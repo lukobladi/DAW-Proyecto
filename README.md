@@ -16,7 +16,58 @@ El objetivo de este proyecto es desarrollar una aplicación web que facilite la 
 ## Contexto Actual
 
 ### Estructura del Grupo
-El grupo está formado por familias que se encargan de contactar directamente con los productores. Cada usuario asume la responsabilidad de un proveedor específico, aunque hay algunos usuarios que no gestionan ningún proveedor.
+
+El grupo está formado por familias que se encargan de contactar directamente con los productores. Cada usuario asume la responsabilidad de mantenerse en contacto con un proveedor específico, aunque hay algunos usuarios que no gestionan ningún proveedor.
+
+#### Ejemplo actual de uso para incorporar una familia:
+1. Contacta con responsable del grupo de consumo.
+2. Responsable explica funcionamiento de grupo.
+3. Responsable pide usuario de Google a la familia.
+4. Responsable comparte la hoja de cálculo de Google con la familia.
+
+#### Ejemplo actual de uso semanal para una familia que quiere pedir verduras:
+1. Entra a Google Docs.
+2. Entra a la sheet compartida.
+3. Busca la hoja correspondiente al productor de verduras (semanal).
+4. Comprueba que el cuadro corresponde a la semana actual (se pone cabecera verde).
+5. Se sitúa en la columna correspondiente a su familia.
+6. Va introduciendo las unidades de cada producto que desea.
+7. En la parte de abajo le calcula el importe total.
+8. La semana siguiente tendrá la nueva tabla vacía.
+
+#### Ejemplo actual de uso semanal para una familia que quiere pedir huevos:
+1. Entra a Google Docs.
+2. Entra a la sheet compartida.
+3. Busca la hoja correspondiente al productor de huevos (semanal y periódico).
+4. Comprueba que el cuadro corresponde a la semana actual (se pone cabecera verde).
+5. Se sitúa en la columna correspondiente a su familia.
+6. Introduce las unidades.
+7. En la parte de abajo le calcula el importe total.
+8. Hasta que modifique las unidades, recibirá ese pedido semanalmente de manera automática.
+
+#### Ejemplo actual de uso semanal para la familia que gestiona las verduras:
+1. Entra a Google Docs.
+2. Entra a la sheet compartida.
+3. Busca la hoja correspondiente al productor de verduras (semanal).
+4. Busca el cuadro con la suma total de unidades de cada verdura.
+5. Contacta con el proveedor o automáticamente se le envía correo desde la sheet.
+6. (Esto ahora es automático) Duplica el cuadro (vacío) de la semana pasada en las filas inferiores y se establece la cabecera del pedido actual en verde y la anterior en rojo.
+7. Al final de mes, el productor le pasa factura.
+8. Comprueba que el importe coincide con los pedidos.
+
+#### Ejemplo actual de uso semanal para la familia que gestiona el pan (periódico):
+1. Entra a Google Docs.
+2. Entra a la sheet compartida.
+3. Busca la hoja correspondiente al productor de pan (semanal).
+4. Busca el cuadro con la suma total de unidades de cada pan.
+5. Contacta con el proveedor o automáticamente se le envía correo desde la sheet.
+6. (Esto ahora es automático) Duplica el cuadro de la semana pasada (arrastrando las unidades también) en las filas inferiores y se establece la cabecera del pedido actual en verde y la anterior en rojo.
+7. Al final de mes, el productor le pasa factura.
+8. Comprueba que el importe coincide con los pedidos.
+
+
+### Pedidos periódicos
+Hay algunos productos que se piden semanalmente de manera automática sin que tenga que intervenir el usuario hasta que quiera dejar de recibir ese pedido
 
 ### Frecuencia de Pedidos
 Los productos se solicitan a diferentes proveedores con distintas frecuencias: algunos se piden semanalmente, mientras que otros se solicitan cada dos, tres o seis meses.
@@ -56,7 +107,6 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
 Este documento describe el roadmap para el desarrollo de la aplicación web destinada a facilitar la gestión de un grupo de consumo local y ecológico.
 
 ## 1. Definición de Requisitos
-- [ ] Reunir a los usuarios para discutir necesidades y expectativas.
 - [ ] Crear una lista de funcionalidades clave.
 
 ## 2. Planificación del Proyecto
