@@ -227,7 +227,7 @@ La definición de requisitos es una etapa crucial en el desarrollo de la aplicac
     - **Complejidad Técnica**: Media.
 
 
-## 1. Cronograma del Proyecto: Aplicación Web para un Grupo de Consumo Local y Ecológico
+## 2. Cronograma del Proyecto: Aplicación Web para un Grupo de Consumo Local y Ecológico
 
 | Hito | Descripción | Fecha de Inicio | Fecha de Finalización | Responsable |
 |------|-------------|------------------|-----------------------|-------------|
@@ -243,3 +243,89 @@ La definición de requisitos es una etapa crucial en el desarrollo de la aplicac
 | **10. Recopilación de Feedback y Mejora Continua** | Lanzar una versión beta y recopilar feedback. | 16/03/2025 | 31/03/2025 | Equipo de Proyecto |
 | **11. Mantenimiento** | Establecer un plan para soporte técnico y actualizaciones. | 01/04/2025 | En curso | Equipo de Proyecto |
 
+## 3. Prototipos de la Aplicación Web
+
+### 1. Pantalla de Inicio
+- **Elementos Clave**:
+  - Logo del grupo de consumo.
+  - Menú de navegación (Inicio, Productos, Pedidos, Usuarios, Contacto).
+  - Breve descripción del grupo y su misión.
+  - Botón de "Iniciar Sesión" o "Registrarse".
+
+### 2. Pantalla de Registro
+- **Elementos Clave**:
+  - Formulario de registro con campos para:
+    - Nombre completo.
+    - Correo electrónico.
+    - Contraseña.
+    - Confirmar contraseña.
+  - Botón de "Registrarse".
+  - Enlace a "Iniciar Sesión" si ya tiene una cuenta.
+
+### 3. Pantalla de Inicio de Sesión
+- **Elementos Clave**:
+  - Formulario de inicio de sesión con campos para:
+    - Correo electrónico.
+    - Contraseña.
+  - Botón de "Iniciar Sesión".
+  - Enlace a "¿Olvidaste tu contraseña?".
+
+### 4. Pantalla de Dashboard (Tablero)
+- **Elementos Clave**:
+  - Resumen de pedidos actuales y próximos.
+  - Acceso rápido a "Realizar Pedido".
+  - Sección de "Productos Disponibles".
+  - Notificaciones sobre fechas límite de pedidos.
+
+### 5. Pantalla de Productos
+- **Elementos Clave**:
+  - Lista de productos con:
+    - Nombre del producto.
+    - Descripción.
+    - Precio.
+    - Botón de "Añadir al Pedido".
+  - Filtros para buscar productos por categoría o proveedor.
+
+### 6. Pantalla de Realización de Pedidos
+- **Elementos Clave**:
+  - Selección de productos con casillas de verificación.
+  - Campo para ingresar cantidades.
+  - Resumen del pedido con total calculado.
+  - Botón de "Confirmar Pedido".
+
+### 7. Pantalla de Historial de Pedidos
+- **Elementos Clave**:
+  - Lista de pedidos anteriores con:
+    - Fecha del pedido.
+    - Productos solicitados.
+    - Estado del pedido (completado, pendiente, cancelado).
+  - Opción para ver detalles de cada pedido.
+
+### 8. Pantalla de Gestión de Usuarios (para administradores)
+- **Elementos Clave**:
+  - Lista de usuarios con:
+    - Nombre.
+    - Correo electrónico.
+    - Estado (activo/inactivo).
+    - Botones para "Editar" o "Eliminar" usuarios.
+  - Opción para añadir nuevos usuarios.
+
+### 9. Pantalla de Configuración de Cuenta
+- **Elementos Clave**:
+  - Formulario para actualizar información del usuario:
+    - Nombre.
+    - Correo electrónico.
+    - Contraseña (opcional).
+  - Botón de "Guardar Cambios".
+
+### 10. Pantalla de Soporte y Ayuda
+- **Elementos Clave**:
+  - Sección de preguntas frecuentes (FAQ).
+  - Formulario de contacto para enviar consultas.
+  - Información de contacto del grupo.
+
+### Herramientas para Crear Prototipos
+- **Figma**: Herramienta de diseño colaborativo en línea.
+- **Adobe XD**: Software de diseño y prototipado de Adobe.
+- **Sketch**: Herramienta de diseño vectorial para macOS.
+- **InVision**: Plataforma para crear prototipos interactivos.
