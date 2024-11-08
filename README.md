@@ -329,3 +329,232 @@ La definición de requisitos es una etapa crucial en el desarrollo de la aplicac
 - **Adobe XD**: Software de diseño y prototipado de Adobe.
 - **Sketch**: Herramienta de diseño vectorial para macOS.
 - **InVision**: Plataforma para crear prototipos interactivos.
+
+## 4. Flujo de Usuario para la Aplicación Web de Consumo Local y Ecológico
+
+### 1. Gestión de Productos
+
+#### Flujo de Usuario:
+1. **Acceso a la sección de Productos**:
+   - El usuario inicia sesión en la aplicación.
+   - Navega al menú y selecciona "Productos".
+
+2. **Visualización de Productos**:
+   - Se muestra una lista de productos disponibles con detalles (nombre, descripción, precio).
+   - El usuario puede aplicar filtros para buscar productos específicos.
+
+3. **Añadir un Producto** (para administradores):
+   - El administrador selecciona "Añadir Producto".
+   - Completa un formulario con la información del producto (nombre, descripción, precio, proveedor).
+   - Hace clic en "Guardar" para añadir el producto a la base de datos.
+
+4. **Editar o Eliminar un Producto** (para administradores):
+   - El administrador selecciona un producto de la lista.
+   - Elige "Editar" para modificar la información o "Eliminar" para quitar el producto.
+   - Confirma la acción.
+
+---
+
+### 2. Gestión de Pedidos
+
+#### Flujo de Usuario:
+1. **Acceso a la sección de Pedidos**:
+   - El usuario inicia sesión y selecciona "Pedidos" en el menú.
+
+2. **Crear un Nuevo Pedido**:
+   - El usuario hace clic en "Realizar Pedido".
+   - Se muestra una lista de productos con casillas de verificación.
+   - El usuario selecciona los productos deseados y especifica las cantidades.
+
+3. **Confirmación del Pedido**:
+   - El usuario revisa el resumen del pedido, que incluye el total calculado.
+   - Hace clic en "Confirmar Pedido".
+   - Se muestra un mensaje de confirmación y se envía el pedido al proveedor correspondiente.
+
+4. **Gestión de Pedidos Existentes**:
+   - El usuario puede ver una lista de pedidos anteriores.
+   - Selecciona un pedido para ver detalles o cancelar si está pendiente.
+
+---
+
+### 3. Cálculos Financieros
+
+#### Flujo de Usuario:
+1. **Acceso a la sección de Finanzas**:
+   - El usuario inicia sesión y selecciona "Finanzas" en el menú.
+
+2. **Visualización de Gastos Mensuales**:
+   - Se muestra un resumen de los gastos mensuales de la familia.
+   - El usuario puede ver detalles de cada pedido y el saldo actual.
+
+3. **Gestión de Deudas**:
+   - El usuario puede ver a quién debe dinero y el importe.
+   - Opción para marcar deudas como pagadas.
+
+---
+
+### 4. Gestión de Usuarios (para administradores)
+
+#### Flujo de Usuario:
+1. **Acceso a la sección de Gestión de Usuarios**:
+   - El administrador inicia sesión y selecciona "Usuarios" en el menú.
+
+2. **Visualización de Usuarios**:
+   - Se muestra una lista de usuarios con detalles (nombre, correo electrónico, estado).
+   - Opción para buscar usuarios específicos.
+
+3. **Añadir un Nuevo Usuario**:
+   - El administrador hace clic en "Añadir Usuario".
+   - Completa un formulario con la información del nuevo usuario.
+   - Hace clic en "Guardar" para añadir el usuario.
+
+4. **Editar o Eliminar un Usuario**:
+   - El administrador selecciona un usuario de la lista.
+   - Elige "Editar" para modificar la información o "Eliminar" para quitar el usuario.
+   - Confirma la acción.
+
+---
+
+### 5. Pantalla de Soporte y Ayuda
+
+#### Flujo de Usuario:
+1. **Acceso a la sección de Soporte**:
+   - El usuario inicia sesión y selecciona "Soporte" en el menú.
+
+2. **Visualización de Preguntas Frecuentes (FAQ)**:
+   - Se muestra una lista de preguntas frecuentes.
+   - El usuario puede hacer clic en una pregunta para ver la respuesta.
+
+3. **Enviar una Consulta**:
+   - El usuario completa un formulario de contacto con su consulta.
+   - Hace clic en "Enviar".
+   - Se muestra un mensaje de confirmación de que la consulta ha sido enviada.
+
+---
+
+### 6. Notificaciones y Recordatorios
+
+#### Flujo de Usuario:
+1. **Configuración de Notificaciones**:
+   - El usuario accede a "Configuración de Cuenta".
+   - Selecciona "Notificaciones".
+   - Activa o desactiva las notificaciones para fechas de pedidos y vencimientos.
+
+2. **Recepción de Notificaciones**:
+   - El usuario recibe notificaciones por correo electrónico o en la aplicación sobre fechas límite de pedidos y actualizaciones.
+
+---
+
+### 7. Historial de Pedidos
+
+#### Flujo de Usuario:
+1. **Acceso a la sección de Historial de Pedidos**:
+   - El usuario inicia sesión y selecciona "Historial de Pedidos" en el menú.
+
+2. **Visualización de Pedidos Anteriores**:
+   - Se muestra una lista de pedidos anteriores con detalles como:
+     - Fecha del pedido.
+     - Productos solicitados.
+     - Estado del pedido (completado, pendiente, cancelado).
+
+3. **Ver Detalles de un Pedido**:
+   - El usuario selecciona un pedido de la lista.
+   - Se muestra una vista detallada del pedido, incluyendo:
+     - Productos solicitados.
+     - Cantidades.
+     - Total del pedido.
+     - Estado del pedido.
+
+4. **Opción para Repetir un Pedido**:
+   - El usuario puede seleccionar "Repetir Pedido" para crear un nuevo pedido con los mismos productos.
+   - Se redirige al flujo de creación de pedidos con los productos preseleccionados.
+
+---
+
+### 8. Configuración de Cuenta
+
+#### Flujo de Usuario:
+1. **Acceso a la sección de Configuración de Cuenta**:
+   - El usuario inicia sesión y selecciona "Configuración de Cuenta" en el menú.
+
+2. **Visualización de Información de la Cuenta**:
+   - Se muestra la información actual del usuario, incluyendo:
+     - Nombre.
+     - Correo electrónico.
+     - Opciones de seguridad.
+
+3. **Actualizar Información**:
+   - El usuario puede editar su nombre o correo electrónico.
+   - Opción para cambiar la contraseña.
+   - Hace clic en "Guardar Cambios" para aplicar las modificaciones.
+
+4. **Cerrar Sesión**:
+   - El usuario puede seleccionar "Cerrar Sesión" para salir de la aplicación.
+
+---
+
+### 9. Panel de Administración (para administradores)
+
+#### Flujo de Usuario:
+1. **Acceso al Panel de Administración**:
+   - El administrador inicia sesión y selecciona "Panel de Administración" en el menú.
+
+2. **Visualización de Resumen General**:
+   - Se muestra un resumen de la actividad del grupo, incluyendo:
+     - Total de usuarios.
+     - Total de pedidos realizados.
+     - Productos más solicitados.
+
+3. **Gestión de Productos y Usuarios**:
+   - El administrador puede acceder a las secciones de "Gestión de Productos" y "Gestión de Usuarios" desde el panel.
+   - Opción para ver estadísticas y reportes sobre el consumo y pedidos.
+
+4. **Configuración de Parámetros del Grupo**:
+   - El administrador puede ajustar configuraciones generales del grupo, como:
+     - Frecuencias de pedidos.
+     - Notificaciones automáticas.
+   - Hace clic en "Guardar Cambios" para aplicar las modificaciones.
+
+---
+
+### 10. Informes y Estadísticas
+
+#### Flujo de Usuario:
+1. **Acceso a la sección de Informes**:
+   - El usuario o administrador inicia sesión y selecciona "Informes" en el menú.
+
+2. **Visualización de Informes Generales**:
+   - Se muestra una lista de informes disponibles, como:
+     - Consumo mensual.
+     - Gastos por familia.
+     - Productos más comprados.
+
+3. **Generación de Informes Personalizados**:
+   - El usuario puede seleccionar criterios para generar informes personalizados.
+   - Hace clic en "Generar Informe" para visualizar los datos.
+
+4. **Descarga de Informes**:
+   - Opción para descargar los informes en formato PDF o CSV.
+   - Se muestra un mensaje de confirmación de que el informe ha sido descargado.
+
+---
+
+### 11. Soporte y Ayuda
+
+#### Flujo de Usuario:
+1. **Acceso a la sección de Soporte**:
+   - El usuario inicia sesión y selecciona "Soporte" en el menú.
+
+2. **Visualización de Preguntas Frecuentes (FAQ)**:
+   - Se muestra una lista de preguntas frecuentes.
+   - El usuario puede hacer clic en una pregunta para ver la respuesta.
+
+3. **Enviar una Consulta**:
+   - El usuario completa un formulario de contacto con su consulta.
+   - Hace clic en "Enviar".
+   - Se muestra un mensaje de confirmación de que la consulta ha sido enviada.
+
+4. **Recibir Respuesta**:
+   - El usuario recibe una notificación por correo electrónico con la respuesta a su consulta.
+
+---
