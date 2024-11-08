@@ -3,11 +3,14 @@
 ## Tabla de Contenidos
 - [Descripción del Proyecto](#descripción-del-proyecto)
 - [Contexto Actual](#contexto-actual)
+  - [Estructura del Grupo](#estructura-del-grupo)
+  - [Gestión Actual en Google Sheets](#gestión-actual-en-google-sheets)
+  - [Cálculos Avanzados](#cálculos-avanzados)
 - [Propuesta de Solución](#propuesta-de-solución)
-- [Instalación](#instalación)
-- [Uso](#uso)
-- [Contribuciones](#contribuciones)
-- [Licencia](#licencia)
+- [Roadmap del Proyecto](#roadmap-del-proyecto-aplicación-web-para-un-grupo-de-consumo-local-y-ecológico)
+- [Definición de Requisitos](#1-definición-de-requisitos)
+- [Cronograma del Proyecto](#1-cronograma-del-proyecto-aplicación-web-para-un-grupo-de-consumo-local-y-ecológico)
+- [Notas Adicionales](#notas-adicionales)
 
 # Descripción del Proyecto: Desarrollo de una Aplicación Web para un Grupo de Consumo Local y Ecológico
 
@@ -224,3 +227,23 @@ La definición de requisitos es una etapa crucial en el desarrollo de la aplicac
     - **Complejidad Técnica**: Media.
 
 
+## 1. Cronograma del Proyecto: Aplicación Web para un Grupo de Consumo Local y Ecológico
+
+| Hito | Descripción | Fecha de Inicio | Fecha de Finalización | Responsable |
+|------|-------------|------------------|-----------------------|-------------|
+| **1. Definición de Requisitos** | Crear una lista de funcionalidades clave. | 01/11/2024 | 15/11/2024 | Equipo de Proyecto |
+| **2. Planificación del Proyecto** | Establecer un cronograma con hitos y plazos. | 16/11/2024 | 20/11/2024 | Equipo de Proyecto |
+| **3. Diseño de la Aplicación** | Crear wireframes o prototipos de la interfaz de usuario. | 21/11/2024 | 10/12/2024 | Diseñador UI/UX |
+| **4. Configuración del Entorno de Desarrollo** | Instalar Node.js, Express, PostgreSQL, Vue.js y Bootstrap. | 11/12/2024 | 15/12/2024 | Desarrollador Back-End |
+| **5. Desarrollo del Back-End** | Definir modelos de datos, implementar rutas de API y autenticación. | 16/12/2024 | 31/01/2025 | Desarrollador Back-End |
+| **6. Desarrollo del Front-End** | Construir la interfaz de usuario y conectar con la API. | 01/02/2025 | 15/02/2025 | Desarrollador Front-End |
+| **7. Pruebas** | Implementar pruebas unitarias y de integración. | 16/02/2025 | 28/02/2025 | Equipo de QA |
+| **8. Documentación** | Documentar la API y crear una guía de usuario. | 01/03/2025 | 10/03/2025 | Documentador |
+| **9. Despliegue** | Elegir un servicio de hosting y configurar el entorno de producción. | 11/03/2025 | 15/03/2025 | Desarrollador Back-End |
+| **10. Recopilación de Feedback y Mejora Continua** | Lanzar una versión beta y recopilar feedback. | 16/03/2025 | 31/03/2025 | Equipo de Proyecto |
+| **11. Mantenimiento** | Establecer un plan para soporte técnico y actualizaciones. | 01/04/2025 | En curso | Equipo de Proyecto |
+
+## Notas Adicionales:
+- **Revisiones Semanales**: Se recomienda realizar reuniones semanales para revisar el progreso y ajustar el cronograma según sea necesario.
+- **Flexibilidad**: Las fechas son estimaciones y pueden ajustarse en función de la complejidad de las tareas y la disponibilidad del equipo.
+- **Iteración**: Se sugiere un enfoque iterativo, donde se puedan realizar mejoras y ajustes en cada fase del desarrollo.
