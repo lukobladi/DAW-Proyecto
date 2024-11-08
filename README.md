@@ -243,7 +243,3 @@ La definición de requisitos es una etapa crucial en el desarrollo de la aplicac
 | **10. Recopilación de Feedback y Mejora Continua** | Lanzar una versión beta y recopilar feedback. | 16/03/2025 | 31/03/2025 | Equipo de Proyecto |
 | **11. Mantenimiento** | Establecer un plan para soporte técnico y actualizaciones. | 01/04/2025 | En curso | Equipo de Proyecto |
 
-## Notas Adicionales:
-- **Revisiones Semanales**: Se recomienda realizar reuniones semanales para revisar el progreso y ajustar el cronograma según sea necesario.
-- **Flexibilidad**: Las fechas son estimaciones y pueden ajustarse en función de la complejidad de las tareas y la disponibilidad del equipo.
-- **Iteración**: Se sugiere un enfoque iterativo, donde se puedan realizar mejoras y ajustes en cada fase del desarrollo.
