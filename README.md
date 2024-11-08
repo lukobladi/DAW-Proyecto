@@ -111,7 +111,6 @@ Este documento describe el roadmap para el desarrollo de la aplicación web dest
 
 ## 2. Planificación del Proyecto
 - [ ] Establecer un cronograma con hitos y plazos.
-- [ ] Asignar roles y responsabilidades a los miembros del equipo.
 
 ## 3. Diseño de la Aplicación
 - [ ] Crear wireframes o prototipos de la interfaz de usuario.
@@ -163,63 +162,65 @@ La definición de requisitos es una etapa crucial en el desarrollo de la aplicac
   - **Acciones**:
     - Analizar las necesidades de los usuarios y extraer las funcionalidades necesarias.
     - Clasificar las funcionalidades en categorías, todas consideradas esenciales:
-      - **Gestión de Productos**: 
+      - [ ] **Gestión de Productos**: 
         - Añadir, editar y eliminar productos.
         - Visualizar información de proveedores.
         - **Complejidad Técnica**: Media. Requiere implementación de formularios y validaciones, así como la gestión de la base de datos.
-      - **Gestión de Pedidos**: 
+      - [ ] **Gestión de Pedidos**: 
         - Crear y gestionar pedidos.
         - Establecer fechas límite y enviar recordatorios.
         - **Complejidad Técnica**: Alta. Implica lógica de negocio para el manejo de fechas y cálculos, así como notificaciones.
-      - **Cálculos Financieros**: 
+      - [ ] **Cálculos Financieros**: 
         - Calcular gastos mensuales.
         - Gestionar deudas entre usuarios.
         - **Complejidad Técnica**: Media. Requiere cálculos precisos y la gestión de relaciones entre usuarios y pedidos.
-      - **Gestión de Usuarios**: 
+      - [ ] **Gestión de Usuarios**: 
         - Alta y baja de usuarios.
         - Funcionalidad de login y autenticación.
         - **Complejidad Técnica**: Alta. Implica la implementación de un sistema de autenticación seguro y la gestión de sesiones.
 
--  **Funcionalidades Adicionales para el Futuro**
-A continuación se presentan funcionalidades adicionales que podrían implementarse en futuras versiones de la aplicación:
+- **Funcionalidades Adicionales para el Futuro**
+  
+  A continuación se presentan funcionalidades adicionales que podrían implementarse en futuras versiones de la aplicación:
 
-- [ ] **Notificaciones y Recordatorios**
-  - **Descripción**: Implementar un sistema de notificaciones para recordar a los usuarios sobre fechas de pedidos, vencimientos de pagos y actualizaciones de productos.
-  - **Complejidad Técnica**: Media.
+  - [ ] **Notificaciones y Recordatorios**
+    - **Descripción**: Implementar un sistema de notificaciones para recordar a los usuarios sobre fechas de pedidos, vencimientos de pagos y actualizaciones de productos.
+    - **Complejidad Técnica**: Media.
 
-- [ ] **Historial de Pedidos**
-  - **Descripción**: Permitir a los usuarios ver un historial de sus pedidos anteriores, incluyendo detalles como fechas, productos y costos.
-  - **Complejidad Técnica**: Baja.
+  - [ ] **Historial de Pedidos**
+    - **Descripción**: Permitir a los usuarios ver un historial de sus pedidos anteriores, incluyendo detalles como fechas, productos y costos.
+    - **Complejidad Técnica**: Baja.
 
-- [ ] **Sistema de Calificación y Reseñas**
-  - **Descripción**: Permitir a los usuarios calificar y dejar reseñas sobre los productos y proveedores.
-  - **Complejidad Técnica**: Media.
+  - [ ] **Sistema de Calificación y Reseñas**
+    - **Descripción**: Permitir a los usuarios calificar y dejar reseñas sobre los productos y proveedores.
+    - **Complejidad Técnica**: Media.
 
-- [ ] **Integración de Pagos**
-  - **Descripción**: Implementar un sistema de pago en línea para facilitar el pago de pedidos.
-  - **Complejidad Técnica**: Alta.
+  - [ ] **Integración de Pagos**
+    - **Descripción**: Implementar un sistema de pago en línea para facilitar el pago de pedidos.
+    - **Complejidad Técnica**: Alta.
 
-- [ ] **Panel de Administración**
-  - **Descripción**: Crear un panel de administración para que los responsables del grupo puedan gestionar usuarios, productos y pedidos de manera centralizada.
-  - **Complejidad Técnica**: Alta.
+  - [ ] **Panel de Administración**
+    - **Descripción**: Crear un panel de administración para que los responsables del grupo puedan gestionar usuarios, productos y pedidos de manera centralizada.
+    - **Complejidad Técnica**: Alta.
 
-- [ ] **Informes y Estadísticas**
-  - **Descripción**: Generar informes sobre el consumo, gastos y tendencias de pedidos, lo que puede ayudar en la toma de decisiones.
-  - **Complejidad Técnica**: Media.
+  - [ ] **Informes y Estadísticas**
+    - **Descripción**: Generar informes sobre el consumo, gastos y tendencias de pedidos, lo que puede ayudar en la toma de decisiones.
+    - **Complejidad Técnica**: Media.
 
-- [ ] **Soporte y Ayuda**
-  - **Descripción**: Incluir una sección de preguntas frecuentes (FAQ) y un sistema de soporte para ayudar a los usuarios con problemas o dudas.
-  - **Complejidad Técnica**: Baja.
+  - [ ] **Soporte y Ayuda**
+    - **Descripción**: Incluir una sección de preguntas frecuentes (FAQ) y un sistema de soporte para ayudar a los usuarios con problemas o dudas.
+    - **Complejidad Técnica**: Baja.
 
-- [ ] **Interacción Social**
-  - **Descripción**: Facilitar la interacción entre los miembros del grupo, como foros o grupos de discusión.
-  - **Complejidad Técnica**: Alta.
+  - [ ] **Interacción Social**
+    - **Descripción**: Facilitar la interacción entre los miembros del grupo, como foros o grupos de discusión.
+    - **Complejidad Técnica**: Alta.
 
-- [ ] **Accesibilidad**
-  - **Descripción**: Asegurar que la aplicación sea accesible para personas con discapacidades, cumpliendo con las pautas de accesibilidad web (WCAG).
-  - **Complejidad Técnica**: Media.
+  - [ ] **Accesibilidad**
+    - **Descripción**: Asegurar que la aplicación sea accesible para personas con discapacidades, cumpliendo con las pautas de accesibilidad web (WCAG).
+    - **Complejidad Técnica**: Media.
 
-- [ ] **Multilenguaje**
-  - **Descripción**: Permitir que la aplicación esté disponible en varios idiomas para atender a una audiencia más amplia.
-  - **Complejidad Técnica**: Media.
+  - [ ] **Multilenguaje**
+    - **Descripción**: Permitir que la aplicación esté disponible en varios idiomas para atender a una audiencia más amplia.
+    - **Complejidad Técnica**: Media.
+
 
