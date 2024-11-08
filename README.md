@@ -158,7 +158,7 @@ Este documento describe el roadmap para el desarrollo de la aplicación web dest
 
 La definición de requisitos es una etapa crucial en el desarrollo de la aplicación, ya que establece las bases para el diseño y la implementación. A continuación se detallan las tareas a realizar en esta fase:
 
-- [ ] **Crear una lista de funcionalidades clave.**
+- **Lista de funcionalidades clave.**
   - **Objetivo**: Definir las características esenciales que debe tener la aplicación para satisfacer las necesidades de los usuarios.
   - **Acciones**:
     - Analizar las necesidades de los usuarios y extraer las funcionalidades necesarias.
@@ -180,10 +180,46 @@ La definición de requisitos es una etapa crucial en el desarrollo de la aplicac
         - Funcionalidad de login y autenticación.
         - **Complejidad Técnica**: Alta. Implica la implementación de un sistema de autenticación seguro y la gestión de sesiones.
 
-- [ ] **Priorizar las funcionalidades.**
-  - **Objetivo**: Establecer que todas las funcionalidades son esenciales para el funcionamiento de la aplicación.
-  - **Acciones**:
-    - Asegurar que todas las funcionalidades se implementen en la primera fase del desarrollo.
+-  **Funcionalidades Adicionales para el Futuro**
+A continuación se presentan funcionalidades adicionales que podrían implementarse en futuras versiones de la aplicación:
 
-Esta fase de definición de requisitos ayudará a asegurar que la aplicación cumpla con las expectativas de los usuarios y se enfoque en resolver los problemas actuales de gestión.
+- [ ] **Notificaciones y Recordatorios**
+  - **Descripción**: Implementar un sistema de notificaciones para recordar a los usuarios sobre fechas de pedidos, vencimientos de pagos y actualizaciones de productos.
+  - **Complejidad Técnica**: Media.
+
+- [ ] **Historial de Pedidos**
+  - **Descripción**: Permitir a los usuarios ver un historial de sus pedidos anteriores, incluyendo detalles como fechas, productos y costos.
+  - **Complejidad Técnica**: Baja.
+
+- [ ] **Sistema de Calificación y Reseñas**
+  - **Descripción**: Permitir a los usuarios calificar y dejar reseñas sobre los productos y proveedores.
+  - **Complejidad Técnica**: Media.
+
+- [ ] **Integración de Pagos**
+  - **Descripción**: Implementar un sistema de pago en línea para facilitar el pago de pedidos.
+  - **Complejidad Técnica**: Alta.
+
+- [ ] **Panel de Administración**
+  - **Descripción**: Crear un panel de administración para que los responsables del grupo puedan gestionar usuarios, productos y pedidos de manera centralizada.
+  - **Complejidad Técnica**: Alta.
+
+- [ ] **Informes y Estadísticas**
+  - **Descripción**: Generar informes sobre el consumo, gastos y tendencias de pedidos, lo que puede ayudar en la toma de decisiones.
+  - **Complejidad Técnica**: Media.
+
+- [ ] **Soporte y Ayuda**
+  - **Descripción**: Incluir una sección de preguntas frecuentes (FAQ) y un sistema de soporte para ayudar a los usuarios con problemas o dudas.
+  - **Complejidad Técnica**: Baja.
+
+- [ ] **Interacción Social**
+  - **Descripción**: Facilitar la interacción entre los miembros del grupo, como foros o grupos de discusión.
+  - **Complejidad Técnica**: Alta.
+
+- [ ] **Accesibilidad**
+  - **Descripción**: Asegurar que la aplicación sea accesible para personas con discapacidades, cumpliendo con las pautas de accesibilidad web (WCAG).
+  - **Complejidad Técnica**: Media.
+
+- [ ] **Multilenguaje**
+  - **Descripción**: Permitir que la aplicación esté disponible en varios idiomas para atender a una audiencia más amplia.
+  - **Complejidad Técnica**: Media.
 
