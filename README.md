@@ -407,7 +407,7 @@ La definición de requisitos es una etapa crucial en el desarrollo de la aplicac
    - Hace clic en "Confirmar Pedido".
    - Se muestra un mensaje de confirmación y se envía el pedido al proveedor correspondiente.
 
-4. **Gestión de Pedidos Existentes (>funcionalidades adicionales<)**:
+4. **Gestión de Pedidos Existentes _(funcionalidades adicionales)_**:
    - El usuario puede ver una lista de pedidos anteriores.
    - Selecciona un pedido para ver detalles, duplicar o cancelar si está pendiente.
 
@@ -451,7 +451,7 @@ La definición de requisitos es una etapa crucial en el desarrollo de la aplicac
 
 ---
 
-### 5. Pantalla de Soporte y Ayuda
+### 5. Pantalla de Soporte y Ayuda _(funcionalidades adicionales)_
 
 #### Flujo de Usuario:
 1. **Acceso a la sección de Soporte**:
@@ -468,7 +468,7 @@ La definición de requisitos es una etapa crucial en el desarrollo de la aplicac
 
 ---
 
-### 6. Notificaciones y Recordatorios
+### 6. Notificaciones y Recordatorios _(funcionalidades adicionales)_
 
 #### Flujo de Usuario:
 1. **Configuración de Notificaciones**:
@@ -481,7 +481,7 @@ La definición de requisitos es una etapa crucial en el desarrollo de la aplicac
 
 ---
 
-### 7. Historial de Pedidos
+### 7. Historial de Pedidos _(funcionalidades adicionales)_
 
 #### Flujo de Usuario:
 1. **Acceso a la sección de Historial de Pedidos**:
@@ -553,7 +553,7 @@ La definición de requisitos es una etapa crucial en el desarrollo de la aplicac
 
 ---
 
-### 10. Informes y Estadísticas
+### 10. Informes y Estadísticas _(funcionalidades adicionales)_
 
 #### Flujo de Usuario:
 1. **Acceso a la sección de Informes**:
