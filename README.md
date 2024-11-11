@@ -329,7 +329,7 @@ La definición de requisitos es una etapa crucial en el desarrollo de la aplicac
   - Resumen del pedido con total calculado.
   - Botón de "Confirmar Pedido".
 
-### 7. Pantalla de Historial de Pedidos
+### 7. Pantalla de Historial de Pedidos (>funcionalidades adicionales<)
 - **Elementos Clave**:
   - Lista de pedidos anteriores con:
     - Fecha del pedido.
@@ -346,7 +346,7 @@ La definición de requisitos es una etapa crucial en el desarrollo de la aplicac
     - Botones para "Editar" o "Eliminar" usuarios.
   - Opción para añadir nuevos usuarios.
 
-### 9. Pantalla de Configuración de Cuenta
+### 9. Pantalla de Configuración de Cuenta (>funcionalidades adicionales<)
 - **Elementos Clave**:
   - Formulario para actualizar información del usuario:
     - Nombre.
@@ -354,7 +354,7 @@ La definición de requisitos es una etapa crucial en el desarrollo de la aplicac
     - Contraseña (opcional).
   - Botón de "Guardar Cambios".
 
-### 10. Pantalla de Soporte y Ayuda
+### 10. Pantalla de Soporte y Ayuda (>funcionalidades adicionales<)
 - **Elementos Clave**:
   - Sección de preguntas frecuentes (FAQ).
   - Formulario de contacto para enviar consultas.
@@ -376,15 +376,15 @@ La definición de requisitos es una etapa crucial en el desarrollo de la aplicac
    - Navega al menú y selecciona "Productos".
 
 2. **Visualización de Productos**:
-   - Se muestra una lista de productos disponibles con detalles (nombre, descripción, precio).
+   - Se muestra una lista de productos disponibles con detalles (nombre, descripción, precio, proveedor/productor).
    - El usuario puede aplicar filtros para buscar productos específicos.
 
-3. **Añadir un Producto** (para administradores):
+3. **Añadir un Producto** (para administradores y el usuario responsable de ese productor/proveedor):
    - El administrador selecciona "Añadir Producto".
-   - Completa un formulario con la información del producto (nombre, descripción, precio, proveedor).
+   - Completa un formulario con la información del producto (nombre, descripción, precio, proveedor/productor).
    - Hace clic en "Guardar" para añadir el producto a la base de datos.
 
-4. **Editar o Eliminar un Producto** (para administradores):
+4. **Editar o Eliminar un Producto** (para administradores y el usuario responsable de ese productor/proveedor):
    - El administrador selecciona un producto de la lista.
    - Elige "Editar" para modificar la información o "Eliminar" para quitar el producto.
    - Confirma la acción.
@@ -407,9 +407,9 @@ La definición de requisitos es una etapa crucial en el desarrollo de la aplicac
    - Hace clic en "Confirmar Pedido".
    - Se muestra un mensaje de confirmación y se envía el pedido al proveedor correspondiente.
 
-4. **Gestión de Pedidos Existentes**:
+4. **Gestión de Pedidos Existentes (>funcionalidades adicionales<)**:
    - El usuario puede ver una lista de pedidos anteriores.
-   - Selecciona un pedido para ver detalles o cancelar si está pendiente.
+   - Selecciona un pedido para ver detalles, duplicar o cancelar si está pendiente.
 
 ---
 
@@ -572,25 +572,5 @@ La definición de requisitos es una etapa crucial en el desarrollo de la aplicac
 4. **Descarga de Informes**:
    - Opción para descargar los informes en formato PDF o CSV.
    - Se muestra un mensaje de confirmación de que el informe ha sido descargado.
-
----
-
-### 11. Soporte y Ayuda
-
-#### Flujo de Usuario:
-1. **Acceso a la sección de Soporte**:
-   - El usuario inicia sesión y selecciona "Soporte" en el menú.
-
-2. **Visualización de Preguntas Frecuentes (FAQ)**:
-   - Se muestra una lista de preguntas frecuentes.
-   - El usuario puede hacer clic en una pregunta para ver la respuesta.
-
-3. **Enviar una Consulta**:
-   - El usuario completa un formulario de contacto con su consulta.
-   - Hace clic en "Enviar".
-   - Se muestra un mensaje de confirmación de que la consulta ha sido enviada.
-
-4. **Recibir Respuesta**:
-   - El usuario recibe una notificación por correo electrónico con la respuesta a su consulta.
 
 ---
