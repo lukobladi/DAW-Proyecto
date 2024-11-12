@@ -143,8 +143,6 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
 
 # Roadmap del Proyecto: Aplicación Web para un Grupo de Consumo Local y Ecológico
 
-Este documento describe el roadmap para el desarrollo de la aplicación web destinada a facilitar la gestión de un grupo de consumo local y ecológico.
-
 ## 1. Definición de Requisitos
 - [ ] Crear una lista de funcionalidades clave.
 
@@ -193,8 +191,6 @@ Este documento describe el roadmap para el desarrollo de la aplicación web dest
 ---
 
 ## 1. Definición de Requisitos
-
-La definición de requisitos es una etapa crucial en el desarrollo de la aplicación, ya que establece las bases para el diseño y la implementación. A continuación se detallan las tareas a realizar en esta fase:
 
 - **Lista de funcionalidades clave.**
   - **Objetivo**: Definir las características esenciales que debe tener la aplicación para satisfacer las necesidades de los usuarios.
