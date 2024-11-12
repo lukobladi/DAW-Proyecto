@@ -12,12 +12,6 @@ PLANTILLA PARA LA DEFINICIÓN DEL PROYECTO
 |  |  |  |  |  |  |
 | **Diseño** | *Descripción específica de la infraestructura a utilizar ( equipos necesarios, información de la red, servicios utilizados, …)  Define la estructura del sitio web (contenidos)  Front End. Breve descripción de la página. Indicar cuales son las características principales y en qué creéis que destaca. Sería una ventana de las excelencias del producto al cliente.  Back End. Manual para los administradores del sitio. En el sitio, el hosting, la administración, gestión de plugin, actualizaciones y migración.  Esquema conceptual (Diagrama E-R)  Otra …..documentación que consideréis* |  |  |  |  |
 | **Plan de trabajo** | *Software a utilizar/instalar en equipos.  Análisis de las necesidades  Realización de los esbozos (front-end, back-end)* |  |  |  |  |
-| COMPLETAR EN CASO DE PROYECTOS GRUPALES (SOLO PARA DAW Y DAM) |  |  |  |  |  |
-| **Datos estudiante** |  | **Reparto de tareas** |  |  |  |
-| *Nombre y apellidos* |  | Tareas asignadas: *Reparto de tareas técnicas del proyecto, elaboración de la memoria y presentación.* |  |  |  |
-| *Nombre y apellidos* |  | Tareas asignadas: *Reparto de tareas técnicas del proyecto, elaboración de la memoria y presentación.* |  |  |  |
-| *Nombre y apellidos* |  | Tareas asignadas: *Reparto de tareas técnicas del proyecto, elaboración de la memoria y presentación.* |  |  |  |
-| *Nombre y apellidos* |  | Tareas asignadas: *Reparto de tareas técnicas del proyecto, elaboración de la memoria y presentación.* |  |  |  |
 
 **Una vez elegido el tema sobre el cual se va a trabajar, recopila información o recursos. Recuerda que por motivos de derechos de autor debes referenciar las fuentes.**
 
