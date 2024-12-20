@@ -1,11 +1,6 @@
 # Preparación para el Desarrollo de la Aplicación Web de Consumo Local y Ecológico
 
-## 1. Revisión de Requisitos
-
-- **Revisar la Documentación**: Asegúrate de que todos los requisitos funcionales y no funcionales estén claramente documentados.
-- **Confirmar Funcionalidades**: Verifica que todas las funcionalidades clave estén definidas y priorizadas.
-
-## 2. Configuración del Entorno de Desarrollo
+## 1. Configuración del Entorno de Desarrollo
 
 ### Herramientas y Tecnologías
 - **Back-End**:
@@ -22,7 +17,7 @@
 - **Configurar PostgreSQL**: Instala y configura PostgreSQL en tu máquina local o en un servidor.
 - **Crear Repositorio**: Configura un repositorio en GitHub o GitLab para el control de versiones.
 
-## 3. Estructura del Proyecto
+## 2. Estructura del Proyecto
 
 - **Organización de Carpetas**:
   - `/backend`: Contendrá el código del servidor y la API.
