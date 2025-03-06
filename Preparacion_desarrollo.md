@@ -217,7 +217,12 @@ app.listen(port, () => {
 });
 ```
 
-6. Ejecuta: node index.js.
+7. Ejecuta:
+   En VS Code: F5
+   
+
+8. Prueba:
+   En navegador web: http://localhost:3000/
 
 ### 2. Configurar la Base de Datos
 1. Crea un archivo `.env` en la raíz del proyecto con las credenciales de la base de datos:
