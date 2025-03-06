@@ -93,22 +93,19 @@ Aquí tienes las instrucciones en formato **Markdown** para configurar y comenza
 ### 1. Instalar Visual Studio Code
 1. Descarga Visual Studio Code desde [Visual Studio Code]([https://git-scm.com/](https://code.visualstudio.com/)).
 2. Sigue las instrucciones del instalador.
-3. Instalar complementos:
-   ** Git Graph
-   ** 
+3. Instalar extensiones:
 
 ### 2. Instalar Node.js
 1. Descarga Node.js desde [nodejs.org](https://nodejs.org/).
 2. Asegúrate de instalar la versión LTS (Long Term Support).
 3. Verifica la instalación:
-   ```bash
+   ```en el propio terminal de Visual Studio Code
    node -v
    npm -v
    ```
-
-### 3. Instalar Visual Studio Code
-1. Descarga Visual Studio Code desde [code.visualstudio.com](https://code.visualstudio.com/).
-2. Instala las extensiones recomendadas para desarrollo en Node.js, Vue.js, y PostgreSQL.
+### 3. Habilitar la ejecución de scripts
+1. Abre PowerShell como administrador
+2. Ejecutar: Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 ### 4. Instalar PostgreSQL
 1. Descarga PostgreSQL desde [postgresql.org](https://www.postgresql.org/download/windows/).
@@ -195,6 +192,32 @@ Aquí tienes las instrucciones en formato **Markdown** para configurar y comenza
    ```bash
    npm install
    ```
+3. Crear proyecto:
+   ```
+   npm init -y.
+   ```
+
+5. Instala Express:
+   ```
+   npm install express.
+   ```
+
+6. Crea un archivo index.js con un ejemplo básico:
+```
+const express = require('express');
+const app = express();
+const port = 3000;
+
+app.get('/', (req, res) => {
+  res.send('Hola, mundo!');
+});
+
+app.listen(port, () => {
+  console.log(`API corriendo en http://localhost:${port}`);
+});
+```
+
+6. Ejecuta: node index.js.
 
 ### 2. Configurar la Base de Datos
 1. Crea un archivo `.env` en la raíz del proyecto con las credenciales de la base de datos:
