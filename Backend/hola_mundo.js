@@ -1,11 +1,22 @@
 const express = require('express');
-const app = express();
-const port = 3000;
+const pool = require('./db');
 
-app.get('/', (req, res) => {
-  res.send('Hola, mundo!');
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
+
+// Ruta de prueba para verificar la conexión a la base de datos
+app.get('/test-db', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT NOW()');
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error al conectar con la base de datos');
+  }
 });
 
-app.listen(port, () => {
-  console.log(`API corriendo en http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

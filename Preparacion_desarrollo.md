@@ -112,6 +112,39 @@ Aquí tienes las instrucciones en formato **Markdown** para configurar y comenza
 2. Sigue las instrucciones del instalador.
 3. Configura una base de datos y un usuario para tu proyecto.
 
+Acceder a PostgreSQL
+    COn usuario postgres (superusuario):
+    ```
+    C:\Program Files\PostgreSQL\17\bin> .\psql.exe -U postgres
+    ```
+
+Crear una Base de Datos
+    ```
+    CREATE DATABASE ekonsumo;
+    ```
+
+Crear un Usuario y Contraseña
+    ```
+    CREATE USER ekonsumo_user WITH PASSWORD '1234';
+    ```
+
+Asignar Permisos al Usuario
+    ```
+    GRANT ALL PRIVILEGES ON DATABASE ekonsumo TO ekonsumo_user;
+    ```
+
+
+    Permisos adicionales sobre las tablas, conéctate a la base de datos:
+    ```
+    \c ekonsumo
+    ```
+
+    Y luego concede permisos sobre el esquema public:
+    ```
+    GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO ekonsumo_user;
+    GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO ekonsumo_user;
+    ```
+
 ### 5. Clonar el Repositorio
 1. Abre una terminal (CMD, PowerShell, o Git Bash).
 2. Navega a la carpeta donde quieres clonar el repositorio.
@@ -232,6 +265,11 @@ app.listen(port, () => {
    DB_USER=tu_usuario
    DB_PASSWORD=tu_contraseña
    DB_NAME=ekonsumo
+   ```
+
+2. Instalar conector Postrgre
+   ```
+   npm install dotenv pg
    ```
 
 ### 3. Ejecutar Migraciones
