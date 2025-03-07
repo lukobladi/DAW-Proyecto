@@ -107,7 +107,7 @@ Aquí tienes las instrucciones en formato **Markdown** para configurar y comenza
 1. Abre PowerShell como administrador
 2. Ejecutar: Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 
-### 4. Instalar PostgreSQL
+### 4. Instalar PostgreSQL [deprecated] instalar con npm pg
 1. Descarga PostgreSQL desde [postgresql.org](https://www.postgresql.org/download/windows/).
 2. Sigue las instrucciones del instalador.
 3. Configura una base de datos y un usuario para tu proyecto.
@@ -191,7 +191,7 @@ Asignar Permisos al Usuario
    ```
 3. Instala las extensiones recomendadas para desarrollo en Node.js, Vue.js, y PostgreSQL.
 
-### 4. Instalar PostgreSQL
+### 4. Instalar PostgreSQL [deprecated] instalar con npm pg
 1. Instala PostgreSQL:
    ```bash
    sudo apt update
