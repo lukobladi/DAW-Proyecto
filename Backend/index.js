@@ -6,6 +6,9 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
+const usuarioRoutes = require('./routes/usuarioRoutes');
+app.use('/api/usuarios', usuarioRoutes);
+
 // Ruta de prueba para verificar la conexión a la base de datos
 app.get('/test-db', async (req, res) => {
   try {

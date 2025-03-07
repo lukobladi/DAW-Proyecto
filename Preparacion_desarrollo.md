@@ -272,11 +272,71 @@ app.listen(port, () => {
    npm install dotenv pg
    ```
 
-### 3. Ejecutar Migraciones
-1. Si estás utilizando un ORM como Sequelize, ejecuta las migraciones para crear las tablas en la base de datos:
-   ```bash
-   npx sequelize-cli db:migrate
+### 3. Crear tablas
    ```
+   CREATE TABLE Usuario (
+    ID_Usuario SERIAL PRIMARY KEY,
+    Nombre VARCHAR(100) NOT NULL,
+    Correo VARCHAR(100) UNIQUE NOT NULL,
+    Contraseña VARCHAR(100) NOT NULL,
+    Rol VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Proveedor (
+    ID_Proveedor SERIAL PRIMARY KEY,
+    Nombre VARCHAR(100) NOT NULL,
+    Contacto VARCHAR(100),
+    Telefono VARCHAR(20),
+    Correo VARCHAR(100)
+);
+
+CREATE TABLE Producto (
+    ID_Producto SERIAL PRIMARY KEY,
+    Nombre VARCHAR(100) NOT NULL,
+    Descripcion TEXT,
+    Precio DECIMAL(10, 2) NOT NULL,
+    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor)
+);
+
+CREATE TABLE Pedido (
+    ID_Pedido SERIAL PRIMARY KEY,
+    Fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ID_Usuario INT REFERENCES Usuario(ID_Usuario),
+    Estado VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Detalle_Pedido (
+    ID_Detalle SERIAL PRIMARY KEY,
+    ID_Pedido INT REFERENCES Pedido(ID_Pedido),
+    ID_Producto INT REFERENCES Producto(ID_Producto),
+    Cantidad INT NOT NULL,
+    Precio_Total DECIMAL(10, 2) NOT NULL
+);
+   ```
+### 4. Crear Modelos y Controladores
+1. Crear una carpeta llamada models en la raíz del proyecto.
+
+2. Dentro de models, crear archivos para cada entidad:
+   1. usuario.js
+   2. proveedor.js
+   3. producto.js
+   4. pedido.js
+   5. detalle_Pedido.js
+   
+3. Crear una carpeta llamada controllers en la raíz del proyecto.
+
+4. Dentro de controllers, crear archivos para cada entidad:
+   1. usuarioController.js
+   2. proveedorController.js
+   3. productoController.js
+   4. pedidoController.js
+   5. detalle_PedidoController.js
+
+### 5. Configurar las Rutas en Express
+1. Crear una carpeta llamada routes en la raíz.
+
+2. Dentro de routes, crear un archivo usuarioRoutes.js:
+   
 
 ### 4. Iniciar el Servidor
 1. Inicia el servidor de desarrollo:
