@@ -191,7 +191,7 @@ Asignar Permisos al Usuario
    ```
 3. Instala las extensiones recomendadas para desarrollo en Node.js, Vue.js, y PostgreSQL.
 
-### 4. Instalar PostgreSQL [deprecated] instalar con npm pg
+### 4. Instalar PostgreSQL
 1. Instala PostgreSQL:
    ```bash
    sudo apt update
