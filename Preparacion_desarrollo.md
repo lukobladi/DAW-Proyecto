@@ -88,6 +88,22 @@ Aquí tienes las instrucciones en formato **Markdown** para configurar y comenza
 
 # Instrucciones para Configurar el Entorno de Desarrollo
 
+## **Arch Linux**
+
+sudo steamos-readonly disable
+
+sudo pacman -Syu
+
+
+sudo pacman -S postgresql
+
+
+git config --global user.name "Eneko"
+git config --global user.email "eneko@disroot.org"
+
+
+sudo -u postgres initdb --locale=C.UTF-8 --encoding=UTF8 -D '/var/lib/postgres/data'
+
 ## **Para Windows 11**
 
 ### 1. Instalar Visual Studio Code
@@ -272,8 +288,20 @@ app.listen(port, () => {
    npm install dotenv pg
    ```
 
+   ```
+   sudo -u postgres psql
+   CREATE DATABASE ekonsumo;
+   CREATE USER ekonsumo_user WITH PASSWORD '1234';
+   GRANT ALL PRIVILEGES ON DATABASE ekonsumo TO ekonsumo_user;
+   ```
+
 ### 3. Crear tablas
    ```
+   psql -U ekonsumo_user -d ekonsumo
+
+   \c ekonsumo 
+
+
    CREATE TABLE Usuario (
     ID_Usuario SERIAL PRIMARY KEY,
     Nombre VARCHAR(100) NOT NULL,
@@ -312,6 +340,8 @@ CREATE TABLE Detalle_Pedido (
     Cantidad INT NOT NULL,
     Precio_Total DECIMAL(10, 2) NOT NULL
 );
+
+\dt 
    ```
 ### 4. Crear Modelos y Controladores
 1. Crear una carpeta llamada models en la raíz del proyecto.
