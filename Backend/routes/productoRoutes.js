@@ -3,19 +3,234 @@ const productoController = require('../controllers/productoController');
 
 const router = express.Router();
 
-// Crear un nuevo producto
+/**
+ * @swagger
+ * tags:
+ *   name: Productos
+ *   description: Endpoints para gestionar productos
+ */
+
+/**
+ * @swagger
+ * /api/productos:
+ *   post:
+ *     summary: Crear un nuevo producto
+ *     tags: [Productos]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *                 example: "Manzana"
+ *               descripcion:
+ *                 type: string
+ *                 example: "Manzana roja orgánica"
+ *               precio:
+ *                 type: number
+ *                 format: float
+ *                 example: 1.50
+ *               id_proveedor:
+ *                 type: integer
+ *                 example: 1
+ *     responses:
+ *       201:
+ *         description: Producto creado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id_producto:
+ *                   type: integer
+ *                   example: 1
+ *                 nombre:
+ *                   type: string
+ *                   example: "Manzana"
+ *                 descripcion:
+ *                   type: string
+ *                   example: "Manzana roja orgánica"
+ *                 precio:
+ *                   type: number
+ *                   format: float
+ *                   example: 1.50
+ *                 id_proveedor:
+ *                   type: integer
+ *                   example: 1
+ *       500:
+ *         description: Error al crear el producto
+ */
 router.post('/', productoController.crear);
 
-// Obtener todos los productos
+/**
+ * @swagger
+ * /api/productos:
+ *   get:
+ *     summary: Obtener todos los productos
+ *     tags: [Productos]
+ *     responses:
+ *       200:
+ *         description: Lista de productos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id_producto:
+ *                     type: integer
+ *                     example: 1
+ *                   nombre:
+ *                     type: string
+ *                     example: "Manzana"
+ *                   descripcion:
+ *                     type: string
+ *                     example: "Manzana roja orgánica"
+ *                   precio:
+ *                     type: number
+ *                     format: float
+ *                     example: 1.50
+ *                   id_proveedor:
+ *                     type: integer
+ *                     example: 1
+ *       500:
+ *         description: Error al obtener los productos
+ */
 router.get('/', productoController.listar);
 
-// Obtener un producto por ID
+/**
+ * @swagger
+ * /api/productos/{id}:
+ *   get:
+ *     summary: Obtener un producto por ID
+ *     tags: [Productos]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del producto
+ *     responses:
+ *       200:
+ *         description: Producto encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id_producto:
+ *                   type: integer
+ *                   example: 1
+ *                 nombre:
+ *                   type: string
+ *                   example: "Manzana"
+ *                 descripcion:
+ *                   type: string
+ *                   example: "Manzana roja orgánica"
+ *                 precio:
+ *                   type: number
+ *                   format: float
+ *                   example: 1.50
+ *                 id_proveedor:
+ *                   type: integer
+ *                   example: 1
+ *       404:
+ *         description: Producto no encontrado
+ *       500:
+ *         description: Error al obtener el producto
+ */
 router.get('/:id', productoController.obtenerPorId);
 
-// Actualizar un producto
+/**
+ * @swagger
+ * /api/productos/{id}:
+ *   put:
+ *     summary: Actualizar un producto
+ *     tags: [Productos]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del producto
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *                 example: "Manzana Verde"
+ *               descripcion:
+ *                 type: string
+ *                 example: "Manzana verde orgánica"
+ *               precio:
+ *                 type: number
+ *                 format: float
+ *                 example: 1.75
+ *               id_proveedor:
+ *                 type: integer
+ *                 example: 1
+ *     responses:
+ *       200:
+ *         description: Producto actualizado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id_producto:
+ *                   type: integer
+ *                   example: 1
+ *                 nombre:
+ *                   type: string
+ *                   example: "Manzana Verde"
+ *                 descripcion:
+ *                   type: string
+ *                   example: "Manzana verde orgánica"
+ *                 precio:
+ *                   type: number
+ *                   format: float
+ *                   example: 1.75
+ *                 id_proveedor:
+ *                   type: integer
+ *                   example: 1
+ *       404:
+ *         description: Producto no encontrado
+ *       500:
+ *         description: Error al actualizar el producto
+ */
 router.put('/:id', productoController.actualizar);
 
-// Eliminar un producto
+/**
+ * @swagger
+ * /api/productos/{id}:
+ *   delete:
+ *     summary: Eliminar un producto
+ *     tags: [Productos]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del producto
+ *     responses:
+ *       204:
+ *         description: Producto eliminado correctamente
+ *       404:
+ *         description: Producto no encontrado
+ *       500:
+ *         description: Error al eliminar el producto
+ */
 router.delete('/:id', productoController.eliminar);
 
 module.exports = router;
