@@ -1,5 +1,6 @@
 
 const express = require('express');
+const swaggerSetup = require('./swagger');
 
 const pool = require('./db');
 
@@ -9,21 +10,17 @@ const proveedorRoutes = require('./routes/proveedorRoutes');
 const pedidoRoutes = require('./routes/pedidoRoutes');
 const detallePedidoRoutes = require('./routes/detallePedidoRoutes');
 
+// Solo para testear API
+const testRoutes = require('./routes/testRoutes');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Configura Swagger
+swaggerSetup(app);  
+
 app.use(express.json());
 
-// Ruta de prueba para verificar la conexión a la base de datos
-app.get('/test-db', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT NOW()');
-    res.json(result.rows[0]);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error al conectar con la base de datos');
-  }
-});
 
 // Usar las rutas
 app.use('/api/usuarios', usuarioRoutes);
@@ -31,7 +28,10 @@ app.use('/api/productos', productoRoutes);
 app.use('/api/proveedores', proveedorRoutes);
 app.use('/api/pedidos', pedidoRoutes);
 app.use('/api/detalle-pedido', detallePedidoRoutes);
+app.use('/api', testRoutes);
+
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`Documentación de la API: http://localhost:${PORT}/api-docs`);
 });

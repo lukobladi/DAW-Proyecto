@@ -366,7 +366,11 @@ CREATE TABLE Detalle_Pedido (
 1. Crear una carpeta llamada routes en la raíz.
 
 2. Dentro de routes, crear un archivo usuarioRoutes.js:
-   
+
+### 6. Instalar Swagger
+   ```
+   npm install swagger-jsdoc swagger-ui-express 
+   ```
 
 ### 4. Iniciar el Servidor
 1. Inicia el servidor de desarrollo:
