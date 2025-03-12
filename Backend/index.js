@@ -2,8 +2,6 @@
 const express = require('express');
 const swaggerSetup = require('./swagger');
 
-const pool = require('./db');
-
 const usuarioRoutes = require('./routes/usuarioRoutes');
 const productoRoutes = require('./routes/productoRoutes');
 const proveedorRoutes = require('./routes/proveedorRoutes');

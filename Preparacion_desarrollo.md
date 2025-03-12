@@ -293,6 +293,7 @@ app.listen(port, () => {
    CREATE DATABASE ekonsumo;
    CREATE USER ekonsumo_user WITH PASSWORD '1234';
    GRANT ALL PRIVILEGES ON DATABASE ekonsumo TO ekonsumo_user;
+   
    ```
 
 ### 3. Crear tablas

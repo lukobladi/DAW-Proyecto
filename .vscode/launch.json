@@ -7,12 +7,19 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "Iniciar la aplicación",
             "skipFiles": [
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}/Backend/index.js",
-            "runtimeExecutable": "/home/deck/.nvm/versions/node/v22.14.0/bin/node"
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ],
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "console": "integratedTerminal"
+//            "runtimeExecutable": "/home/deck/.nvm/versions/node/v22.14.0/bin/node"
         }
     ]
 }
