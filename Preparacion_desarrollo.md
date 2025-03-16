@@ -386,3 +386,21 @@ CREATE TABLE Detalle_Pedido (
 
 ### 1. Front-End (Vue.js)
 - Crea los componentes necesarios para las pantallas de registro, inicio de sesión, gestión de productos
+
+1. Estructura del proyecto:
+frontend/
+├── public/
+│   └── index.html
+├── src/
+│   ├── assets/
+│   ├── components/
+│   ├── views/
+│   ├── router/
+│   ├── services/  # Para llamadas a la API
+│   ├── App.vue
+│   └── main.js
+└── package.json
+
+2. Configura Vue.js
+npm install -g @vue/cli
+vue create Frontend
