@@ -404,3 +404,6 @@ frontend/
 2. Configura Vue.js
 npm install -g @vue/cli
 vue create Frontend
+npm install
+npm run serve
+npm install vue-router
