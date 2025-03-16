@@ -1,5 +1,5 @@
 const express = require('express');
-const detallePedidoController = require('../controllers/detallePedidoController');
+const DetallePedidoController = require('../controllers/DetallePedidoController');
 
 const router = express.Router();
 
@@ -63,7 +63,7 @@ const router = express.Router();
  *       500:
  *         description: Error al crear el detalle de pedido
  */
-router.post('/', detallePedidoController.crear);
+router.post('/', DetallePedidoController.crear);
 
 /**
  * @swagger
@@ -109,7 +109,7 @@ router.post('/', detallePedidoController.crear);
  *       500:
  *         description: Error al obtener los detalles del pedido
  */
-router.get('/pedido/:id_pedido', detallePedidoController.listarPorPedido);
+router.get('/pedido/:id_pedido', DetallePedidoController.listarPorPedido);
 
 /**
  * @swagger
@@ -173,7 +173,7 @@ router.get('/pedido/:id_pedido', detallePedidoController.listarPorPedido);
  *       500:
  *         description: Error al actualizar el detalle de pedido
  */
-router.put('/:id', detallePedidoController.actualizar);
+router.put('/:id', DetallePedidoController.actualizar);
 
 /**
  * @swagger
@@ -196,6 +196,6 @@ router.put('/:id', detallePedidoController.actualizar);
  *       500:
  *         description: Error al eliminar el detalle de pedido
  */
-router.delete('/:id', detallePedidoController.eliminar);
+router.delete('/:id', DetallePedidoController.eliminar);
 
 module.exports = router;

@@ -1,6 +1,6 @@
-const Producto = require('../models/producto');
+const Producto = require('../models/Producto');
 
-const productoController = {
+const ProductoController = {
   // Crear un nuevo producto
   async crear(req, res) {
     const { nombre, descripcion, precio, id_proveedor } = req.body;
@@ -65,4 +65,4 @@ const productoController = {
   },
 };
 
-module.exports = productoController;
+module.exports = ProductoController;

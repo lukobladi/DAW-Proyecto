@@ -1,5 +1,5 @@
 const express = require('express');
-const proveedorController = require('../controllers/proveedorController');
+const ProveedorController = require('../controllers/ProveedorController');
 
 const router = express.Router();
 
@@ -61,7 +61,7 @@ const router = express.Router();
  *       500:
  *         description: Error al crear el proveedor
  */
-router.post('/', proveedorController.crear);
+router.post('/', ProveedorController.crear);
 
 /**
  * @swagger
@@ -97,7 +97,7 @@ router.post('/', proveedorController.crear);
  *       500:
  *         description: Error al obtener los proveedores
  */
-router.get('/', proveedorController.listar);
+router.get('/', ProveedorController.listar);
 
 /**
  * @swagger
@@ -140,7 +140,7 @@ router.get('/', proveedorController.listar);
  *       500:
  *         description: Error al obtener el proveedor
  */
-router.get('/:id', proveedorController.obtenerPorId);
+router.get('/:id', ProveedorController.obtenerPorId);
 
 /**
  * @swagger
@@ -202,7 +202,7 @@ router.get('/:id', proveedorController.obtenerPorId);
  *       500:
  *         description: Error al actualizar el proveedor
  */
-router.put('/:id', proveedorController.actualizar);
+router.put('/:id', ProveedorController.actualizar);
 
 /**
  * @swagger
@@ -225,6 +225,6 @@ router.put('/:id', proveedorController.actualizar);
  *       500:
  *         description: Error al eliminar el proveedor
  */
-router.delete('/:id', proveedorController.eliminar);
+router.delete('/:id', ProveedorController.eliminar);
 
 module.exports = router;

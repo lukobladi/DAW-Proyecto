@@ -1,5 +1,5 @@
 const express = require('express');
-const productoController = require('../controllers/productoController');
+const ProductoController = require('../controllers/ProductoController');
 
 const router = express.Router();
 
@@ -63,7 +63,7 @@ const router = express.Router();
  *       500:
  *         description: Error al crear el producto
  */
-router.post('/', productoController.crear);
+router.post('/', ProductoController.crear);
 
 /**
  * @swagger
@@ -100,7 +100,7 @@ router.post('/', productoController.crear);
  *       500:
  *         description: Error al obtener los productos
  */
-router.get('/', productoController.listar);
+router.get('/', ProductoController.listar);
 
 /**
  * @swagger
@@ -144,7 +144,7 @@ router.get('/', productoController.listar);
  *       500:
  *         description: Error al obtener el producto
  */
-router.get('/:id', productoController.obtenerPorId);
+router.get('/:id', ProductoController.obtenerPorId);
 
 /**
  * @swagger
@@ -208,7 +208,7 @@ router.get('/:id', productoController.obtenerPorId);
  *       500:
  *         description: Error al actualizar el producto
  */
-router.put('/:id', productoController.actualizar);
+router.put('/:id', ProductoController.actualizar);
 
 /**
  * @swagger
@@ -231,6 +231,6 @@ router.put('/:id', productoController.actualizar);
  *       500:
  *         description: Error al eliminar el producto
  */
-router.delete('/:id', productoController.eliminar);
+router.delete('/:id', ProductoController.eliminar);
 
 module.exports = router;

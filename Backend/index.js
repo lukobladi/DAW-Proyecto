@@ -2,14 +2,14 @@
 const express = require('express');
 const swaggerSetup = require('./swagger');
 
-const usuarioRoutes = require('./routes/usuarioRoutes');
-const productoRoutes = require('./routes/productoRoutes');
-const proveedorRoutes = require('./routes/proveedorRoutes');
-const pedidoRoutes = require('./routes/pedidoRoutes');
-const detallePedidoRoutes = require('./routes/detallePedidoRoutes');
+const usuarioRoutes = require('./routes/UsuarioRoutes');
+const productoRoutes = require('./routes/ProductoRoutes');
+const proveedorRoutes = require('./routes/ProveedorRoutes');
+const pedidoRoutes = require('./routes/PedidoRoutes');
+const detallePedidoRoutes = require('./routes/DetallePedidoRoutes');
 
 // Solo para testear API
-const testRoutes = require('./routes/testRoutes');
+const testRoutes = require('./routes/TestRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -28,6 +28,10 @@ app.use('/api/pedidos', pedidoRoutes);
 app.use('/api/detalle-pedido', detallePedidoRoutes);
 app.use('/api', testRoutes);
 
+app.use((err, req, res, next) => {
+  console.error(err.stack); // Log del error en la consola
+  res.status(500).json({ error: 'Algo salió mal en el servidor' });
+});
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
