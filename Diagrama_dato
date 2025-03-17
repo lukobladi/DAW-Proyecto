@@ -1,0 +1,202 @@
+¡Claro! Aquí tienes un diagrama de la base de datos en formato **Markdown** (`.md`). Este diagrama describe las tablas y sus relaciones basadas en la estructura que hemos discutido.
+
+---
+
+## **Diagrama de la Base de Datos**
+
+### **Tablas Principales**
+
+#### 1. **Usuario**
+| Columna          | Tipo de Dato      | Descripción                          |
+|------------------|-------------------|--------------------------------------|
+| `ID_Usuario`     | `SERIAL`          | Clave primaria.                      |
+| `Nombre`         | `VARCHAR(100)`    | Nombre del usuario.                  |
+| `Correo`         | `VARCHAR(100)`    | Correo electrónico (único).          |
+| `Contraseña`     | `VARCHAR(100)`    | Contraseña del usuario.              |
+| `Rol`            | `VARCHAR(50)`     | Rol del usuario (admin, gestor, usuario). |
+
+---
+
+#### 2. **Proveedor**
+| Columna          | Tipo de Dato      | Descripción                          |
+|------------------|-------------------|--------------------------------------|
+| `ID_Proveedor`   | `SERIAL`          | Clave primaria.                      |
+| `Nombre`         | `VARCHAR(100)`    | Nombre del proveedor.                |
+| `Contacto`       | `VARCHAR(100)`    | Nombre de la persona de contacto.    |
+| `Telefono`       | `VARCHAR(20)`     | Teléfono del proveedor.              |
+| `Correo`         | `VARCHAR(100)`    | Correo electrónico del proveedor.    |
+
+---
+
+#### 3. **Producto**
+| Columna          | Tipo de Dato      | Descripción                          |
+|------------------|-------------------|--------------------------------------|
+| `ID_Producto`    | `SERIAL`          | Clave primaria.                      |
+| `Nombre`         | `VARCHAR(100)`    | Nombre del producto.                 |
+| `Descripcion`    | `TEXT`            | Descripción del producto.            |
+| `Precio`         | `DECIMAL(10, 2)`  | Precio del producto.                 |
+| `Frecuencia_Pedido` | `VARCHAR(50)`  | Frecuencia de pedido (semanal, mensual, etc.). |
+| `ID_Proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
+
+---
+
+#### 4. **Pedido**
+| Columna          | Tipo de Dato      | Descripción                          |
+|------------------|-------------------|--------------------------------------|
+| `ID_Pedido`      | `SERIAL`          | Clave primaria.                      |
+| `ID_Usuario`     | `INT`             | Clave foránea (relación con `Usuario`). |
+| `ID_Proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
+| `Fecha_Pedido`   | `TIMESTAMP`       | Fecha y hora del pedido.             |
+| `Fecha_Entrega`  | `TIMESTAMP`       | Fecha y hora de entrega.             |
+| `Estado`         | `VARCHAR(50)`     | Estado del pedido (pendiente, completado, cancelado). |
+
+---
+
+#### 5. **Detalle_Pedido**
+| Columna          | Tipo de Dato      | Descripción                          |
+|------------------|-------------------|--------------------------------------|
+| `ID_Detalle`     | `SERIAL`          | Clave primaria.                      |
+| `ID_Pedido`      | `INT`             | Clave foránea (relación con `Pedido`). |
+| `ID_Producto`    | `INT`             | Clave foránea (relación con `Producto`). |
+| `Cantidad`       | `INT`             | Cantidad del producto.               |
+| `Precio_Total`   | `DECIMAL(10, 2)`  | Precio total del producto.           |
+
+---
+
+#### 6. **Usuario_Proveedor** (Relación muchos a muchos)
+| Columna          | Tipo de Dato      | Descripción                          |
+|------------------|-------------------|--------------------------------------|
+| `ID_Usuario`     | `INT`             | Clave foránea (relación con `Usuario`). |
+| `ID_Proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
+
+---
+
+#### 7. **Pedido_Periodico**
+| Columna          | Tipo de Dato      | Descripción                          |
+|------------------|-------------------|--------------------------------------|
+| `ID_Pedido_Periodico` | `SERIAL`    | Clave primaria.                      |
+| `ID_Usuario`     | `INT`             | Clave foránea (relación con `Usuario`). |
+| `ID_Producto`    | `INT`             | Clave foránea (relación con `Producto`). |
+| `Cantidad`       | `INT`             | Cantidad del producto.               |
+| `Fecha_Inicio`   | `TIMESTAMP`       | Fecha de inicio del pedido periódico.|
+| `Fecha_Fin`      | `TIMESTAMP`       | Fecha de fin del pedido periódico.   |
+| `Activo`         | `BOOLEAN`         | Indica si el pedido está activo.     |
+
+---
+
+### **Relaciones entre Tablas**
+
+1. **Usuario** → **Usuario_Proveedor** (1 a muchos):
+   - Un usuario puede estar asociado a varios proveedores.
+   - Un proveedor puede estar asociado a varios usuarios.
+
+2. **Proveedor** → **Producto** (1 a muchos):
+   - Un proveedor puede tener varios productos.
+   - Un producto pertenece a un solo proveedor.
+
+3. **Usuario** → **Pedido** (1 a muchos):
+   - Un usuario puede realizar varios pedidos.
+   - Un pedido pertenece a un solo usuario.
+
+4. **Proveedor** → **Pedido** (1 a muchos):
+   - Un proveedor puede estar asociado a varios pedidos.
+   - Un pedido está asociado a un solo proveedor.
+
+5. **Pedido** → **Detalle_Pedido** (1 a muchos):
+   - Un pedido puede contener varios detalles.
+   - Un detalle pertenece a un solo pedido.
+
+6. **Producto** → **Detalle_Pedido** (1 a muchos):
+   - Un producto puede estar en varios detalles de pedido.
+   - Un detalle de pedido está asociado a un solo producto.
+
+7. **Usuario** → **Pedido_Periodico** (1 a muchos):
+   - Un usuario puede tener varios pedidos periódicos.
+   - Un pedido periódico pertenece a un solo usuario.
+
+8. **Producto** → **Pedido_Periodico** (1 a muchos):
+   - Un producto puede estar en varios pedidos periódicos.
+   - Un pedido periódico está asociado a un solo producto.
+
+---
+
+### **Diagrama de Relaciones**
+
+```plaintext
+Usuario
+|--< Usuario_Proveedor >--|
+|                         |
+Proveedor                 |
+|--< Producto             |
+|--< Pedido >-- Detalle_Pedido
+|--< Pedido_Periodico
+```
+
+---
+
+### **Ejemplo de Consultas SQL**
+
+#### Crear Tablas
+```sql
+CREATE TABLE Usuario (
+    ID_Usuario SERIAL PRIMARY KEY,
+    Nombre VARCHAR(100) NOT NULL,
+    Correo VARCHAR(100) UNIQUE NOT NULL,
+    Contraseña VARCHAR(100) NOT NULL,
+    Rol VARCHAR(50) NOT NULL CHECK (Rol IN ('admin', 'gestor', 'usuario'))
+);
+
+CREATE TABLE Proveedor (
+    ID_Proveedor SERIAL PRIMARY KEY,
+    Nombre VARCHAR(100) NOT NULL,
+    Contacto VARCHAR(100),
+    Telefono VARCHAR(20),
+    Correo VARCHAR(100)
+);
+
+CREATE TABLE Producto (
+    ID_Producto SERIAL PRIMARY KEY,
+    Nombre VARCHAR(100) NOT NULL,
+    Descripcion TEXT,
+    Precio DECIMAL(10, 2) NOT NULL,
+    Frecuencia_Pedido VARCHAR(50) CHECK (Frecuencia_Pedido IN ('semanal', 'quincenal', 'mensual', 'bimestral', 'trimestral', 'semestral')),
+    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE
+);
+
+CREATE TABLE Pedido (
+    ID_Pedido SERIAL PRIMARY KEY,
+    ID_Usuario INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
+    Fecha_Pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Fecha_Entrega TIMESTAMP,
+    Estado VARCHAR(50) NOT NULL CHECK (Estado IN ('pendiente', 'completado', 'cancelado'))
+);
+
+CREATE TABLE Detalle_Pedido (
+    ID_Detalle SERIAL PRIMARY KEY,
+    ID_Pedido INT REFERENCES Pedido(ID_Pedido) ON DELETE CASCADE,
+    ID_Producto INT REFERENCES Producto(ID_Producto) ON DELETE CASCADE,
+    Cantidad INT NOT NULL,
+    Precio_Total DECIMAL(10, 2) NOT NULL
+);
+
+CREATE TABLE Usuario_Proveedor (
+    ID_Usuario INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
+    PRIMARY KEY (ID_Usuario, ID_Proveedor)
+);
+
+CREATE TABLE Pedido_Periodico (
+    ID_Pedido_Periodico SERIAL PRIMARY KEY,
+    ID_Usuario INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+    ID_Producto INT REFERENCES Producto(ID_Producto) ON DELETE CASCADE,
+    Cantidad INT NOT NULL,
+    Fecha_Inicio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Fecha_Fin TIMESTAMP,
+    Activo BOOLEAN DEFAULT TRUE
+);
+```
+
+---
+
+Este diagrama y las consultas SQL te ayudarán a implementar la base de datos en tu proyecto. Si necesitas más detalles o ajustes, ¡no dudes en pedírmelo! 🚀
