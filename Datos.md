@@ -38,6 +38,7 @@
 | `Precio`         | `DECIMAL(10, 2)`  | Precio del producto.                 |
 | `Frecuencia_Pedido` | `VARCHAR(50)`  | Frecuencia de pedido (semanal, mensual, etc.). |
 | `ID_Proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
+| `ID_Usuario_Gestor`   | `INT`             | Clave foránea (relación con `Usuario`). |
 
 ---
 
@@ -200,7 +201,8 @@ CREATE TABLE Producto (
     Descripcion TEXT,
     Precio DECIMAL(10, 2) NOT NULL,
     Frecuencia_Pedido VARCHAR(50) CHECK (Frecuencia_Pedido IN ('semanal', 'mensual', 'bimestral', 'trimestral', 'semestral')),
-    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE
+    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
+    ID_Usuario_Encargado INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
 );
 
 CREATE TABLE Pedido (
