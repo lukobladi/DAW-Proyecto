@@ -1,6 +1,6 @@
-const Proveedor = require('../models/proveedor');
+const Proveedor = require('../models/Proveedor');
 
-const proveedorController = {
+const ProveedorController = {
   // Crear un nuevo proveedor
   async crear(req, res) {
     const { nombre, contacto, telefono, correo } = req.body;
@@ -65,4 +65,4 @@ const proveedorController = {
   },
 };
 
-module.exports = proveedorController;
+module.exports = ProveedorController;

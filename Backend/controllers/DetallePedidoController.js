@@ -1,6 +1,6 @@
-const DetallePedido = require('../models/detallePedido');
+const DetallePedido = require('../models/DetallePedido');
 
-const detallePedidoController = {
+const DetallePedidoController = {
   // Crear un nuevo detalle de pedido
   async crear(req, res) {
     const { id_pedido, id_producto, cantidad, precio_total } = req.body;
@@ -51,4 +51,4 @@ const detallePedidoController = {
   },
 };
 
-module.exports = detallePedidoController;
+module.exports = DetallePedidoController;

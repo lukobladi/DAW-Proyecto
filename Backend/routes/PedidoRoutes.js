@@ -1,5 +1,5 @@
 const express = require('express');
-const pedidoController = require('../controllers/pedidoController');
+const PedidoController = require('../controllers/PedidoController');
 
 const router = express.Router();
 
@@ -57,7 +57,7 @@ const router = express.Router();
  *       500:
  *         description: Error al crear el pedido
  */
-router.post('/', pedidoController.crear);
+router.post('/', PedidoController.crear);
 
 /**
  * @swagger
@@ -91,7 +91,7 @@ router.post('/', pedidoController.crear);
  *       500:
  *         description: Error al obtener los pedidos
  */
-router.get('/', pedidoController.listar);
+router.get('/', PedidoController.listar);
 
 /**
  * @swagger
@@ -132,7 +132,7 @@ router.get('/', pedidoController.listar);
  *       500:
  *         description: Error al obtener el pedido
  */
-router.get('/:id', pedidoController.obtenerPorId);
+router.get('/:id', PedidoController.obtenerPorId);
 
 /**
  * @swagger
@@ -190,7 +190,7 @@ router.get('/:id', pedidoController.obtenerPorId);
  *       500:
  *         description: Error al actualizar el pedido
  */
-router.put('/:id', pedidoController.actualizar);
+router.put('/:id', PedidoController.actualizar);
 
 /**
  * @swagger
@@ -213,6 +213,6 @@ router.put('/:id', pedidoController.actualizar);
  *       500:
  *         description: Error al eliminar el pedido
  */
-router.delete('/:id', pedidoController.eliminar);
+router.delete('/:id', PedidoController.eliminar);
 
 module.exports = router;

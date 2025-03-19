@@ -1,6 +1,6 @@
-const Pedido = require('../models/pedido');
+const Pedido = require('../models/Pedido');
 
-const pedidoController = {
+const PedidoController = {
   // Crear un nuevo pedido
   async crear(req, res) {
     const { fecha, id_usuario, estado } = req.body;
@@ -65,4 +65,4 @@ const pedidoController = {
   },
 };
 
-module.exports = pedidoController;
+module.exports = PedidoController;

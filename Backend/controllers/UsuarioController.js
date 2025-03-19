@@ -1,6 +1,6 @@
-const Usuario = require('../models/usuario');
+const Usuario = require('../models/Usuario');
 
-const usuarioController = {
+const UsuarioController = {
   // Registrar un nuevo usuario
   async registrar(req, res) {
     const { nombre, correo, contraseña, rol } = req.body;
@@ -80,4 +80,4 @@ const usuarioController = {
   },
 };
 
-module.exports = usuarioController;
+module.exports = UsuarioController;

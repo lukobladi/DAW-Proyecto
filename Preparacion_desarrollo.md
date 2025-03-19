@@ -302,13 +302,15 @@ app.listen(port, () => {
 
    \c ekonsumo 
 
-
-   CREATE TABLE Usuario (
+CREATE TABLE Usuario (
     ID_Usuario SERIAL PRIMARY KEY,
     Nombre VARCHAR(100) NOT NULL,
     Correo VARCHAR(100) UNIQUE NOT NULL,
     Contraseña VARCHAR(100) NOT NULL,
-    Rol VARCHAR(50) NOT NULL
+    Movil VARCHAR(20),
+    Rol VARCHAR(50) NOT NULL CHECK (Rol IN ('admin', 'gestor', 'usuario')),
+    Activo BOOLEAN DEFAULT FALSE,
+    Saldo DECIMAL(10, 2) DEFAULT 0
 );
 
 CREATE TABLE Proveedor (
@@ -316,7 +318,10 @@ CREATE TABLE Proveedor (
     Nombre VARCHAR(100) NOT NULL,
     Contacto VARCHAR(100),
     Telefono VARCHAR(20),
-    Correo VARCHAR(100)
+    Movil VARCHAR(20),
+    Correo VARCHAR(100),
+    Envio_Movil BOOLEAN DEFAULT FALSE,
+    Envio_Mail BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE Producto (
@@ -324,22 +329,63 @@ CREATE TABLE Producto (
     Nombre VARCHAR(100) NOT NULL,
     Descripcion TEXT,
     Precio DECIMAL(10, 2) NOT NULL,
-    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor)
+    Frecuencia_Pedido VARCHAR(50) CHECK (Frecuencia_Pedido IN ('semanal', 'mensual', 'bimestral', 'trimestral', 'semestral')),
+    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
+    ID_Usuario_Encargado INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
 );
 
 CREATE TABLE Pedido (
     ID_Pedido SERIAL PRIMARY KEY,
-    Fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    ID_Usuario INT REFERENCES Usuario(ID_Usuario),
-    Estado VARCHAR(50) NOT NULL
+    ID_Usuario_Encargado INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
+    Fecha_Apertura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Fecha_Cierre TIMESTAMP,
+    Fecha_Entrega TIMESTAMP,
+    Estado VARCHAR(50) NOT NULL CHECK (Estado IN ('pendiente', 'en proceso', 'entregado', 'repartido', 'cancelado'))
 );
 
 CREATE TABLE Detalle_Pedido (
     ID_Detalle SERIAL PRIMARY KEY,
-    ID_Pedido INT REFERENCES Pedido(ID_Pedido),
-    ID_Producto INT REFERENCES Producto(ID_Producto),
+    ID_Pedido INT REFERENCES Pedido(ID_Pedido) ON DELETE CASCADE,
+    ID_Producto INT REFERENCES Producto(ID_Producto) ON DELETE CASCADE,
     Cantidad INT NOT NULL,
-    Precio_Total DECIMAL(10, 2) NOT NULL
+    Precio_Total DECIMAL(10, 2) NOT NULL,
+    ID_Usuario_Comprador INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE
+);
+
+CREATE TABLE Usuario_Proveedor (
+    ID_Usuario INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
+    PRIMARY KEY (ID_Usuario, ID_Proveedor)
+);
+
+CREATE TABLE Pedido_Periodico (
+    ID_Pedido_Periodico SERIAL PRIMARY KEY,
+    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
+    Fecha_Inicio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Fecha_Fin TIMESTAMP,
+    Activo BOOLEAN DEFAULT TRUE,
+    Periodicidad INT,
+    Dia_Apertura INT,
+    Dia_Cierre INT,
+    Dia_Entrega INT
+);
+
+CREATE TABLE Pago (
+    ID_Pago SERIAL PRIMARY KEY,
+    ID_Usuario_Deudor INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+    ID_Usuario_Creditor INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+    Monto DECIMAL(10, 2) NOT NULL,
+    Fecha_Pago TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Estado VARCHAR(50) NOT NULL CHECK (Estado IN ('pendiente', 'completado'))
+);
+
+CREATE TABLE Notificacion (
+    ID_Notificacion SERIAL PRIMARY KEY,
+    ID_Usuario INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+    Mensaje TEXT NOT NULL,
+    Fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Leida BOOLEAN DEFAULT FALSE
 );
 
 \dt 
@@ -386,3 +432,24 @@ CREATE TABLE Detalle_Pedido (
 
 ### 1. Front-End (Vue.js)
 - Crea los componentes necesarios para las pantallas de registro, inicio de sesión, gestión de productos
+
+1. Estructura del proyecto:
+frontend/
+├── public/
+│   └── index.html
+├── src/
+│   ├── assets/
+│   ├── components/
+│   ├── views/
+│   ├── router/
+│   ├── services/  # Para llamadas a la API
+│   ├── App.vue
+│   └── main.js
+└── package.json
+
+2. Configura Vue.js
+npm install -g @vue/cli
+vue create Frontend
+npm install
+npm run serve
+npm install vue-router
