@@ -4,7 +4,7 @@ RESUMEN
 **Objetivo:** Desarrollar una aplicación web para gestionar un grupo de consumo local y ecológico, mejorando la eficiencia en la gestión de pedidos y productos, actualmente realizada manualmente en Google Sheets.
 
 **Contexto Actual:**
-- **Estructura del Grupo:** Aproximadamente 40 familias y 15 productores. Cada familia gestiona su propio proveedor.
+- **Estructura del Grupo:** Aproximadamente 40 familias y 15 productores. Cada familia gestiona entre 0 y 4 proveedores.
 - **Proceso Actual:** Los usuarios ingresan a Google Sheets para realizar pedidos, lo que es ineficiente y propenso a errores. Los pedidos pueden ser semanales o periódicos, y se entregan en un local común.
 - **Gestión en Google Sheets:** Cada proveedor tiene su propia página, y se realizan cálculos complejos para gestionar gastos y pedidos.
 
@@ -12,8 +12,11 @@ RESUMEN
 - **Automatización:** La nueva aplicación web automatizará procesos, ofreciendo una interfaz amigable.
 - **Características Clave:**
   - Gestión de productos y proveedores.
-  - Sistema de pedidos con recordatorios automáticos.
-  - Cálculos automáticos de gastos y deudas.
+  - Sistema de pedidos puntuales o periodicos.
+  - Los pedidos son conjuntos entre todos los usuarios.
+  - Los pedidos tienen una periodo para poder añadir lineas.
+  - Los pedidos los crea el usuario que gestiona el proveedor correspondiente a ese pedido.
+  - Cálculos automáticos de gastos y deudas mensual.
   - Mejora en la comunicación entre usuarios y productores.
 
 ### Roadmap del Proyecto
@@ -37,8 +40,8 @@ RESUMEN
 - **Gestión de Usuarios:** Alta/baja de usuarios y autenticación.
 
 ### Cronograma
-- **Inicio:** 01/11/2024
-- **Finalización:** 01/04/2025 (Mantenimiento en curso)
+- **Inicio:** 01/3/2025
+- **Finalización:** 01/05/2025 (Mantenimiento en curso)
 
 ### Resumen del Proyecto: Prototipos y Flujos de Usuario para la Aplicación Web de Consumo Local y Ecológico
 
@@ -50,30 +53,27 @@ RESUMEN
    - Logo, menú de navegación, descripción del grupo y botones de inicio de sesión/registro.
 
 2. **Pantalla de Registro:** 
-   - Formulario para registrar usuarios con campos para nombre, correo y contraseña.
+   - Formulario para registrar usuarios con campos para nombre, movil, correo y contraseña.
 
 3. **Pantalla de Inicio de Sesión:** 
-   - Formulario para iniciar sesión con correo y contraseña.
+   - Formulario para iniciar sesión con movil y contraseña.
 
 4. **Pantalla de Dashboard:** 
-   - Resumen de pedidos, acceso rápido a realizar pedidos y notificaciones.
+   - Cesta de compra mensual. Se muestra el estado de los productos pedidos. Acceso rápido a pedir productos y notificaciones.
 
 5. **Pantalla de Productos:** 
-   - Lista de productos con detalles y opción de añadir al pedido.
+   - Listas de productos agrupados por proveedor con detalles y opción de añadir a la cesta mensual.
 
-6. **Pantalla de Realización de Pedidos:** 
-   - Selección de productos, ingreso de cantidades y resumen del pedido.
+6. **Pantalla de Historial de Pedidos:** 
+   - Lista de productos pedidos anteriormente con detalles y estado.
 
-7. **Pantalla de Historial de Pedidos:** 
-   - Lista de pedidos anteriores con detalles y estado.
-
-8. **Pantalla de Gestión de Usuarios (Administradores):** 
+7. **Pantalla de Gestión de Usuarios (Administradores):** 
    - Lista de usuarios con opciones para editar o eliminar.
 
-9. **Pantalla de Configuración de Cuenta:** 
+8. **Pantalla de Configuración de Cuenta:** 
    - Formulario para actualizar información del usuario.
 
-10. **Pantalla de Soporte y Ayuda:** 
+9.  **Pantalla de Soporte y Ayuda:** 
     - Sección de preguntas frecuentes y formulario de contacto.
 
 ### Herramientas para Crear Prototipos
