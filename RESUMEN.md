@@ -59,13 +59,13 @@ RESUMEN
    - Formulario para iniciar sesión con movil y contraseña.
 
 4. **Pantalla de Dashboard:** 
-   - Cesta de compra mensual. Se muestra el estado de los productos pedidos. Acceso rápido a pedir productos y notificaciones.
+   - Cesta de compra mensual. Se muestra el estado de los productos pedidos. Acceso rápido a pedir productos (añadir productos a la cesta mensual) y notificaciones.
 
 5. **Pantalla de Productos:** 
    - Listas de productos agrupados por proveedor con detalles y opción de añadir a la cesta mensual.
 
 6. **Pantalla de Historial de Pedidos:** 
-   - Lista de productos pedidos anteriormente con detalles y estado.
+   - Lista de productos pedidos anteriormente con detalles y estado sin limite de fecha.
 
 7. **Pantalla de Gestión de Usuarios (Administradores):** 
    - Lista de usuarios con opciones para editar o eliminar.
@@ -75,6 +75,12 @@ RESUMEN
 
 9.  **Pantalla de Soporte y Ayuda:** 
     - Sección de preguntas frecuentes y formulario de contacto.
+
+10.  **Pantalla de Gestión de proveedor:** 
+    - Los usuarios que tengan proveedor asignado podrán entrar en esta pantalla.
+    - El usuario puede modificar datos del proveedor.
+    - El usuario puede crear, modificar y borrar productos disponibles de ese proveedor.
+    - EL usuario puede crear pedidos conjuntos puntuales o periódicos.
 
 ### Herramientas para Crear Prototipos
 - **Figma, Adobe XD, Sketch, InVision:** Herramientas para diseño y prototipado.

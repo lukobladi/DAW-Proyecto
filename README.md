@@ -1,52 +1,72 @@
 # DAW-Proyecto
 
 ## Tabla de Contenidos
-- [Descripción del Proyecto](#descripción-del-proyecto)
-- [Contexto Actual](#contexto-actual)
-  - [Estructura del Grupo](#estructura-del-grupo)
-    - [Ejemplo actual de uso para incorporar una familia](#ejemplo-actual-de-uso-para-incorporar-una-familia)
-    - [Ejemplo actual de uso semanal para una familia que quiere pedir verduras](#ejemplo-actual-de-uso-semanal-para-una-familia-que-quiere-pedir-verduras)
-    - [Ejemplo actual de uso semanal para una familia que quiere pedir huevos](#ejemplo-actual-de-uso-semanal-para-una-familia-que-quiere-pedir-huevos)
-    - [Ejemplo actual de uso semanal para la familia que gestiona las verduras](#ejemplo-actual-de-uso-semanal-para-la-familia-que-gestiona-las-verduras)
-    - [Ejemplo actual de uso semanal para la familia que gestiona el pan](#ejemplo-actual-de-uso-semanal-para-la-familia-que-gestiona-el-pan)
-  - [Pedidos periódicos](#pedidos-periódicos)
-  - [Frecuencia de Pedidos](#frecuencia-de-pedidos)
-  - [Entrega de Productos](#entrega-de-productos)
-- [Gestión Actual en Google Sheets](#gestión-actual-en-google-sheets)
-  - [Páginas por Proveedor](#páginas-por-proveedor)
-  - [Registro de Productos](#registro-de-productos)
-  - [Pedidos](#pedidos)
-  - [Usuarios y Familias](#usuarios-y-familias)
-- [Cálculos Avanzados](#cálculos-avanzados)
-  - [Gasto Mensual](#gasto-mensual)
-  - [Cálculo de Pedidos](#cálculo-de-pedidos)
-- [Propuesta de Solución](#propuesta-de-solución)
-- [Roadmap del Proyecto](#roadmap-del-proyecto-aplicación-web-para-un-grupo-de-consumo-local-y-ecológico)
-- [Definición de Requisitos](#1-definición-de-requisitos)
-- [Cronograma del Proyecto](#2-cronograma-del-proyecto-aplicación-web-para-un-grupo-de-consumo-local-y-ecológico)
-- [Prototipos de la Aplicación Web](#3-prototipos-de-la-aplicación-web)
-  - [Pantalla de Inicio](#1-pantalla-de-inicio)
-  - [Pantalla de Registro](#2-pantalla-de-registro)
-  - [Pantalla de Inicio de Sesión](#3-pantalla-de-inicio-de-sesión)
-  - [Pantalla de Dashboard (Tablero)](#4-pantalla-de-dashboard-tablero)
-  - [Pantalla de Productos](#5-pantalla-de-productos)
-  - [Pantalla de Realización de Pedidos](#6-pantalla-de-realización-de-pedidos)
-  - [Pantalla de Historial de Pedidos](#7-pantalla-de-historial-de-pedidos)
-  - [Pantalla de Gestión de Usuarios (para administradores)](#8-pantalla-de-gestión-de-usuarios-para-administradores)
-  - [Pantalla de Configuración de Cuenta](#9-pantalla-de-configuración-de-cuenta)
-  - [Pantalla de Soporte y Ayuda](#10-pantalla-de-soporte-y-ayuda)
-- [Flujo de Usuario para la Aplicación Web de Consumo Local y Ecológico](#4-flujo-de-usuario-para-la-aplicación-web-de-consumo-local-y-ecológico)
-  - [Gestión de Productos](#1-gestión-de-productos)
-  - [Gestión de Pedidos](#2-gestión-de-pedidos)
-  - [Cálculos Financieros](#3-cálculos-financieros)
-  - [Gestión de Usuarios (para administradores)](#4-gestión-de-usuarios-para-administradores)
-  - [Pantalla de Soporte y Ayuda](#5-pantalla-de-soporte-y-ayuda)
-  - [Notificaciones y Recordatorios](#6-notificaciones-y-recordatorios)
-  - [Historial de Pedidos](#7-historial-de-pedidos)
-  - [Configuración de Cuenta](#8-configuración-de-cuenta)
-  - [Panel de Administración (para administradores)](#9-panel-de-administración-para-administradores)
-  - [Informes y Estadísticas](#10-informes-y-estadísticas)
-  - [Soporte y Ayuda](#11-soporte-y-ayuda)
+- [DAW-Proyecto](#daw-proyecto)
+  - [Tabla de Contenidos](#tabla-de-contenidos)
+- [Descripción del Proyecto: Desarrollo de una Aplicación Web para un Grupo de Consumo Local y Ecológico](#descripción-del-proyecto-desarrollo-de-una-aplicación-web-para-un-grupo-de-consumo-local-y-ecológico)
+  - [Contexto Actual](#contexto-actual)
+    - [Estructura del Grupo](#estructura-del-grupo)
+      - [Ejemplo actual de uso para incorporar una familia:](#ejemplo-actual-de-uso-para-incorporar-una-familia)
+      - [Ejemplo actual de uso semanal para una familia que quiere pedir verduras:](#ejemplo-actual-de-uso-semanal-para-una-familia-que-quiere-pedir-verduras)
+      - [Ejemplo actual de uso semanal para una familia que quiere pedir huevos:](#ejemplo-actual-de-uso-semanal-para-una-familia-que-quiere-pedir-huevos)
+      - [Ejemplo actual de uso semanal para la familia que gestiona las verduras:](#ejemplo-actual-de-uso-semanal-para-la-familia-que-gestiona-las-verduras)
+      - [Ejemplo actual de uso semanal para la familia que gestiona el pan (periódico):](#ejemplo-actual-de-uso-semanal-para-la-familia-que-gestiona-el-pan-periódico)
+    - [Pedidos](#pedidos)
+    - [Pedido abierto](#pedido-abierto)
+    - [Pedidos periódicos](#pedidos-periódicos)
+    - [Frecuencia de Pedidos](#frecuencia-de-pedidos)
+    - [Entrega de Productos](#entrega-de-productos)
+    - [Reparto de Productos](#reparto-de-productos)
+  - [Gestión Actual en Google Sheets](#gestión-actual-en-google-sheets)
+    - [Cálculos Avanzados](#cálculos-avanzados)
+  - [Propuesta de Solución](#propuesta-de-solución)
+- [Roadmap del Proyecto: Aplicación Web para un Grupo de Consumo Local y Ecológico](#roadmap-del-proyecto-aplicación-web-para-un-grupo-de-consumo-local-y-ecológico)
+  - [1. Definición de Requisitos](#1-definición-de-requisitos)
+  - [2. Planificación del Proyecto](#2-planificación-del-proyecto)
+  - [3. Diseño de la Aplicación](#3-diseño-de-la-aplicación)
+  - [4. Configuración del Entorno de Desarrollo](#4-configuración-del-entorno-de-desarrollo)
+  - [5. Desarrollo del Back-End](#5-desarrollo-del-back-end)
+  - [6. Desarrollo del Front-End](#6-desarrollo-del-front-end)
+  - [7. Pruebas](#7-pruebas)
+  - [8. Documentación](#8-documentación)
+  - [9. Despliegue](#9-despliegue)
+  - [10. Recopilación de Feedback y Mejora Continua](#10-recopilación-de-feedback-y-mejora-continua)
+  - [11. Mantenimiento](#11-mantenimiento)
+  - [1. Definición de Requisitos](#1-definición-de-requisitos-1)
+  - [2. Cronograma del Proyecto: Aplicación Web para un Grupo de Consumo Local y Ecológico](#2-cronograma-del-proyecto-aplicación-web-para-un-grupo-de-consumo-local-y-ecológico)
+  - [3. Prototipos de la Aplicación Web](#3-prototipos-de-la-aplicación-web)
+    - [1. Pantalla de Inicio](#1-pantalla-de-inicio)
+    - [2. Pantalla de Registro](#2-pantalla-de-registro)
+    - [3. Pantalla de Inicio de Sesión](#3-pantalla-de-inicio-de-sesión)
+    - [4. Pantalla de Dashboard (Tablero)](#4-pantalla-de-dashboard-tablero)
+    - [5. Pantalla de Productos](#5-pantalla-de-productos)
+    - [6. Pantalla de Realización de Pedidos](#6-pantalla-de-realización-de-pedidos)
+    - [7. Pantalla de Historial de Pedidos (\>funcionalidades adicionales\<)](#7-pantalla-de-historial-de-pedidos-funcionalidades-adicionales)
+    - [8. Pantalla de Gestión de Usuarios (para administradores)](#8-pantalla-de-gestión-de-usuarios-para-administradores)
+    - [9. Pantalla de Configuración de Cuenta (\>funcionalidades adicionales\<)](#9-pantalla-de-configuración-de-cuenta-funcionalidades-adicionales)
+    - [10. Pantalla de Soporte y Ayuda (\>funcionalidades adicionales\<)](#10-pantalla-de-soporte-y-ayuda-funcionalidades-adicionales)
+    - [Herramientas para Crear Prototipos](#herramientas-para-crear-prototipos)
+  - [4. Flujo de Usuario para la Aplicación Web de Consumo Local y Ecológico](#4-flujo-de-usuario-para-la-aplicación-web-de-consumo-local-y-ecológico)
+    - [1. Gestión de Productos](#1-gestión-de-productos)
+      - [Flujo de Usuario:](#flujo-de-usuario)
+    - [2. Gestión de Pedidos](#2-gestión-de-pedidos)
+      - [Flujo de Usuario:](#flujo-de-usuario-1)
+    - [3. Cálculos Financieros](#3-cálculos-financieros)
+      - [Flujo de Usuario:](#flujo-de-usuario-2)
+    - [4. Gestión de Usuarios (para administradores)](#4-gestión-de-usuarios-para-administradores)
+      - [Flujo de Usuario:](#flujo-de-usuario-3)
+    - [5. Pantalla de Soporte y Ayuda _(funcionalidades adicionales)_](#5-pantalla-de-soporte-y-ayuda-funcionalidades-adicionales)
+      - [Flujo de Usuario:](#flujo-de-usuario-4)
+    - [6. Notificaciones y Recordatorios _(funcionalidades adicionales)_](#6-notificaciones-y-recordatorios-funcionalidades-adicionales)
+      - [Flujo de Usuario:](#flujo-de-usuario-5)
+    - [7. Historial de Pedidos _(funcionalidades adicionales)_](#7-historial-de-pedidos-funcionalidades-adicionales)
+      - [Flujo de Usuario:](#flujo-de-usuario-6)
+    - [8. Configuración de Cuenta](#8-configuración-de-cuenta)
+      - [Flujo de Usuario:](#flujo-de-usuario-7)
+    - [9. Panel de Administración (para administradores)](#9-panel-de-administración-para-administradores)
+      - [Flujo de Usuario:](#flujo-de-usuario-8)
+    - [10. Informes y Estadísticas _(funcionalidades adicionales)_](#10-informes-y-estadísticas-funcionalidades-adicionales)
+      - [Flujo de Usuario:](#flujo-de-usuario-9)
 
 # Descripción del Proyecto: Desarrollo de una Aplicación Web para un Grupo de Consumo Local y Ecológico
 
@@ -56,7 +76,7 @@ El objetivo de este proyecto es desarrollar una aplicación web que facilite la 
 
 ### Estructura del Grupo
 
-El grupo está formado por familias que se encargan de contactar directamente con los productores. Cada usuario asume la responsabilidad de mantenerse en contacto con un proveedor específico, aunque hay algunos usuarios que no gestionan ningún proveedor.
+El grupo está formado por familias que se encargan de contactar directamente con los productores. Cada usuario asume la responsabilidad de mantenerse en contacto con un proveedor específico, aunque hay algunos usuarios que no gestionan ningún proveedor. Será el usuario que gestiona ese proveedor el encargado de dar de alta, modificar y borrar productos. Será el encargado de dar de alta pedidos conjuntos estableciendo un periodo en el que los usuarios podrán añadir lineas al pedido.
 
 #### Ejemplo actual de uso para incorporar una familia:
 1. Contacta con responsable del grupo de consumo.
@@ -104,15 +124,23 @@ El grupo está formado por familias que se encargan de contactar directamente co
 7. Al final de mes, el productor le pasa factura.
 8. Comprueba que el importe coincide con los pedidos.
 
+### Pedidos 
+Los pedidos se hacen de manera conjunta entre todos los usuarios del grupo. Los pedidos los abre el usuario encargado de ese proveedor(grupo de productos). 
+
+### Pedido abierto
+Cuando un pedido está abierto significa que el usuario encargado del proveedor ha abierto un pedido y ha establecido una fecha de apertura y una fecha de cierre. El pedido solo será editable en este periodo.
 
 ### Pedidos periódicos
-Hay algunos productos que se piden semanalmente de manera automática sin que tenga que intervenir el usuario hasta que quiera dejar de recibir ese pedido
+Hay algunos productos que se piden semanalmente de manera automática sin que tenga que intervenir el usuario hasta que quiera dejar de recibir ese pedido.
 
 ### Frecuencia de Pedidos
 Los productos se solicitan a diferentes proveedores con distintas frecuencias: algunos se piden semanalmente, mientras que otros se solicitan cada dos, tres o seis meses.
 
 ### Entrega de Productos
-Todos los productos se entregan en un local común, donde los usuarios pueden recoger sus pedidos.
+Todos los productos se entregan en un local común, donde los usuarios pueden recoger sus pedidos. Es el usuario encargado de ese proveedor el que establecerá una fecha aproximada de entrega en el momento de abrir un pedido.
+
+### Reparto de Productos
+Algunos productos se repartirán a los usuarios que los han pedido, después de que hayan sido entregados en el local.
 
 ## Gestión Actual en Google Sheets
 
@@ -133,8 +161,9 @@ Se realizan cálculos complejos para gestionar la información financiera y de p
 
 La nueva aplicación web permitirá automatizar y optimizar todos estos procesos, ofreciendo una interfaz más amigable y eficiente para los usuarios. Algunas de las características clave incluirán:
 
-- **Gestión de Productos y Proveedores**: Una sección dedicada para que los usuarios puedan ver y gestionar los productos y proveedores de manera más intuitiva.
-- **Sistema de Pedidos**: Un sistema que permita realizar pedidos de forma sencilla, con recordatorios automáticos para las fechas límite.
+- **Gestión de Productos y Proveedores**: Una sección dedicada para que los usuarios gestores puedan ver y gestionar los productos y proveedores de manera más intuitiva.
+- **Sistema de Pedidos**: Un sistema que permita abrir pedidos de forma sencilla a los usuarios gestores.
+- **Sistema de Compras**: Un sistema que permita añadir productos a la cesta mensual de manera intuitiva.
 - **Cálculos Automáticos**: Automatización de los cálculos de gastos y deudas, eliminando la necesidad de realizar cálculos manuales en hojas de cálculo.
 - **Interacción entre Usuarios**: Facilitar la comunicación entre usuarios y productores, mejorando la colaboración y la eficiencia del grupo.
 
