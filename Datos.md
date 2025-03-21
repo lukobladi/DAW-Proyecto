@@ -130,9 +130,9 @@
    - El usuario revisa y modifica los productos.
    - El usuario hace clic en **"Continuar con el Pedido"**.
 
-4. **Notificación al Proveedor**:
-   - Cuando llega la fecha límite, se notifica al proveedor.
-   - Los productos se marcan como **"Pendiente"**.
+4. **Notificación al Proveedor y usuario gesto**:
+   - Cuando llega la fecha límite(fecha cierre de pedido), se notifica al proveedor y al usuario encargado de ese proveedor.
+   - Los productos se marcan como **"En proceso"**.
 
 5. **Seguimiento del Pedido**:
    - El usuario puede ver el estado del pedido en el **Dashboard** o **Historial de Pedidos**.
