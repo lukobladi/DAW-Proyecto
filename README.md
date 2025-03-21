@@ -376,7 +376,7 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
   - Formulario para actualizar información del usuario:
     - Nombre.
     - Correo electrónico.
-    - Contraseña (opcional).
+    - Contraseña (opcional). 
   - Botón de "Guardar Cambios".
 
 ### 10. Pantalla de Soporte y Ayuda (>funcionalidades adicionales<)
@@ -386,12 +386,31 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
   - Información de contacto del grupo.
 
 ### Herramientas para Crear Prototipos
+- **Penpot**: Herramienta de diseño colaborativo en línea. (La que he deciduido utilizar)
 - **Figma**: Herramienta de diseño colaborativo en línea.
 - **Adobe XD**: Software de diseño y prototipado de Adobe.
 - **Sketch**: Herramienta de diseño vectorial para macOS.
 - **InVision**: Plataforma para crear prototipos interactivos.
 
 ## 4. Flujo de Usuario para la Aplicación Web de Consumo Local y Ecológico
+
+### 0. Dashboard - Cesta de compra mensual
+
+#### Flujo de Usuario:
+1. **Acceso al dashboard**:
+   - El usuario inicia sesión y se abre por defecto el dashboard.
+
+2. **Crear un Nuevo Pedido (conjunto)** (para administradores y el usuario responsable de ese productor/proveedor):
+   - El usuario hace clic en "Abrir Pedido".
+   - Se muestra un modal para crear el pedido.
+   - El usuario selecciona la fecha de apertura, fecha de cierre, fecha aproximada de entrega y la posibilidad de hacerlo periodico.
+
+4. **Gestión de Pedidos Existentes (Historial de pedidos)_(funcionalidades adicionales)_** (para administradores y el usuario responsable de ese productor/proveedor)::
+   - El usuario puede ver una lista de pedidos anteriores.
+   - Selecciona un pedido para ver detalles, duplicar o cancelar si está pendiente.
+   - En los detalles se muestra el listado de productos, cantidades, usuario que ha comprado, importe, etc..
+
+---
 
 ### 1. Gestión de Productos
 
@@ -422,31 +441,27 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
 1. **Acceso a la sección de Pedidos**:
    - El usuario inicia sesión y selecciona "Pedidos" en el menú.
 
-2. **Crear un Nuevo Pedido**:
-   - El usuario hace clic en "Realizar Pedido".
-   - Se muestra una lista de productos con casillas de verificación.
-   - El usuario selecciona los productos deseados y especifica las cantidades.
+2. **Crear un Nuevo Pedido (conjunto)** (para administradores y el usuario responsable de ese productor/proveedor):
+   - El usuario hace clic en "Abrir Pedido".
+   - Se muestra un modal para crear el pedido.
+   - El usuario selecciona la fecha de apertura, fecha de cierre, fecha aproximada de entrega y la posibilidad de hacerlo periodico.
 
-3. **Confirmación del Pedido**:
-   - El usuario revisa el resumen del pedido, que incluye el total calculado.
-   - Hace clic en "Confirmar Pedido".
-   - Se muestra un mensaje de confirmación y se envía el pedido al proveedor correspondiente.
-
-4. **Gestión de Pedidos Existentes _(funcionalidades adicionales)_**:
+4. **Gestión de Pedidos Existentes (Historial de pedidos)_(funcionalidades adicionales)_** (para administradores y el usuario responsable de ese productor/proveedor)::
    - El usuario puede ver una lista de pedidos anteriores.
    - Selecciona un pedido para ver detalles, duplicar o cancelar si está pendiente.
+   - En los detalles se muestra el listado de productos, cantidades, usuario que ha comprado, importe, etc..
 
 ---
 
-### 3. Cálculos Financieros
+### 3. Cálculos Financieros (para administradores)
 
 #### Flujo de Usuario:
 1. **Acceso a la sección de Finanzas**:
    - El usuario inicia sesión y selecciona "Finanzas" en el menú.
 
 2. **Visualización de Gastos Mensuales**:
-   - Se muestra un resumen de los gastos mensuales de la familia.
-   - El usuario puede ver detalles de cada pedido y el saldo actual.
+   - Se muestra un resumen de los gastos mensuales de las familia.
+   - El usuario puede ver detalles de cada pedido y el saldo actual de cada usuario.
 
 3. **Gestión de Deudas**:
    - El usuario puede ver a quién debe dinero y el importe.
