@@ -117,21 +117,22 @@
 
 ### **1. Flujo de Usuario: Realización del Pedido a los Proveedores**
 1. **Pantalla de Dashboard**:
-   - El usuario hace clic en **"Pedir productos"**.
+   - El usuario hace clic en **"Adquirir productos"**.
 
 2. **Pantalla de Productos**:
+   - El usuario selecciona un grupo de productos(proveedor).
+   - Si el pedido a ese proveedor está abierto, estarán activados los botones para añadir productos.
    - El usuario selecciona productos y cantidades.
-   - Los productos se agrupan por proveedor.
    - El usuario hace clic en **"Añadir al Pedido"**.
 
-3. **Pantalla de Cesta de Compras Mensual**:
-   - La cesta se resetea mensualmente.
+3. **Pantalla de dashboard - Cesta de Compras Mensual**:
+   - La cesta se resetea mensualmente. Excepto productos no entragados. 
    - El usuario revisa y modifica los productos.
    - El usuario hace clic en **"Continuar con el Pedido"**.
 
-4. **Notificación al Proveedor**:
-   - Cuando llega la fecha límite, se notifica al proveedor.
-   - Los productos se marcan como **"Pendiente"**.
+4. **Notificación al Proveedor y usuario gesto**:
+   - Cuando llega la fecha límite(fecha cierre de pedido), se notifica al proveedor y al usuario encargado de ese proveedor.
+   - Los productos se marcan como **"En proceso"**.
 
 5. **Seguimiento del Pedido**:
    - El usuario puede ver el estado del pedido en el **Dashboard** o **Historial de Pedidos**.
@@ -139,8 +140,10 @@
 
 6. **Entrega del Pedido**:
    - El proveedor entrega los productos.
-   - El usuario confirma la entrega.
-   - El sistema actualiza el estado a **"Completado"**.
+   - Puede que se haga el reparto de pedidos o no
+   - El usuario confirma la entrega o reparto.
+   - El sistema actualiza el estado del pedido a **"Entregado"** o **"Repartido"**.
+  
 
 ---
 

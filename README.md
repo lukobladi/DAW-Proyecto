@@ -38,17 +38,24 @@
     - [1. Pantalla de Inicio](#1-pantalla-de-inicio)
     - [2. Pantalla de Registro](#2-pantalla-de-registro)
     - [3. Pantalla de Inicio de Sesión](#3-pantalla-de-inicio-de-sesión)
+    - [3. Pantalla de Recuperar contraseña](#3-pantalla-de-recuperar-contraseña)
     - [4. Pantalla de Dashboard (Tablero)](#4-pantalla-de-dashboard-tablero)
-    - [5. Pantalla de Productos](#5-pantalla-de-productos)
-    - [6. Pantalla de Realización de Pedidos](#6-pantalla-de-realización-de-pedidos)
+    - [5. Pantalla de Compras](#5-pantalla-de-compras)
     - [7. Pantalla de Historial de Pedidos (\>funcionalidades adicionales\<)](#7-pantalla-de-historial-de-pedidos-funcionalidades-adicionales)
+    - [7. Pantalla de Detalles de Pedidos (\>funcionalidades adicionales\<)](#7-pantalla-de-detalles-de-pedidos-funcionalidades-adicionales)
     - [8. Pantalla de Gestión de Usuarios (para administradores)](#8-pantalla-de-gestión-de-usuarios-para-administradores)
     - [9. Pantalla de Configuración de Cuenta (\>funcionalidades adicionales\<)](#9-pantalla-de-configuración-de-cuenta-funcionalidades-adicionales)
     - [10. Pantalla de Soporte y Ayuda (\>funcionalidades adicionales\<)](#10-pantalla-de-soporte-y-ayuda-funcionalidades-adicionales)
+    - [11. Pantalla de Gestión de proveedores](#11-pantalla-de-gestión-de-proveedores)
+    - [12. Pantalla de Gestión de productos](#12-pantalla-de-gestión-de-productos)
+    - [13. Pantalla de Gestión de pedidos](#13-pantalla-de-gestión-de-pedidos)
     - [Herramientas para Crear Prototipos](#herramientas-para-crear-prototipos)
   - [4. Flujo de Usuario para la Aplicación Web de Consumo Local y Ecológico](#4-flujo-de-usuario-para-la-aplicación-web-de-consumo-local-y-ecológico)
     - [1. Gestión de Productos](#1-gestión-de-productos)
       - [Flujo de Usuario:](#flujo-de-usuario)
+    - [**2. Gestión de Pagos y Balances**](#2-gestión-de-pagos-y-balances)
+    - [**3. Gestión de Usuarios y Proveedores**](#3-gestión-de-usuarios-y-proveedores)
+    - [**4. Notificaciones**](#4-notificaciones)
     - [2. Gestión de Pedidos](#2-gestión-de-pedidos)
       - [Flujo de Usuario:](#flujo-de-usuario-1)
     - [3. Cálculos Financieros](#3-cálculos-financieros)
@@ -67,6 +74,19 @@
       - [Flujo de Usuario:](#flujo-de-usuario-8)
     - [10. Informes y Estadísticas _(funcionalidades adicionales)_](#10-informes-y-estadísticas-funcionalidades-adicionales)
       - [Flujo de Usuario:](#flujo-de-usuario-9)
+  - [DATOS](#datos)
+    - [**Tablas Principales**](#tablas-principales)
+      - [1. **Usuario**](#1-usuario)
+      - [2. **Proveedor**](#2-proveedor)
+      - [3. **Producto**](#3-producto)
+      - [4. **Pedido**](#4-pedido)
+      - [5. **Detalle\_Pedido**](#5-detalle_pedido)
+      - [6. **Usuario\_Proveedor** (Relación muchos a muchos)](#6-usuario_proveedor-relación-muchos-a-muchos)
+      - [7. **Pedido\_Periodico**](#7-pedido_periodico)
+      - [8. **Pago** (Nueva)](#8-pago-nueva)
+      - [9. **Notificacion** (Nueva)](#9-notificacion-nueva)
+    - [**5. Consultas SQL**](#5-consultas-sql)
+      - [Crear Tablas](#crear-tablas)
 
 # Descripción del Proyecto: Desarrollo de una Aplicación Web para un Grupo de Consumo Local y Ecológico
 
@@ -226,11 +246,16 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
   - **Acciones**:
     - Analizar las necesidades de los usuarios y extraer las funcionalidades necesarias.
     - Clasificar las funcionalidades en categorías, todas consideradas esenciales:
+      - [ ] **Gestión de Proveedores**: 
+        - Añadir, editar y eliminar datps de proveedores.
+        - **Complejidad Técnica**: Media. Requiere implementación de formularios y validaciones, así como la gestión de la base de datos.
       - [ ] **Gestión de Productos**: 
         - Añadir, editar y eliminar productos.
         - Visualizar información de proveedores.
         - **Complejidad Técnica**: Media. Requiere implementación de formularios y validaciones, así como la gestión de la base de datos.
       - [ ] **Gestión de Pedidos**: 
+        - Los pedidos son conjuntos.
+        - Cada pedido se hace a un proveedor con su lista de productos. 
         - Crear y gestionar pedidos.
         - Establecer fechas límite y enviar recordatorios.
         - **Complejidad Técnica**: Alta. Implica lógica de negocio para el manejo de fechas y cálculos, así como notificaciones.
@@ -292,26 +317,30 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
 
 | Hito | Descripción | Fecha de Inicio | Fecha de Finalización | Responsable |
 |------|-------------|------------------|-----------------------|-------------|
-| **1. Definición de Requisitos** | Crear una lista de funcionalidades clave. | 01/11/2024 | 15/11/2024 | Equipo de Proyecto |
-| **2. Planificación del Proyecto** | Establecer un cronograma con hitos y plazos. | 16/11/2024 | 20/11/2024 | Equipo de Proyecto |
-| **3. Diseño de la Aplicación** | Crear wireframes o prototipos de la interfaz de usuario. | 21/11/2024 | 10/12/2024 | Diseñador UI/UX |
-| **4. Configuración del Entorno de Desarrollo** | Instalar Node.js, Express, PostgreSQL, Vue.js y Bootstrap. | 11/12/2024 | 15/12/2024 | Desarrollador Back-End |
-| **5. Desarrollo del Back-End** | Definir modelos de datos, implementar rutas de API y autenticación. | 16/12/2024 | 31/01/2025 | Desarrollador Back-End |
-| **6. Desarrollo del Front-End** | Construir la interfaz de usuario y conectar con la API. | 01/02/2025 | 15/02/2025 | Desarrollador Front-End |
-| **7. Pruebas** | Implementar pruebas unitarias y de integración. | 16/02/2025 | 28/02/2025 | Equipo de QA |
-| **8. Documentación** | Documentar la API y crear una guía de usuario. | 01/03/2025 | 10/03/2025 | Documentador |
-| **9. Despliegue** | Elegir un servicio de hosting y configurar el entorno de producción. | 11/03/2025 | 15/03/2025 | Desarrollador Back-End |
-| **10. Recopilación de Feedback y Mejora Continua** | Lanzar una versión beta y recopilar feedback. | 16/03/2025 | 31/03/2025 | Equipo de Proyecto |
-| **11. Mantenimiento** | Establecer un plan para soporte técnico y actualizaciones. | 01/04/2025 | En curso | Equipo de Proyecto |
+| **1. Definición de Requisitos** | Crear una lista de funcionalidades clave. | 20/03/2025 | 20/03/2025 | Equipo de Proyecto |
+| **2. Planificación del Proyecto** | Establecer un cronograma con hitos y plazos. | 20/03/2025 | 20/03/2025 | Equipo de Proyecto |
+| **3. Diseño de la Aplicación** | Crear wireframes o prototipos de la interfaz de usuario. | 20/03/2025 | 20/03/2025 | Diseñador UI/UX |
+| **4. Configuración del Entorno de Desarrollo** | Instalar Node.js, Express, PostgreSQL, Vue.js y Bootstrap. | 20/03/2025 | 20/03/2025 | Desarrollador Back-End |
+| **5. Desarrollo del Back-End** | Definir modelos de datos, implementar rutas de API y autenticación. | 20/03/2025 | 30/03/2025 | Desarrollador Back-End |
+| **6. Desarrollo del Front-End** | Construir la interfaz de usuario y conectar con la API. | 01/04/2025 | 01/05/2025 | Desarrollador Front-End |
+| **7. Pruebas** | Implementar pruebas unitarias y de integración. | 01/05/2025 | 10/05/2025 | Equipo de QA |
+| **8. Documentación** | Documentar la API y crear una guía de usuario. | 20/03/2025 | 20/03/2025 | Documentador |
+| **9. Despliegue** | Elegir un servicio de hosting y configurar el entorno de producción. | 01/05/2025 | 15/05/2025 | Desarrollador Back-End |
+| **10. Recopilación de Feedback y Mejora Continua** | Lanzar una versión beta y recopilar feedback. | 01/05/2025 | 15/05/2025 | Equipo de Proyecto |
+| **11. Mantenimiento** | Establecer un plan para soporte técnico y actualizaciones. | 15/05/2025 | En curso | Equipo de Proyecto |
 
 ## 3. Prototipos de la Aplicación Web
 
 ### 1. Pantalla de Inicio
 - **Elementos Clave**:
   - Logo del grupo de consumo.
-  - Menú de navegación (Inicio, Productos, Pedidos, Usuarios, Contacto).
   - Breve descripción del grupo y su misión.
   - Botón de "Iniciar Sesión" o "Registrarse".
+
+Interacciones:
+
+        Al hacer clic en "Iniciar Sesión", se abre la Pantalla de Inicio de Sesión.
+        Al hacer clic en "Registrarse", se abre la Pantalla de Registro.
 
 ### 2. Pantalla de Registro
 - **Elementos Clave**:
@@ -323,53 +352,102 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
   - Botón de "Registrarse".
   - Enlace a "Iniciar Sesión" si ya tiene una cuenta.
 
+    Interacciones:
+
+        Al hacer clic en "Registrarse", se valida la información:
+
+            Si es correcta, se muestra un mensaje de éxito y se redirige a la Pantalla de Inicio de Sesión.
+            Si hay errores, se muestran mensajes de validación (por ejemplo, "El correo ya está registrado").
+
 ### 3. Pantalla de Inicio de Sesión
 - **Elementos Clave**:
   - Formulario de inicio de sesión con campos para:
-    - Correo electrónico.
+    - Movil.
     - Contraseña.
   - Botón de "Iniciar Sesión".
   - Enlace a "¿Olvidaste tu contraseña?".
 
+    Interacciones:
+
+        Al hacer clic en "Iniciar Sesión", se valida la información:
+
+            Si es correcta, se redirige al Dashboard.
+
+            Si hay errores, se muestra un mensaje de error (por ejemplo, "Credenciales incorrectas").
+
+        Al hacer clic en "¿Olvidaste tu contraseña?", se abre la Pantalla de Recuperación de Contraseña.
+
+### 3. Pantalla de Recuperar contraseña
+- **Elementos Clave**:
+  - Formulario de recuperar contraseña con campos para:
+    - Movil.
+
+  - Botón: [Enviar Instrucciones].
+
+    Interacciones:
+
+        Al hacer clic en "Enviar Instrucciones", se envía un correo o sms con un enlace para restablecer la contraseña.
+
 ### 4. Pantalla de Dashboard (Tablero)
 - **Elementos Clave**:
-  - Resumen de pedidos actuales y próximos.
-  - Acceso rápido a "Realizar Pedido".
+  - Cesta mensual. Lista de productos pedidos y su estado.
+  - Acceso rápido a "Adquirir productos".
   - Sección de "Productos Disponibles".
-  - Notificaciones sobre fechas límite de pedidos.
+  - Notificaciones sobre pedidos abierto(no periódicos).
 
-### 5. Pantalla de Productos
+    Interacciones:
+
+        Al hacer clic en "Adquirir productos", se abre la Pantalla de compras.
+
+        Al hacer clic en "Ver Historial de Pedidos", se abre la Pantalla de Historial de Pedidos.
+
+### 5. Pantalla de Compras
 - **Elementos Clave**:
+  - Agrupados por grupos de productos (proveedor)
   - Lista de productos con:
     - Nombre del producto.
     - Descripción.
     - Precio.
-    - Botón de "Añadir al Pedido".
+    - Botón de "Añadir a la cesta/pedido conjunto".
   - Filtros para buscar productos por categoría o proveedor.
 
-### 6. Pantalla de Realización de Pedidos
-- **Elementos Clave**:
-  - Selección de productos con casillas de verificación.
-  - Campo para ingresar cantidades.
-  - Resumen del pedido con total calculado.
-  - Botón de "Confirmar Pedido".
+    Interacciones:
+
+        Al hacer clic en "Añadir producto", se actualiza el carrito/cesta y se muestra un mensaje de confirmación.
+
+        Al hacer clic en "Ver Cesta", se abre la Pantalla de la cesta o dashboard.
 
 ### 7. Pantalla de Historial de Pedidos (>funcionalidades adicionales<)
 - **Elementos Clave**:
   - Lista de pedidos anteriores con:
-    - Fecha del pedido.
-    - Productos solicitados.
-    - Estado del pedido (completado, pendiente, cancelado).
+    - Fecha de entrega
+    - Importe.
+    - Estado del pedido (entregao, repartido, pendiente, cancelado, en proceso).
+    -  botón [Ver Detalles]
   - Opción para ver detalles de cada pedido.
+
+### 7. Pantalla de Detalles de Pedidos (>funcionalidades adicionales<)
+- **Elementos Clave**:
+  - Lista de productos del pedido:
+    - Usuario que lo ha comprado
+    - Unidades
+    - Importe.
 
 ### 8. Pantalla de Gestión de Usuarios (para administradores)
 - **Elementos Clave**:
   - Lista de usuarios con:
     - Nombre.
     - Correo electrónico.
+    - Telefono
     - Estado (activo/inactivo).
     - Botones para "Editar" o "Eliminar" usuarios.
   - Opción para añadir nuevos usuarios.
+
+    Interacciones:
+
+        Al hacer clic en "Editar", se abre la Pantalla de Edición de Usuario.
+
+        Al hacer clic en "Eliminar", se muestra un mensaje de confirmación y se elimina el usuario.
 
 ### 9. Pantalla de Configuración de Cuenta (>funcionalidades adicionales<)
 - **Elementos Clave**:
@@ -379,18 +457,74 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
     - Contraseña (opcional). 
   - Botón de "Guardar Cambios".
 
+    Interacciones:
+
+        Al hacer clic en "Actualizar Información", se valida la información y se muestra un mensaje de éxito.
+
 ### 10. Pantalla de Soporte y Ayuda (>funcionalidades adicionales<)
 - **Elementos Clave**:
   - Sección de preguntas frecuentes (FAQ).
   - Formulario de contacto para enviar consultas.
   - Información de contacto del grupo.
 
+
+    Interacciones:
+
+        Al hacer clic en "Enviar Consulta", se muestra un mensaje de confirmación.
+
+### 11. Pantalla de Gestión de proveedores
+- **Elementos Clave**:
+  - Admin permiso total
+  - Usuarios que gestionan un proveedor, permiso de modificar
+  - Lista de proveedores con:
+    - Nombre.
+    - Correo electrónico.
+    - Telefono
+    - Estado (activo/inactivo).
+    - Botones para "Editar" o "Eliminar" proveedores.
+    - Listado de productos
+  - Opción para añadir nuevos proveedores.
+
+
+    Interacciones:
+
+        Al hacer clic en añadir proveedor se abre un modal con un formulario para introducir los datos del proveedor.
+
+### 12. Pantalla de Gestión de productos
+- **Elementos Clave**:
+  - Admin y usuario gestor del proveedor permiso total
+  - Lista de productos con:
+    - Nombre.
+    - Descripcion.
+    - Precio
+    - Estado (activo/inactivo).
+    - Botones para "Editar" o "Eliminar" productos.
+  - Opción para añadir nuevos productos.
+
+### 13. Pantalla de Gestión de pedidos
+- **Elementos Clave**:
+  - Admin y usuario gestor del proveedor permiso total
+  - El usuario geestor del proveedor será el encargado de abrir pedidos.
+  - Lista de pedidos con:
+    - Id
+    - Fecha de entrega(si hay)
+    - Fecha de apertura
+    - Fecha de cierre
+    - Importe total
+    - Ver detalles de pedido
+  - Opcion para crear un nuevo pedido. Abre modal con:
+    - Fecha de apertura. Desde cuando los usuarios podrán pedir productos.
+    - Fecha de cierre. Hasta cuando podrán los usuarios pedir, modificar o borrar productos.
+    - Fecha aproximada de reparto.
+    - Periodicidad. PAra programar el pedido para que se abra con los mismo parametros cada X dias.
 ### Herramientas para Crear Prototipos
 - **Penpot**: Herramienta de diseño colaborativo en línea. (La que he deciduido utilizar)
 - **Figma**: Herramienta de diseño colaborativo en línea.
 - **Adobe XD**: Software de diseño y prototipado de Adobe.
 - **Sketch**: Herramienta de diseño vectorial para macOS.
 - **InVision**: Plataforma para crear prototipos interactivos.
+
+Quiero una herramienta que sea open source compatible con linux y windows:
 
 ## 4. Flujo de Usuario para la Aplicación Web de Consumo Local y Ecológico
 
@@ -421,9 +555,13 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
 
 2. **Visualización de Productos**:
    - Se muestra una lista de productos disponibles con detalles (nombre, descripción, precio, proveedor/productor).
+   - El usuario selecciona un grupo de productos(proveedor).
+   - Si el pedido a ese proveedor está abierto, estarán activados los botones para añadir productos.
+   - El usuario selecciona productos y cantidades.
+   - El usuario hace clic en **"Añadir al Pedido"**.
    - El usuario puede aplicar filtros para buscar productos específicos.
 
-3. **Añadir un Producto** (para administradores y el usuario responsable de ese productor/proveedor):
+3. **Añadir un Producto (al proveedor/grupo de productos)** (para administradores y el usuario responsable de ese productor/proveedor):
    - El administrador selecciona "Añadir Producto".
    - Completa un formulario con la información del producto (nombre, descripción, precio, proveedor/productor).
    - Hace clic en "Guardar" para añadir el producto a la base de datos.
@@ -432,6 +570,50 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
    - El administrador selecciona un producto de la lista.
    - Elige "Editar" para modificar la información o "Eliminar" para quitar el producto.
    - Confirma la acción.
+
+5. **Pantalla de dashboard - Cesta de Compras Mensual**:
+   - La cesta se resetea mensualmente. Excepto productos no entragados. 
+   - El usuario ve un listado de los productos pedidos ese mes.
+   - Al lado de cada producto se muestra el estado.
+
+
+6. **Notificación al Proveedor y usuario gestor**:
+   - Cuando llega la fecha límite(fecha cierre de pedido), se notifica al proveedor y al usuario encargado de ese proveedor.
+   - Los productos se marcan como **"En proceso"**.
+
+
+7. **Seguimiento del Pedido**:
+   - El usuario puede ver el estado del pedido en el **Dashboard** y en el **Historial de Pedidos**.
+   - Estados: En proceso, En reparto, Entregado, Repartido.
+
+8. **Entrega del Pedido**:
+   - El proveedor entrega los productos.
+   - Puede que se haga el reparto de pedidos o no
+   - El usuario confirma la entrega o reparto.
+   - El sistema actualiza el estado del pedido a **"Entregado"** o **"Repartido"**.
+
+### **2. Gestión de Pagos y Balances**
+- Al final del mes, se calculan los saldos de los usuarios.
+- Los usuarios que deben dinero realizan pagos a los usuarios que gestionan los proveedores.
+- Se generan notificaciones para informar sobre los pagos pendientes.
+
+### **3. Gestión de Usuarios y Proveedores**
+- **Registro de Usuario**:
+  - El usuario introduce sus datos y espera la confirmación del administrador.
+- **Gestión de Usuarios**:
+  - El administrador activa/desactiva usuarios y accede a su historial de pedidos.
+- **Gestión de Proveedores**:
+  - Los usuarios encargados gestionan los proveedores que tienen asignados y los pedidos a ese proveedor.
+
+
+### **4. Notificaciones**
+- Los usuarios reciben notificaciones sobre:
+  - Nuevos pedidos.
+  - Cambios en el estado de los pedidos.
+  - Pagos pendientes.
+
+   - El usuario puede ver el estado del pedido en el **Dashboard** o **Historial de Pedidos**.
+   - Estados: Pendiente, En reparto, Entregado, Repartido.
 
 ---
 
@@ -614,3 +796,211 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
    - Se muestra un mensaje de confirmación de que el informe ha sido descargado.
 
 ---
+
+## DATOS
+
+### **Tablas Principales**
+
+#### 1. **Usuario**
+| Columna          | Tipo de Dato      | Descripción                          |
+|------------------|-------------------|--------------------------------------|
+| `ID_Usuario`     | `SERIAL`          | Clave primaria.                      |
+| `Nombre`         | `VARCHAR(100)`    | Nombre del usuario.                  |
+| `Correo`         | `VARCHAR(100)`    | Correo electrónico (único).          |
+| `Contraseña`     | `VARCHAR(100)`    | Contraseña del usuario.              |
+| `Movil`          | `VARCHAR(20)`     | Teléfono móvil del usuario.          |
+| `Rol`            | `VARCHAR(50)`     | Rol del usuario (admin, gestor, usuario). |
+| `Activo`         | `BOOLEAN`         | Indica si el usuario está activo.    |
+| `Saldo`          | `DECIMAL(10, 2)`  | Saldo actual del usuario.            |
+
+---
+
+#### 2. **Proveedor**
+| Columna          | Tipo de Dato      | Descripción                          |
+|------------------|-------------------|--------------------------------------|
+| `ID_Proveedor`   | `SERIAL`          | Clave primaria.                      |
+| `Nombre`         | `VARCHAR(100)`    | Nombre del proveedor.                |
+| `Contacto`       | `VARCHAR(100)`    | Nombre de la persona de contacto.    |
+| `Telefono`       | `VARCHAR(20)`     | Teléfono del proveedor.              |
+| `Movil`          | `VARCHAR(20)`     | Teléfono móvil del proveedor.        |
+| `Correo`         | `VARCHAR(100)`    | Correo electrónico del proveedor.    |
+| `Envio_Movil`    | `BOOLEAN`         | Avisar mediante SMS o WhatsApp.      |
+| `Envio_Mail`     | `BOOLEAN`         | Avisar mediante correo electrónico.  |
+
+---
+
+#### 3. **Producto**
+| Columna          | Tipo de Dato      | Descripción                          |
+|------------------|-------------------|--------------------------------------|
+| `ID_Producto`    | `SERIAL`          | Clave primaria.                      |
+| `Nombre`         | `VARCHAR(100)`    | Nombre del producto.                 |
+| `Descripcion`    | `TEXT`            | Descripción del producto.            |
+| `Precio`         | `DECIMAL(10, 2)`  | Precio del producto.                 |
+| `Frecuencia_Pedido` | `VARCHAR(50)`  | Frecuencia de pedido (semanal, mensual, etc.). |
+| `ID_Proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
+| `ID_Usuario_Gestor`   | `INT`             | Clave foránea (relación con `Usuario`). |
+
+---
+
+#### 4. **Pedido**
+| Columna          | Tipo de Dato      | Descripción                          |
+|------------------|-------------------|--------------------------------------|
+| `ID_Pedido`      | `SERIAL`          | Clave primaria.                      |
+| `ID_Usuario_Encargado` | `INT`     | Clave foránea (relación con `Usuario`). |
+| `ID_Proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
+| `Fecha_Apertura` | `TIMESTAMP`       | Fecha y hora de apertura del pedido. |
+| `Fecha_Cierre`   | `TIMESTAMP`       | Fecha límite para modificar el pedido. |
+| `Fecha_Entrega`  | `TIMESTAMP`       | Fecha y hora de entrega.             |
+| `Estado`         | `VARCHAR(50)`     | Estado del pedido (pendiente, en proceso, entregado, repartido, cancelado). |
+
+---
+
+#### 5. **Detalle_Pedido**
+| Columna          | Tipo de Dato      | Descripción                          |
+|------------------|-------------------|--------------------------------------|
+| `ID_Detalle`     | `SERIAL`          | Clave primaria.                      |
+| `ID_Pedido`      | `INT`             | Clave foránea (relación con `Pedido`). |
+| `ID_Producto`    | `INT`             | Clave foránea (relación con `Producto`). |
+| `Cantidad`       | `INT`             | Cantidad del producto.               |
+| `Precio_Total`   | `DECIMAL(10, 2)`  | Precio total del producto.           |
+| `ID_Usuario_Comprador` | `INT`     | Clave foránea (relación con `Usuario`). |
+
+---
+
+#### 6. **Usuario_Proveedor** (Relación muchos a muchos)
+| Columna          | Tipo de Dato      | Descripción                          |
+|------------------|-------------------|--------------------------------------|
+| `ID_Usuario`     | `INT`             | Clave foránea (relación con `Usuario`). |
+| `ID_Proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
+
+---
+
+#### 7. **Pedido_Periodico**
+| Columna          | Tipo de Dato      | Descripción                          |
+|------------------|-------------------|--------------------------------------|
+| `ID_Pedido_Periodico` | `SERIAL`    | Clave primaria.                      |
+| `ID_Proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
+| `Fecha_Inicio`   | `TIMESTAMP`       | Fecha de inicio del pedido periódico. |
+| `Fecha_Fin`      | `TIMESTAMP`       | Fecha de fin del pedido periódico.   |
+| `Activo`         | `BOOLEAN`         | Indica si el pedido está activo.     |
+| `Periodicidad`   | `INT`             | Días entre pedidos.                  |
+| `Dia_Apertura`   | `INT`             | Día de la semana en que se abre el pedido. |
+| `Dia_Cierre`     | `INT`             | Día de la semana en que se cierra el pedido. |
+| `Dia_Entrega`    | `INT`             | Día aproximado de entrega.           |
+
+---
+
+#### 8. **Pago** (Nueva)
+| Columna          | Tipo de Dato      | Descripción                          |
+|------------------|-------------------|--------------------------------------|
+| `ID_Pago`        | `SERIAL`          | Clave primaria.                      |
+| `ID_Usuario_Deudor` | `INT`         | Clave foránea (relación con `Usuario`). |
+| `ID_Usuario_Creditor` | `INT`      | Clave foránea (relación con `Usuario`). |
+| `Monto`          | `DECIMAL(10, 2)`  | Monto del pago.                      |
+| `Fecha_Pago`     | `TIMESTAMP`       | Fecha y hora del pago.               |
+| `Estado`         | `VARCHAR(50)`     | Estado del pago (pendiente, completado). |
+
+---
+
+#### 9. **Notificacion** (Nueva)
+| Columna          | Tipo de Dato      | Descripción                          |
+|------------------|-------------------|--------------------------------------|
+| `ID_Notificacion` | `SERIAL`         | Clave primaria.                      |
+| `ID_Usuario`     | `INT`             | Clave foránea (relación con `Usuario`). |
+| `Mensaje`        | `TEXT`            | Contenido de la notificación.        |
+| `Fecha`          | `TIMESTAMP`       | Fecha y hora de la notificación.     |
+| `Leida`          | `BOOLEAN`         | Indica si la notificación ha sido leída. |
+
+---
+
+
+### **5. Consultas SQL**
+
+#### Crear Tablas
+```sql
+CREATE TABLE Usuario (
+    ID_Usuario SERIAL PRIMARY KEY,
+    Nombre VARCHAR(100) NOT NULL,
+    Correo VARCHAR(100) UNIQUE NOT NULL,
+    Contraseña VARCHAR(100) NOT NULL,
+    Movil VARCHAR(20),
+    Rol VARCHAR(50) NOT NULL CHECK (Rol IN ('admin', 'gestor', 'usuario')),
+    Activo BOOLEAN DEFAULT FALSE,
+    Saldo DECIMAL(10, 2) DEFAULT 0
+);
+
+CREATE TABLE Proveedor (
+    ID_Proveedor SERIAL PRIMARY KEY,
+    Nombre VARCHAR(100) NOT NULL,
+    Contacto VARCHAR(100),
+    Telefono VARCHAR(20),
+    Movil VARCHAR(20),
+    Correo VARCHAR(100),
+    Envio_Movil BOOLEAN DEFAULT FALSE,
+    Envio_Mail BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE Producto (
+    ID_Producto SERIAL PRIMARY KEY,
+    Nombre VARCHAR(100) NOT NULL,
+    Descripcion TEXT,
+    Precio DECIMAL(10, 2) NOT NULL,
+    Frecuencia_Pedido VARCHAR(50) CHECK (Frecuencia_Pedido IN ('semanal', 'mensual', 'bimestral', 'trimestral', 'semestral')),
+    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
+    ID_Usuario_Encargado INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+);
+
+CREATE TABLE Pedido (
+    ID_Pedido SERIAL PRIMARY KEY,
+    ID_Usuario_Encargado INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
+    Fecha_Apertura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Fecha_Cierre TIMESTAMP,
+    Fecha_Entrega TIMESTAMP,
+    Estado VARCHAR(50) NOT NULL CHECK (Estado IN ('pendiente', 'en proceso', 'entregado', 'repartido', 'cancelado'))
+);
+
+CREATE TABLE Detalle_Pedido (
+    ID_Detalle SERIAL PRIMARY KEY,
+    ID_Pedido INT REFERENCES Pedido(ID_Pedido) ON DELETE CASCADE,
+    ID_Producto INT REFERENCES Producto(ID_Producto) ON DELETE CASCADE,
+    Cantidad INT NOT NULL,
+    Precio_Total DECIMAL(10, 2) NOT NULL,
+    ID_Usuario_Comprador INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE
+);
+
+CREATE TABLE Usuario_Proveedor (
+    ID_Usuario INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
+    PRIMARY KEY (ID_Usuario, ID_Proveedor)
+);
+
+CREATE TABLE Pedido_Periodico (
+    ID_Pedido_Periodico SERIAL PRIMARY KEY,
+    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
+    Fecha_Inicio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Fecha_Fin TIMESTAMP,
+    Activo BOOLEAN DEFAULT TRUE,
+    Periodicidad INT,
+    Dia_Apertura INT,
+    Dia_Cierre INT,
+    Dia_Entrega INT
+);
+
+CREATE TABLE Pago (
+    ID_Pago SERIAL PRIMARY KEY,
+    ID_Usuario_Deudor INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+    ID_Usuario_Creditor INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+    Monto DECIMAL(10, 2) NOT NULL,
+    Fecha_Pago TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Estado VARCHAR(50) NOT NULL CHECK (Estado IN ('pendiente', 'completado'))
+);
+
+CREATE TABLE Notificacion (
+    ID_Notificacion SERIAL PRIMARY KEY,
+    ID_Usuario INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+    Mensaje TEXT NOT NULL,
+    Fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Leida BOOLEAN DEFAULT FALSE
+);
+```
