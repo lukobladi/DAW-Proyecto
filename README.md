@@ -38,13 +38,17 @@
     - [1. Pantalla de Inicio](#1-pantalla-de-inicio)
     - [2. Pantalla de Registro](#2-pantalla-de-registro)
     - [3. Pantalla de Inicio de Sesión](#3-pantalla-de-inicio-de-sesión)
+    - [3. Pantalla de Recuperar contraseña](#3-pantalla-de-recuperar-contraseña)
     - [4. Pantalla de Dashboard (Tablero)](#4-pantalla-de-dashboard-tablero)
-    - [5. Pantalla de Productos](#5-pantalla-de-productos)
-    - [6. Pantalla de Realización de Pedidos](#6-pantalla-de-realización-de-pedidos)
+    - [5. Pantalla de Compras](#5-pantalla-de-compras)
     - [7. Pantalla de Historial de Pedidos (\>funcionalidades adicionales\<)](#7-pantalla-de-historial-de-pedidos-funcionalidades-adicionales)
+    - [7. Pantalla de Detalles de Pedidos (\>funcionalidades adicionales\<)](#7-pantalla-de-detalles-de-pedidos-funcionalidades-adicionales)
     - [8. Pantalla de Gestión de Usuarios (para administradores)](#8-pantalla-de-gestión-de-usuarios-para-administradores)
     - [9. Pantalla de Configuración de Cuenta (\>funcionalidades adicionales\<)](#9-pantalla-de-configuración-de-cuenta-funcionalidades-adicionales)
     - [10. Pantalla de Soporte y Ayuda (\>funcionalidades adicionales\<)](#10-pantalla-de-soporte-y-ayuda-funcionalidades-adicionales)
+    - [11. Pantalla de Gestión de proveedores](#11-pantalla-de-gestión-de-proveedores)
+    - [12. Pantalla de Gestión de productos](#12-pantalla-de-gestión-de-productos)
+    - [13. Pantalla de Gestión de pedidos](#13-pantalla-de-gestión-de-pedidos)
     - [Herramientas para Crear Prototipos](#herramientas-para-crear-prototipos)
   - [4. Flujo de Usuario para la Aplicación Web de Consumo Local y Ecológico](#4-flujo-de-usuario-para-la-aplicación-web-de-consumo-local-y-ecológico)
     - [1. Gestión de Productos](#1-gestión-de-productos)
@@ -226,11 +230,16 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
   - **Acciones**:
     - Analizar las necesidades de los usuarios y extraer las funcionalidades necesarias.
     - Clasificar las funcionalidades en categorías, todas consideradas esenciales:
+      - [ ] **Gestión de Proveedores**: 
+        - Añadir, editar y eliminar datps de proveedores.
+        - **Complejidad Técnica**: Media. Requiere implementación de formularios y validaciones, así como la gestión de la base de datos.
       - [ ] **Gestión de Productos**: 
         - Añadir, editar y eliminar productos.
         - Visualizar información de proveedores.
         - **Complejidad Técnica**: Media. Requiere implementación de formularios y validaciones, así como la gestión de la base de datos.
       - [ ] **Gestión de Pedidos**: 
+        - Los pedidos son conjuntos.
+        - Cada pedido se hace a un proveedor con su lista de productos. 
         - Crear y gestionar pedidos.
         - Establecer fechas límite y enviar recordatorios.
         - **Complejidad Técnica**: Alta. Implica lógica de negocio para el manejo de fechas y cálculos, así como notificaciones.
@@ -292,26 +301,30 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
 
 | Hito | Descripción | Fecha de Inicio | Fecha de Finalización | Responsable |
 |------|-------------|------------------|-----------------------|-------------|
-| **1. Definición de Requisitos** | Crear una lista de funcionalidades clave. | 01/11/2024 | 15/11/2024 | Equipo de Proyecto |
-| **2. Planificación del Proyecto** | Establecer un cronograma con hitos y plazos. | 16/11/2024 | 20/11/2024 | Equipo de Proyecto |
-| **3. Diseño de la Aplicación** | Crear wireframes o prototipos de la interfaz de usuario. | 21/11/2024 | 10/12/2024 | Diseñador UI/UX |
-| **4. Configuración del Entorno de Desarrollo** | Instalar Node.js, Express, PostgreSQL, Vue.js y Bootstrap. | 11/12/2024 | 15/12/2024 | Desarrollador Back-End |
-| **5. Desarrollo del Back-End** | Definir modelos de datos, implementar rutas de API y autenticación. | 16/12/2024 | 31/01/2025 | Desarrollador Back-End |
-| **6. Desarrollo del Front-End** | Construir la interfaz de usuario y conectar con la API. | 01/02/2025 | 15/02/2025 | Desarrollador Front-End |
-| **7. Pruebas** | Implementar pruebas unitarias y de integración. | 16/02/2025 | 28/02/2025 | Equipo de QA |
-| **8. Documentación** | Documentar la API y crear una guía de usuario. | 01/03/2025 | 10/03/2025 | Documentador |
-| **9. Despliegue** | Elegir un servicio de hosting y configurar el entorno de producción. | 11/03/2025 | 15/03/2025 | Desarrollador Back-End |
-| **10. Recopilación de Feedback y Mejora Continua** | Lanzar una versión beta y recopilar feedback. | 16/03/2025 | 31/03/2025 | Equipo de Proyecto |
-| **11. Mantenimiento** | Establecer un plan para soporte técnico y actualizaciones. | 01/04/2025 | En curso | Equipo de Proyecto |
+| **1. Definición de Requisitos** | Crear una lista de funcionalidades clave. | 20/03/2025 | 20/03/2025 | Equipo de Proyecto |
+| **2. Planificación del Proyecto** | Establecer un cronograma con hitos y plazos. | 20/03/2025 | 20/03/2025 | Equipo de Proyecto |
+| **3. Diseño de la Aplicación** | Crear wireframes o prototipos de la interfaz de usuario. | 20/03/2025 | 20/03/2025 | Diseñador UI/UX |
+| **4. Configuración del Entorno de Desarrollo** | Instalar Node.js, Express, PostgreSQL, Vue.js y Bootstrap. | 20/03/2025 | 20/03/2025 | Desarrollador Back-End |
+| **5. Desarrollo del Back-End** | Definir modelos de datos, implementar rutas de API y autenticación. | 20/03/2025 | 30/03/2025 | Desarrollador Back-End |
+| **6. Desarrollo del Front-End** | Construir la interfaz de usuario y conectar con la API. | 01/04/2025 | 01/05/2025 | Desarrollador Front-End |
+| **7. Pruebas** | Implementar pruebas unitarias y de integración. | 01/05/2025 | 10/05/2025 | Equipo de QA |
+| **8. Documentación** | Documentar la API y crear una guía de usuario. | 20/03/2025 | 20/03/2025 | Documentador |
+| **9. Despliegue** | Elegir un servicio de hosting y configurar el entorno de producción. | 01/05/2025 | 15/05/2025 | Desarrollador Back-End |
+| **10. Recopilación de Feedback y Mejora Continua** | Lanzar una versión beta y recopilar feedback. | 01/05/2025 | 15/05/2025 | Equipo de Proyecto |
+| **11. Mantenimiento** | Establecer un plan para soporte técnico y actualizaciones. | 15/05/2025 | En curso | Equipo de Proyecto |
 
 ## 3. Prototipos de la Aplicación Web
 
 ### 1. Pantalla de Inicio
 - **Elementos Clave**:
   - Logo del grupo de consumo.
-  - Menú de navegación (Inicio, Productos, Pedidos, Usuarios, Contacto).
   - Breve descripción del grupo y su misión.
   - Botón de "Iniciar Sesión" o "Registrarse".
+
+Interacciones:
+
+        Al hacer clic en "Iniciar Sesión", se abre la Pantalla de Inicio de Sesión.
+        Al hacer clic en "Registrarse", se abre la Pantalla de Registro.
 
 ### 2. Pantalla de Registro
 - **Elementos Clave**:
@@ -323,53 +336,102 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
   - Botón de "Registrarse".
   - Enlace a "Iniciar Sesión" si ya tiene una cuenta.
 
+    Interacciones:
+
+        Al hacer clic en "Registrarse", se valida la información:
+
+            Si es correcta, se muestra un mensaje de éxito y se redirige a la Pantalla de Inicio de Sesión.
+            Si hay errores, se muestran mensajes de validación (por ejemplo, "El correo ya está registrado").
+
 ### 3. Pantalla de Inicio de Sesión
 - **Elementos Clave**:
   - Formulario de inicio de sesión con campos para:
-    - Correo electrónico.
+    - Movil.
     - Contraseña.
   - Botón de "Iniciar Sesión".
   - Enlace a "¿Olvidaste tu contraseña?".
 
+    Interacciones:
+
+        Al hacer clic en "Iniciar Sesión", se valida la información:
+
+            Si es correcta, se redirige al Dashboard.
+
+            Si hay errores, se muestra un mensaje de error (por ejemplo, "Credenciales incorrectas").
+
+        Al hacer clic en "¿Olvidaste tu contraseña?", se abre la Pantalla de Recuperación de Contraseña.
+
+### 3. Pantalla de Recuperar contraseña
+- **Elementos Clave**:
+  - Formulario de recuperar contraseña con campos para:
+    - Movil.
+
+  - Botón: [Enviar Instrucciones].
+
+    Interacciones:
+
+        Al hacer clic en "Enviar Instrucciones", se envía un correo o sms con un enlace para restablecer la contraseña.
+
 ### 4. Pantalla de Dashboard (Tablero)
 - **Elementos Clave**:
-  - Resumen de pedidos actuales y próximos.
-  - Acceso rápido a "Realizar Pedido".
+  - Cesta mensual. Lista de productos pedidos y su estado.
+  - Acceso rápido a "Adquirir productos".
   - Sección de "Productos Disponibles".
-  - Notificaciones sobre fechas límite de pedidos.
+  - Notificaciones sobre pedidos abierto(no periódicos).
 
-### 5. Pantalla de Productos
+    Interacciones:
+
+        Al hacer clic en "Adquirir productos", se abre la Pantalla de compras.
+
+        Al hacer clic en "Ver Historial de Pedidos", se abre la Pantalla de Historial de Pedidos.
+
+### 5. Pantalla de Compras
 - **Elementos Clave**:
+  - Agrupados por grupos de productos (proveedor)
   - Lista de productos con:
     - Nombre del producto.
     - Descripción.
     - Precio.
-    - Botón de "Añadir al Pedido".
+    - Botón de "Añadir a la cesta/pedido conjunto".
   - Filtros para buscar productos por categoría o proveedor.
 
-### 6. Pantalla de Realización de Pedidos
-- **Elementos Clave**:
-  - Selección de productos con casillas de verificación.
-  - Campo para ingresar cantidades.
-  - Resumen del pedido con total calculado.
-  - Botón de "Confirmar Pedido".
+    Interacciones:
+
+        Al hacer clic en "Añadir producto", se actualiza el carrito/cesta y se muestra un mensaje de confirmación.
+
+        Al hacer clic en "Ver Cesta", se abre la Pantalla de la cesta o dashboard.
 
 ### 7. Pantalla de Historial de Pedidos (>funcionalidades adicionales<)
 - **Elementos Clave**:
   - Lista de pedidos anteriores con:
-    - Fecha del pedido.
-    - Productos solicitados.
-    - Estado del pedido (completado, pendiente, cancelado).
+    - Fecha de entrega
+    - Importe.
+    - Estado del pedido (entregao, repartido, pendiente, cancelado, en proceso).
+    -  botón [Ver Detalles]
   - Opción para ver detalles de cada pedido.
+
+### 7. Pantalla de Detalles de Pedidos (>funcionalidades adicionales<)
+- **Elementos Clave**:
+  - Lista de productos del pedido:
+    - Usuario que lo ha comprado
+    - Unidades
+    - Importe.
 
 ### 8. Pantalla de Gestión de Usuarios (para administradores)
 - **Elementos Clave**:
   - Lista de usuarios con:
     - Nombre.
     - Correo electrónico.
+    - Telefono
     - Estado (activo/inactivo).
     - Botones para "Editar" o "Eliminar" usuarios.
   - Opción para añadir nuevos usuarios.
+
+    Interacciones:
+
+        Al hacer clic en "Editar", se abre la Pantalla de Edición de Usuario.
+
+        Al hacer clic en "Eliminar", se muestra un mensaje de confirmación y se elimina el usuario.
 
 ### 9. Pantalla de Configuración de Cuenta (>funcionalidades adicionales<)
 - **Elementos Clave**:
@@ -379,17 +441,73 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
     - Contraseña (opcional).
   - Botón de "Guardar Cambios".
 
+    Interacciones:
+
+        Al hacer clic en "Actualizar Información", se valida la información y se muestra un mensaje de éxito.
+
 ### 10. Pantalla de Soporte y Ayuda (>funcionalidades adicionales<)
 - **Elementos Clave**:
   - Sección de preguntas frecuentes (FAQ).
   - Formulario de contacto para enviar consultas.
   - Información de contacto del grupo.
 
+
+    Interacciones:
+
+        Al hacer clic en "Enviar Consulta", se muestra un mensaje de confirmación.
+
+### 11. Pantalla de Gestión de proveedores
+- **Elementos Clave**:
+  - Admin permiso total
+  - Usuarios que gestionan un proveedor, permiso de modificar
+  - Lista de proveedores con:
+    - Nombre.
+    - Correo electrónico.
+    - Telefono
+    - Estado (activo/inactivo).
+    - Botones para "Editar" o "Eliminar" proveedores.
+    - Listado de productos
+  - Opción para añadir nuevos proveedores.
+
+
+    Interacciones:
+
+        Al hacer clic en añadir proveedor se abre un modal con un formulario para introducir los datos del proveedor.
+
+### 12. Pantalla de Gestión de productos
+- **Elementos Clave**:
+  - Admin y usuario gestor del proveedor permiso total
+  - Lista de productos con:
+    - Nombre.
+    - Descripcion.
+    - Precio
+    - Estado (activo/inactivo).
+    - Botones para "Editar" o "Eliminar" productos.
+  - Opción para añadir nuevos productos.
+
+### 13. Pantalla de Gestión de pedidos
+- **Elementos Clave**:
+  - Admin y usuario gestor del proveedor permiso total
+  - El usuario geestor del proveedor será el encargado de abrir pedidos.
+  - Lista de pedidos con:
+    - Id
+    - Fecha de entrega(si hay)
+    - Fecha de apertura
+    - Fecha de cierre
+    - Importe total
+    - Ver detalles de pedido
+  - Opcion para crear un nuevo pedido. Abre modal con:
+    - Fecha de apertura. Desde cuando los usuarios podrán pedir productos.
+    - Fecha de cierre. Hasta cuando podrán los usuarios pedir, modificar o borrar productos.
+    - Fecha aproximada de reparto.
+    - Periodicidad. PAra programar el pedido para que se abra con los mismo parametros cada X dias.
 ### Herramientas para Crear Prototipos
 - **Figma**: Herramienta de diseño colaborativo en línea.
 - **Adobe XD**: Software de diseño y prototipado de Adobe.
 - **Sketch**: Herramienta de diseño vectorial para macOS.
 - **InVision**: Plataforma para crear prototipos interactivos.
+
+Quiero una herramienta que sea open source compatible con linux y windows:
 
 ## 4. Flujo de Usuario para la Aplicación Web de Consumo Local y Ecológico
 
@@ -599,3 +717,4 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
    - Se muestra un mensaje de confirmación de que el informe ha sido descargado.
 
 ---
+
