@@ -2,21 +2,21 @@ const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
 const swaggerOptions = {
-  definition: {
+  swaggerDefinition: {
     openapi: '3.0.0',
     info: {
-      title: 'Ekonsumo API',
+      title: 'API del Grupo de Consumo',
       version: '1.0.0',
-      description: 'Documentación de la API de Ekonsumo',
+      description: 'Documentación de la API para la gestión del grupo de consumo local y ecológico',
     },
     servers: [
       {
         url: 'http://localhost:3000',
-        description: 'Servidor local',
+        description: 'Servidor de desarrollo',
       },
     ],
   },
-  apis: ['./routes/*.js'], // Ruta a los archivos de rutas
+  apis: ['./routes/*.js'],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);

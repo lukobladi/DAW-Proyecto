@@ -249,6 +249,11 @@ Asignar Permisos al Usuario
 5. Instala Express:
    ```
    npm install express.
+
+   Instala Validator
+   npm install express-validator
+
+
    ```
 
 6. Crea un archivo index.js con un ejemplo básico:

@@ -1,19 +1,21 @@
 {
-  "name": "backend",
+  "name": "grupo-consumo-api",
   "version": "1.0.0",
+  "description": "API para la gestión de un grupo de consumo local y ecológico",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "pg": "^8.14.0",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
+    "express": "^4.17.1",
+    "express-validator": "^6.15.0",
+    "pg": "^8.7.1",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.1.6"
   },
-  "description": ""
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
 }

@@ -1,17 +1,16 @@
+```markdown
 # DAW-Proyecto
 
 ## Tabla de Contenidos
-- [DAW-Proyecto](#daw-proyecto)
-  - [Tabla de Contenidos](#tabla-de-contenidos)
-- [Descripción del Proyecto: Desarrollo de una Aplicación Web para un Grupo de Consumo Local y Ecológico](#descripción-del-proyecto-desarrollo-de-una-aplicación-web-para-un-grupo-de-consumo-local-y-ecológico)
-  - [Contexto Actual](#contexto-actual)
-    - [Estructura del Grupo](#estructura-del-grupo)
-      - [Ejemplo actual de uso para incorporar una familia:](#ejemplo-actual-de-uso-para-incorporar-una-familia)
-      - [Ejemplo actual de uso semanal para una familia que quiere pedir verduras:](#ejemplo-actual-de-uso-semanal-para-una-familia-que-quiere-pedir-verduras)
-      - [Ejemplo actual de uso semanal para una familia que quiere pedir huevos:](#ejemplo-actual-de-uso-semanal-para-una-familia-que-quiere-pedir-huevos)
-      - [Ejemplo actual de uso semanal para la familia que gestiona las verduras:](#ejemplo-actual-de-uso-semanal-para-la-familia-que-gestiona-las-verduras)
-      - [Ejemplo actual de uso semanal para la familia que gestiona el pan (periódico):](#ejemplo-actual-de-uso-semanal-para-la-familia-que-gestiona-el-pan-periódico)
-    - [Pedidos](#pedidos)
+- [Descripción del Proyecto](#descripción-del-proyecto)
+- [Contexto Actual](#contexto-actual)
+  - [Estructura del Grupo](#estructura-del-grupo)
+    - [Ejemplo actual de uso para incorporar una familia](#ejemplo-actual-de-uso-para-incorporar-una-familia)
+    - [Ejemplo actual de uso semanal para una familia que quiere pedir verduras](#ejemplo-actual-de-uso-semanal-para-una-familia-que-quiere-pedir-verduras)
+    - [Ejemplo actual de uso semanal para una familia que quiere pedir huevos](#ejemplo-actual-de-uso-semanal-para-una-familia-que-quiere-pedir-huevos)
+    - [Ejemplo actual de uso semanal para la familia que gestiona las verduras](#ejemplo-actual-de-uso-semanal-para-la-familia-que-gestiona-las-verduras)
+    - [Ejemplo actual de uso semanal para la familia que gestiona el pan (periódico)](#ejemplo-actual-de-uso-semanal-para-la-familia-que-gestiona-el-pan-periódico)
+  - [Pedidos](#pedidos)
     - [Pedido abierto](#pedido-abierto)
     - [Pedidos periódicos](#pedidos-periódicos)
     - [Frecuencia de Pedidos](#frecuencia-de-pedidos)
@@ -19,8 +18,8 @@
     - [Reparto de Productos](#reparto-de-productos)
   - [Gestión Actual en Google Sheets](#gestión-actual-en-google-sheets)
     - [Cálculos Avanzados](#cálculos-avanzados)
-  - [Propuesta de Solución](#propuesta-de-solución)
-- [Roadmap del Proyecto: Aplicación Web para un Grupo de Consumo Local y Ecológico](#roadmap-del-proyecto-aplicación-web-para-un-grupo-de-consumo-local-y-ecológico)
+- [Propuesta de Solución](#propuesta-de-solución)
+- [Roadmap del Proyecto](#roadmap-del-proyecto)
   - [1. Definición de Requisitos](#1-definición-de-requisitos)
   - [2. Planificación del Proyecto](#2-planificación-del-proyecto)
   - [3. Diseño de la Aplicación](#3-diseño-de-la-aplicación)
@@ -32,63 +31,85 @@
   - [9. Despliegue](#9-despliegue)
   - [10. Recopilación de Feedback y Mejora Continua](#10-recopilación-de-feedback-y-mejora-continua)
   - [11. Mantenimiento](#11-mantenimiento)
-  - [1. Definición de Requisitos](#1-definición-de-requisitos-1)
-  - [2. Cronograma del Proyecto: Aplicación Web para un Grupo de Consumo Local y Ecológico](#2-cronograma-del-proyecto-aplicación-web-para-un-grupo-de-consumo-local-y-ecológico)
-  - [3. Prototipos de la Aplicación Web](#3-prototipos-de-la-aplicación-web)
-    - [1. Pantalla de Inicio](#1-pantalla-de-inicio)
-    - [2. Pantalla de Registro](#2-pantalla-de-registro)
-    - [3. Pantalla de Inicio de Sesión](#3-pantalla-de-inicio-de-sesión)
-    - [3. Pantalla de Recuperar contraseña](#3-pantalla-de-recuperar-contraseña)
-    - [4. Pantalla de Dashboard (Tablero)](#4-pantalla-de-dashboard-tablero)
-    - [5. Pantalla de Compras](#5-pantalla-de-compras)
-    - [7. Pantalla de Historial de Pedidos (\>funcionalidades adicionales\<)](#7-pantalla-de-historial-de-pedidos-funcionalidades-adicionales)
-    - [7. Pantalla de Detalles de Pedidos (\>funcionalidades adicionales\<)](#7-pantalla-de-detalles-de-pedidos-funcionalidades-adicionales)
-    - [8. Pantalla de Gestión de Usuarios (para administradores)](#8-pantalla-de-gestión-de-usuarios-para-administradores)
-    - [9. Pantalla de Configuración de Cuenta (\>funcionalidades adicionales\<)](#9-pantalla-de-configuración-de-cuenta-funcionalidades-adicionales)
-    - [10. Pantalla de Soporte y Ayuda (\>funcionalidades adicionales\<)](#10-pantalla-de-soporte-y-ayuda-funcionalidades-adicionales)
-    - [11. Pantalla de Gestión de proveedores](#11-pantalla-de-gestión-de-proveedores)
-    - [12. Pantalla de Gestión de productos](#12-pantalla-de-gestión-de-productos)
-    - [13. Pantalla de Gestión de pedidos](#13-pantalla-de-gestión-de-pedidos)
-    - [Herramientas para Crear Prototipos](#herramientas-para-crear-prototipos)
-  - [4. Flujo de Usuario para la Aplicación Web de Consumo Local y Ecológico](#4-flujo-de-usuario-para-la-aplicación-web-de-consumo-local-y-ecológico)
-    - [1. Gestión de Productos](#1-gestión-de-productos)
-      - [Flujo de Usuario:](#flujo-de-usuario)
-    - [**2. Gestión de Pagos y Balances**](#2-gestión-de-pagos-y-balances)
-    - [**3. Gestión de Usuarios y Proveedores**](#3-gestión-de-usuarios-y-proveedores)
-    - [**4. Notificaciones**](#4-notificaciones)
-    - [2. Gestión de Pedidos](#2-gestión-de-pedidos)
-      - [Flujo de Usuario:](#flujo-de-usuario-1)
-    - [3. Cálculos Financieros](#3-cálculos-financieros)
-      - [Flujo de Usuario:](#flujo-de-usuario-2)
-    - [4. Gestión de Usuarios (para administradores)](#4-gestión-de-usuarios-para-administradores)
-      - [Flujo de Usuario:](#flujo-de-usuario-3)
-    - [5. Pantalla de Soporte y Ayuda _(funcionalidades adicionales)_](#5-pantalla-de-soporte-y-ayuda-funcionalidades-adicionales)
-      - [Flujo de Usuario:](#flujo-de-usuario-4)
-    - [6. Notificaciones y Recordatorios _(funcionalidades adicionales)_](#6-notificaciones-y-recordatorios-funcionalidades-adicionales)
-      - [Flujo de Usuario:](#flujo-de-usuario-5)
-    - [7. Historial de Pedidos _(funcionalidades adicionales)_](#7-historial-de-pedidos-funcionalidades-adicionales)
-      - [Flujo de Usuario:](#flujo-de-usuario-6)
-    - [8. Configuración de Cuenta](#8-configuración-de-cuenta)
-      - [Flujo de Usuario:](#flujo-de-usuario-7)
-    - [9. Panel de Administración (para administradores)](#9-panel-de-administración-para-administradores)
-      - [Flujo de Usuario:](#flujo-de-usuario-8)
-    - [10. Informes y Estadísticas _(funcionalidades adicionales)_](#10-informes-y-estadísticas-funcionalidades-adicionales)
-      - [Flujo de Usuario:](#flujo-de-usuario-9)
-  - [DATOS](#datos)
-    - [**Tablas Principales**](#tablas-principales)
-      - [1. **Usuario**](#1-usuario)
-      - [2. **Proveedor**](#2-proveedor)
-      - [3. **Producto**](#3-producto)
-      - [4. **Pedido**](#4-pedido)
-      - [5. **Detalle\_Pedido**](#5-detalle_pedido)
-      - [6. **Usuario\_Proveedor** (Relación muchos a muchos)](#6-usuario_proveedor-relación-muchos-a-muchos)
-      - [7. **Pedido\_Periodico**](#7-pedido_periodico)
-      - [8. **Pago** (Nueva)](#8-pago-nueva)
-      - [9. **Notificacion** (Nueva)](#9-notificacion-nueva)
-    - [**5. Consultas SQL**](#5-consultas-sql)
-      - [Crear Tablas](#crear-tablas)
+- [Prototipos de la Aplicación Web](#prototipos-de-la-aplicación-web)
+  - [1. Pantalla de Inicio](#1-pantalla-de-inicio)
+  - [2. Pantalla de Registro](#2-pantalla-de-registro)
+  - [3. Pantalla de Inicio de Sesión](#3-pantalla-de-inicio-de-sesión)
+  - [4. Pantalla de Recuperar Contraseña](#4-pantalla-de-recuperar-contraseña)
+  - [5. Pantalla de Dashboard (Tablero)](#5-pantalla-de-dashboard-tablero)
+  - [6. Pantalla de Compras](#6-pantalla-de-compras)
+  - [7. Pantalla de Historial de Pedidos](#7-pantalla-de-historial-de-pedidos)
+  - [8. Pantalla de Detalles de Pedidos](#8-pantalla-de-detalles-de-pedidos)
+  - [9. Pantalla de Gestión de Usuarios (para administradores)](#9-pantalla-de-gestión-de-usuarios-para-administradores)
+  - [10. Pantalla de Configuración de Cuenta](#10-pantalla-de-configuración-de-cuenta)
+  - [11. Pantalla de Soporte y Ayuda](#11-pantalla-de-soporte-y-ayuda)
+  - [12. Pantalla de Gestión de Proveedores](#12-pantalla-de-gestión-de-proveedores)
+  - [13. Pantalla de Gestión de Productos](#13-pantalla-de-gestión-de-productos)
+  - [14. Pantalla de Gestión de Pedidos](#14-pantalla-de-gestión-de-pedidos)
+- [Flujo de Usuario para la Aplicación Web](#flujo-de-usuario-para-la-aplicación-web)
+  - [1. Gestión de Productos](#1-gestión-de-productos)
+  - [2. Gestión de Pedidos](#2-gestión-de-pedidos)
+  - [3. Cálculos Financieros](#3-cálculos-financieros)
+  - [4. Gestión de Usuarios (para administradores)](#4-gestión-de-usuarios-para-administradores)
+  - [5. Notificaciones y Recordatorios](#5-notificaciones-y-recordatorios)
+  - [6. Historial de Pedidos](#6-historial-de-pedidos)
+  - [7. Configuración de Cuenta](#7-configuración-de-cuenta)
+  - [8. Panel de Administración (para administradores)](#8-panel-de-administración-para-administradores)
+  - [9. Informes y Estadísticas](#9-informes-y-estadísticas)
+- [Datos](#datos)
+  - [Tablas Principales](#tablas-principales)
+    - [1. Usuario](#1-usuario)
+    - [2. Proveedor](#2-proveedor)
+    - [3. Producto](#3-producto)
+    - [4. Pedido](#4-pedido)
+    - [5. Detalle_Pedido](#5-detalle_pedido)
+    - [6. Usuario_Proveedor (Relación muchos a muchos)](#6-usuario_proveedor-relación-muchos-a-muchos)
+    - [7. Pedido_Periodico](#7-pedido_periodico)
+    - [8. Pago (Nueva)](#8-pago-nueva)
+    - [9. Notificacion (Nueva)](#9-notificacion-nueva)
+  - [Consultas SQL](#consultas-sql)
+    - [Crear Tablas](#crear-tablas)
+- [Backend API Rest Node Express](#backend-api-rest-node-express)
+  - [Estructura](#estructura)
+  - [Index.js](#indexjs)
+  - [DetallePedidoController.js](#detallepedidocontrollerjs)
+  - [DetallePedido.js (Modelo)](#detallepedidojs-modelo)
+  - [DetallePedidoRoutes.js](#detallepedidoroutesjs)
+  - [db.js](#dbjs)
+  - [swagger.js](#swaggerjs)
+  - [config.env](#configenv)
+  - [package.json](#packagejson)
+  - [TestRoutes.js](#testroutesjs)
+  - [UsuarioController.js](#usuariocontrollerjs)
+  - [Usuario.js (Modelo)](#usuariojs-modelo)
+  - [UsuarioRoutes.js](#usuarioroutesjs)
+  - [ProductoController.js](#productocontrollerjs)
+  - [Producto.js (Modelo)](#productojs-modelo)
+  - [ProductoRoutes.js](#productoroutesjs)
+  - [ProveedorController.js](#proveedorcontrollerjs)
+  - [Proveedor.js (Modelo)](#proveedorjs-modelo)
+  - [ProveedorRoutes.js](#proveedorroutesjs)
+  - [PedidoController.js](#pedidocontrollerjs)
+  - [Pedido.js (Modelo)](#pedidojs-modelo)
+  - [PedidoRoutes.js](#pedidoroutesjs)
+  - [PedidoPeriodicoController.js](#pedidoperiodicocontrollerjs)
+  - [PedidoPeriodico.js (Modelo)](#pedidoperiodicojs-modelo)
+  - [PedidoPeriodicoRoutes.js](#pedidoperiodicoroutesjs)
+  - [UsuarioProveedorController.js](#usuarioproveedorcontrollerjs)
+  - [UsuarioProveedor.js (Modelo)](#usuarioproveedorjs-modelo)
+  - [UsuarioProveedorRoutes.js](#usuarioproveedorroutesjs)
+  - [PagoController.js](#pagocontrollerjs)
+  - [NotificacionController.js](#notificacioncontrollerjs)
+  - [SaldoController.js](#saldocontrollerjs)
+  - [Pago.js (Modelo)](#pagojs-modelo)
+  - [Notificacion.js (Modelo)](#notificacionjs-modelo)
+  - [Saldo.js (Modelo)](#saldojs-modelo)
+  - [PagoRoutes.js](#pagoRoutesjs)
+  - [NotificacionRoutes.js](#notificacionRoutesjs)
+  - [SaldoRoutes.js](#saldoRoutesjs)
+  - [Validators.js (Middlewares)](#validatorsjs-middlewares)
 
-# Descripción del Proyecto: Desarrollo de una Aplicación Web para un Grupo de Consumo Local y Ecológico
+# Descripción del Proyecto
 
 El objetivo de este proyecto es desarrollar una aplicación web que facilite la gestión de un grupo de consumo local y ecológico, compuesto por aproximadamente cuarenta usuarios (familias) y quince productores. Actualmente, la gestión de pedidos y productos se realiza de manera manual a través de tablas en Google Sheets, lo que puede resultar ineficiente y propenso a errores.
 
@@ -187,10 +208,7 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
 - **Cálculos Automáticos**: Automatización de los cálculos de gastos y deudas, eliminando la necesidad de realizar cálculos manuales en hojas de cálculo.
 - **Interacción entre Usuarios**: Facilitar la comunicación entre usuarios y productores, mejorando la colaboración y la eficiencia del grupo.
 
-
-
-
-# Roadmap del Proyecto: Aplicación Web para un Grupo de Consumo Local y Ecológico
+# Roadmap del Proyecto
 
 ## 1. Definición de Requisitos
 - [ ] Crear una lista de funcionalidades clave.
@@ -237,112 +255,19 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
 - [ ] Establecer un plan para el soporte técnico y la resolución de problemas.
 - [ ] Planificar actualizaciones regulares para mejorar la aplicación.
 
----
+# Prototipos de la Aplicación Web
 
-## 1. Definición de Requisitos
-
-- **Lista de funcionalidades clave.**
-  - **Objetivo**: Definir las características esenciales que debe tener la aplicación para satisfacer las necesidades de los usuarios.
-  - **Acciones**:
-    - Analizar las necesidades de los usuarios y extraer las funcionalidades necesarias.
-    - Clasificar las funcionalidades en categorías, todas consideradas esenciales:
-      - [ ] **Gestión de Proveedores**: 
-        - Añadir, editar y eliminar datps de proveedores.
-        - **Complejidad Técnica**: Media. Requiere implementación de formularios y validaciones, así como la gestión de la base de datos.
-      - [ ] **Gestión de Productos**: 
-        - Añadir, editar y eliminar productos.
-        - Visualizar información de proveedores.
-        - **Complejidad Técnica**: Media. Requiere implementación de formularios y validaciones, así como la gestión de la base de datos.
-      - [ ] **Gestión de Pedidos**: 
-        - Los pedidos son conjuntos.
-        - Cada pedido se hace a un proveedor con su lista de productos. 
-        - Crear y gestionar pedidos.
-        - Establecer fechas límite y enviar recordatorios.
-        - **Complejidad Técnica**: Alta. Implica lógica de negocio para el manejo de fechas y cálculos, así como notificaciones.
-      - [ ] **Cálculos Financieros**: 
-        - Calcular gastos mensuales.
-        - Gestionar deudas entre usuarios.
-        - **Complejidad Técnica**: Media. Requiere cálculos precisos y la gestión de relaciones entre usuarios y pedidos.
-      - [ ] **Gestión de Usuarios**: 
-        - Alta y baja de usuarios.
-        - Funcionalidad de login y autenticación.
-        - **Complejidad Técnica**: Alta. Implica la implementación de un sistema de autenticación seguro y la gestión de sesiones.
-
-- **Funcionalidades Adicionales para el Futuro**
-  
-  A continuación se presentan funcionalidades adicionales que podrían implementarse en futuras versiones de la aplicación:
-
-  - [ ] **Notificaciones y Recordatorios**
-    - **Descripción**: Implementar un sistema de notificaciones para recordar a los usuarios sobre fechas de pedidos, vencimientos de pagos y actualizaciones de productos.
-    - **Complejidad Técnica**: Media.
-
-  - [ ] **Historial de Pedidos**
-    - **Descripción**: Permitir a los usuarios ver un historial de sus pedidos anteriores, incluyendo detalles como fechas, productos y costos.
-    - **Complejidad Técnica**: Baja.
-
-  - [ ] **Sistema de Calificación y Reseñas**
-    - **Descripción**: Permitir a los usuarios calificar y dejar reseñas sobre los productos y proveedores.
-    - **Complejidad Técnica**: Media.
-
-  - [ ] **Integración de Pagos**
-    - **Descripción**: Implementar un sistema de pago en línea para facilitar el pago de pedidos.
-    - **Complejidad Técnica**: Alta.
-
-  - [ ] **Panel de Administración**
-    - **Descripción**: Crear un panel de administración para que los responsables del grupo puedan gestionar usuarios, productos y pedidos de manera centralizada.
-    - **Complejidad Técnica**: Alta.
-
-  - [ ] **Informes y Estadísticas**
-    - **Descripción**: Generar informes sobre el consumo, gastos y tendencias de pedidos, lo que puede ayudar en la toma de decisiones.
-    - **Complejidad Técnica**: Media.
-
-  - [ ] **Soporte y Ayuda**
-    - **Descripción**: Incluir una sección de preguntas frecuentes (FAQ) y un sistema de soporte para ayudar a los usuarios con problemas o dudas.
-    - **Complejidad Técnica**: Baja.
-
-  - [ ] **Interacción Social**
-    - **Descripción**: Facilitar la interacción entre los miembros del grupo, como foros o grupos de discusión.
-    - **Complejidad Técnica**: Alta.
-
-  - [ ] **Accesibilidad**
-    - **Descripción**: Asegurar que la aplicación sea accesible para personas con discapacidades, cumpliendo con las pautas de accesibilidad web (WCAG).
-    - **Complejidad Técnica**: Media.
-
-  - [ ] **Multilenguaje**
-    - **Descripción**: Permitir que la aplicación esté disponible en varios idiomas para atender a una audiencia más amplia.
-    - **Complejidad Técnica**: Media.
-
-
-## 2. Cronograma del Proyecto: Aplicación Web para un Grupo de Consumo Local y Ecológico
-
-| Hito | Descripción | Fecha de Inicio | Fecha de Finalización | Responsable |
-|------|-------------|------------------|-----------------------|-------------|
-| **1. Definición de Requisitos** | Crear una lista de funcionalidades clave. | 20/03/2025 | 20/03/2025 | Equipo de Proyecto |
-| **2. Planificación del Proyecto** | Establecer un cronograma con hitos y plazos. | 20/03/2025 | 20/03/2025 | Equipo de Proyecto |
-| **3. Diseño de la Aplicación** | Crear wireframes o prototipos de la interfaz de usuario. | 20/03/2025 | 20/03/2025 | Diseñador UI/UX |
-| **4. Configuración del Entorno de Desarrollo** | Instalar Node.js, Express, PostgreSQL, Vue.js y Bootstrap. | 20/03/2025 | 20/03/2025 | Desarrollador Back-End |
-| **5. Desarrollo del Back-End** | Definir modelos de datos, implementar rutas de API y autenticación. | 20/03/2025 | 30/03/2025 | Desarrollador Back-End |
-| **6. Desarrollo del Front-End** | Construir la interfaz de usuario y conectar con la API. | 01/04/2025 | 01/05/2025 | Desarrollador Front-End |
-| **7. Pruebas** | Implementar pruebas unitarias y de integración. | 01/05/2025 | 10/05/2025 | Equipo de QA |
-| **8. Documentación** | Documentar la API y crear una guía de usuario. | 20/03/2025 | 20/03/2025 | Documentador |
-| **9. Despliegue** | Elegir un servicio de hosting y configurar el entorno de producción. | 01/05/2025 | 15/05/2025 | Desarrollador Back-End |
-| **10. Recopilación de Feedback y Mejora Continua** | Lanzar una versión beta y recopilar feedback. | 01/05/2025 | 15/05/2025 | Equipo de Proyecto |
-| **11. Mantenimiento** | Establecer un plan para soporte técnico y actualizaciones. | 15/05/2025 | En curso | Equipo de Proyecto |
-
-## 3. Prototipos de la Aplicación Web
-
-### 1. Pantalla de Inicio
+## 1. Pantalla de Inicio
 - **Elementos Clave**:
   - Logo del grupo de consumo.
   - Breve descripción del grupo y su misión.
   - Botón de "Iniciar Sesión" o "Registrarse".
 
-Interacciones:
+**Interacciones**:
+- Al hacer clic en "Iniciar Sesión", se abre la Pantalla de Inicio de Sesión.
+- Al hacer clic en "Registrarse", se abre la Pantalla de Registro.
 
-        Al hacer clic en "Iniciar Sesión", se abre la Pantalla de Inicio de Sesión.
-        Al hacer clic en "Registrarse", se abre la Pantalla de Registro.
-
-### 2. Pantalla de Registro
+## 2. Pantalla de Registro
 - **Elementos Clave**:
   - Formulario de registro con campos para:
     - Nombre completo.
@@ -352,56 +277,46 @@ Interacciones:
   - Botón de "Registrarse".
   - Enlace a "Iniciar Sesión" si ya tiene una cuenta.
 
-    Interacciones:
+**Interacciones**:
+- Al hacer clic en "Registrarse", se valida la información:
+  - Si es correcta, se muestra un mensaje de éxito y se redirige a la Pantalla de Inicio de Sesión.
+  - Si hay errores, se muestran mensajes de validación (por ejemplo, "El correo ya está registrado").
 
-        Al hacer clic en "Registrarse", se valida la información:
-
-            Si es correcta, se muestra un mensaje de éxito y se redirige a la Pantalla de Inicio de Sesión.
-            Si hay errores, se muestran mensajes de validación (por ejemplo, "El correo ya está registrado").
-
-### 3. Pantalla de Inicio de Sesión
+## 3. Pantalla de Inicio de Sesión
 - **Elementos Clave**:
   - Formulario de inicio de sesión con campos para:
-    - Movil.
+    - Móvil.
     - Contraseña.
   - Botón de "Iniciar Sesión".
   - Enlace a "¿Olvidaste tu contraseña?".
 
-    Interacciones:
+**Interacciones**:
+- Al hacer clic en "Iniciar Sesión", se valida la información:
+  - Si es correcta, se redirige al Dashboard.
+  - Si hay errores, se muestra un mensaje de error (por ejemplo, "Credenciales incorrectas").
+- Al hacer clic en "¿Olvidaste tu contraseña?", se abre la Pantalla de Recuperación de Contraseña.
 
-        Al hacer clic en "Iniciar Sesión", se valida la información:
-
-            Si es correcta, se redirige al Dashboard.
-
-            Si hay errores, se muestra un mensaje de error (por ejemplo, "Credenciales incorrectas").
-
-        Al hacer clic en "¿Olvidaste tu contraseña?", se abre la Pantalla de Recuperación de Contraseña.
-
-### 3. Pantalla de Recuperar contraseña
+## 4. Pantalla de Recuperar Contraseña
 - **Elementos Clave**:
   - Formulario de recuperar contraseña con campos para:
-    - Movil.
-
+    - Móvil.
   - Botón: [Enviar Instrucciones].
 
-    Interacciones:
+**Interacciones**:
+- Al hacer clic en "Enviar Instrucciones", se envía un correo o SMS con un enlace para restablecer la contraseña.
 
-        Al hacer clic en "Enviar Instrucciones", se envía un correo o sms con un enlace para restablecer la contraseña.
-
-### 4. Pantalla de Dashboard (Tablero)
+## 5. Pantalla de Dashboard (Tablero)
 - **Elementos Clave**:
   - Cesta mensual. Lista de productos pedidos y su estado.
   - Acceso rápido a "Adquirir productos".
   - Sección de "Productos Disponibles".
-  - Notificaciones sobre pedidos abierto(no periódicos).
+  - Notificaciones sobre pedidos abiertos (no periódicos).
 
-    Interacciones:
+**Interacciones**:
+- Al hacer clic en "Adquirir productos", se abre la Pantalla de compras.
+- Al hacer clic en "Ver Historial de Pedidos", se abre la Pantalla de Historial de Pedidos.
 
-        Al hacer clic en "Adquirir productos", se abre la Pantalla de compras.
-
-        Al hacer clic en "Ver Historial de Pedidos", se abre la Pantalla de Historial de Pedidos.
-
-### 5. Pantalla de Compras
+## 6. Pantalla de Compras
 - **Elementos Clave**:
   - Agrupados por grupos de productos (proveedor)
   - Lista de productos con:
@@ -411,45 +326,41 @@ Interacciones:
     - Botón de "Añadir a la cesta/pedido conjunto".
   - Filtros para buscar productos por categoría o proveedor.
 
-    Interacciones:
+**Interacciones**:
+- Al hacer clic en "Añadir producto", se actualiza el carrito/cesta y se muestra un mensaje de confirmación.
+- Al hacer clic en "Ver Cesta", se abre la Pantalla de la cesta o dashboard.
 
-        Al hacer clic en "Añadir producto", se actualiza el carrito/cesta y se muestra un mensaje de confirmación.
-
-        Al hacer clic en "Ver Cesta", se abre la Pantalla de la cesta o dashboard.
-
-### 7. Pantalla de Historial de Pedidos (>funcionalidades adicionales<)
+## 7. Pantalla de Historial de Pedidos
 - **Elementos Clave**:
   - Lista de pedidos anteriores con:
-    - Fecha de entrega
+    - Fecha de entrega.
     - Importe.
-    - Estado del pedido (entregao, repartido, pendiente, cancelado, en proceso).
-    -  botón [Ver Detalles]
+    - Estado del pedido (entregado, repartido, pendiente, cancelado, en proceso).
+    - Botón [Ver Detalles].
   - Opción para ver detalles de cada pedido.
 
-### 7. Pantalla de Detalles de Pedidos (>funcionalidades adicionales<)
+## 8. Pantalla de Detalles de Pedidos
 - **Elementos Clave**:
   - Lista de productos del pedido:
-    - Usuario que lo ha comprado
-    - Unidades
+    - Usuario que lo ha comprado.
+    - Unidades.
     - Importe.
 
-### 8. Pantalla de Gestión de Usuarios (para administradores)
+## 9. Pantalla de Gestión de Usuarios (para administradores)
 - **Elementos Clave**:
   - Lista de usuarios con:
     - Nombre.
     - Correo electrónico.
-    - Telefono
+    - Teléfono.
     - Estado (activo/inactivo).
     - Botones para "Editar" o "Eliminar" usuarios.
   - Opción para añadir nuevos usuarios.
 
-    Interacciones:
+**Interacciones**:
+- Al hacer clic en "Editar", se abre la Pantalla de Edición de Usuario.
+- Al hacer clic en "Eliminar", se muestra un mensaje de confirmación y se elimina el usuario.
 
-        Al hacer clic en "Editar", se abre la Pantalla de Edición de Usuario.
-
-        Al hacer clic en "Eliminar", se muestra un mensaje de confirmación y se elimina el usuario.
-
-### 9. Pantalla de Configuración de Cuenta (>funcionalidades adicionales<)
+## 10. Pantalla de Configuración de Cuenta
 - **Elementos Clave**:
   - Formulario para actualizar información del usuario:
     - Nombre.
@@ -457,351 +368,224 @@ Interacciones:
     - Contraseña (opcional). 
   - Botón de "Guardar Cambios".
 
-    Interacciones:
+**Interacciones**:
+- Al hacer clic en "Actualizar Información", se valida la información y se muestra un mensaje de éxito.
 
-        Al hacer clic en "Actualizar Información", se valida la información y se muestra un mensaje de éxito.
-
-### 10. Pantalla de Soporte y Ayuda (>funcionalidades adicionales<)
+## 11. Pantalla de Soporte y Ayuda
 - **Elementos Clave**:
   - Sección de preguntas frecuentes (FAQ).
   - Formulario de contacto para enviar consultas.
   - Información de contacto del grupo.
 
+**Interacciones**:
+- Al hacer clic en "Enviar Consulta", se muestra un mensaje de confirmación.
 
-    Interacciones:
-
-        Al hacer clic en "Enviar Consulta", se muestra un mensaje de confirmación.
-
-### 11. Pantalla de Gestión de proveedores
+## 12. Pantalla de Gestión de Proveedores
 - **Elementos Clave**:
-  - Admin permiso total
-  - Usuarios que gestionan un proveedor, permiso de modificar
+  - Admin permiso total.
+  - Usuarios que gestionan un proveedor, permiso de modificar.
   - Lista de proveedores con:
     - Nombre.
     - Correo electrónico.
-    - Telefono
+    - Teléfono.
     - Estado (activo/inactivo).
     - Botones para "Editar" o "Eliminar" proveedores.
-    - Listado de productos
+    - Listado de productos.
   - Opción para añadir nuevos proveedores.
 
+**Interacciones**:
+- Al hacer clic en añadir proveedor se abre un modal con un formulario para introducir los datos del proveedor.
 
-    Interacciones:
-
-        Al hacer clic en añadir proveedor se abre un modal con un formulario para introducir los datos del proveedor.
-
-### 12. Pantalla de Gestión de productos
+## 13. Pantalla de Gestión de Productos
 - **Elementos Clave**:
-  - Admin y usuario gestor del proveedor permiso total
+  - Admin y usuario gestor del proveedor permiso total.
   - Lista de productos con:
     - Nombre.
-    - Descripcion.
-    - Precio
+    - Descripción.
+    - Precio.
     - Estado (activo/inactivo).
     - Botones para "Editar" o "Eliminar" productos.
   - Opción para añadir nuevos productos.
 
-### 13. Pantalla de Gestión de pedidos
+## 14. Pantalla de Gestión de Pedidos
 - **Elementos Clave**:
-  - Admin y usuario gestor del proveedor permiso total
-  - El usuario geestor del proveedor será el encargado de abrir pedidos.
+  - Admin y usuario gestor del proveedor permiso total.
+  - El usuario gestor del proveedor será el encargado de abrir pedidos.
   - Lista de pedidos con:
-    - Id
-    - Fecha de entrega(si hay)
-    - Fecha de apertura
-    - Fecha de cierre
-    - Importe total
-    - Ver detalles de pedido
-  - Opcion para crear un nuevo pedido. Abre modal con:
+    - Id.
+    - Fecha de entrega (si hay).
+    - Fecha de apertura.
+    - Fecha de cierre.
+    - Importe total.
+    - Ver detalles de pedido.
+  - Opción para crear un nuevo pedido. Abre modal con:
     - Fecha de apertura. Desde cuando los usuarios podrán pedir productos.
     - Fecha de cierre. Hasta cuando podrán los usuarios pedir, modificar o borrar productos.
     - Fecha aproximada de reparto.
-    - Periodicidad. PAra programar el pedido para que se abra con los mismo parametros cada X dias.
-### Herramientas para Crear Prototipos
-- **Penpot**: Herramienta de diseño colaborativo en línea. (La que he deciduido utilizar)
-- **Figma**: Herramienta de diseño colaborativo en línea.
-- **Adobe XD**: Software de diseño y prototipado de Adobe.
-- **Sketch**: Herramienta de diseño vectorial para macOS.
-- **InVision**: Plataforma para crear prototipos interactivos.
-
-Quiero una herramienta que sea open source compatible con linux y windows:
-
-## 4. Flujo de Usuario para la Aplicación Web de Consumo Local y Ecológico
-
-### 0. Dashboard - Cesta de compra mensual
-
-#### Flujo de Usuario:
-1. **Acceso al dashboard**:
-   - El usuario inicia sesión y se abre por defecto el dashboard.
-
-2. **Crear un Nuevo Pedido (conjunto)** (para administradores y el usuario responsable de ese productor/proveedor):
-   - El usuario hace clic en "Abrir Pedido".
-   - Se muestra un modal para crear el pedido.
-   - El usuario selecciona la fecha de apertura, fecha de cierre, fecha aproximada de entrega y la posibilidad de hacerlo periodico.
-
-4. **Gestión de Pedidos Existentes (Historial de pedidos)_(funcionalidades adicionales)_** (para administradores y el usuario responsable de ese productor/proveedor)::
-   - El usuario puede ver una lista de pedidos anteriores.
-   - Selecciona un pedido para ver detalles, duplicar o cancelar si está pendiente.
-   - En los detalles se muestra el listado de productos, cantidades, usuario que ha comprado, importe, etc..
-
----
-
-### 1. Gestión de Productos
-
-#### Flujo de Usuario:
-1. **Acceso a la sección de Productos**:
-   - El usuario inicia sesión en la aplicación.
-   - Navega al menú y selecciona "Productos".
-
-2. **Visualización de Productos**:
-   - Se muestra una lista de productos disponibles con detalles (nombre, descripción, precio, proveedor/productor).
-   - El usuario selecciona un grupo de productos(proveedor).
-   - Si el pedido a ese proveedor está abierto, estarán activados los botones para añadir productos.
-   - El usuario selecciona productos y cantidades.
-   - El usuario hace clic en **"Añadir al Pedido"**.
-   - El usuario puede aplicar filtros para buscar productos específicos.
-
-3. **Añadir un Producto (al proveedor/grupo de productos)** (para administradores y el usuario responsable de ese productor/proveedor):
-   - El administrador selecciona "Añadir Producto".
-   - Completa un formulario con la información del producto (nombre, descripción, precio, proveedor/productor).
-   - Hace clic en "Guardar" para añadir el producto a la base de datos.
-
-4. **Editar o Eliminar un Producto** (para administradores y el usuario responsable de ese productor/proveedor):
-   - El administrador selecciona un producto de la lista.
-   - Elige "Editar" para modificar la información o "Eliminar" para quitar el producto.
-   - Confirma la acción.
-
-5. **Pantalla de dashboard - Cesta de Compras Mensual**:
-   - La cesta se resetea mensualmente. Excepto productos no entragados. 
-   - El usuario ve un listado de los productos pedidos ese mes.
-   - Al lado de cada producto se muestra el estado.
-
-
-6. **Notificación al Proveedor y usuario gestor**:
-   - Cuando llega la fecha límite(fecha cierre de pedido), se notifica al proveedor y al usuario encargado de ese proveedor.
-   - Los productos se marcan como **"En proceso"**.
-
-
-7. **Seguimiento del Pedido**:
-   - El usuario puede ver el estado del pedido en el **Dashboard** y en el **Historial de Pedidos**.
-   - Estados: En proceso, En reparto, Entregado, Repartido.
-
-8. **Entrega del Pedido**:
-   - El proveedor entrega los productos.
-   - Puede que se haga el reparto de pedidos o no
-   - El usuario confirma la entrega o reparto.
-   - El sistema actualiza el estado del pedido a **"Entregado"** o **"Repartido"**.
-
-### **2. Gestión de Pagos y Balances**
-- Al final del mes, se calculan los saldos de los usuarios.
-- Los usuarios que deben dinero realizan pagos a los usuarios que gestionan los proveedores.
-- Se generan notificaciones para informar sobre los pagos pendientes.
-
-### **3. Gestión de Usuarios y Proveedores**
-- **Registro de Usuario**:
-  - El usuario introduce sus datos y espera la confirmación del administrador.
-- **Gestión de Usuarios**:
-  - El administrador activa/desactiva usuarios y accede a su historial de pedidos.
-- **Gestión de Proveedores**:
-  - Los usuarios encargados gestionan los proveedores que tienen asignados y los pedidos a ese proveedor.
-
-
-### **4. Notificaciones**
-- Los usuarios reciben notificaciones sobre:
-  - Nuevos pedidos.
-  - Cambios en el estado de los pedidos.
-  - Pagos pendientes.
-
-   - El usuario puede ver el estado del pedido en el **Dashboard** o **Historial de Pedidos**.
-   - Estados: Pendiente, En reparto, Entregado, Repartido.
-
----
-
-### 2. Gestión de Pedidos
-
-#### Flujo de Usuario:
-1. **Acceso a la sección de Pedidos**:
-   - El usuario inicia sesión y selecciona "Pedidos" en el menú.
-
-2. **Crear un Nuevo Pedido (conjunto)** (para administradores y el usuario responsable de ese productor/proveedor):
-   - El usuario hace clic en "Abrir Pedido".
-   - Se muestra un modal para crear el pedido.
-   - El usuario selecciona la fecha de apertura, fecha de cierre, fecha aproximada de entrega y la posibilidad de hacerlo periodico.
-
-4. **Gestión de Pedidos Existentes (Historial de pedidos)_(funcionalidades adicionales)_** (para administradores y el usuario responsable de ese productor/proveedor)::
-   - El usuario puede ver una lista de pedidos anteriores.
-   - Selecciona un pedido para ver detalles, duplicar o cancelar si está pendiente.
-   - En los detalles se muestra el listado de productos, cantidades, usuario que ha comprado, importe, etc..
-
----
-
-### 3. Cálculos Financieros (para administradores)
-
-#### Flujo de Usuario:
-1. **Acceso a la sección de Finanzas**:
-   - El usuario inicia sesión y selecciona "Finanzas" en el menú.
-
-2. **Visualización de Gastos Mensuales**:
-   - Se muestra un resumen de los gastos mensuales de las familia.
-   - El usuario puede ver detalles de cada pedido y el saldo actual de cada usuario.
-
-3. **Gestión de Deudas**:
-   - El usuario puede ver a quién debe dinero y el importe.
-   - Opción para marcar deudas como pagadas.
-
----
-
-### 4. Gestión de Usuarios (para administradores)
-
-#### Flujo de Usuario:
-1. **Acceso a la sección de Gestión de Usuarios**:
-   - El administrador inicia sesión y selecciona "Usuarios" en el menú.
-
-2. **Visualización de Usuarios**:
-   - Se muestra una lista de usuarios con detalles (nombre, correo electrónico, estado).
-   - Opción para buscar usuarios específicos.
-
-3. **Añadir un Nuevo Usuario**:
-   - El administrador hace clic en "Añadir Usuario".
-   - Completa un formulario con la información del nuevo usuario.
-   - Hace clic en "Guardar" para añadir el usuario.
-
-4. **Editar o Eliminar un Usuario**:
-   - El administrador selecciona un usuario de la lista.
-   - Elige "Editar" para modificar la información o "Eliminar" para quitar el usuario.
-   - Confirma la acción.
-
----
-
-### 5. Pantalla de Soporte y Ayuda _(funcionalidades adicionales)_
-
-#### Flujo de Usuario:
-1. **Acceso a la sección de Soporte**:
-   - El usuario inicia sesión y selecciona "Soporte" en el menú.
-
-2. **Visualización de Preguntas Frecuentes (FAQ)**:
-   - Se muestra una lista de preguntas frecuentes.
-   - El usuario puede hacer clic en una pregunta para ver la respuesta.
-
-3. **Enviar una Consulta**:
-   - El usuario completa un formulario de contacto con su consulta.
-   - Hace clic en "Enviar".
-   - Se muestra un mensaje de confirmación de que la consulta ha sido enviada.
-
----
-
-### 6. Notificaciones y Recordatorios _(funcionalidades adicionales)_
-
-#### Flujo de Usuario:
-1. **Configuración de Notificaciones**:
-   - El usuario accede a "Configuración de Cuenta".
-   - Selecciona "Notificaciones".
-   - Activa o desactiva las notificaciones para fechas de pedidos y vencimientos.
-
-2. **Recepción de Notificaciones**:
-   - El usuario recibe notificaciones por correo electrónico o en la aplicación sobre fechas límite de pedidos y actualizaciones.
-
----
-
-### 7. Historial de Pedidos _(funcionalidades adicionales)_
-
-#### Flujo de Usuario:
-1. **Acceso a la sección de Historial de Pedidos**:
-   - El usuario inicia sesión y selecciona "Historial de Pedidos" en el menú.
-
-2. **Visualización de Pedidos Anteriores**:
-   - Se muestra una lista de pedidos anteriores con detalles como:
-     - Fecha del pedido.
-     - Productos solicitados.
-     - Estado del pedido (completado, pendiente, cancelado).
-
-3. **Ver Detalles de un Pedido**:
-   - El usuario selecciona un pedido de la lista.
-   - Se muestra una vista detallada del pedido, incluyendo:
-     - Productos solicitados.
-     - Cantidades.
-     - Total del pedido.
-     - Estado del pedido.
-
-4. **Opción para Repetir un Pedido**:
-   - El usuario puede seleccionar "Repetir Pedido" para crear un nuevo pedido con los mismos productos.
-   - Se redirige al flujo de creación de pedidos con los productos preseleccionados.
-
----
-
-### 8. Configuración de Cuenta
-
-#### Flujo de Usuario:
-1. **Acceso a la sección de Configuración de Cuenta**:
-   - El usuario inicia sesión y selecciona "Configuración de Cuenta" en el menú.
-
-2. **Visualización de Información de la Cuenta**:
-   - Se muestra la información actual del usuario, incluyendo:
-     - Nombre.
-     - Correo electrónico.
-     - Opciones de seguridad.
-
-3. **Actualizar Información**:
-   - El usuario puede editar su nombre o correo electrónico.
-   - Opción para cambiar la contraseña.
-   - Hace clic en "Guardar Cambios" para aplicar las modificaciones.
-
-4. **Cerrar Sesión**:
-   - El usuario puede seleccionar "Cerrar Sesión" para salir de la aplicación.
-
----
-
-### 9. Panel de Administración (para administradores)
-
-#### Flujo de Usuario:
-1. **Acceso al Panel de Administración**:
-   - El administrador inicia sesión y selecciona "Panel de Administración" en el menú.
-
-2. **Visualización de Resumen General**:
-   - Se muestra un resumen de la actividad del grupo, incluyendo:
-     - Total de usuarios.
-     - Total de pedidos realizados.
-     - Productos más solicitados.
-
-3. **Gestión de Productos y Usuarios**:
-   - El administrador puede acceder a las secciones de "Gestión de Productos" y "Gestión de Usuarios" desde el panel.
-   - Opción para ver estadísticas y reportes sobre el consumo y pedidos.
-
-4. **Configuración de Parámetros del Grupo**:
-   - El administrador puede ajustar configuraciones generales del grupo, como:
-     - Frecuencias de pedidos.
-     - Notificaciones automáticas.
-   - Hace clic en "Guardar Cambios" para aplicar las modificaciones.
-
----
-
-### 10. Informes y Estadísticas _(funcionalidades adicionales)_
-
-#### Flujo de Usuario:
-1. **Acceso a la sección de Informes**:
-   - El usuario o administrador inicia sesión y selecciona "Informes" en el menú.
-
-2. **Visualización de Informes Generales**:
-   - Se muestra una lista de informes disponibles, como:
-     - Consumo mensual.
-     - Gastos por familia.
-     - Productos más comprados.
-
-3. **Generación de Informes Personalizados**:
-   - El usuario puede seleccionar criterios para generar informes personalizados.
-   - Hace clic en "Generar Informe" para visualizar los datos.
-
-4. **Descarga de Informes**:
-   - Opción para descargar los informes en formato PDF o CSV.
-   - Se muestra un mensaje de confirmación de que el informe ha sido descargado.
-
----
-
-## DATOS
-
-### **Tablas Principales**
-
-#### 1. **Usuario**
+    - Periodicidad. Para programar el pedido para que se abra con los mismos parámetros cada X días.
+
+# Flujo de Usuario para la Aplicación Web
+
+## 1. Gestión de Productos
+- **Flujo de Usuario**:
+  1. **Acceso a la sección de Productos**:
+     - El usuario inicia sesión en la aplicación.
+     - Navega al menú y selecciona "Productos".
+  2. **Visualización de Productos**:
+     - Se muestra una lista de productos disponibles con detalles (nombre, descripción, precio, proveedor/productor).
+     - El usuario selecciona un grupo de productos (proveedor).
+     - Si el pedido a ese proveedor está abierto, estarán activados los botones para añadir productos.
+     - El usuario selecciona productos y cantidades.
+     - El usuario hace clic en **"Añadir al Pedido"**.
+     - El usuario puede aplicar filtros para buscar productos específicos.
+  3. **Añadir un Producto (al proveedor/grupo de productos)** (para administradores y el usuario responsable de ese productor/proveedor):
+     - El administrador selecciona "Añadir Producto".
+     - Completa un formulario con la información del producto (nombre, descripción, precio, proveedor/productor).
+     - Hace clic en "Guardar" para añadir el producto a la base de datos.
+  4. **Editar o Eliminar un Producto** (para administradores y el usuario responsable de ese productor/proveedor):
+     - El administrador selecciona un producto de la lista.
+     - Elige "Editar" para modificar la información o "Eliminar" para quitar el producto.
+     - Confirma la acción.
+  5. **Pantalla de dashboard - Cesta de Compras Mensual**:
+     - La cesta se resetea mensualmente. Excepto productos no entregados. 
+     - El usuario ve un listado de los productos pedidos ese mes.
+     - Al lado de cada producto se muestra el estado.
+  6. **Notificación al Proveedor y usuario gestor**:
+     - Cuando llega la fecha límite (fecha cierre de pedido), se notifica al proveedor y al usuario encargado de ese proveedor.
+     - Los productos se marcan como **"En proceso"**.
+  7. **Seguimiento del Pedido**:
+     - El usuario puede ver el estado del pedido en el **Dashboard** y en el **Historial de Pedidos**.
+     - Estados: En proceso, En reparto, Entregado, Repartido.
+  8. **Entrega del Pedido**:
+     - El proveedor entrega los productos.
+     - Puede que se haga el reparto de pedidos o no.
+     - El usuario confirma la entrega o reparto.
+     - El sistema actualiza el estado del pedido a **"Entregado"** o **"Repartido"**.
+
+## 2. Gestión de Pedidos
+- **Flujo de Usuario**:
+  1. **Acceso a la sección de Pedidos**:
+     - El usuario inicia sesión y selecciona "Pedidos" en el menú.
+  2. **Crear un Nuevo Pedido (conjunto)** (para administradores y el usuario responsable de ese productor/proveedor):
+     - El usuario hace clic en "Abrir Pedido".
+     - Se muestra un modal para crear el pedido.
+     - El usuario selecciona la fecha de apertura, fecha de cierre, fecha aproximada de entrega y la posibilidad de hacerlo periódico.
+  3. **Gestión de Pedidos Existentes (Historial de pedidos)** (para administradores y el usuario responsable de ese productor/proveedor):
+     - El usuario puede ver una lista de pedidos anteriores.
+     - Selecciona un pedido para ver detalles, duplicar o cancelar si está pendiente.
+     - En los detalles se muestra el listado de productos, cantidades, usuario que ha comprado, importe, etc.
+
+## 3. Cálculos Financieros (para administradores)
+- **Flujo de Usuario**:
+  1. **Acceso a la sección de Finanzas**:
+     - El usuario inicia sesión y selecciona "Finanzas" en el menú.
+  2. **Visualización de Gastos Mensuales**:
+     - Se muestra un resumen de los gastos mensuales de las familias.
+     - El usuario puede ver detalles de cada pedido y el saldo actual de cada usuario.
+  3. **Gestión de Deudas**:
+     - El usuario puede ver a quién debe dinero y el importe.
+     - Opción para marcar deudas como pagadas.
+
+## 4. Gestión de Usuarios (para administradores)
+- **Flujo de Usuario**:
+  1. **Acceso a la sección de Gestión de Usuarios**:
+     - El administrador inicia sesión y selecciona "Usuarios" en el menú.
+  2. **Visualización de Usuarios**:
+     - Se muestra una lista de usuarios con detalles (nombre, correo electrónico, estado).
+     - Opción para buscar usuarios específicos.
+  3. **Añadir un Nuevo Usuario**:
+     - El administrador hace clic en "Añadir Usuario".
+     - Completa un formulario con la información del nuevo usuario.
+     - Hace clic en "Guardar" para añadir el usuario.
+  4. **Editar o Eliminar un Usuario**:
+     - El administrador selecciona un usuario de la lista.
+     - Elige "Editar" para modificar la información o "Eliminar" para quitar el usuario.
+     - Confirma la acción.
+
+## 5. Notificaciones y Recordatorios
+- **Flujo de Usuario**:
+  1. **Configuración de Notificaciones**:
+     - El usuario accede a "Configuración de Cuenta".
+     - Selecciona "Notificaciones".
+     - Activa o desactiva las notificaciones para fechas de pedidos y vencimientos.
+  2. **Recepción de Notificaciones**:
+     - El usuario recibe notificaciones por correo electrónico o en la aplicación sobre fechas límite de pedidos y actualizaciones.
+
+## 6. Historial de Pedidos
+- **Flujo de Usuario**:
+  1. **Acceso a la sección de Historial de Pedidos**:
+     - El usuario inicia sesión y selecciona "Historial de Pedidos" en el menú.
+  2. **Visualización de Pedidos Anteriores**:
+     - Se muestra una lista de pedidos anteriores con detalles como:
+       - Fecha del pedido.
+       - Productos solicitados.
+       - Estado del pedido (completado, pendiente, cancelado).
+  3. **Ver Detalles de un Pedido**:
+     - El usuario selecciona un pedido de la lista.
+     - Se muestra una vista detallada del pedido, incluyendo:
+       - Productos solicitados.
+       - Cantidades.
+       - Total del pedido.
+       - Estado del pedido.
+  4. **Opción para Repetir un Pedido**:
+     - El usuario puede seleccionar "Repetir Pedido" para crear un nuevo pedido con los mismos productos.
+     - Se redirige al flujo de creación de pedidos con los productos preseleccionados.
+
+## 7. Configuración de Cuenta
+- **Flujo de Usuario**:
+  1. **Acceso a la sección de Configuración de Cuenta**:
+     - El usuario inicia sesión y selecciona "Configuración de Cuenta" en el menú.
+  2. **Visualización de Información de la Cuenta**:
+     - Se muestra la información actual del usuario, incluyendo:
+       - Nombre.
+       - Correo electrónico.
+       - Opciones de seguridad.
+  3. **Actualizar Información**:
+     - El usuario puede editar su nombre o correo electrónico.
+     - Opción para cambiar la contraseña.
+     - Hace clic en "Guardar Cambios" para aplicar las modificaciones.
+  4. **Cerrar Sesión**:
+     - El usuario puede seleccionar "Cerrar Sesión" para salir de la aplicación.
+
+## 8. Panel de Administración (para administradores)
+- **Flujo de Usuario**:
+  1. **Acceso al Panel de Administración**:
+     - El administrador inicia sesión y selecciona "Panel de Administración" en el menú.
+  2. **Visualización de Resumen General**:
+     - Se muestra un resumen de la actividad del grupo, incluyendo:
+       - Total de usuarios.
+       - Total de pedidos realizados.
+       - Productos más solicitados.
+  3. **Gestión de Productos y Usuarios**:
+     - El administrador puede acceder a las secciones de "Gestión de Productos" y "Gestión de Usuarios" desde el panel.
+     - Opción para ver estadísticas y reportes sobre el consumo y pedidos.
+  4. **Configuración de Parámetros del Grupo**:
+     - El administrador puede ajustar configuraciones generales del grupo, como:
+       - Frecuencias de pedidos.
+       - Notificaciones automáticas.
+     - Hace clic en "Guardar Cambios" para aplicar las modificaciones.
+
+## 9. Informes y Estadísticas
+- **Flujo de Usuario**:
+  1. **Acceso a la sección de Informes**:
+     - El usuario o administrador inicia sesión y selecciona "Informes" en el menú.
+  2. **Visualización de Informes Generales**:
+     - Se muestra una lista de informes disponibles, como:
+       - Consumo mensual.
+       - Gastos por familia.
+       - Productos más comprados.
+  3. **Generación de Informes Personalizados**:
+     - El usuario puede seleccionar criterios para generar informes personalizados.
+     - Hace clic en "Generar Informe" para visualizar los datos.
+  4. **Descarga de Informes**:
+     - Opción para descargar los informes en formato PDF o CSV.
+     - Se muestra un mensaje de confirmación de que el informe ha sido descargado.
+
+# Datos
+
+## Tablas Principales
+
+### 1. Usuario
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
 | `ID_Usuario`     | `SERIAL`          | Clave primaria.                      |
@@ -813,9 +597,7 @@ Quiero una herramienta que sea open source compatible con linux y windows:
 | `Activo`         | `BOOLEAN`         | Indica si el usuario está activo.    |
 | `Saldo`          | `DECIMAL(10, 2)`  | Saldo actual del usuario.            |
 
----
-
-#### 2. **Proveedor**
+### 2. Proveedor
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
 | `ID_Proveedor`   | `SERIAL`          | Clave primaria.                      |
@@ -827,9 +609,7 @@ Quiero una herramienta que sea open source compatible con linux y windows:
 | `Envio_Movil`    | `BOOLEAN`         | Avisar mediante SMS o WhatsApp.      |
 | `Envio_Mail`     | `BOOLEAN`         | Avisar mediante correo electrónico.  |
 
----
-
-#### 3. **Producto**
+### 3. Producto
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
 | `ID_Producto`    | `SERIAL`          | Clave primaria.                      |
@@ -838,11 +618,8 @@ Quiero una herramienta que sea open source compatible con linux y windows:
 | `Precio`         | `DECIMAL(10, 2)`  | Precio del producto.                 |
 | `Frecuencia_Pedido` | `VARCHAR(50)`  | Frecuencia de pedido (semanal, mensual, etc.). |
 | `ID_Proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
-| `ID_Usuario_Gestor`   | `INT`             | Clave foránea (relación con `Usuario`). |
 
----
-
-#### 4. **Pedido**
+### 4. Pedido
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
 | `ID_Pedido`      | `SERIAL`          | Clave primaria.                      |
@@ -853,9 +630,7 @@ Quiero una herramienta que sea open source compatible con linux y windows:
 | `Fecha_Entrega`  | `TIMESTAMP`       | Fecha y hora de entrega.             |
 | `Estado`         | `VARCHAR(50)`     | Estado del pedido (pendiente, en proceso, entregado, repartido, cancelado). |
 
----
-
-#### 5. **Detalle_Pedido**
+### 5. Detalle_Pedido
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
 | `ID_Detalle`     | `SERIAL`          | Clave primaria.                      |
@@ -865,17 +640,13 @@ Quiero una herramienta que sea open source compatible con linux y windows:
 | `Precio_Total`   | `DECIMAL(10, 2)`  | Precio total del producto.           |
 | `ID_Usuario_Comprador` | `INT`     | Clave foránea (relación con `Usuario`). |
 
----
-
-#### 6. **Usuario_Proveedor** (Relación muchos a muchos)
+### 6. Usuario_Proveedor (Relación muchos a muchos)
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
 | `ID_Usuario`     | `INT`             | Clave foránea (relación con `Usuario`). |
 | `ID_Proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
 
----
-
-#### 7. **Pedido_Periodico**
+### 7. Pedido_Periodico
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
 | `ID_Pedido_Periodico` | `SERIAL`    | Clave primaria.                      |
@@ -888,9 +659,7 @@ Quiero una herramienta que sea open source compatible con linux y windows:
 | `Dia_Cierre`     | `INT`             | Día de la semana en que se cierra el pedido. |
 | `Dia_Entrega`    | `INT`             | Día aproximado de entrega.           |
 
----
-
-#### 8. **Pago** (Nueva)
+### 8. Pago (Nueva)
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
 | `ID_Pago`        | `SERIAL`          | Clave primaria.                      |
@@ -900,9 +669,7 @@ Quiero una herramienta que sea open source compatible con linux y windows:
 | `Fecha_Pago`     | `TIMESTAMP`       | Fecha y hora del pago.               |
 | `Estado`         | `VARCHAR(50)`     | Estado del pago (pendiente, completado). |
 
----
-
-#### 9. **Notificacion** (Nueva)
+### 9. Notificacion (Nueva)
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
 | `ID_Notificacion` | `SERIAL`         | Clave primaria.                      |
@@ -911,12 +678,9 @@ Quiero una herramienta que sea open source compatible con linux y windows:
 | `Fecha`          | `TIMESTAMP`       | Fecha y hora de la notificación.     |
 | `Leida`          | `BOOLEAN`         | Indica si la notificación ha sido leída. |
 
----
+## Consultas SQL
 
-
-### **5. Consultas SQL**
-
-#### Crear Tablas
+### Crear Tablas
 ```sql
 CREATE TABLE Usuario (
     ID_Usuario SERIAL PRIMARY KEY,
@@ -936,6 +700,7 @@ CREATE TABLE Proveedor (
     Telefono VARCHAR(20),
     Movil VARCHAR(20),
     Correo VARCHAR(100),
+    Metodo_Pago VARCHAR(100),
     Envio_Movil BOOLEAN DEFAULT FALSE,
     Envio_Mail BOOLEAN DEFAULT TRUE
 );
@@ -946,8 +711,7 @@ CREATE TABLE Producto (
     Descripcion TEXT,
     Precio DECIMAL(10, 2) NOT NULL,
     Frecuencia_Pedido VARCHAR(50) CHECK (Frecuencia_Pedido IN ('semanal', 'mensual', 'bimestral', 'trimestral', 'semestral')),
-    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
-    ID_Usuario_Encargado INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE
 );
 
 CREATE TABLE Pedido (
@@ -965,7 +729,7 @@ CREATE TABLE Detalle_Pedido (
     ID_Pedido INT REFERENCES Pedido(ID_Pedido) ON DELETE CASCADE,
     ID_Producto INT REFERENCES Producto(ID_Producto) ON DELETE CASCADE,
     Cantidad INT NOT NULL,
-    Precio_Total DECIMAL(10, 2) NOT NULL,
+    Precio_Unitario DECIMAL(10, 2) NOT NULL,
     ID_Usuario_Comprador INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE
 );
 
@@ -1003,4 +767,1496 @@ CREATE TABLE Notificacion (
     Fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Leida BOOLEAN DEFAULT FALSE
 );
+```
+
+# Backend API Rest Node Express
+
+## Estructura
+```
+├── config
+│   └── db.js
+├── config.env
+├── controllers
+│   ├── DetallePedidoController.js
+│   ├── PedidoController.js
+│   ├── PedidoPeriodicoController.js
+│   ├── ProductoController.js
+│   ├── ProveedorController.js
+│   ├── UsuarioController.js
+│   ├── UsuarioProveedorController.js
+│   ├── PagoController.js
+│   ├── NotificacionController.js
+│   └── SaldoController.js
+├── crearBaseDatos.sql
+├── datosPrueba.sql
+├── db.js
+├── index.js
+├── middlewares
+│   └── validators.js
+├── models
+│   ├── DetallePedido.js
+│   ├── Pedido.js
+│   ├── PedidoPeriodico.js
+│   ├── Producto.js
+│   ├── Proveedor.js
+│   ├── Usuario.js
+│   ├── UsuarioProveedor.js
+│   ├── Pago.js
+│   ├── Notificacion.js
+│   └── Saldo.js
+├── package.json
+├── package-lock.json
+├── routes
+│   ├── DetallePedidoRoutes.js
+│   ├── PedidoPeriodicoRoutes.js
+│   ├── PedidoRoutes.js
+│   ├── ProductoRoutes.js
+│   ├── ProveedorRoutes.js
+│   ├── TestRoutes.js
+│   ├── UsuarioProveedorRoutes.js
+│   ├── UsuarioRoutes.js
+│   ├── PagoRoutes.js
+│   ├── NotificacionRoutes.js
+│   └── SaldoRoutes.js
+└── swagger.js
+```
+
+## Index.js
+
+```javascript
+const express = require('express');
+const swaggerSetup = require('./swagger');
+const validators = require('./middlewares/validators');
+
+const usuarioRoutes = require('./routes/UsuarioRoutes');
+const productoRoutes = require('./routes/ProductoRoutes');
+const proveedorRoutes = require('./routes/ProveedorRoutes');
+const pedidoRoutes = require('./routes/PedidoRoutes');
+const detallePedidoRoutes = require('./routes/DetallePedidoRoutes');
+const usuarioProveedorRoutes = require('./routes/UsuarioProveedorRoutes');
+const pedidoPeriodicoRoutes = require('./routes/PedidoPeriodicoRoutes');
+const pagoRoutes = require('./routes/PagoRoutes');
+const notificacionRoutes = require('./routes/NotificacionRoutes');
+const saldoRoutes = require('./routes/SaldoRoutes');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Configura Swagger
+swaggerSetup(app);
+
+app.use(express.json());
+
+// Usar las rutas
+app.use('/api/usuarios', usuarioRoutes);
+app.use('/api/productos', productoRoutes);
+app.use('/api/proveedores', proveedorRoutes);
+app.use('/api/pedidos', pedidoRoutes);
+app.use('/api/detalle-pedido', detallePedidoRoutes);
+app.use('/api/usuario-proveedor', usuarioProveedorRoutes);
+app.use('/api/pedido-periodico', pedidoPeriodicoRoutes);
+app.use('/api/pagos', pagoRoutes);
+app.use('/api/notificaciones', notificacionRoutes);
+app.use('/api/saldos', saldoRoutes);
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Algo salió mal en el servidor' });
+});
+
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`Documentación de la API: http://localhost:${PORT}/api-docs`);
+});
+```
+
+## DetallePedidoController.js
+
+```javascript
+const DetallePedido = require('../models/DetallePedido');
+
+const DetallePedidoController = {
+  // Crear un nuevo detalle de pedido
+  async crear(req, res) {
+    const { id_pedido, id_producto, cantidad, precio_total } = req.body;
+    try {
+      const nuevoDetalle = await DetallePedido.create(id_pedido, id_producto, cantidad, precio_total);
+      res.status(201).json(nuevoDetalle);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al crear el detalle del pedido');
+    }
+  },
+
+  // Obtener todos los detalles de un pedido
+  async listarPorPedido(req, res) {
+    const { id_pedido } = req.params;
+    try {
+      const detalles = await DetallePedido.findByPedidoId(id_pedido);
+      res.json(detalles);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al obtener los detalles del pedido');
+    }
+  },
+
+  // Actualizar un detalle de pedido
+  async actualizar(req, res) {
+    const { id } = req.params;
+    const { id_pedido, id_producto, cantidad, precio_total } = req.body;
+    try {
+      const detalleActualizado = await DetallePedido.update(id, id_pedido, id_producto, cantidad, precio_total);
+      res.json(detalleActualizado);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al actualizar el detalle del pedido');
+    }
+  },
+
+  // Eliminar un detalle de pedido
+  async eliminar(req, res) {
+    const { id } = req.params;
+    try {
+      await DetallePedido.delete(id);
+      res.status(204).send();
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al eliminar el detalle del pedido');
+    }
+  },
+};
+
+module.exports = DetallePedidoController;
+```
+
+## DetallePedido.js (Modelo)
+
+```javascript
+const db = require('../db');
+
+class DetallePedido {
+  static async create(id_pedido, id_producto, cantidad, precio_total) {
+    const query = `
+      INSERT INTO Detalle_Pedido (ID_Pedido, ID_Producto, Cantidad, Precio_Total)
+      VALUES ($1, $2, $3, $4)
+      RETURNING *;
+    `;
+    const values = [id_pedido, id_producto, cantidad, precio_total];
+    const { rows } = await db.query(query, values);
+    return rows[0];
+  }
+
+  static async findByPedidoId(id_pedido) {
+    const query = `
+      SELECT * FROM Detalle_Pedido
+      WHERE ID_Pedido = $1;
+    `;
+    const { rows } = await db.query(query, [id_pedido]);
+    return rows;
+  }
+
+  static async update(id, id_pedido, id_producto, cantidad, precio_total) {
+    const query = `
+      UPDATE Detalle_Pedido
+      SET ID_Pedido = $1, ID_Producto = $2, Cantidad = $3, Precio_Total = $4
+      WHERE ID_Detalle = $5
+      RETURNING *;
+    `;
+    const values = [id_pedido, id_producto, cantidad, precio_total, id];
+    const { rows } = await db.query(query, values);
+    return rows[0];
+  }
+
+  static async delete(id) {
+    const query = `
+      DELETE FROM Detalle_Pedido
+      WHERE ID_Detalle = $1;
+    `;
+    await db.query(query, [id]);
+  }
+}
+
+module.exports = DetallePedido;
+```
+
+## DetallePedidoRoutes.js
+
+```javascript
+const express = require('express');
+const DetallePedidoController = require('../controllers/DetallePedidoController');
+
+const router = express.Router();
+
+router.post('/', DetallePedidoController.crear);
+router.get('/:id_pedido', DetallePedidoController.listarPorPedido);
+router.put('/:id', DetallePedidoController.actualizar);
+router.delete('/:id', DetallePedidoController.eliminar);
+
+module.exports = router;
+```
+
+## db.js
+
+```javascript
+const { Pool } = require('pg');
+
+const pool = new Pool({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
+});
+
+module.exports = {
+  query: (text, params) => pool.query(text, params),
+};
+```
+
+## swagger.js
+
+```javascript
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+
+const swaggerOptions = {
+  swaggerDefinition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'API del Grupo de Consumo',
+      version: '1.0.0',
+      description: 'Documentación de la API para la gestión del grupo de consumo local y ecológico',
+    },
+    servers: [
+      {
+        url: 'http://localhost:3000',
+        description: 'Servidor de desarrollo',
+      },
+    ],
+  },
+  apis: ['./routes/*.js'],
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+
+module.exports = (app) => {
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+};
+```
+
+## config.env
+
+```plaintext
+DB_USER=tu_usuario
+DB_HOST=localhost
+DB_NAME=grupo_consumo
+DB_PASSWORD=tu_contraseña
+DB_PORT=5432
+```
+
+## package.json
+
+```json
+{
+  "name": "grupo-consumo-api",
+  "version": "1.0.0",
+  "description": "API para la gestión de un grupo de consumo local y ecológico",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^8.7.1",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.1.6"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
+```
+
+## TestRoutes.js
+
+```javascript
+const express = require('express');
+const router = express.Router();
+
+router.get('/', (req, res) => {
+  res.send('API funcionando correctamente');
+});
+
+module.exports = router;
+```
+
+## UsuarioController.js
+
+```javascript
+const Usuario = require('../models/Usuario');
+
+const UsuarioController = {
+  // Crear un nuevo usuario
+  async crear(req, res) {
+    const { nombre, correo, contraseña, movil, rol, activo, saldo } = req.body;
+    try {
+      const nuevoUsuario = await Usuario.create(nombre, correo, contraseña, movil, rol, activo, saldo);
+      res.status(201).json(nuevoUsuario);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al crear el usuario');
+    }
+  },
+
+  // Obtener todos los usuarios
+  async listar(req, res) {
+    try {
+      const usuarios = await Usuario.findAll();
+      res.json(usuarios);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al obtener los usuarios');
+    }
+  },
+
+  // Obtener un usuario por ID
+  async obtenerPorId(req, res) {
+    const { id } = req.params;
+    try {
+      const usuario = await Usuario.findById(id);
+      if (usuario) {
+        res.json(usuario);
+      } else {
+        res.status(404).send('Usuario no encontrado');
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al obtener el usuario');
+    }
+  },
+
+  // Actualizar un usuario
+  async actualizar(req, res) {
+    const { id } = req.params;
+    const { nombre, correo, contraseña, movil, rol, activo, saldo } = req.body;
+    try {
+      const usuarioActualizado = await Usuario.update(id, nombre, correo, contraseña, movil, rol, activo, saldo);
+      res.json(usuarioActualizado);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al actualizar el usuario');
+    }
+  },
+
+  // Eliminar un usuario
+  async eliminar(req, res) {
+    const { id } = req.params;
+    try {
+      await Usuario.delete(id);
+      res.status(204).send();
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al eliminar el usuario');
+    }
+  },
+};
+
+module.exports = UsuarioController;
+```
+
+## Usuario.js (Modelo)
+
+```javascript
+const db = require('../db');
+
+class Usuario {
+  static async create(nombre, correo, contraseña, movil, rol, activo, saldo) {
+    const query = `
+      INSERT INTO Usuario (Nombre, Correo, Contraseña, Movil, Rol, Activo, Saldo)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      RETURNING *;
+    `;
+    const values = [nombre, correo, contraseña, movil, rol, activo, saldo];
+    const { rows } = await db.query(query, values);
+    return rows[0];
+  }
+
+  static async findAll() {
+    const query = `
+      SELECT * FROM Usuario;
+    `;
+    const { rows } = await db.query(query);
+    return rows;
+  }
+
+  static async findById(id) {
+    const query = `
+      SELECT * FROM Usuario
+      WHERE ID_Usuario = $1;
+    `;
+    const { rows } = await db.query(query, [id]);
+    return rows[0];
+  }
+
+  static async update(id, nombre, correo, contraseña, movil, rol, activo, saldo) {
+    const query = `
+      UPDATE Usuario
+      SET Nombre = $1, Correo = $2, Contraseña = $3, Movil = $4, Rol = $5, Activo = $6, Saldo = $7
+      WHERE ID_Usuario = $8
+      RETURNING *;
+    `;
+    const values = [nombre, correo, contraseña, movil, rol, activo, saldo, id];
+    const { rows } = await db.query(query, values);
+    return rows[0];
+  }
+
+  static async delete(id) {
+    const query = `
+      DELETE FROM Usuario
+      WHERE ID_Usuario = $1;
+    `;
+    await db.query(query, [id]);
+  }
+}
+
+module.exports = Usuario;
+```
+
+## UsuarioRoutes.js
+
+```javascript
+const express = require('express');
+const UsuarioController = require('../controllers/UsuarioController');
+
+const router = express.Router();
+
+router.post('/', UsuarioController.crear);
+router.get('/', UsuarioController.listar);
+router.get('/:id', UsuarioController.obtenerPorId);
+router.put('/:id', UsuarioController.actualizar);
+router.delete('/:id', UsuarioController.eliminar);
+
+module.exports = router;
+```
+
+## ProductoController.js
+
+```javascript
+const Producto = require('../models/Producto');
+
+const ProductoController = {
+  // Crear un nuevo producto
+  async crear(req, res) {
+    const { nombre, descripcion, precio, frecuencia_pedido, id_proveedor, id_usuario_encargado } = req.body;
+    try {
+      const nuevoProducto = await Producto.create(nombre, descripcion, precio, frecuencia_pedido, id_proveedor, id_usuario_encargado);
+      res.status(201).json(nuevoProducto);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al crear el producto');
+    }
+  },
+
+  // Obtener todos los productos
+  async listar(req, res) {
+    try {
+      const productos = await Producto.findAll();
+      res.json(productos);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al obtener los productos');
+    }
+  },
+
+  // Obtener un producto por ID
+  async obtenerPorId(req, res) {
+    const { id } = req.params;
+    try {
+      const producto = await Producto.findById(id);
+      if (producto) {
+        res.json(producto);
+      } else {
+        res.status(404).send('Producto no encontrado');
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al obtener el producto');
+    }
+  },
+
+  // Actualizar un producto
+  async actualizar(req, res) {
+    const { id } = req.params;
+    const { nombre, descripcion, precio, frecuencia_pedido, id_proveedor, id_usuario_encargado } = req.body;
+    try {
+      const productoActualizado = await Producto.update(id, nombre, descripcion, precio, frecuencia_pedido, id_proveedor, id_usuario_encargado);
+      res.json(productoActualizado);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al actualizar el producto');
+    }
+  },
+
+  // Eliminar un producto
+  async eliminar(req, res) {
+    const { id } = req.params;
+    try {
+      await Producto.delete(id);
+      res.status(204).send();
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al eliminar el producto');
+    }
+  },
+};
+
+module.exports = ProductoController;
+```
+
+## Producto.js (Modelo)
+
+```javascript
+const db = require('../db');
+
+class Producto {
+  static async create(nombre, descripcion, precio, frecuencia_pedido, id_proveedor, id_usuario_encargado) {
+    const query = `
+      INSERT INTO Producto (Nombre, Descripcion, Precio, Frecuencia_Pedido, ID_Proveedor, ID_Usuario_Encargado)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING *;
+    `;
+    const values = [nombre, descripcion, precio, frecuencia_pedido, id_proveedor, id_usuario_encargado];
+    const { rows } = await db.query(query, values);
+    return rows[0];
+  }
+
+  static async findAll() {
+    const query = `
+      SELECT * FROM Producto;
+    `;
+    const { rows } = await db.query(query);
+    return rows;
+  }
+
+  static async findById(id) {
+    const query = `
+      SELECT * FROM Producto
+      WHERE ID_Producto = $1;
+    `;
+    const { rows } = await db.query(query, [id]);
+    return rows[0];
+  }
+
+  static async update(id, nombre, descripcion, precio, frecuencia_pedido, id_proveedor, id_usuario_encargado) {
+    const query = `
+      UPDATE Producto
+      SET Nombre = $1, Descripcion = $2, Precio = $3, Frecuencia_Pedido = $4, ID_Proveedor = $5, ID_Usuario_Encargado = $6
+      WHERE ID_Producto = $7
+      RETURNING *;
+    `;
+    const values = [nombre, descripcion, precio, frecuencia_pedido, id_proveedor, id_usuario_encargado, id];
+    const { rows } = await db.query(query, values);
+    return rows[0];
+  }
+
+  static async delete(id) {
+    const query = `
+      DELETE FROM Producto
+      WHERE ID_Producto = $1;
+    `;
+    await db.query(query, [id]);
+  }
+}
+
+module.exports = Producto;
+```
+
+## ProductoRoutes.js
+
+```javascript
+const express = require('express');
+const ProductoController = require('../controllers/ProductoController');
+
+const router = express.Router();
+
+router.post('/', ProductoController.crear);
+router.get('/', ProductoController.listar);
+router.get('/:id', ProductoController.obtenerPorId);
+router.put('/:id', ProductoController.actualizar);
+router.delete('/:id', ProductoController.eliminar);
+
+module.exports = router;
+```
+
+## ProveedorController.js
+
+```javascript
+const Proveedor = require('../models/Proveedor');
+
+const ProveedorController = {
+  // Crear un nuevo proveedor
+  async crear(req, res) {
+    const { nombre, contacto, telefono, movil, correo, envio_movil, envio_mail } = req.body;
+    try {
+      const nuevoProveedor = await Proveedor.create(nombre, contacto, telefono, movil, correo, envio_movil, envio_mail);
+      res.status(201).json(nuevoProveedor);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al crear el proveedor');
+    }
+  },
+
+  // Obtener todos los proveedores
+  async listar(req, res) {
+    try {
+      const proveedores = await Proveedor.findAll();
+      res.json(proveedores);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al obtener los proveedores');
+    }
+  },
+
+  // Obtener un proveedor por ID
+  async obtenerPorId(req, res) {
+    const { id } = req.params;
+    try {
+      const proveedor = await Proveedor.findById(id);
+      if (proveedor) {
+        res.json(proveedor);
+      } else {
+        res.status(404).send('Proveedor no encontrado');
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al obtener el proveedor');
+    }
+  },
+
+  // Actualizar un proveedor
+  async actualizar(req, res) {
+    const { id } = req.params;
+    const { nombre, contacto, telefono, movil, correo, envio_movil, envio_mail } = req.body;
+    try {
+      const proveedorActualizado = await Proveedor.update(id, nombre, contacto, telefono, movil, correo, envio_movil, envio_mail);
+      res.json(proveedorActualizado);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al actualizar el proveedor');
+    }
+  },
+
+  // Eliminar un proveedor
+  async eliminar(req, res) {
+    const { id } = req.params;
+    try {
+      await Proveedor.delete(id);
+      res.status(204).send();
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al eliminar el proveedor');
+    }
+  },
+};
+
+module.exports = ProveedorController;
+```
+
+## Proveedor.js (Modelo)
+
+```javascript
+const db = require('../db');
+
+class Proveedor {
+  static async create(nombre, contacto, telefono, movil, correo, envio_movil, envio_mail) {
+    const query = `
+      INSERT INTO Proveedor (Nombre, Contacto, Telefono, Movil, Correo, Envio_Movil, Envio_Mail)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      RETURNING *;
+    `;
+    const values = [nombre, contacto, telefono, movil, correo, envio_movil, envio_mail];
+    const { rows } = await db.query(query, values);
+    return rows[0];
+  }
+
+  static async findAll() {
+    const query = `
+      SELECT * FROM Proveedor;
+    `;
+    const { rows } = await db.query(query);
+    return rows;
+  }
+
+  static async findById(id) {
+    const query = `
+      SELECT * FROM Proveedor
+      WHERE ID_Proveedor = $1;
+    `;
+    const { rows } = await db.query(query, [id]);
+    return rows[0];
+  }
+
+  static async update(id, nombre, contacto, telefono, movil, correo, envio_movil, envio_mail) {
+    const query = `
+      UPDATE Proveedor
+      SET Nombre = $1, Contacto = $2, Telefono = $3, Movil = $4, Correo = $5, Envio_Movil = $6, Envio_Mail = $7
+      WHERE ID_Proveedor = $8
+      RETURNING *;
+    `;
+    const values = [nombre, contacto, telefono, movil, correo, envio_movil, envio_mail, id];
+    const { rows } = await db.query(query, values);
+    return rows[0];
+  }
+
+  static async delete(id) {
+    const query = `
+      DELETE FROM Proveedor
+      WHERE ID_Proveedor = $1;
+    `;
+    await db.query(query, [id]);
+  }
+}
+
+module.exports = Proveedor;
+```
+
+## ProveedorRoutes.js
+
+```javascript
+const express = require('express');
+const ProveedorController = require('../controllers/ProveedorController');
+
+const router = express.Router();
+
+router.post('/', ProveedorController.crear);
+router.get('/', ProveedorController.listar);
+router.get('/:id', ProveedorController.obtenerPorId);
+router.put('/:id', ProveedorController.actualizar);
+router.delete('/:id', ProveedorController.eliminar);
+
+module.exports = router;
+```
+
+## PedidoController.js
+
+```javascript
+const Pedido = require('../models/Pedido');
+
+const PedidoController = {
+  // Crear un nuevo pedido
+  async crear(req, res) {
+    const { id_usuario_encargado, id_proveedor, fecha_apertura, fecha_cierre, fecha_entrega, estado } = req.body;
+    try {
+      const nuevoPedido = await Pedido.create(id_usuario_encargado, id_proveedor, fecha_apertura, fecha_cierre, fecha_entrega, estado);
+      res.status(201).json(nuevoPedido);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al crear el pedido');
+    }
+  },
+
+  // Obtener todos los pedidos
+  async listar(req, res) {
+    try {
+      const pedidos = await Pedido.findAll();
+      res.json(pedidos);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al obtener los pedidos');
+    }
+  },
+
+  // Obtener un pedido por ID
+  async obtenerPorId(req, res) {
+    const { id } = req.params;
+    try {
+      const pedido = await Pedido.findById(id);
+      if (pedido) {
+        res.json(pedido);
+      } else {
+        res.status(404).send('Pedido no encontrado');
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al obtener el pedido');
+    }
+  },
+
+  // Actualizar un pedido
+  async actualizar(req, res) {
+    const { id } = req.params;
+    const { id_usuario_encargado, id_proveedor, fecha_apertura, fecha_cierre, fecha_entrega, estado } = req.body;
+    try {
+      const pedidoActualizado = await Pedido.update(id, id_usuario_encargado, id_proveedor, fecha_apertura, fecha_cierre, fecha_entrega, estado);
+      res.json(pedidoActualizado);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al actualizar el pedido');
+    }
+  },
+
+  // Eliminar un pedido
+  async eliminar(req, res) {
+    const { id } = req.params;
+    try {
+      await Pedido.delete(id);
+      res.status(204).send();
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al eliminar el pedido');
+    }
+  },
+};
+
+module.exports = PedidoController;
+```
+
+## Pedido.js (Modelo)
+
+```javascript
+const db = require('../db');
+
+class Pedido {
+  static async create(id_usuario_encargado, id_proveedor, fecha_apertura, fecha_cierre, fecha_entrega, estado) {
+    const query = `
+      INSERT INTO Pedido (ID_Usuario_Encargado, ID_Proveedor, Fecha_Apertura, Fecha_Cierre, Fecha_Entrega, Estado)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING *;
+    `;
+    const values = [id_usuario_encargado, id_proveedor, fecha_apertura, fecha_cierre, fecha_entrega, estado];
+    const { rows } = await db.query(query, values);
+    return rows[0];
+  }
+
+  static async findAll() {
+    const query = `
+      SELECT * FROM Pedido;
+    `;
+    const { rows } = await db.query(query);
+    return rows;
+  }
+
+  static async findById(id) {
+    const query = `
+      SELECT * FROM Pedido
+      WHERE ID_Pedido = $1;
+    `;
+    const { rows } = await db.query(query, [id]);
+    return rows[0];
+  }
+
+  static async update(id, id_usuario_encargado, id_proveedor, fecha_apertura, fecha_cierre, fecha_entrega, estado) {
+    const query = `
+      UPDATE Pedido
+      SET ID_Usuario_Encargado = $1, ID_Proveedor = $2, Fecha_Apertura = $3, Fecha_Cierre = $4, Fecha_Entrega = $5, Estado = $6
+      WHERE ID_Pedido = $7
+      RETURNING *;
+    `;
+    const values = [id_usuario_encargado, id_proveedor, fecha_apertura, fecha_cierre, fecha_entrega, estado, id];
+    const { rows } = await db.query(query, values);
+    return rows[0];
+  }
+
+  static async delete(id) {
+    const query = `
+      DELETE FROM Pedido
+      WHERE ID_Pedido = $1;
+    `;
+    await db.query(query, [id]);
+  }
+}
+
+module.exports = Pedido;
+```
+
+## PedidoRoutes.js
+
+```javascript
+const express = require('express');
+const PedidoController = require('../controllers/PedidoController');
+
+const router = express.Router();
+
+router.post('/', PedidoController.crear);
+router.get('/', PedidoController.listar);
+router.get('/:id', PedidoController.obtenerPorId);
+router.put('/:id', PedidoController.actualizar);
+router.delete('/:id', PedidoController.eliminar);
+
+module.exports = router;
+```
+
+## PedidoPeriodicoController.js
+
+```javascript
+const PedidoPeriodico = require('../models/PedidoPeriodico');
+
+const PedidoPeriodicoController = {
+  // Crear un nuevo pedido periódico
+  async crear(req, res) {
+    const { id_proveedor, fecha_inicio, fecha_fin, activo, periodicidad, dia_apertura, dia_cierre, dia_entrega } = req.body;
+    try {
+      const nuevoPedidoPeriodico = await PedidoPeriodico.create(id_proveedor, fecha_inicio, fecha_fin, activo, periodicidad, dia_apertura, dia_cierre, dia_entrega);
+      res.status(201).json(nuevoPedidoPeriodico);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al crear el pedido periódico');
+    }
+  },
+
+  // Obtener todos los pedidos periódicos
+  async listar(req, res) {
+    try {
+      const pedidosPeriodicos = await PedidoPeriodico.findAll();
+      res.json(pedidosPeriodicos);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al obtener los pedidos periódicos');
+    }
+  },
+
+  // Obtener un pedido periódico por ID
+  async obtenerPorId(req, res) {
+    const { id } = req.params;
+    try {
+      const pedidoPeriodico = await PedidoPeriodico.findById(id);
+      if (pedidoPeriodico) {
+        res.json(pedidoPeriodico);
+      } else {
+        res.status(404).send('Pedido periódico no encontrado');
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al obtener el pedido periódico');
+    }
+  },
+
+  // Actualizar un pedido periódico
+  async actualizar(req, res) {
+    const { id } = req.params;
+    const { id_proveedor, fecha_inicio, fecha_fin, activo, periodicidad, dia_apertura, dia_cierre, dia_entrega } = req.body;
+    try {
+      const pedidoPeriodicoActualizado = await PedidoPeriodico.update(id, id_proveedor, fecha_inicio, fecha_fin, activo, periodicidad, dia_apertura, dia_cierre, dia_entrega);
+      res.json(pedidoPeriodicoActualizado);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al actualizar el pedido periódico');
+    }
+  },
+
+  // Eliminar un pedido periódico
+  async eliminar(req, res) {
+    const { id } = req.params;
+    try {
+      await PedidoPeriodico.delete(id);
+      res.status(204).send();
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al eliminar el pedido periódico');
+    }
+  },
+};
+
+module.exports = PedidoPeriodicoController;
+```
+
+## PedidoPeriodico.js (Modelo)
+
+```javascript
+const db = require('../db');
+
+class PedidoPeriodico {
+  static async create(id_proveedor, fecha_inicio, fecha_fin, activo, periodicidad, dia_apertura, dia_cierre, dia_entrega) {
+    const query = `
+      INSERT INTO Pedido_Periodico (ID_Proveedor, Fecha_Inicio, Fecha_Fin, Activo, Periodicidad, Dia_Apertura, Dia_Cierre, Dia_Entrega)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      RETURNING *;
+    `;
+    const values = [id_proveedor, fecha_inicio, fecha_fin, activo, periodicidad, dia_apertura, dia_cierre, dia_entrega];
+    const { rows } = await db.query(query, values);
+    return rows[0];
+  }
+
+  static async findAll() {
+    const query = `
+      SELECT * FROM Pedido_Periodico;
+    `;
+    const { rows } = await db.query(query);
+    return rows;
+  }
+
+  static async findById(id) {
+    const query = `
+      SELECT * FROM Pedido_Periodico
+      WHERE ID_Pedido_Periodico = $1;
+    `;
+    const { rows } = await db.query(query, [id]);
+    return rows[0];
+  }
+
+  static async update(id, id_proveedor, fecha_inicio, fecha_fin, activo, periodicidad, dia_apertura, dia_cierre, dia_entrega) {
+    const query = `
+      UPDATE Pedido_Periodico
+      SET ID_Proveedor = $1, Fecha_Inicio = $2, Fecha_Fin = $3, Activo = $4, Periodicidad = $5, Dia_Apertura = $6, Dia_Cierre = $7, Dia_Entrega = $8
+      WHERE ID_Pedido_Periodico = $9
+      RETURNING *;
+    `;
+    const values = [id_proveedor, fecha_inicio, fecha_fin, activo, periodicidad, dia_apertura, dia_cierre, dia_entrega, id];
+    const { rows } = await db.query(query, values);
+    return rows[0];
+  }
+
+  static async delete(id) {
+    const query = `
+      DELETE FROM Pedido_Periodico
+      WHERE ID_Pedido_Periodico = $1;
+    `;
+    await db.query(query, [id]);
+  }
+}
+
+module.exports = PedidoPeriodico;
+```
+
+## PedidoPeriodicoRoutes.js
+
+```javascript
+const express = require('express');
+const PedidoPeriodicoController = require('../controllers/PedidoPeriodicoController');
+
+const router = express.Router();
+
+router.post('/', PedidoPeriodicoController.crear);
+router.get('/', PedidoPeriodicoController.listar);
+router.get('/:id', PedidoPeriodicoController.obtenerPorId);
+router.put('/:id', PedidoPeriodicoController.actualizar);
+router.delete('/:id', PedidoPeriodicoController.eliminar);
+
+module.exports = router;
+```
+
+## UsuarioProveedorController.js
+
+```javascript
+const UsuarioProveedor = require('../models/UsuarioProveedor');
+
+const UsuarioProveedorController = {
+  // Crear una nueva relación usuario-proveedor
+  async crear(req, res) {
+    const { id_usuario, id_proveedor } = req.body;
+    try {
+      const nuevaRelacion = await UsuarioProveedor.create(id_usuario, id_proveedor);
+      res.status(201).json(nuevaRelacion);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al crear la relación usuario-proveedor');
+    }
+  },
+
+  // Obtener todas las relaciones usuario-proveedor
+  async listar(req, res) {
+    try {
+      const relaciones = await UsuarioProveedor.findAll();
+      res.json(relaciones);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al obtener las relaciones usuario-proveedor');
+    }
+  },
+
+  // Obtener una relación usuario-proveedor por ID
+  async obtenerPorId(req, res) {
+    const { id_usuario, id_proveedor } = req.params;
+    try {
+      const relacion = await UsuarioProveedor.findById(id_usuario, id_proveedor);
+      if (relacion) {
+        res.json(relacion);
+      } else {
+        res.status(404).send('Relación usuario-proveedor no encontrada');
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al obtener la relación usuario-proveedor');
+    }
+  },
+
+  // Eliminar una relación usuario-proveedor
+  async eliminar(req, res) {
+    const { id_usuario, id_proveedor } = req.params;
+    try {
+      await UsuarioProveedor.delete(id_usuario, id_proveedor);
+      res.status(204).send();
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al eliminar la relación usuario-proveedor');
+    }
+  },
+};
+
+module.exports = UsuarioProveedorController;
+```
+
+## UsuarioProveedor.js (Modelo)
+
+```javascript
+const db = require('../db');
+
+class UsuarioProveedor {
+  static async create(id_usuario, id_proveedor) {
+    const query = `
+      INSERT INTO Usuario_Proveedor (ID_Usuario, ID_Proveedor)
+      VALUES ($1, $2)
+      RETURNING *;
+    `;
+    const values = [id_usuario, id_proveedor];
+    const { rows } = await db.query(query, values);
+    return rows[0];
+  }
+
+  static async findAll() {
+    const query = `
+      SELECT * FROM Usuario_Proveedor;
+    `;
+    const { rows } = await db.query(query);
+    return rows;
+  }
+
+  static async findById(id_usuario, id_proveedor) {
+    const query = `
+      SELECT * FROM Usuario_Proveedor
+      WHERE ID_Usuario = $1 AND ID_Proveedor = $2;
+    `;
+    const values = [id_usuario, id_proveedor];
+    const { rows } = await db.query(query, values);
+    return rows[0];
+  }
+
+  static async delete(id_usuario, id_proveedor) {
+    const query = `
+      DELETE FROM Usuario_Proveedor
+      WHERE ID_Usuario = $1 AND ID_Proveedor = $2;
+    `;
+    const values = [id_usuario, id_proveedor];
+    await db.query(query, values);
+  }
+}
+
+module.exports = UsuarioProveedor;
+```
+
+## UsuarioProveedorRoutes.js
+
+```javascript
+const express = require('express');
+const UsuarioProveedorController = require('../controllers/UsuarioProveedorController');
+
+const router = express.Router();
+
+router.post('/', UsuarioProveedorController.crear);
+router.get('/', UsuarioProveedorController.listar);
+router.get('/:id_usuario/:id_proveedor', UsuarioProveedorController.obtenerPorId);
+router.delete('/:id_usuario/:id_proveedor', UsuarioProveedorController.eliminar);
+
+module.exports = router;
+```
+
+## swagger.js
+
+```javascript
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+
+const swaggerOptions = {
+  swaggerDefinition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'API del Grupo de Consumo',
+      version: '1.0.0',
+      description: 'Documentación de la API para la gestión del grupo de consumo local y ecológico',
+    },
+    servers: [
+      {
+        url: 'http://localhost:3000',
+        description: 'Servidor de desarrollo',
+      },
+    ],
+  },
+  apis: ['./routes/*.js'],
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+
+module.exports = (app) => {
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+};
+```
+
+## Validators.js (Middlewares)
+
+```javascript
+const { body, param, query } = require('express-validator');
+
+const validators = {
+  // Validación para crear un usuario
+  crearUsuario: [
+    body('nombre').notEmpty().withMessage('El nombre es obligatorio'),
+    body('correo').isEmail().withMessage('El correo no es válido'),
+    body('contraseña').isLength({ min: 6 }).withMessage('La contraseña debe tener al menos 6 caracteres'),
+  ],
+  // Validación para crear un pedido
+  crearPedido: [
+    body('id_usuario_encargado').isInt().withMessage('El ID del usuario encargado debe ser un número'),
+    body('id_proveedor').isInt().withMessage('El ID del proveedor debe ser un número'),
+    body('fecha_apertura').isISO8601().withMessage('La fecha de apertura debe ser válida'),
+    body('fecha_cierre').isISO8601().withMessage('La fecha de cierre debe ser válida'),
+    body('fecha_entrega').isISO8601().withMessage('La fecha de entrega debe ser válida'),
+    body('estado').isIn(['pendiente', 'en proceso', 'entregado', 'repartido', 'cancelado']).withMessage('Estado no válido'),
+  ],
+  // Validación para paginación
+  paginacion: [
+    query('pagina').optional().isInt({ min: 1 }).withMessage('La página debe ser un número mayor a 0'),
+    query('limite').optional().isInt({ min: 1 }).withMessage('El límite debe ser un número mayor a 0'),
+  ],
+};
+
+module.exports = validators;
+```
+
+## PagoController.js
+
+```javascript
+const Pago = require('../models/Pago');
+
+const PagoController = {
+  // Crear un nuevo pago
+  async crear(req, res) {
+    const { id_usuario_deudor, id_usuario_creditor, monto, estado } = req.body;
+    try {
+      const nuevoPago = await Pago.create(id_usuario_deudor, id_usuario_creditor, monto, estado);
+      res.status(201).json(nuevoPago);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al crear el pago');
+    }
+  },
+
+  // Obtener todos los pagos
+  async listar(req, res) {
+    try {
+      const pagos = await Pago.findAll();
+      res.json(pagos);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al obtener los pagos');
+    }
+  },
+
+  // Cambiar el estado de un pago
+  async cambiarEstado(req, res) {
+    const { id } = req.params;
+    const { estado } = req.body;
+    try {
+      const pagoActualizado = await Pago.cambiarEstado(id, estado);
+      res.json(pagoActualizado);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al cambiar el estado del pago');
+    }
+  },
+};
+
+module.exports = PagoController;
+```
+
+## NotificacionController.js
+
+```javascript
+const Notificacion = require('../models/Notificacion');
+
+const NotificacionController = {
+  // Enviar una notificación
+  async enviar(req, res) {
+    const { id_usuario, mensaje } = req.body;
+    try {
+      const nuevaNotificacion = await Notificacion.enviar(id_usuario, mensaje);
+      res.status(201).json(nuevaNotificacion);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al enviar la notificación');
+    }
+  },
+
+  // Marcar una notificación como leída
+  async marcarLeida(req, res) {
+    const { id } = req.params;
+    try {
+      const notificacion = await Notificacion.marcarLeida(id);
+      res.json(notificacion);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al marcar la notificación como leída');
+    }
+  },
+};
+
+module.exports = NotificacionController;
+```
+
+## SaldoController.js
+
+```javascript
+const Saldo = require('../models/Saldo');
+
+const SaldoController = {
+  // Calcular el saldo de un usuario
+  async calcularSaldo(req, res) {
+    const { id_usuario } = req.params;
+    try {
+      const saldo = await Saldo.calcularSaldo(id_usuario);
+      res.json({ saldo });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al calcular el saldo');
+    }
+  },
+};
+
+module.exports = SaldoController;
+```
+
+## Pago.js (Modelo)
+
+```javascript
+const db = require('../db');
+
+class Pago {
+  static async create(id_usuario_deudor, id_usuario_creditor, monto, estado) {
+    const query = `
+      INSERT INTO Pago (ID_Usuario_Deudor, ID_Usuario_Creditor, Monto, Estado)
+      VALUES ($1, $2, $3, $4)
+      RETURNING *;
+    `;
+    const values = [id_usuario_deudor, id_usuario_creditor, monto, estado];
+    const { rows } = await db.query(query, values);
+    return rows[0];
+  }
+
+  static async findAll() {
+    const query = `
+      SELECT * FROM Pago;
+    `;
+    const { rows } = await db.query(query);
+    return rows;
+  }
+
+  static async cambiarEstado(id, estado) {
+    const query = `
+      UPDATE Pago
+      SET Estado = $1
+      WHERE ID_Pago = $2
+      RETURNING *;
+    `;
+    const { rows } = await db.query(query, [estado, id]);
+    return rows[0];
+  }
+}
+
+module.exports = Pago;
+```
+
+## Notificacion.js (Modelo)
+
+```javascript
+const db = require('../db');
+
+class Notificacion {
+  static async enviar(id_usuario, mensaje) {
+    const query = `
+      INSERT INTO Notificacion (ID_Usuario, Mensaje)
+      VALUES ($1, $2)
+      RETURNING *;
+    `;
+    const { rows } = await db.query(query, [id_usuario, mensaje]);
+    return rows[0];
+  }
+
+  static async marcarLeida(id) {
+    const query = `
+      UPDATE Notificacion
+      SET Leida = TRUE
+      WHERE ID_Notificacion = $1
+      RETURNING *;
+    `;
+    const { rows } = await db.query(query, [id]);
+    return rows[0];
+  }
+}
+
+module.exports = Notificacion;
+```
+
+## Saldo.js (Modelo)
+
+```javascript
+const db = require('../db');
+
+class Saldo {
+  static async calcularSaldo(id_usuario) {
+    const query = `
+      SELECT SUM(Monto) AS saldo
+      FROM Pago
+      WHERE ID_Usuario_Deudor = $1 AND Estado = 'pendiente';
+    `;
+    const { rows } = await db.query(query, [id_usuario]);
+    return rows[0].saldo || 0;
+  }
+}
+
+module.exports = Saldo;
+```
+
+## PagoRoutes.js
+
+```javascript
+const express = require('express');
+const PagoController = require('../controllers/PagoController');
+const validators = require('../middlewares/validators');
+
+const router = express.Router();
+
+router.post('/', validators.crearPedido, PagoController.crear);
+router.get('/', PagoController.listar);
+router.put('/:id/cambiar-estado', PagoController.cambiarEstado);
+
+module.exports = router;
+```
+
+## NotificacionRoutes.js
+
+```javascript
+const express = require('express');
+const NotificacionController = require('../controllers/NotificacionController');
+
+const router = express.Router();
+
+router.post('/', NotificacionController.enviar);
+router.put('/:id/marcar-leida', NotificacionController.marcarLeida);
+
+module.exports = router;
+```
+
+## SaldoRoutes.js
+
+```javascript
+const express = require('express');
+const SaldoController = require('../controllers/SaldoController');
+
+const router = express.Router();
+
+router.get('/:id_usuario', SaldoController.calcularSaldo);
+
+module.exports = router;
+```
+
 ```
