@@ -1,3 +1,7 @@
+Aquí tienes la versión corregida y mejor organizada del documento en formato **Markdown**. He ajustado la estructura, corregido errores de formato y mejorado la claridad del contenido.
+
+---
+
 # Preparación para el Desarrollo de la Aplicación Web de Consumo Local y Ecológico
 
 ## 1. Configuración del Entorno de Desarrollo
@@ -29,7 +33,7 @@
   - `README.md`: Para la documentación del proyecto.
   - `.gitignore`: Para excluir archivos y carpetas innecesarias del control de versiones.
 
-## 4. Definición de Modelos de Datos
+## 3. Definición de Modelos de Datos
 
 - **Identificar Entidades**:
   - **Usuario**: ID, nombre, correo electrónico, contraseña, rol (usuario/admin).
@@ -38,7 +42,7 @@
 
 - **Crear Diagramas ER**: Utiliza herramientas como Lucidchart o Draw.io para crear diagramas de entidad-relación que representen las relaciones entre las entidades.
 
-## 5. Planificación de la API
+## 4. Planificación de la API
 
 - **Definir Endpoints**:
   - **Usuarios**:
@@ -60,29 +64,26 @@
     - `GET /api/pedidos`: Obtener todos los pedidos.
     - `GET /api/pedidos/:id`: Obtener un pedido específico.
 
-## 6. Planificación del Desarrollo
+## 5. Planificación del Desarrollo
 
 - **Dividir el Trabajo**: Asigna tareas específicas a los miembros del equipo (si aplica).
 - **Establecer Cronograma**: Define un cronograma con hitos y plazos para cada fase del desarrollo.
 - **Revisiones de Código**: Planifica revisiones de código regulares para asegurar la calidad del código.
 
-## 7. Documentación
+## 6. Documentación
 
 - **Documentar la API**: Utiliza herramientas como Swagger o Postman para documentar los endpoints de la API.
 - **Guía de Usuario**: Prepara una guía de usuario que explique cómo utilizar la aplicación.
 
-## 8. Preparación para Pruebas
+## 7. Preparación para Pruebas
 
 - **Definir Estrategia de Pruebas**: Planifica pruebas unitarias, de integración y de usabilidad.
 - **Herramientas de Pruebas**: Selecciona herramientas para pruebas (por ejemplo, Jest para pruebas unitarias en JavaScript).
 
-## 9. Despliegue
+## 8. Despliegue
 
 - **Seleccionar Servicio de Hosting**: Clouding.io.
-- **Configurar Entorno de
-
-
-Aquí tienes las instrucciones en formato **Markdown** para configurar y comenzar el desarrollo de tu proyecto en **Windows 11** y **Ubuntu**.
+- **Configurar Entorno de Producción**: Asegúrate de que la base de datos y la aplicación estén correctamente configuradas para producción.
 
 ---
 
@@ -90,76 +91,69 @@ Aquí tienes las instrucciones en formato **Markdown** para configurar y comenza
 
 ## **Arch Linux**
 
+```bash
 sudo steamos-readonly disable
-
 sudo pacman -Syu
-
-
 sudo pacman -S postgresql
-
-
 git config --global user.name "Eneko"
 git config --global user.email "eneko@disroot.org"
-
-
 sudo -u postgres initdb --locale=C.UTF-8 --encoding=UTF8 -D '/var/lib/postgres/data'
+```
 
 ## **Para Windows 11**
 
 ### 1. Instalar Visual Studio Code
-1. Descarga Visual Studio Code desde [Visual Studio Code]([https://git-scm.com/](https://code.visualstudio.com/)).
+1. Descarga Visual Studio Code desde [Visual Studio Code](https://code.visualstudio.com/).
 2. Sigue las instrucciones del instalador.
-3. Instalar extensiones:
+3. Instala extensiones recomendadas para desarrollo en Node.js, Vue.js y PostgreSQL.
 
 ### 2. Instalar Node.js
 1. Descarga Node.js desde [nodejs.org](https://nodejs.org/).
 2. Asegúrate de instalar la versión LTS (Long Term Support).
 3. Verifica la instalación:
-   ```en el propio terminal de Visual Studio Code
+   ```bash
    node -v
    npm -v
    ```
-### 3. Habilitar la ejecución de scripts
-1. Abre PowerShell como administrador
-2. Ejecutar: Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 
-### 4. Instalar PostgreSQL [deprecated] instalar con npm pg
+### 3. Habilitar la Ejecución de Scripts
+1. Abre PowerShell como administrador.
+2. Ejecuta:
+   ```powershell
+   Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+   ```
+
+### 4. Instalar PostgreSQL
 1. Descarga PostgreSQL desde [postgresql.org](https://www.postgresql.org/download/windows/).
 2. Sigue las instrucciones del instalador.
 3. Configura una base de datos y un usuario para tu proyecto.
 
-Acceder a PostgreSQL
-    COn usuario postgres (superusuario):
-    ```
-    C:\Program Files\PostgreSQL\17\bin> .\psql.exe -U postgres
-    ```
+#### Acceder a PostgreSQL
+```bash
+C:\Program Files\PostgreSQL\17\bin> .\psql.exe -U postgres
+```
 
-Crear una Base de Datos
-    ```
-    CREATE DATABASE ekonsumo;
-    ```
+#### Crear una Base de Datos
+```sql
+CREATE DATABASE ekonsumo;
+```
 
-Crear un Usuario y Contraseña
-    ```
-    CREATE USER ekonsumo_user WITH PASSWORD '1234';
-    ```
+#### Crear un Usuario y Contraseña
+```sql
+CREATE USER ekonsumo_user WITH PASSWORD '1234';
+```
 
-Asignar Permisos al Usuario
-    ```
-    GRANT ALL PRIVILEGES ON DATABASE ekonsumo TO ekonsumo_user;
-    ```
+#### Asignar Permisos al Usuario
+```sql
+GRANT ALL PRIVILEGES ON DATABASE ekonsumo TO ekonsumo_user;
+```
 
-
-    Permisos adicionales sobre las tablas, conéctate a la base de datos:
-    ```
-    \c ekonsumo
-    ```
-
-    Y luego concede permisos sobre el esquema public:
-    ```
-    GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO ekonsumo_user;
-    GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO ekonsumo_user;
-    ```
+#### Permisos Adicionales sobre las Tablas
+```sql
+\c ekonsumo
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO ekonsumo_user;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO ekonsumo_user;
+```
 
 ### 5. Clonar el Repositorio
 1. Abre una terminal (CMD, PowerShell, o Git Bash).
@@ -242,41 +236,40 @@ Asignar Permisos al Usuario
    npm install
    ```
 3. Crear proyecto:
-   ```
-   npm init -y.
+   ```bash
+   npm init -y
    ```
 
-5. Instala Express:
+4. Instala Express:
+   ```bash
+   npm install express
    ```
-   npm install express.
 
-   Instala Validator
+5. Instala Validator:
+   ```bash
    npm install express-validator
-
-
    ```
 
-6. Crea un archivo index.js con un ejemplo básico:
-```
-const express = require('express');
-const app = express();
-const port = 3000;
+6. Crea un archivo `index.js` con un ejemplo básico:
+   ```javascript
+   const express = require('express');
+   const app = express();
+   const port = 3000;
 
-app.get('/', (req, res) => {
-  res.send('Hola, mundo!');
-});
+   app.get('/', (req, res) => {
+     res.send('Hola, mundo!');
+   });
 
-app.listen(port, () => {
-  console.log(`API corriendo en http://localhost:${port}`);
-});
-```
+   app.listen(port, () => {
+     console.log(`API corriendo en http://localhost:${port}`);
+   });
+   ```
 
 7. Ejecuta:
-   En VS Code: F5
-   
+   En VS Code: `F5`.
 
 8. Prueba:
-   En navegador web: http://localhost:3000/
+   En navegador web: `http://localhost:3000/`.
 
 ### 2. Configurar la Base de Datos
 1. Crea un archivo `.env` en la raíz del proyecto con las credenciales de la base de datos:
@@ -288,143 +281,132 @@ app.listen(port, () => {
    DB_NAME=ekonsumo
    ```
 
-2. Instalar conector Postrgre
-   ```
+2. Instalar conector PostgreSQL:
+   ```bash
    npm install dotenv pg
    ```
 
-   ```
-   sudo -u postgres psql
-   CREATE DATABASE ekonsumo;
-   CREATE USER ekonsumo_user WITH PASSWORD '1234';
-   GRANT ALL PRIVILEGES ON DATABASE ekonsumo TO ekonsumo_user;
-   
-   ```
-
-### 3. Crear tablas
-   ```
+3. Crear tablas:
+   ```sql
    psql -U ekonsumo_user -d ekonsumo
 
    \c ekonsumo 
 
-CREATE TABLE Usuario (
-    ID_Usuario SERIAL PRIMARY KEY,
-    Nombre VARCHAR(100) NOT NULL,
-    Correo VARCHAR(100) UNIQUE NOT NULL,
-    Contraseña VARCHAR(100) NOT NULL,
-    Movil VARCHAR(20),
-    Rol VARCHAR(50) NOT NULL CHECK (Rol IN ('admin', 'gestor', 'usuario')),
-    Activo BOOLEAN DEFAULT FALSE,
-    Saldo DECIMAL(10, 2) DEFAULT 0
-);
+   CREATE TABLE Usuario (
+       ID_Usuario SERIAL PRIMARY KEY,
+       Nombre VARCHAR(100) NOT NULL,
+       Correo VARCHAR(100) UNIQUE NOT NULL,
+       Contraseña VARCHAR(100) NOT NULL,
+       Movil VARCHAR(20),
+       Rol VARCHAR(50) NOT NULL CHECK (Rol IN ('admin', 'gestor', 'usuario')),
+       Activo BOOLEAN DEFAULT FALSE,
+       Saldo DECIMAL(10, 2) DEFAULT 0
+   );
 
-CREATE TABLE Proveedor (
-    ID_Proveedor SERIAL PRIMARY KEY,
-    Nombre VARCHAR(100) NOT NULL,
-    Contacto VARCHAR(100),
-    Telefono VARCHAR(20),
-    Movil VARCHAR(20),
-    Correo VARCHAR(100),
-    Envio_Movil BOOLEAN DEFAULT FALSE,
-    Envio_Mail BOOLEAN DEFAULT TRUE
-);
+   CREATE TABLE Proveedor (
+       ID_Proveedor SERIAL PRIMARY KEY,
+       Nombre VARCHAR(100) NOT NULL,
+       Contacto VARCHAR(100),
+       Telefono VARCHAR(20),
+       Movil VARCHAR(20),
+       Correo VARCHAR(100),
+       Envio_Movil BOOLEAN DEFAULT FALSE,
+       Envio_Mail BOOLEAN DEFAULT TRUE
+   );
 
-CREATE TABLE Producto (
-    ID_Producto SERIAL PRIMARY KEY,
-    Nombre VARCHAR(100) NOT NULL,
-    Descripcion TEXT,
-    Precio DECIMAL(10, 2) NOT NULL,
-    Frecuencia_Pedido VARCHAR(50) CHECK (Frecuencia_Pedido IN ('semanal', 'mensual', 'bimestral', 'trimestral', 'semestral')),
-    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
-    ID_Usuario_Encargado INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
-);
+   CREATE TABLE Producto (
+       ID_Producto SERIAL PRIMARY KEY,
+       Nombre VARCHAR(100) NOT NULL,
+       Descripcion TEXT,
+       Precio DECIMAL(10, 2) NOT NULL,
+       Frecuencia_Pedido VARCHAR(50) CHECK (Frecuencia_Pedido IN ('semanal', 'mensual', 'bimestral', 'trimestral', 'semestral')),
+       ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
+       ID_Usuario_Encargado INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE
+   );
 
-CREATE TABLE Pedido (
-    ID_Pedido SERIAL PRIMARY KEY,
-    ID_Usuario_Encargado INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
-    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
-    Fecha_Apertura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    Fecha_Cierre TIMESTAMP,
-    Fecha_Entrega TIMESTAMP,
-    Estado VARCHAR(50) NOT NULL CHECK (Estado IN ('pendiente', 'en proceso', 'entregado', 'repartido', 'cancelado'))
-);
+   CREATE TABLE Pedido (
+       ID_Pedido SERIAL PRIMARY KEY,
+       ID_Usuario_Encargado INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+       ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
+       Fecha_Apertura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+       Fecha_Cierre TIMESTAMP,
+       Fecha_Entrega TIMESTAMP,
+       Estado VARCHAR(50) NOT NULL CHECK (Estado IN ('pendiente', 'en proceso', 'entregado', 'repartido', 'cancelado'))
+   );
 
-CREATE TABLE Detalle_Pedido (
-    ID_Detalle SERIAL PRIMARY KEY,
-    ID_Pedido INT REFERENCES Pedido(ID_Pedido) ON DELETE CASCADE,
-    ID_Producto INT REFERENCES Producto(ID_Producto) ON DELETE CASCADE,
-    Cantidad INT NOT NULL,
-    Precio_Total DECIMAL(10, 2) NOT NULL,
-    ID_Usuario_Comprador INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE
-);
+   CREATE TABLE Detalle_Pedido (
+       ID_Detalle SERIAL PRIMARY KEY,
+       ID_Pedido INT REFERENCES Pedido(ID_Pedido) ON DELETE CASCADE,
+       ID_Producto INT REFERENCES Producto(ID_Producto) ON DELETE CASCADE,
+       Cantidad INT NOT NULL,
+       Precio_Total DECIMAL(10, 2) NOT NULL,
+       ID_Usuario_Comprador INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE
+   );
 
-CREATE TABLE Usuario_Proveedor (
-    ID_Usuario INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
-    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
-    PRIMARY KEY (ID_Usuario, ID_Proveedor)
-);
+   CREATE TABLE Usuario_Proveedor (
+       ID_Usuario INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+       ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
+       PRIMARY KEY (ID_Usuario, ID_Proveedor)
+   );
 
-CREATE TABLE Pedido_Periodico (
-    ID_Pedido_Periodico SERIAL PRIMARY KEY,
-    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
-    Fecha_Inicio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    Fecha_Fin TIMESTAMP,
-    Activo BOOLEAN DEFAULT TRUE,
-    Periodicidad INT,
-    Dia_Apertura INT,
-    Dia_Cierre INT,
-    Dia_Entrega INT
-);
+   CREATE TABLE Pedido_Periodico (
+       ID_Pedido_Periodico SERIAL PRIMARY KEY,
+       ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
+       Fecha_Inicio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+       Fecha_Fin TIMESTAMP,
+       Activo BOOLEAN DEFAULT TRUE,
+       Periodicidad INT,
+       Dia_Apertura INT,
+       Dia_Cierre INT,
+       Dia_Entrega INT
+   );
 
-CREATE TABLE Pago (
-    ID_Pago SERIAL PRIMARY KEY,
-    ID_Usuario_Deudor INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
-    ID_Usuario_Creditor INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
-    Monto DECIMAL(10, 2) NOT NULL,
-    Fecha_Pago TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    Estado VARCHAR(50) NOT NULL CHECK (Estado IN ('pendiente', 'completado'))
-);
+   CREATE TABLE Pago (
+       ID_Pago SERIAL PRIMARY KEY,
+       ID_Usuario_Deudor INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+       ID_Usuario_Creditor INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+       Monto DECIMAL(10, 2) NOT NULL,
+       Fecha_Pago TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+       Estado VARCHAR(50) NOT NULL CHECK (Estado IN ('pendiente', 'completado'))
+   );
 
-CREATE TABLE Notificacion (
-    ID_Notificacion SERIAL PRIMARY KEY,
-    ID_Usuario INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
-    Mensaje TEXT NOT NULL,
-    Fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    Leida BOOLEAN DEFAULT FALSE
-);
+   CREATE TABLE Notificacion (
+       ID_Notificacion SERIAL PRIMARY KEY,
+       ID_Usuario INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+       Mensaje TEXT NOT NULL,
+       Fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+       Leida BOOLEAN DEFAULT FALSE
+   );
 
-\dt 
+   \dt
    ```
+
 ### 4. Crear Modelos y Controladores
-1. Crear una carpeta llamada models en la raíz del proyecto.
-
-2. Dentro de models, crear archivos para cada entidad:
-   1. usuario.js
-   2. proveedor.js
-   3. producto.js
-   4. pedido.js
-   5. detalle_Pedido.js
-   
-3. Crear una carpeta llamada controllers en la raíz del proyecto.
-
-4. Dentro de controllers, crear archivos para cada entidad:
-   1. usuarioController.js
-   2. proveedorController.js
-   3. productoController.js
-   4. pedidoController.js
-   5. detalle_PedidoController.js
+1. Crear una carpeta llamada `models` en la raíz del proyecto.
+2. Dentro de `models`, crear archivos para cada entidad:
+   - `usuario.js`
+   - `proveedor.js`
+   - `producto.js`
+   - `pedido.js`
+   - `detalle_Pedido.js`
+3. Crear una carpeta llamada `controllers` en la raíz del proyecto.
+4. Dentro de `controllers`, crear archivos para cada entidad:
+   - `usuarioController.js`
+   - `proveedorController.js`
+   - `productoController.js`
+   - `pedidoController.js`
+   - `detalle_PedidoController.js`
 
 ### 5. Configurar las Rutas en Express
-1. Crear una carpeta llamada routes en la raíz.
-
-2. Dentro de routes, crear un archivo usuarioRoutes.js:
+1. Crear una carpeta llamada `routes` en la raíz.
+2. Dentro de `routes`, crear un archivo `usuarioRoutes.js`.
 
 ### 6. Instalar Swagger
-   ```
-   npm install swagger-jsdoc swagger-ui-express 
-   ```
+```bash
+npm install swagger-jsdoc swagger-ui-express
+```
 
-### 4. Iniciar el Servidor
+### 7. Iniciar el Servidor
 1. Inicia el servidor de desarrollo:
    ```bash
    npm start
@@ -436,9 +418,10 @@ CREATE TABLE Notificacion (
 # Desarrollo del Proyecto
 
 ### 1. Front-End (Vue.js)
-- Crea los componentes necesarios para las pantallas de registro, inicio de sesión, gestión de productos
+- Crea los componentes necesarios para las pantallas de registro, inicio de sesión, gestión de productos.
 
-1. Estructura del proyecto:
+#### Estructura del Proyecto:
+```
 frontend/
 ├── public/
 │   └── index.html
@@ -451,10 +434,19 @@ frontend/
 │   ├── App.vue
 │   └── main.js
 └── package.json
+```
 
-2. Configura Vue.js
+#### Configura Vue.js
+```bash
 npm install -g @vue/cli
-vue create Frontend
+vue create frontend
+cd frontend
 npm install
 npm run serve
 npm install vue-router
+
+npm install bootstrap @popperjs/core
+```
+
+#### Instalar extension debugger for firefox
+---

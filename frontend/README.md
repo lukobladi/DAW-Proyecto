@@ -22,3 +22,8 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+### Instalar bootstrap 
+npm install bootstrap @popperjs/core
+npm install bootstrap@5 bootstrap-vue-3
