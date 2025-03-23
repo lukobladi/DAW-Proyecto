@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="homePage">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container">
@@ -56,7 +56,7 @@ export default {
 </script>
 
 <style scoped>
-.home {
+.homePage {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
