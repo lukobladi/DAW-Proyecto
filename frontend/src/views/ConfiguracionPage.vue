@@ -1,9 +1,9 @@
 <template>
-  <div class="register-page">
+  <div class="configuracion-page">
     <NavBar />
-    <div class="register-form">
-      <h2>Registro</h2>
-      <form @submit.prevent="register">
+    <div class="configuracion-content">
+      <h2>Configuración de Cuenta</h2>
+      <form @submit.prevent="guardarCambios">
         <div class="form-group">
           <label for="nombre">Nombre</label>
           <input type="text" id="nombre" v-model="nombre" required>
@@ -13,16 +13,15 @@
           <input type="email" id="correo" v-model="correo" required>
         </div>
         <div class="form-group">
-          <label for="contraseña">Contraseña</label>
-          <input type="password" id="contraseña" v-model="contraseña" required>
+          <label for="contraseña">Nueva Contraseña</label>
+          <input type="password" id="contraseña" v-model="contraseña">
         </div>
         <div class="form-group">
-          <label for="confirmar-contraseña">Confirmar Contraseña</label>
-          <input type="password" id="confirmar-contraseña" v-model="confirmarContraseña" required>
+          <label for="confirmar-contraseña">Confirmar Nueva Contraseña</label>
+          <input type="password" id="confirmar-contraseña" v-model="confirmarContraseña">
         </div>
-        <button type="submit" class="btn btn-primary">Registrarse</button>
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
       </form>
-      <p>¿Ya tienes una cuenta? <router-link to="/login">Inicia Sesión</router-link></p>
     </div>
     <Footer />
   </div>
@@ -39,34 +38,30 @@ export default {
   },
   data() {
     return {
-      nombre: '',
-      correo: '',
+      nombre: 'Juan Pérez',
+      correo: 'juan@example.com',
       contraseña: '',
       confirmarContraseña: ''
     };
   },
   methods: {
-    register() {
-      // Lógica para registrar al usuario
-      console.log('Registrando usuario...');
+    guardarCambios() {
+      // Lógica para guardar los cambios
+      console.log('Guardando cambios...');
     }
   }
 };
 </script>
 
 <style scoped>
-.register-page {
+.configuracion-page {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-.register-form {
+.configuracion-content {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   padding: 2rem;
 }
 

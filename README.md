@@ -1,4 +1,4 @@
-```markdown
+
 # DAW-Proyecto
 
 ## Tabla de Contenidos
@@ -207,6 +207,32 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
 - **Sistema de Compras**: Un sistema que permita añadir productos a la cesta mensual de manera intuitiva.
 - **Cálculos Automáticos**: Automatización de los cálculos de gastos y deudas, eliminando la necesidad de realizar cálculos manuales en hojas de cálculo.
 - **Interacción entre Usuarios**: Facilitar la comunicación entre usuarios y productores, mejorando la colaboración y la eficiencia del grupo.
+
+### Herramientas
+- GIthub: Para el control de versiones y repositorio remoto.
+- Visual Studio Code: Entorno de desarrollo.
+- Penpot: Prototipado UI UX
+- Draw.io: Diagramas.
+- Gimp: Editor de imagenes.
+- CLouding.io: Servidor virtual VPS Debian
+
+### Tecnologías de programación
+#### Backend API Rest
+- PostgreSQL: Gestor de base de datos
+- Swagger: Documentación de la API
+- Node:
+- Express: 
+    - Cors
+    - express-validator 
+    - swagger-jsdoc 
+    - swagger-ui-express
+    - dotenv
+
+#### Frontend Web
+- Vue:
+    - vue-router
+    - Bootstrap
+    - axios    
 
 # Roadmap del Proyecto
 
@@ -2301,4 +2327,114 @@ router.get('/:id_usuario', SaldoController.calcularSaldo);
 module.exports = router;
 ```
 
+
+
+---
+
+# Frontend
+
+## Descripción del Frontend
+
+El frontend de la aplicación está desarrollado con **Vue.js** y **Bootstrap**. Se conecta al backend a través de una API REST para gestionar usuarios, productos, proveedores y pedidos. La aplicación está diseñada para ser responsive y ofrece una interfaz intuitiva para los usuarios.
+
+## Estructura del Proyecto
+
+El frontend está estructurado de la siguiente manera:
+
 ```
+frontend/
+├── public/
+│   └── index.html           # Página principal de la aplicación
+├── src/
+│   ├── assets/              # Recursos estáticos (imágenes, estilos globales)
+│   ├── components/          # Componentes reutilizables
+│   │   ├── NavBar.vue       # Barra de navegación
+│   │   ├── Footer.vue       # Pie de página
+│   │   ├── ProductCard.vue  # Tarjeta de producto
+│   │   ├── PedidoCard.vue   # Tarjeta de pedido
+│   │   └── Notification.vue # Componente de notificaciones
+│   ├── views/               # Vistas principales de la aplicación
+│   │   ├── HomePage.vue     # Página de inicio
+│   │   ├── LoginPage.vue    # Página de inicio de sesión
+│   │   ├── RegisterPage.vue # Página de registro
+│   │   ├── DashboardPage.vue # Página de dashboard
+│   │   ├── ProductosPage.vue # Página de gestión de productos
+│   │   ├── ProveedoresPage.vue # Página de gestión de proveedores
+│   │   ├── PedidosPage.vue  # Página de gestión de pedidos
+│   │   ├── HistorialPage.vue # Página de historial de pedidos
+│   │   ├── ConfiguracionPage.vue # Página de configuración de cuenta
+│   │   └── SoportePage.vue  # Página de soporte y ayuda
+│   ├── router/              # Configuración de las rutas de la aplicación
+│   │   └── index.js         # Definición de rutas
+│   ├── services/            # Servicios para interactuar con la API
+│   │   └── api.js           # Configuración de Axios y métodos de la API
+│   ├── store/               # Gestión del estado global con Vuex (opcional)
+│   │   └── index.js         # Configuración de Vuex
+│   ├── App.vue              # Componente principal de la aplicación
+│   └── main.js              # Punto de entrada de la aplicación
+├── package.json             # Dependencias y scripts del proyecto
+└── vue.config.js            # Configuración específica de Vue CLI
+```
+
+## Descripción de los Archivos
+
+### 1. **Componentes Reutilizables (`src/components/`)**
+- **`NavBar.vue`**: Barra de navegación superior con enlaces a las principales secciones de la aplicación.
+- **`Footer.vue`**: Pie de página con información de contacto y enlaces útiles.
+- **`ProductCard.vue`**: Tarjeta para mostrar la información de un producto.
+- **`PedidoCard.vue`**: Tarjeta para mostrar la información de un pedido.
+- **`Notification.vue`**: Componente para mostrar notificaciones al usuario.
+
+### 2. **Vistas Principales (`src/views/`)**
+- **`HomePage.vue`**: Página de inicio con una breve descripción del grupo de consumo.
+- **`LoginPage.vue`**: Página de inicio de sesión para usuarios registrados.
+- **`RegisterPage.vue`**: Página de registro para nuevos usuarios.
+- **`DashboardPage.vue`**: Página principal del usuario, donde puede ver su cesta mensual y acceder a otras funcionalidades.
+- **`ProductosPage.vue`**: Página para gestionar productos (añadir, editar, eliminar).
+- **`ProveedoresPage.vue`**: Página para gestionar proveedores (añadir, editar, eliminar).
+- **`PedidosPage.vue`**: Página para gestionar pedidos (abrir, cerrar, ver detalles).
+- **`HistorialPage.vue`**: Página para ver el historial de pedidos realizados.
+- **`ConfiguracionPage.vue`**: Página para que los usuarios configuren su cuenta.
+- **`SoportePage.vue`**: Página de soporte y ayuda con preguntas frecuentes y formulario de contacto.
+
+### 3. **Router (`src/router/index.js`)**
+Configura las rutas de la aplicación y asocia cada ruta con su componente correspondiente.
+
+### 4. **Servicios (`src/services/api.js`)**
+Contiene la configuración de Axios y los métodos para interactuar con la API del backend.
+
+### 5. **Store (`src/store/index.js`)**
+Opcional. Si se usa Vuex, aquí se define el estado global de la aplicación, las mutaciones y las acciones.
+
+### 6. **Punto de Entrada (`src/main.js`)**
+Configura Vue, el router, el store (si se usa) y monta la aplicación en el DOM.
+
+### 7. **Componente Principal (`src/App.vue`)**
+Contiene la estructura base de la aplicación, como el `NavBar`, `Footer` y el `router-view` para renderizar las vistas.
+
+---
+
+## Requisitos del Frontend
+
+### 1. **Autenticación y Autorización**
+- Los usuarios deben poder iniciar sesión y registrarse.
+- Las rutas protegidas solo deben ser accesibles para usuarios autenticados.
+
+### 2. **Gestión de Productos**
+- Los usuarios gestores deben poder añadir, editar y eliminar productos.
+- Los usuarios deben poder ver los productos disponibles y añadirlos a su cesta.
+
+### 3. **Gestión de Pedidos**
+- Los usuarios gestores deben poder abrir y cerrar pedidos.
+- Los usuarios deben poder ver los pedidos abiertos y añadir productos a ellos.
+
+### 4. **Historial de Pedidos**
+- Los usuarios deben poder ver un historial de sus pedidos realizados.
+
+### 5. **Configuración de Cuenta**
+- Los usuarios deben poder actualizar su información personal y cambiar su contraseña.
+
+### 6. **Soporte y Ayuda**
+- Los usuarios deben poder acceder a preguntas frecuentes y enviar consultas de soporte.
+
+---

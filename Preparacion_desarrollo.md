@@ -447,6 +447,8 @@ npm run serve
 npm install vue-router
 npm install axios
 
+npm install vuex
+
 npm install bootstrap @popperjs/core
 ```
 

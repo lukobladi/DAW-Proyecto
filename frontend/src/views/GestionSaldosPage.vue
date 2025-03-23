@@ -1,0 +1,72 @@
+<template>
+  <div class="gestion-saldos-page">
+    <NavBar />
+    <div class="gestion-saldos-content">
+      <h2>Gestión de Saldos</h2>
+      <div class="lista-saldos">
+        <div v-for="usuario in usuarios" :key="usuario.id" class="saldo-card">
+          <h3>{{ usuario.nombre }}</h3>
+          <p>Saldo: {{ usuario.saldo }}€</p>
+          <button @click="verDetalles(usuario.id)" class="btn btn-primary">Ver Detalles</button>
+        </div>
+      </div>
+    </div>
+    <Footer />
+  </div>
+</template>
+
+<script>
+import NavBar from '@/components/NavBar.vue';
+import Footer from '@/components/FooterBar.vue';
+
+export default {
+  components: {
+    NavBar,
+    Footer
+  },
+  data() {
+    return {
+      usuarios: [
+        // Ejemplo de datos de usuarios con saldos
+        { id: 1, nombre: 'Juan Pérez', saldo: 25.5 },
+        { id: 2, nombre: 'Ana Gómez', saldo: -18.7 }
+      ]
+    };
+  },
+  methods: {
+    verDetalles(usuarioId) {
+      // Lógica para ver detalles del saldo
+      console.log('Ver detalles del saldo:', usuarioId);
+    }
+  }
+};
+</script>
+
+<style scoped>
+.gestion-saldos-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.gestion-saldos-content {
+  flex: 1;
+  padding: 2rem;
+}
+
+.lista-saldos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.saldo-card {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.btn {
+  margin-top: 1rem;
+}
+</style>

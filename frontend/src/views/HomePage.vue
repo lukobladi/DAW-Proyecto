@@ -1,78 +1,52 @@
 <template>
-  <div class="homePage">
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container">
-        <a class="navbar-brand" href="#">Ekonsumo</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <router-link to="/" class="nav-link">Inicio</router-link>
-            </li>
-            <li class="nav-item">
-              <router-link to="/dashboard" class="nav-link">Dashboard</router-link>
-            </li>
-            <li class="nav-item">
-              <button class="btn btn-primary" @click="iniciarSesion">Iniciar Sesión</button>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Contenido Principal -->
-    <div class="container mt-5">
-      <div class="row">
-        <div class="col-md-8 offset-md-2 text-center">
-          <h1 class="display-4">Bienvenido a Ekonsumo</h1>
-          <p class="lead">Tu plataforma para gestionar pedidos de productos ecológicos.</p>
-          <router-link to="/dashboard" class="btn btn-success btn-lg">Ir al Dashboard</router-link>
-        </div>
+  <div class="home-page">
+    <NavBar />
+    <div class="hero-section">
+      <h1>Bienvenido al Grupo de Consumo</h1>
+      <p>Un espacio para comprar productos locales y ecológicos de manera colaborativa.</p>
+      <div class="buttons">
+        <router-link to="/login" class="btn btn-primary">Iniciar Sesión</router-link>
+        <router-link to="/register" class="btn btn-secondary">Registrarse</router-link>
       </div>
     </div>
+    <Footer />
   </div>
 </template>
 
 <script>
+import NavBar from '@/components/NavBar.vue';
+import Footer from '@/components/FooterBar.vue';
+
 export default {
-  methods: {
-    iniciarSesion() {
-      // Lógica para iniciar sesión
-      alert('Iniciar sesión...');
-    },
-  },
+  components: {
+    NavBar,
+    Footer
+  }
 };
 </script>
 
 <style scoped>
-.homePage {
-  min-height: 100vh;
+.home-page {
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
-.navbar {
-  margin-bottom: 2rem;
+.hero-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
 }
 
-.display-4 {
-  font-size: 2.5rem;
-  font-weight: bold;
+.buttons {
+  margin-top: 1rem;
 }
 
-.lead {
-  font-size: 1.25rem;
-  color: #666;
+.btn {
+  margin: 0 0.5rem;
 }
 </style>
