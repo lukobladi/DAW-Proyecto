@@ -36,6 +36,14 @@
       <div class="row">
         <div class="col-md-12">
           <h2>Dashboard</h2>
+          <div v-if="loading">Cargando usuarios...</div>
+          <div v-else>
+            <ul>
+              <li v-for="usuario in usuarios" :key="usuario.id">
+                {{ usuario.nombre }} - {{ usuario.correo }}
+              </li>
+            </ul>
+          </div>
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Resumen de Pedidos</h5>
@@ -50,7 +58,29 @@
 </template>
 
 <script>
+import api from '@/services/api';
+
+console.log('mensaje');
+
 export default {
+  name: 'DashboardPage',
+    data() {
+      return {
+        usuarios: [], // Almacena los usuarios obtenidos
+        loading: true, // Estado de carga
+      };
+    },
+    async mounted() {
+      try {
+        const response = await api.getUsuarios(); // Llama a la API
+        this.usuarios = response.data; // Asigna los datos a la variable 'usuarios'
+      } catch (error) {
+        console.error('Error al obtener usuarios:', error);
+      } finally {
+        this.loading = false; // Desactiva el estado de carga
+      }
+    },
+    
   methods: {
     cerrarSesion() {
       // Lógica para cerrar sesión

@@ -243,6 +243,7 @@ GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO ekonsumo_user;
 4. Instala Express:
    ```bash
    npm install express
+   npm install cors
    ```
 
 5. Instala Validator:
@@ -444,6 +445,7 @@ cd frontend
 npm install
 npm run serve
 npm install vue-router
+npm install axios
 
 npm install bootstrap @popperjs/core
 ```

@@ -1,4 +1,6 @@
 const express = require('express');
+const cors = require('cors');
+
 const swaggerSetup = require('./swagger');
 const validators = require('./middlewares/validators');
 
@@ -19,7 +21,11 @@ const PORT = process.env.PORT || 3000;
 // Configura Swagger
 swaggerSetup(app);
 
-app.use(express.json());
+//app.use(express.json());
+app.use(cors({
+  origin: 'http://localhost:8080', // Permite solicitudes desde este origen
+}));
+
 
 // Usar las rutas
 app.use('/api/usuarios', usuarioRoutes);
