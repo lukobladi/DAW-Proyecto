@@ -14,13 +14,13 @@ VALUES
     ('Bebidas del Norte', 'Jorge Fernández', '914445556', '600333444', 'contacto@bebidasnorte.com', 'efectivo', 'trimestral', TRUE, FALSE);
 
 -- Insertar datos de prueba en la tabla Producto
-INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor)
+INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Imagen)
 VALUES
-    ('Manzanas', 'Manzanas ecológicas', 2.50, 1),
-    ('Naranjas', 'Naranjas de Valencia', 1.80, 1),
-    ('Filete de ternera', 'Filete de ternera de alta calidad', 8.00, 2),
-    ('Agua mineral', 'Agua mineral 1L', 0.50, 3),
-    ('Vino tinto', 'Vino tinto de la Rioja', 5.00, 3);
+    ('Manzanas', 'Manzanas ecológicas', 2.50, 1, '/uploads/manzanas.webp'),
+    ('Naranjas', 'Naranjas de Valencia', 1.80, 1, '/uploads/naranjas.webp'),
+    ('Filete de ternera', 'Filete de ternera de alta calidad', 8.00, 2, '/uploads/filete.webp'),
+    ('Agua mineral', 'Agua mineral 1L', 0.50, 3, '/uploads/agua.webp'),
+    ('Vino tinto', 'Vino tinto de la Rioja', 5.00, 3, '/uploads/vino.webp');
 
 -- Insertar datos de prueba en la tabla Pedido
 INSERT INTO Pedido (ID_Usuario_Encargado, ID_Proveedor, Fecha_Apertura, Fecha_Cierre, Fecha_Entrega, Estado)

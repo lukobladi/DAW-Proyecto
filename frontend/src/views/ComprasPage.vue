@@ -8,6 +8,7 @@
       </div>
       <div class="lista-productos">
         <div v-for="producto in productos" :key="producto.id" class="producto-card">
+          <img :src="producto.imagen" alt="Imagen del producto" class="producto-imagen" />
           <h3>{{ producto.nombre }}</h3>
           <p>{{ producto.descripcion }}</p>
           <p>Precio: {{ producto.precio }}€</p>
@@ -31,9 +32,8 @@ export default {
   data() {
     return {
       productos: [
-        // Ejemplo de datos de productos
-        { id: 1, nombre: 'Manzanas', descripcion: 'Manzanas ecológicas', precio: 2.5 },
-        { id: 2, nombre: 'Pan', descripcion: 'Pan integral', precio: 1.8 }
+        { id: 1, nombre: 'Manzanas', descripcion: 'Manzanas ecológicas', precio: 2.5, imagen: '/uploads/manzanas.jpg' },
+        { id: 2, nombre: 'Pan', descripcion: 'Pan integral', precio: 1.8, imagen: '/uploads/pan.jpg' }
       ]
     };
   },
@@ -68,6 +68,14 @@ export default {
   border: 1px solid #ccc;
   padding: 1rem;
   border-radius: 8px;
+  text-align: center;
+}
+
+.producto-imagen {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 1rem;
 }
 
 .btn {

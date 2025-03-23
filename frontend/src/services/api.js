@@ -18,5 +18,23 @@ export default {
   getProductos() {
     return apiClient.get('/productos');
   },
-  // Más métodos aquí
+  crearProducto(formData) {
+    return apiClient.post('/productos', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
+  actualizarProducto(id, formData) {
+    return apiClient.put(`/productos/${id}`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
+  eliminarProducto(id) {
+    return apiClient.delete(`/productos/${id}`);
+  },
+  getCestaMensual() {
+    return apiClient.get('/cesta-mensual');
+  },
+  getDetallesPedido(pedidoId) {
+    return apiClient.get(`/pedidos/${pedidoId}`);
+  },
 };

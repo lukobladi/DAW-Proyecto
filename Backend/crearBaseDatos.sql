@@ -58,7 +58,8 @@ CREATE TABLE Producto (
     Nombre VARCHAR(100) NOT NULL,
     Descripcion TEXT,
     Precio DECIMAL(10, 2) NOT NULL,
-    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE
+    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
+    Imagen VARCHAR(255) -- Urlk de kla imagen
 );
 
 CREATE TABLE Pedido (

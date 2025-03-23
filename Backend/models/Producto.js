@@ -2,13 +2,13 @@ const pool = require('../db');
 
 const Producto = {
   // Crear un nuevo producto
-  async create(nombre, descripcion, precio, id_proveedor) {
+  async create(nombre, descripcion, precio, id_proveedor, imagen) {
     const query = `
-      INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor)
-      VALUES ($1, $2, $3, $4)
+      INSERT INTO producto (nombre, descripcion, precio, id_proveedor, imagen)
+      VALUES ($1, $2, $3, $4, $5)
       RETURNING *;
     `;
-    const values = [nombre, descripcion, precio, id_proveedor];
+    const values = [nombre, descripcion, precio, id_proveedor, imagen];
     const { rows } = await pool.query(query, values);
     return rows[0];
   },
@@ -28,14 +28,14 @@ const Producto = {
   },
 
   // Actualizar un producto
-  async update(id, nombre, descripcion, precio, id_proveedor) {
+  async update(id, nombre, descripcion, precio, id_proveedor, imagen) {
     const query = `
-      UPDATE Producto
-      SET Nombre = $1, Descripcion = $2, Precio = $3, ID_Proveedor = $4
-      WHERE ID_Producto = $5
+      UPDATE producto
+      SET nombre = $1, descripcion = $2, precio = $3, id_proveedor = $4, imagen = $5
+      WHERE id = $6
       RETURNING *;
     `;
-    const values = [nombre, descripcion, precio, id_proveedor, id];
+    const values = [nombre, descripcion, precio, id_proveedor, imagen, id];
     const { rows } = await pool.query(query, values);
     return rows[0];
   },

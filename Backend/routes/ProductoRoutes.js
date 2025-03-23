@@ -1,5 +1,6 @@
 const express = require('express');
 const ProductoController = require('../controllers/ProductoController');
+const upload = require('../config/multer'); // Importa Multer
 
 const router = express.Router();
 
@@ -19,7 +20,7 @@ const router = express.Router();
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
@@ -36,6 +37,9 @@ const router = express.Router();
  *               id_proveedor:
  *                 type: integer
  *                 example: 1
+ *               imagen:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       201:
  *         description: Producto creado correctamente
@@ -60,10 +64,13 @@ const router = express.Router();
  *                 id_proveedor:
  *                   type: integer
  *                   example: 1
+ *                 imagen:
+ *                   type: string
+ *                   example: "/uploads/imagen.jpg"
  *       500:
  *         description: Error al crear el producto
  */
-router.post('/', ProductoController.crear);
+router.post('/', upload.single('imagen'), ProductoController.crear);
 
 /**
  * @swagger
@@ -97,6 +104,9 @@ router.post('/', ProductoController.crear);
  *                   id_proveedor:
  *                     type: integer
  *                     example: 1
+ *                   imagen:
+ *                     type: string
+ *                     example: "/uploads/imagen.jpg"
  *       500:
  *         description: Error al obtener los productos
  */
@@ -139,6 +149,9 @@ router.get('/', ProductoController.listar);
  *                 id_proveedor:
  *                   type: integer
  *                   example: 1
+ *                 imagen:
+ *                   type: string
+ *                   example: "/uploads/imagen.jpg"
  *       404:
  *         description: Producto no encontrado
  *       500:
@@ -162,7 +175,7 @@ router.get('/:id', ProductoController.obtenerPorId);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
@@ -179,6 +192,9 @@ router.get('/:id', ProductoController.obtenerPorId);
  *               id_proveedor:
  *                 type: integer
  *                 example: 1
+ *               imagen:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       200:
  *         description: Producto actualizado correctamente
@@ -203,12 +219,15 @@ router.get('/:id', ProductoController.obtenerPorId);
  *                 id_proveedor:
  *                   type: integer
  *                   example: 1
+ *                 imagen:
+ *                   type: string
+ *                   example: "/uploads/imagen.jpg"
  *       404:
  *         description: Producto no encontrado
  *       500:
  *         description: Error al actualizar el producto
  */
-router.put('/:id', ProductoController.actualizar);
+router.put('/:id', upload.single('imagen'), ProductoController.actualizar);
 
 /**
  * @swagger

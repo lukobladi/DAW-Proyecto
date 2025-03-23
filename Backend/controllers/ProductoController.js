@@ -1,11 +1,14 @@
 const Producto = require('../models/Producto');
+const upload = require('../config/multer'); // Importa Multer
 
 const ProductoController = {
-  // Crear un nuevo producto
+  // Crear un nuevo producto con imagen
   async crear(req, res) {
     const { nombre, descripcion, precio, id_proveedor } = req.body;
+    const imagen = req.file ? `/uploads/${req.file.filename}` : null; // URL de la imagen
+
     try {
-      const nuevoProducto = await Producto.create(nombre, descripcion, precio, id_proveedor);
+      const nuevoProducto = await Producto.create(nombre, descripcion, precio, id_proveedor, imagen);
       res.status(201).json(nuevoProducto);
     } catch (err) {
       console.error(err);
@@ -39,12 +42,14 @@ const ProductoController = {
     }
   },
 
-  // Actualizar un producto
+  // Actualizar un producto con imagen
   async actualizar(req, res) {
     const { id } = req.params;
     const { nombre, descripcion, precio, id_proveedor } = req.body;
+    const imagen = req.file ? `/uploads/${req.file.filename}` : null; // URL de la imagen
+
     try {
-      const productoActualizado = await Producto.update(id, nombre, descripcion, precio, id_proveedor);
+      const productoActualizado = await Producto.update(id, nombre, descripcion, precio, id_proveedor, imagen);
       res.json(productoActualizado);
     } catch (err) {
       console.error(err);
