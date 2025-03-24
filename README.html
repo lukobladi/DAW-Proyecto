@@ -1,0 +1,1949 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>README.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<p>Aquí tienes la documentación que has proporcionado, corregida en cuanto a sintaxis Markdown. He anotado los posibles errores o áreas de mejora directamente en el documento con comentarios en <code>&lt;!-- --&gt;</code>. Los cambios principales son en la indentación, formato de títulos, listas y bloques de código.</p>
+<hr>
+<h1 id="daw-proyecto">DAW-Proyecto</h1>
+<h2 id="tabla-de-contenidos">Tabla de Contenidos</h2>
+<ul>
+<li><a href="#descripci%C3%B3n-del-proyecto">Descripción del Proyecto</a></li>
+<li><a href="#contexto-actual">Contexto Actual</a>
+<ul>
+<li><a href="#estructura-del-grupo">Estructura del Grupo</a>
+<ul>
+<li><a href="#ejemplo-actual-de-uso-para-incorporar-una-familia">Ejemplo actual de uso para incorporar una familia</a></li>
+<li><a href="#ejemplo-actual-de-uso-semanal-para-una-familia-que-quiere-pedir-verduras">Ejemplo actual de uso semanal para una familia que quiere pedir verduras</a></li>
+<li><a href="#ejemplo-actual-de-uso-semanal-para-una-familia-que-quiere-pedir-huevos">Ejemplo actual de uso semanal para una familia que quiere pedir huevos</a></li>
+<li><a href="#ejemplo-actual-de-uso-semanal-para-la-familia-que-gestiona-las-verduras">Ejemplo actual de uso semanal para la familia que gestiona las verduras</a></li>
+<li><a href="#ejemplo-actual-de-uso-semanal-para-la-familia-que-gestiona-el-pan-peri%C3%B3dico">Ejemplo actual de uso semanal para la familia que gestiona el pan (periódico)</a></li>
+</ul>
+</li>
+<li><a href="#pedidos">Pedidos</a>
+<ul>
+<li><a href="#pedido-abierto">Pedido abierto</a></li>
+<li><a href="#pedidos-peri%C3%B3dicos">Pedidos periódicos</a></li>
+<li><a href="#frecuencia-de-pedidos">Frecuencia de Pedidos</a></li>
+<li><a href="#entrega-de-productos">Entrega de Productos</a></li>
+<li><a href="#reparto-de-productos">Reparto de Productos</a></li>
+</ul>
+</li>
+<li><a href="#gesti%C3%B3n-actual-en-google-sheets">Gestión Actual en Google Sheets</a>
+<ul>
+<li><a href="#c%C3%A1lculos-avanzados">Cálculos Avanzados</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#propuesta-de-soluci%C3%B3n">Propuesta de Solución</a></li>
+<li><a href="#roadmap-del-proyecto">Roadmap del Proyecto</a>
+<ul>
+<li><a href="#1-definici%C3%B3n-de-requisitos">1. Definición de Requisitos</a></li>
+<li><a href="#2-planificaci%C3%B3n-del-proyecto">2. Planificación del Proyecto</a></li>
+<li><a href="#3-dise%C3%B1o-de-la-aplicaci%C3%B3n">3. Diseño de la Aplicación</a></li>
+<li><a href="#4-configuraci%C3%B3n-del-entorno-de-desarrollo">4. Configuración del Entorno de Desarrollo</a></li>
+<li><a href="#5-desarrollo-del-back-end">5. Desarrollo del Back-End</a></li>
+<li><a href="#6-desarrollo-del-front-end">6. Desarrollo del Front-End</a></li>
+<li><a href="#7-pruebas">7. Pruebas</a></li>
+<li><a href="#8-documentaci%C3%B3n">8. Documentación</a></li>
+<li><a href="#9-despliegue">9. Despliegue</a></li>
+<li><a href="#10-recopilaci%C3%B3n-de-feedback-y-mejora-continua">10. Recopilación de Feedback y Mejora Continua</a></li>
+<li><a href="#11-mantenimiento">11. Mantenimiento</a></li>
+</ul>
+</li>
+<li><a href="#prototipos-de-la-aplicaci%C3%B3n-web">Prototipos de la Aplicación Web</a>
+<ul>
+<li><a href="#1-pantalla-de-inicio">1. Pantalla de Inicio</a></li>
+<li><a href="#2-pantalla-de-registro">2. Pantalla de Registro</a></li>
+<li><a href="#3-pantalla-de-inicio-de-sesi%C3%B3n">3. Pantalla de Inicio de Sesión</a></li>
+<li><a href="#4-pantalla-de-recuperar-contrase%C3%B1a">4. Pantalla de Recuperar Contraseña</a></li>
+<li><a href="#5-pantalla-de-dashboard-tablero">5. Pantalla de Dashboard (Tablero)</a></li>
+<li><a href="#6-pantalla-de-compras">6. Pantalla de Compras</a></li>
+<li><a href="#7-pantalla-de-historial-de-pedidos">7. Pantalla de Historial de Pedidos</a></li>
+<li><a href="#8-pantalla-de-detalles-de-pedidos">8. Pantalla de Detalles de Pedidos</a></li>
+<li><a href="#9-pantalla-de-gesti%C3%B3n-de-usuarios-para-administradores">9. Pantalla de Gestión de Usuarios (para administradores)</a></li>
+<li><a href="#10-pantalla-de-configuraci%C3%B3n-de-cuenta">10. Pantalla de Configuración de Cuenta</a></li>
+<li><a href="#11-pantalla-de-soporte-y-ayuda">11. Pantalla de Soporte y Ayuda</a></li>
+<li><a href="#12-pantalla-de-gesti%C3%B3n-de-proveedores">12. Pantalla de Gestión de Proveedores</a></li>
+<li><a href="#13-pantalla-de-gesti%C3%B3n-de-productos">13. Pantalla de Gestión de Productos</a></li>
+<li><a href="#14-pantalla-de-gesti%C3%B3n-de-pedidos">14. Pantalla de Gestión de Pedidos</a></li>
+</ul>
+</li>
+<li><a href="#flujo-de-usuario-para-la-aplicaci%C3%B3n-web">Flujo de Usuario para la Aplicación Web</a>
+<ul>
+<li><a href="#1-gesti%C3%B3n-de-productos">1. Gestión de Productos</a></li>
+<li><a href="#2-gesti%C3%B3n-de-pedidos">2. Gestión de Pedidos</a></li>
+<li><a href="#3-c%C3%A1lculos-financieros">3. Cálculos Financieros</a></li>
+<li><a href="#4-gesti%C3%B3n-de-usuarios-para-administradores">4. Gestión de Usuarios (para administradores)</a></li>
+<li><a href="#5-notificaciones-y-recordatorios">5. Notificaciones y Recordatorios</a></li>
+<li><a href="#6-historial-de-pedidos">6. Historial de Pedidos</a></li>
+<li><a href="#7-configuraci%C3%B3n-de-cuenta">7. Configuración de Cuenta</a></li>
+<li><a href="#8-panel-de-administraci%C3%B3n-para-administradores">8. Panel de Administración (para administradores)</a></li>
+<li><a href="#9-informes-y-estad%C3%ADsticas">9. Informes y Estadísticas</a></li>
+</ul>
+</li>
+<li><a href="#datos">Datos</a>
+<ul>
+<li><a href="#tablas-principales">Tablas Principales</a>
+<ul>
+<li><a href="#1-usuario">1. Usuario</a></li>
+<li><a href="#2-proveedor">2. Proveedor</a></li>
+<li><a href="#3-producto">3. Producto</a></li>
+<li><a href="#4-pedido">4. Pedido</a></li>
+<li><a href="#5-detalle_pedido">5. Detalle_Pedido</a></li>
+<li><a href="#6-usuario_proveedor-relaci%C3%B3n-muchos-a-muchos">6. Usuario_Proveedor (Relación muchos a muchos)</a></li>
+<li><a href="#7-pedido_periodico">7. Pedido_Periodico</a></li>
+<li><a href="#8-pago-nueva">8. Pago (Nueva)</a></li>
+<li><a href="#9-notificacion-nueva">9. Notificacion (Nueva)</a></li>
+</ul>
+</li>
+<li><a href="#consultas-sql">Consultas SQL</a>
+<ul>
+<li><a href="#crear-tablas">Crear Tablas</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#backend-api-rest-node-express">Backend API Rest Node Express</a>
+<ul>
+<li><a href="#estructura">Estructura</a></li>
+<li><a href="#indexjs">Index.js</a></li>
+<li><a href="#detallepedidocontrollerjs">DetallePedidoController.js</a></li>
+<li><a href="#detallepedidojs-modelo">DetallePedido.js (Modelo)</a></li>
+<li><a href="#detallepedidoroutesjs">DetallePedidoRoutes.js</a></li>
+<li><a href="#dbjs">db.js</a></li>
+<li><a href="#swaggerjs">swagger.js</a></li>
+<li><a href="#configenv">config.env</a></li>
+<li><a href="#packagejson">package.json</a></li>
+<li><a href="#testroutesjs">TestRoutes.js</a></li>
+<li><a href="#usuariocontrollerjs">UsuarioController.js</a></li>
+<li><a href="#usuariojs-modelo">Usuario.js (Modelo)</a></li>
+<li><a href="#usuarioroutesjs">UsuarioRoutes.js</a></li>
+<li><a href="#productocontrollerjs">ProductoController.js</a></li>
+<li><a href="#productojs-modelo">Producto.js (Modelo)</a></li>
+<li><a href="#productoroutesjs">ProductoRoutes.js</a></li>
+<li><a href="#proveedorcontrollerjs">ProveedorController.js</a></li>
+<li><a href="#proveedorjs-modelo">Proveedor.js (Modelo)</a></li>
+<li><a href="#proveedorroutesjs">ProveedorRoutes.js</a></li>
+<li><a href="#pedidocontrollerjs">PedidoController.js</a></li>
+<li><a href="#pedidojs-modelo">Pedido.js (Modelo)</a></li>
+<li><a href="#pedidoroutesjs">PedidoRoutes.js</a></li>
+<li><a href="#pedidoperiodicocontrollerjs">PedidoPeriodicoController.js</a></li>
+<li><a href="#pedidoperiodicojs-modelo">PedidoPeriodico.js (Modelo)</a></li>
+<li><a href="#pedidoperiodicoroutesjs">PedidoPeriodicoRoutes.js</a></li>
+<li><a href="#usuarioproveedorcontrollerjs">UsuarioProveedorController.js</a></li>
+<li><a href="#usuarioproveedorjs-modelo">UsuarioProveedor.js (Modelo)</a></li>
+<li><a href="#usuarioproveedorroutesjs">UsuarioProveedorRoutes.js</a></li>
+<li><a href="#pagocontrollerjs">PagoController.js</a></li>
+<li><a href="#notificacioncontrollerjs">NotificacionController.js</a></li>
+<li><a href="#saldocontrollerjs">SaldoController.js</a></li>
+<li><a href="#pagojs-modelo">Pago.js (Modelo)</a></li>
+<li><a href="#notificacionjs-modelo">Notificacion.js (Modelo)</a></li>
+<li><a href="#saldojs-modelo">Saldo.js (Modelo)</a></li>
+<li><a href="#pagoRoutesjs">PagoRoutes.js</a></li>
+<li><a href="#notificacionRoutesjs">NotificacionRoutes.js</a></li>
+<li><a href="#saldoRoutesjs">SaldoRoutes.js</a></li>
+<li><a href="#validatorsjs-middlewares">Validators.js (Middlewares)</a></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="descripci%C3%B3n-del-proyecto">Descripción del Proyecto</h1>
+<p>El objetivo de este proyecto es desarrollar una aplicación web que facilite la gestión de un grupo de consumo local y ecológico, compuesto por aproximadamente cuarenta usuarios (familias) y quince productores. Actualmente, la gestión de pedidos y productos se realiza de manera manual a través de tablas en Google Sheets, lo que puede resultar ineficiente y propenso a errores.</p>
+<h2 id="contexto-actual">Contexto Actual</h2>
+<h3 id="estructura-del-grupo">Estructura del Grupo</h3>
+<p>El grupo está formado por familias que se encargan de contactar directamente con los productores. Cada usuario asume la responsabilidad de mantenerse en contacto con un proveedor específico, aunque hay algunos usuarios que no gestionan ningún proveedor. Será el usuario que gestiona ese proveedor el encargado de dar de alta, modificar y borrar productos. Será el encargado de dar de alta pedidos conjuntos estableciendo un periodo en el que los usuarios podrán añadir lineas al pedido.</p>
+<h4 id="ejemplo-actual-de-uso-para-incorporar-una-familia">Ejemplo actual de uso para incorporar una familia:</h4>
+<ol>
+<li>Contacta con responsable del grupo de consumo.</li>
+<li>Responsable explica funcionamiento de grupo.</li>
+<li>Responsable pide usuario de Google a la familia.</li>
+<li>Responsable comparte la hoja de cálculo de Google con la familia.</li>
+</ol>
+<h4 id="ejemplo-actual-de-uso-semanal-para-una-familia-que-quiere-pedir-verduras">Ejemplo actual de uso semanal para una familia que quiere pedir verduras:</h4>
+<ol>
+<li>Entra a Google Docs.</li>
+<li>Entra a la sheet compartida.</li>
+<li>Busca la hoja correspondiente al productor de verduras (semanal).</li>
+<li>Comprueba que el cuadro corresponde a la semana actual (se pone cabecera verde).</li>
+<li>Se sitúa en la columna correspondiente a su familia.</li>
+<li>Va introduciendo las unidades de cada producto que desea.</li>
+<li>En la parte de abajo le calcula el importe total.</li>
+<li>La semana siguiente tendrá la nueva tabla vacía.</li>
+</ol>
+<h4 id="ejemplo-actual-de-uso-semanal-para-una-familia-que-quiere-pedir-huevos">Ejemplo actual de uso semanal para una familia que quiere pedir huevos:</h4>
+<ol>
+<li>Entra a Google Docs.</li>
+<li>Entra a la sheet compartida.</li>
+<li>Busca la hoja correspondiente al productor de huevos (semanal y periódico).</li>
+<li>Comprueba que el cuadro corresponde a la semana actual (se pone cabecera verde).</li>
+<li>Se sitúa en la columna correspondiente a su familia.</li>
+<li>Introduce las unidades.</li>
+<li>En la parte de abajo le calcula el importe total.</li>
+<li>Hasta que modifique las unidades, recibirá ese pedido semanalmente de manera automática.</li>
+</ol>
+<h4 id="ejemplo-actual-de-uso-semanal-para-la-familia-que-gestiona-las-verduras">Ejemplo actual de uso semanal para la familia que gestiona las verduras:</h4>
+<ol>
+<li>Entra a Google Docs.</li>
+<li>Entra a la sheet compartida.</li>
+<li>Busca la hoja correspondiente al productor de verduras (semanal).</li>
+<li>Busca el cuadro con la suma total de unidades de cada verdura.</li>
+<li>Contacta con el proveedor o automáticamente se le envía correo desde la sheet.</li>
+<li>(Esto ahora es automático) Duplica el cuadro (vacío) de la semana pasada en las filas inferiores y se establece la cabecera del pedido actual en verde y la anterior en rojo.</li>
+<li>Al final de mes, el productor le pasa factura.</li>
+<li>Comprueba que el importe coincide con los pedidos.</li>
+</ol>
+<h4 id="ejemplo-actual-de-uso-semanal-para-la-familia-que-gestiona-el-pan-peri%C3%B3dico">Ejemplo actual de uso semanal para la familia que gestiona el pan (periódico):</h4>
+<ol>
+<li>Entra a Google Docs.</li>
+<li>Entra a la sheet compartida.</li>
+<li>Busca la hoja correspondiente al productor de pan (semanal).</li>
+<li>Busca el cuadro con la suma total de unidades de cada pan.</li>
+<li>Contacta con el proveedor o automáticamente se le envía correo desde la sheet.</li>
+<li>(Esto ahora es automático) Duplica el cuadro de la semana pasada (arrastrando las unidades también) en las filas inferiores y se establece la cabecera del pedido actual en verde y la anterior en rojo.</li>
+<li>Al final de mes, el productor le pasa factura.</li>
+<li>Comprueba que el importe coincide con los pedidos.</li>
+</ol>
+<h3 id="pedidos">Pedidos</h3>
+<p>Los pedidos se hacen de manera conjunta entre todos los usuarios del grupo. Los pedidos los abre el usuario encargado de ese proveedor(grupo de productos).</p>
+<h3 id="pedido-abierto">Pedido abierto</h3>
+<p>Cuando un pedido está abierto significa que el usuario encargado del proveedor ha abierto un pedido y ha establecido una fecha de apertura y una fecha de cierre. El pedido solo será editable en este periodo.</p>
+<h3 id="pedidos-peri%C3%B3dicos">Pedidos periódicos</h3>
+<p>Hay algunos productos que se piden semanalmente de manera automática sin que tenga que intervenir el usuario hasta que quiera dejar de recibir ese pedido.</p>
+<h3 id="frecuencia-de-pedidos">Frecuencia de Pedidos</h3>
+<p>Los productos se solicitan a diferentes proveedores con distintas frecuencias: algunos se piden semanalmente, mientras que otros se solicitan cada dos, tres o seis meses.</p>
+<h3 id="entrega-de-productos">Entrega de Productos</h3>
+<p>Todos los productos se entregan en un local común, donde los usuarios pueden recoger sus pedidos. Es el usuario encargado de ese proveedor el que establecerá una fecha aproximada de entrega en el momento de abrir un pedido.</p>
+<h3 id="reparto-de-productos">Reparto de Productos</h3>
+<p>Algunos productos se repartirán a los usuarios que los han pedido, después de que hayan sido entregados en el local.</p>
+<h2 id="gesti%C3%B3n-actual-en-google-sheets">Gestión Actual en Google Sheets</h2>
+<p>La gestión de pedidos y productos se organiza en Google Sheets de la siguiente manera:</p>
+<ul>
+<li><strong>Páginas por Proveedor</strong>: Cada proveedor tiene su propia página en la hoja de cálculo.</li>
+<li><strong>Registro de Productos</strong>: Cada producto se representa en una fila, lo que permite un seguimiento claro de la disponibilidad y características de cada uno.</li>
+<li><strong>Pedidos</strong>: Cada pedido se compone de varias filas, donde se establece una fecha máxima de modificación, la fecha de pedido y la periodicidad de los mismos.</li>
+<li><strong>Usuarios y Familias</strong>: Cada familia o usuario tiene su propia columna, lo que facilita el seguimiento de sus pedidos y gastos.</li>
+</ul>
+<h3 id="c%C3%A1lculos-avanzados">Cálculos Avanzados</h3>
+<p>Se realizan cálculos complejos para gestionar la información financiera y de pedidos:</p>
+<ul>
+<li><strong>Gasto Mensual</strong>: Se calcula el gasto mensual de cada familia. Aquellos que gestionan un proveedor y realizan el pago de los pedidos tienen un saldo positivo. Al final del mes, se determina qué familias deben dinero y a quién se lo deben.</li>
+<li><strong>Cálculo de Pedidos</strong>: Se establece un cálculo para determinar el pedido que debe enviarse al proveedor o productor antes de la fecha límite.</li>
+</ul>
+<h2 id="propuesta-de-soluci%C3%B3n">Propuesta de Solución</h2>
+<p>La nueva aplicación web permitirá automatizar y optimizar todos estos procesos, ofreciendo una interfaz más amigable y eficiente para los usuarios. Algunas de las características clave incluirán:</p>
+<ul>
+<li><strong>Gestión de Productos y Proveedores</strong>: Una sección dedicada para que los usuarios gestores puedan ver y gestionar los productos y proveedores de manera más intuitiva.</li>
+<li><strong>Sistema de Pedidos</strong>: Un sistema que permita abrir pedidos de forma sencilla a los usuarios gestores.</li>
+<li><strong>Sistema de Compras</strong>: Un sistema que permita añadir productos a la cesta mensual de manera intuitiva.</li>
+<li><strong>Cálculos Automáticos</strong>: Automatización de los cálculos de gastos y deudas, eliminando la necesidad de realizar cálculos manuales en hojas de cálculo.</li>
+<li><strong>Interacción entre Usuarios</strong>: Facilitar la comunicación entre usuarios y productores, mejorando la colaboración y la eficiencia del grupo.</li>
+</ul>
+<hr>
+<h3 id="herramientas">Herramientas</h3>
+<ul>
+<li><strong>GitHub</strong>: Para el control de versiones y el repositorio remoto.</li>
+<li><strong>Visual Studio Code</strong>: Editor de código muy versátil, con mucha comunidad, e infinidad de extensiones:
+<ul>
+<li><strong>Git Graph</strong>: Para visualizar ramas y commits de Git de manera gráfica.</li>
+<li><strong>Debugger for Firefox</strong>: Para depurar el código directamente en Firefox.</li>
+<li><strong>Vue</strong>: La extensión oficial de Vue, con autocompletado y herramientas de depuración.</li>
+</ul>
+</li>
+<li><strong>Penpot</strong>: Lo uso para prototipar interfaces. Es gratis y muy intuitivo.</li>
+<li><strong>Draw.io</strong>: Para crear diagramas rápidos, como flujos de trabajo o esquemas de la base de datos.</li>
+<li><strong>Gimp</strong>: Editor de imágenes para retocar o optimizar imágenes para la app.</li>
+<li><strong>Clouding.io</strong>: VPS que he configurado con Debian para alojar la app en producción. Es rápido, seguro y fácil de configurar.</li>
+</ul>
+<hr>
+<h3 id="tecnolog%C3%ADas-de-programaci%C3%B3n">Tecnologías de Programación</h3>
+<h4 id="backend-api-rest">Backend API Rest</h4>
+<ul>
+<li><strong>PostgreSQL</strong>: La base de datos elegida. Es robusta, escalable y perfecta para gestionar los datos de la app.</li>
+<li><strong>Swagger</strong>: Para documentar la API de manera interactiva. Así cualquiera puede entender cómo usarla.</li>
+<li><strong>Node.js</strong>: El motor del backend. Corre JavaScript en el servidor, lo que me permite usar el mismo lenguaje en front y back.</li>
+<li><strong>Express</strong>: Framework en Node para crear la API. Es flexible y fácil de usar.
+<ul>
+<li><strong>Cors</strong>: Para permitir que el frontend se comunique con el backend sin problemas de CORS.</li>
+<li><strong>express-validator</strong>: Para validar y sanitizar los datos que llegan al backend.</li>
+<li><strong>swagger-jsdoc</strong>: Genera la documentación de Swagger automáticamente desde los comentarios del código.</li>
+<li><strong>swagger-ui-express</strong>: Sirve la interfaz de Swagger para probar la API desde el navegador.</li>
+<li><strong>dotenv</strong>: Para gestionar variables de entorno, como credenciales de la base de datos.</li>
+<li><strong>multer</strong>: Para manejar la subida de archivos, como las imágenes de los productos.</li>
+</ul>
+</li>
+</ul>
+<h4 id="frontend-web">Frontend Web</h4>
+<ul>
+<li><strong>Vue.js</strong>: Framework favorito para el frontend. Es sencillo, potente y muy reactivo.
+<ul>
+<li><strong>vue-router</strong>: Para gestionar la navegación entre vistas en una aplicación de una sola página (SPA).</li>
+<li><strong>Bootstrap</strong>: Para crear interfaces modernas y responsivas sin complicaciones.</li>
+<li><strong>axios</strong>: Para hacer peticiones HTTP a la API desde el frontend.</li>
+<li><strong>vuex</strong>: Para gestionar el estado global de la aplicación de manera centralizada.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="arquitectura-del-sistema">Arquitectura del Sistema</h3>
+<p>Este diagrama muestra los componentes principales del sistema y cómo interactúan entre sí.</p>
+<h4 id="componentes">Componentes:</h4>
+<ul>
+<li><strong>Frontend (Vue.js)</strong>: Interfaz de usuario para los usuarios y administradores.</li>
+<li><strong>Backend (Node.js + Express)</strong>: API REST que gestiona las solicitudes del frontend.</li>
+<li><strong>Base de Datos (PostgreSQL)</strong>: Almacena la información de usuarios, productos, proveedores, pedidos, etc.</li>
+<li><strong>Servicios Externos</strong>: Notificaciones por correo electrónico o SMS.</li>
+</ul>
+<h4 id="diagrama">Diagrama:</h4>
+<pre class="hljs"><code><div>[Usuario] -&gt; [Frontend (Vue.js)] -&gt; [Backend (Node.js + Express)] -&gt; [Base de Datos (PostgreSQL)]
+[Backend] -&gt; [Servicio de Notificaciones (Email/SMS)]
+</div></code></pre>
+<hr>
+<h3 id="flujo-de-usuario"><strong>Flujo de Usuario</strong></h3>
+<p>Este diagrama representa el flujo de un usuario típico en la aplicación.</p>
+<h4 id="pasos">Pasos:</h4>
+<ol>
+<li><strong>Inicio de Sesión/Registro</strong>: El usuario inicia sesión o se registra.</li>
+<li><strong>Dashboard</strong>: El usuario accede a su panel principal.</li>
+<li><strong>Gestión de Productos</strong>: El usuario gestor añade, edita o elimina productos.</li>
+<li><strong>Gestión de Pedidos</strong>: El usuario gestor abre o cierra pedidos.</li>
+<li><strong>Historial de Pedidos</strong>: El usuario consulta su historial de pedidos.</li>
+<li><strong>Configuración de Cuenta</strong>: El usuario actualiza su información personal.</li>
+</ol>
+<h4 id="diagrama">Diagrama:</h4>
+<pre class="hljs"><code><div>[Inicio de Sesión/Registro] -&gt; [Dashboard] -&gt; [Gestión de Productos] -&gt; [Gestión de Pedidos] -&gt; [Historial de Pedidos] -&gt; [Configuración de Cuenta]
+</div></code></pre>
+<hr>
+<h1 id="roadmap-del-proyecto">Roadmap del Proyecto</h1>
+<h2 id="1-definici%C3%B3n-de-requisitos">1. Definición de Requisitos</h2>
+<ul>
+<li><input type="checkbox" id="checkbox0"><label for="checkbox0">Crear una lista de funcionalidades clave.</label></li>
+</ul>
+<h2 id="2-planificaci%C3%B3n-del-proyecto">2. Planificación del Proyecto</h2>
+<ul>
+<li><input type="checkbox" id="checkbox1"><label for="checkbox1">Establecer un cronograma con hitos y plazos.</label></li>
+</ul>
+<h2 id="3-dise%C3%B1o-de-la-aplicaci%C3%B3n">3. Diseño de la Aplicación</h2>
+<ul>
+<li><input type="checkbox" id="checkbox2"><label for="checkbox2">Crear wireframes o prototipos de la interfaz de usuario.</label></li>
+<li><input type="checkbox" id="checkbox3"><label for="checkbox3">Definir el flujo de usuario para cada funcionalidad.</label></li>
+</ul>
+<h2 id="4-configuraci%C3%B3n-del-entorno-de-desarrollo">4. Configuración del Entorno de Desarrollo</h2>
+<ul>
+<li><input type="checkbox" id="checkbox4"><label for="checkbox4">Instalar Node.js, Express, PostgreSQL, Vue.js y Bootstrap.</label></li>
+<li><input type="checkbox" id="checkbox5"><label for="checkbox5">Configurar un repositorio en GitHub para gestionar el código.</label></li>
+</ul>
+<h2 id="5-desarrollo-del-back-end">5. Desarrollo del Back-End</h2>
+<ul>
+<li><input type="checkbox" id="checkbox6"><label for="checkbox6">Definir los modelos de datos en PostgreSQL (productos, pedidos, usuarios).</label></li>
+<li><input type="checkbox" id="checkbox7"><label for="checkbox7">Implementar las rutas de la API en Express.</label></li>
+<li><input type="checkbox" id="checkbox8"><label for="checkbox8">Configurar la autenticación con JWT.</label></li>
+<li><input type="checkbox" id="checkbox9"><label for="checkbox9">Establecer la conexión a la base de datos utilizando la biblioteca </label><code>pg</code>.</li>
+</ul>
+<h2 id="6-desarrollo-del-front-end">6. Desarrollo del Front-End</h2>
+<ul>
+<li><input type="checkbox" id="checkbox10"><label for="checkbox10">Construir la interfaz de usuario utilizando Vue.js y Bootstrap.</label></li>
+<li><input type="checkbox" id="checkbox11"><label for="checkbox11">Conectar el front-end con la API a través de Axios.</label></li>
+<li><input type="checkbox" id="checkbox12"><label for="checkbox12">Considerar el uso de Vuex para la gestión del estado.</label></li>
+</ul>
+<h2 id="7-pruebas">7. Pruebas</h2>
+<ul>
+<li><input type="checkbox" id="checkbox13"><label for="checkbox13">Implementar pruebas unitarias para componentes y funciones.</label></li>
+<li><input type="checkbox" id="checkbox14"><label for="checkbox14">Realizar pruebas de integración entre el front-end y el back-end.</label></li>
+</ul>
+<h2 id="8-documentaci%C3%B3n">8. Documentación</h2>
+<ul>
+<li><input type="checkbox" id="checkbox15"><label for="checkbox15">Documentar la API utilizando herramientas como Swagger.</label></li>
+<li><input type="checkbox" id="checkbox16"><label for="checkbox16">Crear una guía de usuario para ayudar a los miembros del grupo.</label></li>
+</ul>
+<h2 id="9-despliegue">9. Despliegue</h2>
+<ul>
+<li><input type="checkbox" id="checkbox17"><label for="checkbox17">Elegir un servicio de hosting para desplegar la aplicación.</label></li>
+<li><input type="checkbox" id="checkbox18"><label for="checkbox18">Configurar el entorno de producción para la base de datos y la aplicación.</label></li>
+</ul>
+<h2 id="10-recopilaci%C3%B3n-de-feedback-y-mejora-continua">10. Recopilación de Feedback y Mejora Continua</h2>
+<ul>
+<li><input type="checkbox" id="checkbox19"><label for="checkbox19">Lanzar una versión beta para un grupo selecto de usuarios.</label></li>
+<li><input type="checkbox" id="checkbox20"><label for="checkbox20">Recopilar feedback y realizar mejoras en la aplicación.</label></li>
+</ul>
+<h2 id="11-mantenimiento">11. Mantenimiento</h2>
+<ul>
+<li><input type="checkbox" id="checkbox21"><label for="checkbox21">Establecer un plan para el soporte técnico y la resolución de problemas.</label></li>
+<li><input type="checkbox" id="checkbox22"><label for="checkbox22">Planificar actualizaciones regulares para mejorar la aplicación.</label></li>
+</ul>
+<hr>
+<h1 id="prototipos-de-la-aplicaci%C3%B3n-web">Prototipos de la Aplicación Web</h1>
+<h2 id="1-pantalla-de-inicio">1. Pantalla de Inicio</h2>
+<ul>
+<li><strong>Elementos Clave</strong>:
+<ul>
+<li>Logo del grupo de consumo.</li>
+<li>Breve descripción del grupo y su misión.</li>
+<li>Botón de &quot;Iniciar Sesión&quot; o &quot;Registrarse&quot;.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Interacciones</strong>:</p>
+<ul>
+<li>Al hacer clic en &quot;Iniciar Sesión&quot;, se abre la Pantalla de Inicio de Sesión.</li>
+<li>Al hacer clic en &quot;Registrarse&quot;, se abre la Pantalla de Registro.</li>
+</ul>
+<h2 id="2-pantalla-de-registro">2. Pantalla de Registro</h2>
+<ul>
+<li><strong>Elementos Clave</strong>:
+<ul>
+<li>Formulario de registro con campos para:
+<ul>
+<li>Nombre completo.</li>
+<li>Correo electrónico.</li>
+<li>Contraseña.</li>
+<li>Confirmar contraseña.</li>
+</ul>
+</li>
+<li>Botón de &quot;Registrarse&quot;.</li>
+<li>Enlace a &quot;Iniciar Sesión&quot; si ya tiene una cuenta.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Interacciones</strong>:</p>
+<ul>
+<li>Al hacer clic en &quot;Registrarse&quot;, se valida la información:
+<ul>
+<li>Si es correcta, se muestra un mensaje de éxito y se redirige a la Pantalla de Inicio de Sesión.</li>
+<li>Si hay errores, se muestran mensajes de validación (por ejemplo, &quot;El correo ya está registrado&quot;).</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-pantalla-de-inicio-de-sesi%C3%B3n">3. Pantalla de Inicio de Sesión</h2>
+<ul>
+<li><strong>Elementos Clave</strong>:
+<ul>
+<li>Formulario de inicio de sesión con campos para:
+<ul>
+<li>Móvil.</li>
+<li>Contraseña.</li>
+</ul>
+</li>
+<li>Botón de &quot;Iniciar Sesión&quot;.</li>
+<li>Enlace a &quot;¿Olvidaste tu contraseña?&quot;.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Interacciones</strong>:</p>
+<ul>
+<li>Al hacer clic en &quot;Iniciar Sesión&quot;, se valida la información:
+<ul>
+<li>Si es correcta, se redirige al Dashboard.</li>
+<li>Si hay errores, se muestra un mensaje de error (por ejemplo, &quot;Credenciales incorrectas&quot;).</li>
+</ul>
+</li>
+<li>Al hacer clic en &quot;¿Olvidaste tu contraseña?&quot;, se abre la Pantalla de Recuperación de Contraseña.</li>
+</ul>
+<h2 id="4-pantalla-de-recuperar-contrase%C3%B1a">4. Pantalla de Recuperar Contraseña</h2>
+<ul>
+<li><strong>Elementos Clave</strong>:
+<ul>
+<li>Formulario de recuperar contraseña con campos para:
+<ul>
+<li>Móvil.</li>
+</ul>
+</li>
+<li>Botón: [Enviar Instrucciones].</li>
+</ul>
+</li>
+</ul>
+<p><strong>Interacciones</strong>:</p>
+<ul>
+<li>Al hacer clic en &quot;Enviar Instrucciones&quot;, se envía un correo o SMS con un enlace para restablecer la contraseña.</li>
+</ul>
+<h2 id="5-pantalla-de-dashboard-tablero">5. Pantalla de Dashboard (Tablero)</h2>
+<ul>
+<li><strong>Elementos Clave</strong>:
+<ul>
+<li>Cesta mensual. Lista de productos pedidos y su estado.</li>
+<li>Acceso rápido a &quot;Adquirir productos&quot;.</li>
+<li>Sección de &quot;Productos Disponibles&quot;.</li>
+<li>Notificaciones sobre pedidos abiertos (no periódicos).</li>
+</ul>
+</li>
+</ul>
+<p><strong>Interacciones</strong>:</p>
+<ul>
+<li>Al hacer clic en &quot;Adquirir productos&quot;, se abre la Pantalla de compras.</li>
+<li>Al hacer clic en &quot;Ver Historial de Pedidos&quot;, se abre la Pantalla de Historial de Pedidos.</li>
+</ul>
+<h2 id="6-pantalla-de-compras">6. Pantalla de Compras</h2>
+<ul>
+<li><strong>Elementos Clave</strong>:
+<ul>
+<li>Agrupados por grupos de productos (proveedor)</li>
+<li>Lista de productos con:
+<ul>
+<li>Nombre del producto.</li>
+<li>Descripción.</li>
+<li>Precio.</li>
+<li>Botón de &quot;Añadir a la cesta/pedido conjunto&quot;.</li>
+</ul>
+</li>
+<li>Filtros para buscar productos por categoría o proveedor.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Interacciones</strong>:</p>
+<ul>
+<li>Al hacer clic en &quot;Añadir producto&quot;, se actualiza el carrito/cesta y se muestra un mensaje de confirmación.</li>
+<li>Al hacer clic en &quot;Ver Cesta&quot;, se abre la Pantalla de la cesta o dashboard.</li>
+</ul>
+<h2 id="7-pantalla-de-historial-de-pedidos">7. Pantalla de Historial de Pedidos</h2>
+<ul>
+<li><strong>Elementos Clave</strong>:
+<ul>
+<li>Lista de pedidos anteriores con:
+<ul>
+<li>Fecha de entrega.</li>
+<li>Importe.</li>
+<li>Estado del pedido (entregado, repartido, pendiente, cancelado, en proceso).</li>
+<li>Botón [Ver Detalles].</li>
+</ul>
+</li>
+<li>Opción para ver detalles de cada pedido.</li>
+</ul>
+</li>
+</ul>
+<h2 id="8-pantalla-de-detalles-de-pedidos">8. Pantalla de Detalles de Pedidos</h2>
+<ul>
+<li><strong>Elementos Clave</strong>:
+<ul>
+<li>Lista de productos del pedido:
+<ul>
+<li>Usuario que lo ha comprado.</li>
+<li>Unidades.</li>
+<li>Importe.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="9-pantalla-de-gesti%C3%B3n-de-usuarios-para-administradores">9. Pantalla de Gestión de Usuarios (para administradores)</h2>
+<ul>
+<li><strong>Elementos Clave</strong>:
+<ul>
+<li>Lista de usuarios con:
+<ul>
+<li>Nombre.</li>
+<li>Correo electrónico.</li>
+<li>Teléfono.</li>
+<li>Estado (activo/inactivo).</li>
+<li>Botones para &quot;Editar&quot; o &quot;Eliminar&quot; usuarios.</li>
+</ul>
+</li>
+<li>Opción para añadir nuevos usuarios.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Interacciones</strong>:</p>
+<ul>
+<li>Al hacer clic en &quot;Editar&quot;, se abre la Pantalla de Edición de Usuario.</li>
+<li>Al hacer clic en &quot;Eliminar&quot;, se muestra un mensaje de confirmación y se elimina el usuario.</li>
+</ul>
+<h2 id="10-pantalla-de-configuraci%C3%B3n-de-cuenta">10. Pantalla de Configuración de Cuenta</h2>
+<ul>
+<li><strong>Elementos Clave</strong>:
+<ul>
+<li>Formulario para actualizar información del usuario:
+<ul>
+<li>Nombre.</li>
+<li>Correo electrónico.</li>
+<li>Contraseña (opcional).</li>
+</ul>
+</li>
+<li>Botón de &quot;Guardar Cambios&quot;.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Interacciones</strong>:</p>
+<ul>
+<li>Al hacer clic en &quot;Actualizar Información&quot;, se valida la información y se muestra un mensaje de éxito.</li>
+</ul>
+<h2 id="11-pantalla-de-soporte-y-ayuda">11. Pantalla de Soporte y Ayuda</h2>
+<ul>
+<li><strong>Elementos Clave</strong>:
+<ul>
+<li>Sección de preguntas frecuentes (FAQ).</li>
+<li>Formulario de contacto para enviar consultas.</li>
+<li>Información de contacto del grupo.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Interacciones</strong>:</p>
+<ul>
+<li>Al hacer clic en &quot;Enviar Consulta&quot;, se muestra un mensaje de confirmación.</li>
+</ul>
+<h2 id="12-pantalla-de-gesti%C3%B3n-de-proveedores">12. Pantalla de Gestión de Proveedores</h2>
+<ul>
+<li><strong>Elementos Clave</strong>:
+<ul>
+<li>Admin permiso total.</li>
+<li>Usuarios que gestionan un proveedor, permiso de modificar.</li>
+<li>Lista de proveedores con:
+<ul>
+<li>Nombre.</li>
+<li>Correo electrónico.</li>
+<li>Teléfono.</li>
+<li>Estado (activo/inactivo).</li>
+<li>Botones para &quot;Editar&quot; o &quot;Eliminar&quot; proveedores.</li>
+<li>Listado de productos.</li>
+</ul>
+</li>
+<li>Opción para añadir nuevos proveedores.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Interacciones</strong>:</p>
+<ul>
+<li>Al hacer clic en añadir proveedor se abre un modal con un formulario para introducir los datos del proveedor.</li>
+</ul>
+<h2 id="13-pantalla-de-gesti%C3%B3n-de-productos">13. Pantalla de Gestión de Productos</h2>
+<ul>
+<li><strong>Elementos Clave</strong>:
+<ul>
+<li>Admin y usuario gestor del proveedor permiso total.</li>
+<li>Lista de productos con:
+<ul>
+<li>Nombre.</li>
+<li>Descripción.</li>
+<li>Precio.</li>
+<li>Estado (activo/inactivo).</li>
+<li>Botones para &quot;Editar&quot; o &quot;Eliminar&quot; productos.</li>
+</ul>
+</li>
+<li>Opción para añadir nuevos productos.</li>
+</ul>
+</li>
+</ul>
+<h2 id="14-pantalla-de-gesti%C3%B3n-de-pedidos">14. Pantalla de Gestión de Pedidos</h2>
+<ul>
+<li><strong>Elementos Clave</strong>:
+<ul>
+<li>Admin y usuario gestor del proveedor permiso total.</li>
+<li>El usuario gestor del proveedor será el encargado de abrir pedidos.</li>
+<li>Lista de pedidos con:
+<ul>
+<li>Id.</li>
+<li>Fecha de entrega (si hay).</li>
+<li>Fecha de apertura.</li>
+<li>Fecha de cierre.</li>
+<li>Importe total.</li>
+<li>Ver detalles de pedido.</li>
+</ul>
+</li>
+<li>Opción para crear un nuevo pedido. Abre modal con:
+<ul>
+<li>Fecha de apertura. Desde cuando los usuarios podrán pedir productos.</li>
+<li>Fecha de cierre. Hasta cuando podrán los usuarios pedir, modificar o borrar productos.</li>
+<li>Fecha aproximada de reparto.</li>
+<li>Periodicidad. Para programar el pedido para que se abra con los mismos parámetros cada X días.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="flujo-de-usuario-para-la-aplicaci%C3%B3n-web">Flujo de Usuario para la Aplicación Web</h1>
+<h2 id="1-gesti%C3%B3n-de-productos">1. Gestión de Productos</h2>
+<ul>
+<li><strong>Flujo de Usuario</strong>:
+<ol>
+<li><strong>Acceso a la sección de Productos</strong>:
+<ul>
+<li>El usuario inicia sesión en la aplicación.</li>
+<li>Navega al menú y selecciona &quot;Productos&quot;.</li>
+</ul>
+</li>
+<li><strong>Visualización de Productos</strong>:
+<ul>
+<li>Se muestra una lista de productos disponibles con detalles (nombre, descripción, precio, proveedor/productor).</li>
+<li>El usuario selecciona un grupo de productos (proveedor).</li>
+<li>Si el pedido a ese proveedor está abierto, estarán activados los botones para añadir productos.</li>
+<li>El usuario selecciona productos y cantidades.</li>
+<li>El usuario hace clic en <strong>&quot;Añadir al Pedido&quot;</strong>.</li>
+<li>El usuario puede aplicar filtros para buscar productos específicos.</li>
+</ul>
+</li>
+<li><strong>Añadir un Producto (al proveedor/grupo de productos)</strong> (para administradores y el usuario responsable de ese productor/proveedor):
+<ul>
+<li>El administrador selecciona &quot;Añadir Producto&quot;.</li>
+<li>Completa un formulario con la información del producto (nombre, descripción, precio, proveedor/productor).</li>
+<li>Hace clic en &quot;Guardar&quot; para añadir el producto a la base de datos.</li>
+</ul>
+</li>
+<li><strong>Editar o Eliminar un Producto</strong> (para administradores y el usuario responsable de ese productor/proveedor):
+<ul>
+<li>El administrador selecciona un producto de la lista.</li>
+<li>Elige &quot;Editar&quot; para modificar la información o &quot;Eliminar&quot; para quitar el producto.</li>
+<li>Confirma la acción.</li>
+</ul>
+</li>
+<li><strong>Pantalla de dashboard - Cesta de Compras Mensual</strong>:
+<ul>
+<li>La cesta se resetea mensualmente. Excepto productos no entregados.</li>
+<li>El usuario ve un listado de los productos pedidos ese mes.</li>
+<li>Al lado de cada producto se muestra el estado.</li>
+</ul>
+</li>
+<li><strong>Notificación al Proveedor y usuario gestor</strong>:
+<ul>
+<li>Cuando llega la fecha límite (fecha cierre de pedido), se notifica al proveedor y al usuario encargado de ese proveedor.</li>
+<li>Los productos se marcan como <strong>&quot;En proceso&quot;</strong>.</li>
+</ul>
+</li>
+<li><strong>Seguimiento del Pedido</strong>:
+<ul>
+<li>El usuario puede ver el estado del pedido en el <strong>Dashboard</strong> y en el <strong>Historial de Pedidos</strong>.</li>
+<li>Estados: En proceso, En reparto, Entregado, Repartido.</li>
+</ul>
+</li>
+<li><strong>Entrega del Pedido</strong>:
+<ul>
+<li>El proveedor entrega los productos.</li>
+<li>Puede que se haga el reparto de pedidos o no.</li>
+<li>El usuario confirma la entrega o reparto.</li>
+<li>El sistema actualiza el estado del pedido a <strong>&quot;Entregado&quot;</strong> o <strong>&quot;Repartido&quot;</strong>.</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h2 id="2-gesti%C3%B3n-de-pedidos">2. Gestión de Pedidos</h2>
+<ul>
+<li><strong>Flujo de Usuario</strong>:
+<ol>
+<li><strong>Acceso a la sección de Pedidos</strong>:
+<ul>
+<li>El usuario inicia sesión y selecciona &quot;Pedidos&quot; en el menú.</li>
+</ul>
+</li>
+<li><strong>Crear un Nuevo Pedido (conjunto)</strong> (para administradores y el usuario responsable de ese productor/proveedor):
+<ul>
+<li>El usuario hace clic en &quot;Abrir Pedido&quot;.</li>
+<li>Se muestra un modal para crear el pedido.</li>
+<li>El usuario selecciona la fecha de apertura, fecha de cierre, fecha aproximada de entrega y la posibilidad de hacerlo periódico.</li>
+</ul>
+</li>
+<li><strong>Gestión de Pedidos Existentes (Historial de pedidos)</strong> (para administradores y el usuario responsable de ese productor/proveedor):
+<ul>
+<li>El usuario puede ver una lista de pedidos anteriores.</li>
+<li>Selecciona un pedido para ver detalles, duplicar o cancelar si está pendiente.</li>
+<li>En los detalles se muestra el listado de productos, cantidades, usuario que ha comprado, importe, etc.</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h2 id="3-c%C3%A1lculos-financieros-para-administradores">3. Cálculos Financieros (para administradores)</h2>
+<ul>
+<li><strong>Flujo de Usuario</strong>:
+<ol>
+<li><strong>Acceso a la sección de Finanzas</strong>:
+<ul>
+<li>El usuario inicia sesión y selecciona &quot;Finanzas&quot; en el menú.</li>
+</ul>
+</li>
+<li><strong>Visualización de Gastos Mensuales</strong>:
+<ul>
+<li>Se muestra un resumen de los gastos mensuales de las familias.</li>
+<li>El usuario puede ver detalles de cada pedido y el saldo actual de cada usuario.</li>
+</ul>
+</li>
+<li><strong>Gestión de Deudas</strong>:
+<ul>
+<li>El usuario puede ver a quién debe dinero y el importe.</li>
+<li>Opción para marcar deudas como pagadas.</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h2 id="4-gesti%C3%B3n-de-usuarios-para-administradores">4. Gestión de Usuarios (para administradores)</h2>
+<ul>
+<li><strong>Flujo de Usuario</strong>:
+<ol>
+<li><strong>Acceso a la sección de Gestión de Usuarios</strong>:
+<ul>
+<li>El administrador inicia sesión y selecciona &quot;Usuarios&quot; en el menú.</li>
+</ul>
+</li>
+<li><strong>Visualización de Usuarios</strong>:
+<ul>
+<li>Se muestra una lista de usuarios con detalles (nombre, correo electrónico, estado).</li>
+<li>Opción para buscar usuarios específicos.</li>
+</ul>
+</li>
+<li><strong>Añadir un Nuevo Usuario</strong>:
+<ul>
+<li>El administrador hace clic en &quot;Añadir Usuario&quot;.</li>
+<li>Completa un formulario con la información del nuevo usuario.</li>
+<li>Hace clic en &quot;Guardar&quot; para añadir el usuario.</li>
+</ul>
+</li>
+<li><strong>Editar o Eliminar un Usuario</strong>:
+<ul>
+<li>El administrador selecciona un usuario de la lista.</li>
+<li>Elige &quot;Editar&quot; para modificar la información o &quot;Eliminar&quot; para quitar el usuario.</li>
+<li>Confirma la acción.</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h2 id="5-notificaciones-y-recordatorios">5. Notificaciones y Recordatorios</h2>
+<ul>
+<li><strong>Flujo de Usuario</strong>:
+<ol>
+<li><strong>Configuración de Notificaciones</strong>:
+<ul>
+<li>El usuario accede a &quot;Configuración de Cuenta&quot;.</li>
+<li>Selecciona &quot;Notificaciones&quot;.</li>
+<li>Activa o desactiva las notificaciones para fechas de pedidos y vencimientos.</li>
+</ul>
+</li>
+<li><strong>Recepción de Notificaciones</strong>:
+<ul>
+<li>El usuario recibe notificaciones por correo electrónico o en la aplicación sobre fechas límite de pedidos y actualizaciones.</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h2 id="6-historial-de-pedidos">6. Historial de Pedidos</h2>
+<ul>
+<li><strong>Flujo de Usuario</strong>:
+<ol>
+<li><strong>Acceso a la sección de Historial de Pedidos</strong>:
+<ul>
+<li>El usuario inicia sesión y selecciona &quot;Historial de Pedidos&quot; en el menú.</li>
+</ul>
+</li>
+<li><strong>Visualización de Pedidos Anteriores</strong>:
+<ul>
+<li>Se muestra una lista de pedidos anteriores con detalles como:
+<ul>
+<li>Fecha del pedido.</li>
+<li>Productos solicitados.</li>
+<li>Estado del pedido (completado, pendiente, cancelado).</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Ver Detalles de un Pedido</strong>:
+<ul>
+<li>El usuario selecciona un pedido de la lista.</li>
+<li>Se muestra una vista detallada del pedido, incluyendo:
+<ul>
+<li>Productos solicitados.</li>
+<li>Cantidades.</li>
+<li>Total del pedido.</li>
+<li>Estado del pedido.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Opción para Repetir un Pedido</strong>:
+<ul>
+<li>El usuario puede seleccionar &quot;Repetir Pedido&quot; para crear un nuevo pedido con los mismos productos.</li>
+<li>Se redirige al flujo de creación de pedidos con los productos preseleccionados.</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h2 id="7-configuraci%C3%B3n-de-cuenta">7. Configuración de Cuenta</h2>
+<ul>
+<li><strong>Flujo de Usuario</strong>:
+<ol>
+<li><strong>Acceso a la sección de Configuración de Cuenta</strong>:
+<ul>
+<li>El usuario inicia sesión y selecciona &quot;Configuración de Cuenta&quot; en el menú.</li>
+</ul>
+</li>
+<li><strong>Visualización de Información de la Cuenta</strong>:
+<ul>
+<li>Se muestra la información actual del usuario, incluyendo:
+<ul>
+<li>Nombre.</li>
+<li>Correo electrónico.</li>
+<li>Opciones de seguridad.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Actualizar Información</strong>:
+<ul>
+<li>El usuario puede editar su nombre o correo electrónico.</li>
+<li>Opción para cambiar la contraseña.</li>
+<li>Hace clic en &quot;Guardar Cambios&quot; para aplicar las modificaciones.</li>
+</ul>
+</li>
+<li><strong>Cerrar Sesión</strong>:
+<ul>
+<li>El usuario puede seleccionar &quot;Cerrar Sesión&quot; para salir de la aplicación.</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h2 id="8-panel-de-administraci%C3%B3n-para-administradores">8. Panel de Administración (para administradores)</h2>
+<ul>
+<li><strong>Flujo de Usuario</strong>:
+<ol>
+<li><strong>Acceso al Panel de Administración</strong>:
+<ul>
+<li>El administrador inicia sesión y selecciona &quot;Panel de Administración&quot; en el menú.</li>
+</ul>
+</li>
+<li><strong>Visualización de Resumen General</strong>:
+<ul>
+<li>Se muestra un resumen de la actividad del grupo, incluyendo:
+<ul>
+<li>Total de usuarios.</li>
+<li>Total de pedidos realizados.</li>
+<li>Productos más solicitados.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Gestión de Productos y Usuarios</strong>:
+<ul>
+<li>El administrador puede acceder a las secciones de &quot;Gestión de Productos&quot; y &quot;Gestión de Usuarios&quot; desde el panel.</li>
+<li>Opción para ver estadísticas y reportes sobre el consumo y pedidos.</li>
+</ul>
+</li>
+<li><strong>Configuración de Parámetros del Grupo</strong>:
+<ul>
+<li>El administrador puede ajustar configuraciones generales del grupo, como:
+<ul>
+<li>Frecuencias de pedidos.</li>
+<li>Notificaciones automáticas.</li>
+</ul>
+</li>
+<li>Hace clic en &quot;Guardar Cambios&quot; para aplicar las modificaciones.</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h2 id="9-informes-y-estad%C3%ADsticas">9. Informes y Estadísticas</h2>
+<ul>
+<li><strong>Flujo de Usuario</strong>:
+<ol>
+<li><strong>Acceso a la sección de Informes</strong>:
+<ul>
+<li>El usuario o administrador inicia sesión y selecciona &quot;Informes&quot; en el menú.</li>
+</ul>
+</li>
+<li><strong>Visualización de Informes Generales</strong>:
+<ul>
+<li>Se muestra una lista de informes disponibles, como:
+<ul>
+<li>Consumo mensual.</li>
+<li>Gastos por familia.</li>
+<li>Productos más comprados.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Generación de Informes Personalizados</strong>:
+<ul>
+<li>El usuario puede seleccionar criterios para generar informes personalizados.</li>
+<li>Hace clic en &quot;Generar Informe&quot; para visualizar los datos.</li>
+</ul>
+</li>
+<li><strong>Descarga de Informes</strong>:
+<ul>
+<li>Opción para descargar los informes en formato PDF o CSV.</li>
+<li>Se muestra un mensaje de confirmación de que el informe ha sido descargado.</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h3 id="4-diagrama-de-flujo-de-pedidos">4. <strong>Diagrama de Flujo de Pedidos</strong></h3>
+<p>Este diagrama muestra el flujo de un pedido desde su creación hasta su entrega.</p>
+<h4 id="pasos">Pasos:</h4>
+<ol>
+<li><strong>Apertura de Pedido</strong>: El usuario gestor abre un pedido.</li>
+<li><strong>Añadir Productos</strong>: Los usuarios añaden productos al pedido.</li>
+<li><strong>Cierre de Pedido</strong>: El usuario gestor cierra el pedido.</li>
+<li><strong>Notificación al Proveedor</strong>: El sistema notifica al proveedor.</li>
+<li><strong>Entrega de Productos</strong>: El proveedor entrega los productos.</li>
+<li><strong>Reparto de Productos</strong>: Los productos se reparten entre los usuarios.</li>
+</ol>
+<h4 id="diagrama">Diagrama:</h4>
+<pre class="hljs"><code><div>[Apertura de Pedido] -&gt; [Añadir Productos] -&gt; [Cierre de Pedido] -&gt; [Notificación al Proveedor] -&gt; [Entrega de Productos] -&gt; [Reparto de Productos]
+</div></code></pre>
+<hr>
+<h3 id="5-diagrama-de-navegaci%C3%B3n">5. <strong>Diagrama de Navegación</strong></h3>
+<p>Este diagrama muestra la estructura de las páginas de la aplicación y cómo se navega entre ellas.</p>
+<h4 id="p%C3%A1ginas-principales">Páginas Principales:</h4>
+<ul>
+<li><strong>Inicio</strong>: Página de bienvenida.</li>
+<li><strong>Inicio de Sesión</strong>: Página para iniciar sesión.</li>
+<li><strong>Registro</strong>: Página para registrarse.</li>
+<li><strong>Dashboard</strong>: Página principal del usuario.</li>
+<li><strong>Productos</strong>: Página de gestión de productos.</li>
+<li><strong>Proveedores</strong>: Página de gestión de proveedores.</li>
+<li><strong>Pedidos</strong>: Página de gestión de pedidos.</li>
+<li><strong>Historial</strong>: Página de historial de pedidos.</li>
+<li><strong>Configuración</strong>: Página de configuración de cuenta.</li>
+<li><strong>Soporte</strong>: Página de soporte y ayuda.</li>
+</ul>
+<h4 id="diagrama">Diagrama:</h4>
+<pre class="hljs"><code><div>[Inicio] -&gt; [Inicio de Sesión] -&gt; [Dashboard] -&gt; [Productos]
+[Inicio] -&gt; [Registro] -&gt; [Dashboard] -&gt; [Proveedores]
+[Dashboard] -&gt; [Pedidos] -&gt; [Historial]
+[Dashboard] -&gt; [Configuración]
+[Dashboard] -&gt; [Soporte]
+</div></code></pre>
+<hr>
+<h3 id="6-diagrama-de-secuencia-de-autenticaci%C3%B3n">6. <strong>Diagrama de Secuencia de Autenticación</strong></h3>
+<p>Este diagrama muestra el flujo de autenticación de un usuario.</p>
+<h4 id="pasos">Pasos:</h4>
+<ol>
+<li><strong>Solicitud de Inicio de Sesión</strong>: El usuario introduce sus credenciales.</li>
+<li><strong>Validación de Credenciales</strong>: El backend valida las credenciales.</li>
+<li><strong>Generación de Token</strong>: El backend genera un token JWT.</li>
+<li><strong>Respuesta al Frontend</strong>: El backend devuelve el token al frontend.</li>
+<li><strong>Almacenamiento del Token</strong>: El frontend almacena el token en el localStorage.</li>
+<li><strong>Acceso a Rutas Protegidas</strong>: El frontend usa el token para acceder a rutas protegidas.</li>
+</ol>
+<h4 id="diagrama">Diagrama:</h4>
+<pre class="hljs"><code><div>[Usuario] -&gt; [Frontend] -&gt; [Backend] -&gt; [Base de Datos]
+[Backend] -&gt; [Frontend] -&gt; [Usuario]
+</div></code></pre>
+<hr>
+<h3 id="7-diagrama-de-componentes-del-frontend">7. <strong>Diagrama de Componentes del Frontend</strong></h3>
+<p>Este diagrama muestra los componentes principales del frontend y cómo interactúan entre sí.</p>
+<h4 id="componentes">Componentes:</h4>
+<ul>
+<li><strong>NavBar</strong>: Barra de navegación superior.</li>
+<li><strong>Footer</strong>: Pie de página.</li>
+<li><strong>ProductCard</strong>: Tarjeta de producto.</li>
+<li><strong>PedidoCard</strong>: Tarjeta de pedido.</li>
+<li><strong>Notification</strong>: Componente de notificaciones.</li>
+<li><strong>Vistas</strong>: Páginas principales de la aplicación.</li>
+</ul>
+<h4 id="diagrama">Diagrama:</h4>
+<pre class="hljs"><code><div>[App.vue] -&gt; [NavBar] -&gt; [Footer]
+[App.vue] -&gt; [Vistas] -&gt; [ProductCard]
+[App.vue] -&gt; [Vistas] -&gt; [PedidoCard]
+[App.vue] -&gt; [Vistas] -&gt; [Notification]
+</div></code></pre>
+<hr>
+<h1 id="datos">Datos</h1>
+<h3 id="diagrama-de-base-de-datos-er"><strong>Diagrama de Base de Datos (ER)</strong></h3>
+<p>Este diagrama muestra las tablas de la base de datos y sus relaciones.</p>
+<h4 id="tablas-principales">Tablas Principales:</h4>
+<ul>
+<li><strong>Usuario</strong>: Almacena la información de los usuarios.</li>
+<li><strong>Proveedor</strong>: Almacena la información de los proveedores.</li>
+<li><strong>Producto</strong>: Almacena la información de los productos.</li>
+<li><strong>Pedido</strong>: Almacena la información de los pedidos.</li>
+<li><strong>Detalle_Pedido</strong>: Relaciona los pedidos con los productos.</li>
+<li><strong>Usuario_Proveedor</strong>: Relación muchos a muchos entre usuarios y proveedores.</li>
+<li><strong>Pedido_Periodico</strong>: Almacena la información de los pedidos periódicos.</li>
+<li><strong>Pago</strong>: Almacena la información de los pagos.</li>
+<li><strong>Notificacion</strong>: Almacena las notificaciones enviadas a los usuarios.</li>
+</ul>
+<h4 id="diagrama">Diagrama:</h4>
+<pre class="hljs"><code><div>[Usuario] --&lt; [Usuario_Proveedor] &gt;-- [Proveedor]
+[Proveedor] --&lt; [Producto]
+[Usuario] --&lt; [Pedido] &gt;-- [Proveedor]
+[Pedido] --&lt; [Detalle_Pedido] &gt;-- [Producto]
+[Pedido] --&lt; [Pedido_Periodico]
+[Usuario] --&lt; [Pago] &gt;-- [Usuario]
+[Usuario] --&lt; [Notificacion]
+</div></code></pre>
+<hr>
+<h2 id="tablas-principales">Tablas Principales</h2>
+<h3 id="1-usuario">1. Usuario</h3>
+<table>
+<thead>
+<tr>
+<th>Columna</th>
+<th>Tipo de Dato</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ID_Usuario</code></td>
+<td><code>SERIAL</code></td>
+<td>Clave primaria.</td>
+</tr>
+<tr>
+<td><code>Nombre</code></td>
+<td><code>VARCHAR(100)</code></td>
+<td>Nombre del usuario.</td>
+</tr>
+<tr>
+<td><code>Correo</code></td>
+<td><code>VARCHAR(100)</code></td>
+<td>Correo electrónico (único).</td>
+</tr>
+<tr>
+<td><code>Contraseña</code></td>
+<td><code>VARCHAR(100)</code></td>
+<td>Contraseña del usuario.</td>
+</tr>
+<tr>
+<td><code>Movil</code></td>
+<td><code>VARCHAR(20)</code></td>
+<td>Teléfono móvil del usuario.</td>
+</tr>
+<tr>
+<td><code>Rol</code></td>
+<td><code>VARCHAR(50)</code></td>
+<td>Rol del usuario (admin, gestor, usuario).</td>
+</tr>
+<tr>
+<td><code>Activo</code></td>
+<td><code>BOOLEAN</code></td>
+<td>Indica si el usuario está activo.</td>
+</tr>
+<tr>
+<td><code>Saldo</code></td>
+<td><code>DECIMAL(10, 2)</code></td>
+<td>Saldo actual del usuario.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="2-proveedor">2. Proveedor</h3>
+<table>
+<thead>
+<tr>
+<th>Columna</th>
+<th>Tipo de Dato</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ID_Proveedor</code></td>
+<td><code>SERIAL</code></td>
+<td>Clave primaria.</td>
+</tr>
+<tr>
+<td><code>Nombre</code></td>
+<td><code>VARCHAR(100)</code></td>
+<td>Nombre del proveedor.</td>
+</tr>
+<tr>
+<td><code>Contacto</code></td>
+<td><code>VARCHAR(100)</code></td>
+<td>Nombre de la persona de contacto.</td>
+</tr>
+<tr>
+<td><code>Telefono</code></td>
+<td><code>VARCHAR(20)</code></td>
+<td>Teléfono del proveedor.</td>
+</tr>
+<tr>
+<td><code>Movil</code></td>
+<td><code>VARCHAR(20)</code></td>
+<td>Teléfono móvil del proveedor.</td>
+</tr>
+<tr>
+<td><code>Correo</code></td>
+<td><code>VARCHAR(100)</code></td>
+<td>Correo electrónico del proveedor.</td>
+</tr>
+<tr>
+<td><code>Envio_Movil</code></td>
+<td><code>BOOLEAN</code></td>
+<td>Avisar mediante SMS o WhatsApp.</td>
+</tr>
+<tr>
+<td><code>Envio_Mail</code></td>
+<td><code>BOOLEAN</code></td>
+<td>Avisar mediante correo electrónico.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="3-producto">3. Producto</h3>
+<table>
+<thead>
+<tr>
+<th>Columna</th>
+<th>Tipo de Dato</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ID_Producto</code></td>
+<td><code>SERIAL</code></td>
+<td>Clave primaria.</td>
+</tr>
+<tr>
+<td><code>Nombre</code></td>
+<td><code>VARCHAR(100)</code></td>
+<td>Nombre del producto.</td>
+</tr>
+<tr>
+<td><code>Imagen</code></td>
+<td><code>VARCHAR(100)</code></td>
+<td>URL relativa de imagen del producto.</td>
+</tr>
+<tr>
+<td><code>Descripcion</code></td>
+<td><code>TEXT</code></td>
+<td>Descripción del producto.</td>
+</tr>
+<tr>
+<td><code>Precio</code></td>
+<td><code>DECIMAL(10, 2)</code></td>
+<td>Precio del producto.</td>
+</tr>
+<tr>
+<td><code>Frecuencia_Pedido</code></td>
+<td><code>VARCHAR(50)</code></td>
+<td>Frecuencia de pedido (semanal, mensual, etc.).</td>
+</tr>
+<tr>
+<td><code>ID_Proveedor</code></td>
+<td><code>INT</code></td>
+<td>Clave foránea (relación con <code>Proveedor</code>).</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="4-pedido">4. Pedido</h3>
+<table>
+<thead>
+<tr>
+<th>Columna</th>
+<th>Tipo de Dato</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ID_Pedido</code></td>
+<td><code>SERIAL</code></td>
+<td>Clave primaria.</td>
+</tr>
+<tr>
+<td><code>ID_Usuario_Encargado</code></td>
+<td><code>INT</code></td>
+<td>Clave foránea (relación con <code>Usuario</code>).</td>
+</tr>
+<tr>
+<td><code>ID_Proveedor</code></td>
+<td><code>INT</code></td>
+<td>Clave foránea (relación con <code>Proveedor</code>).</td>
+</tr>
+<tr>
+<td><code>Fecha_Apertura</code></td>
+<td><code>TIMESTAMP</code></td>
+<td>Fecha y hora de apertura del pedido.</td>
+</tr>
+<tr>
+<td><code>Fecha_Cierre</code></td>
+<td><code>TIMESTAMP</code></td>
+<td>Fecha límite para modificar el pedido.</td>
+</tr>
+<tr>
+<td><code>Fecha_Entrega</code></td>
+<td><code>TIMESTAMP</code></td>
+<td>Fecha y hora de entrega.</td>
+</tr>
+<tr>
+<td><code>Estado</code></td>
+<td><code>VARCHAR(50)</code></td>
+<td>Estado del pedido (pendiente, en proceso, entregado, repartido, cancelado).</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="5-detallepedido">5. Detalle_Pedido</h3>
+<table>
+<thead>
+<tr>
+<th>Columna</th>
+<th>Tipo de Dato</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ID_Detalle</code></td>
+<td><code>SERIAL</code></td>
+<td>Clave primaria.</td>
+</tr>
+<tr>
+<td><code>ID_Pedido</code></td>
+<td><code>INT</code></td>
+<td>Clave foránea (relación con <code>Pedido</code>).</td>
+</tr>
+<tr>
+<td><code>ID_Producto</code></td>
+<td><code>INT</code></td>
+<td>Clave foránea (relación con <code>Producto</code>).</td>
+</tr>
+<tr>
+<td><code>Cantidad</code></td>
+<td><code>INT</code></td>
+<td>Cantidad del producto.</td>
+</tr>
+<tr>
+<td><code>Precio_Total</code></td>
+<td><code>DECIMAL(10, 2)</code></td>
+<td>Precio total del producto.</td>
+</tr>
+<tr>
+<td><code>ID_Usuario_Comprador</code></td>
+<td><code>INT</code></td>
+<td>Clave foránea (relación con <code>Usuario</code>).</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="6-usuarioproveedor-relaci%C3%B3n-muchos-a-muchos">6. Usuario_Proveedor (Relación muchos a muchos)</h3>
+<table>
+<thead>
+<tr>
+<th>Columna</th>
+<th>Tipo de Dato</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ID_Usuario</code></td>
+<td><code>INT</code></td>
+<td>Clave foránea (relación con <code>Usuario</code>).</td>
+</tr>
+<tr>
+<td><code>ID_Proveedor</code></td>
+<td><code>INT</code></td>
+<td>Clave foránea (relación con <code>Proveedor</code>).</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="7-pedidoperiodico">7. Pedido_Periodico</h3>
+<table>
+<thead>
+<tr>
+<th>Columna</th>
+<th>Tipo de Dato</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ID_Pedido_Periodico</code></td>
+<td><code>SERIAL</code></td>
+<td>Clave primaria.</td>
+</tr>
+<tr>
+<td><code>ID_Proveedor</code></td>
+<td><code>INT</code></td>
+<td>Clave foránea (relación con <code>Proveedor</code>).</td>
+</tr>
+<tr>
+<td><code>Fecha_Inicio</code></td>
+<td><code>TIMESTAMP</code></td>
+<td>Fecha de inicio del pedido periódico.</td>
+</tr>
+<tr>
+<td><code>Fecha_Fin</code></td>
+<td><code>TIMESTAMP</code></td>
+<td>Fecha de fin del pedido periódico.</td>
+</tr>
+<tr>
+<td><code>Activo</code></td>
+<td><code>BOOLEAN</code></td>
+<td>Indica si el pedido está activo.</td>
+</tr>
+<tr>
+<td><code>Periodicidad</code></td>
+<td><code>INT</code></td>
+<td>Días entre pedidos.</td>
+</tr>
+<tr>
+<td><code>Dia_Apertura</code></td>
+<td><code>INT</code></td>
+<td>Día de la semana en que se abre el pedido.</td>
+</tr>
+<tr>
+<td><code>Dia_Cierre</code></td>
+<td><code>INT</code></td>
+<td>Día de la semana en que se cierra el pedido.</td>
+</tr>
+<tr>
+<td><code>Dia_Entrega</code></td>
+<td><code>INT</code></td>
+<td>Día aproximado de entrega.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="8-pago-nueva">8. Pago (Nueva)</h3>
+<table>
+<thead>
+<tr>
+<th>Columna</th>
+<th>Tipo de Dato</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ID_Pago</code></td>
+<td><code>SERIAL</code></td>
+<td>Clave primaria.</td>
+</tr>
+<tr>
+<td><code>ID_Usuario_Deudor</code></td>
+<td><code>INT</code></td>
+<td>Clave foránea (relación con <code>Usuario</code>).</td>
+</tr>
+<tr>
+<td><code>ID_Usuario_Creditor</code></td>
+<td><code>INT</code></td>
+<td>Clave foránea (relación con <code>Usuario</code>).</td>
+</tr>
+<tr>
+<td><code>Monto</code></td>
+<td><code>DECIMAL(10, 2)</code></td>
+<td>Monto del pago.</td>
+</tr>
+<tr>
+<td><code>Fecha_Pago</code></td>
+<td><code>TIMESTAMP</code></td>
+<td>Fecha y hora del pago.</td>
+</tr>
+<tr>
+<td><code>Estado</code></td>
+<td><code>VARCHAR(50)</code></td>
+<td>Estado del pago (pendiente, completado).</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="9-notificacion-nueva">9. Notificacion (Nueva)</h3>
+<table>
+<thead>
+<tr>
+<th>Columna</th>
+<th>Tipo de Dato</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ID_Notificacion</code></td>
+<td><code>SERIAL</code></td>
+<td>Clave primaria.</td>
+</tr>
+<tr>
+<td><code>ID_Usuario</code></td>
+<td><code>INT</code></td>
+<td>Clave foránea (relación con <code>Usuario</code>).</td>
+</tr>
+<tr>
+<td><code>Mensaje</code></td>
+<td><code>TEXT</code></td>
+<td>Contenido de la notificación.</td>
+</tr>
+<tr>
+<td><code>Fecha</code></td>
+<td><code>TIMESTAMP</code></td>
+<td>Fecha y hora de la notificación.</td>
+</tr>
+<tr>
+<td><code>Leida</code></td>
+<td><code>BOOLEAN</code></td>
+<td>Indica si la notificación ha sido leída.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1 id="frontend">Frontend</h1>
+<h2 id="descripci%C3%B3n-del-frontend">Descripción del Frontend</h2>
+<p>El frontend de la aplicación está desarrollado con <strong>Vue.js</strong> y <strong>Bootstrap</strong>. Se conecta al backend a través de una API REST para gestionar usuarios, productos, proveedores y pedidos. La aplicación está diseñada para ser responsive y ofrece una interfaz intuitiva para los usuarios.</p>
+<h2 id="estructura-del-proyecto">Estructura del Proyecto</h2>
+<p>El frontend está estructurado de la siguiente manera:</p>
+<pre class="hljs"><code><div>frontend/
+├── public/
+│   └── index.html           # Página principal de la aplicación
+├── src/
+│   ├── assets/              # Recursos estáticos (imágenes, estilos globales)
+│   ├── components/          # Componentes reutilizables
+│   │   ├── NavBar.vue       # Barra de navegación
+│   │   ├── Footer.vue       # Pie de página
+│   │   ├── ProductCard.vue  # Tarjeta de producto
+│   │   ├── PedidoCard.vue   # Tarjeta de pedido
+│   │   └── Notification.vue # Componente de notificaciones
+│   ├── views/               # Vistas principales de la aplicación
+│   │   ├── HomePage.vue     # Página de inicio
+│   │   ├── LoginPage.vue    # Página de inicio de sesión
+│   │   ├── RegisterPage.vue # Página de registro
+│   │   ├── DashboardPage.vue # Página de dashboard
+│   │   ├── ProductosPage.vue # Página de gestión de productos
+│   │   ├── ProveedoresPage.vue # Página de gestión de proveedores
+│   │   ├── PedidosPage.vue  # Página de gestión de pedidos
+│   │   ├── HistorialPage.vue # Página de historial de pedidos
+│   │   ├── ConfiguracionPage.vue # Página de configuración de cuenta
+│   │   └── SoportePage.vue  # Página de soporte y ayuda
+│   ├── router/              # Configuración de las rutas de la aplicación
+│   │   └── index.js         # Definición de rutas
+│   ├── services/            # Servicios para interactuar con la API
+│   │   └── api.js           # Configuración de Axios y métodos de la API
+│   ├── store/               # Gestión del estado global con Vuex (opcional)
+│   │   └── index.js         # Configuración de Vuex
+│   ├── App.vue              # Componente principal de la aplicación
+│   └── main.js              # Punto de entrada de la aplicación
+├── package.json             # Dependencias y scripts del proyecto
+└── vue.config.js            # Configuración específica de Vue CLI
+</div></code></pre>
+<hr>
+<h2 id="descripci%C3%B3n-de-los-archivos">Descripción de los Archivos</h2>
+<h3 id="1-componentes-reutilizables-srccomponents">1. <strong>Componentes Reutilizables (<code>src/components/</code>)</strong></h3>
+<ul>
+<li><strong><code>NavBar.vue</code></strong>: Barra de navegación superior con enlaces a las principales secciones de la aplicación.</li>
+<li><strong><code>Footer.vue</code></strong>: Pie de página con información de contacto y enlaces útiles.</li>
+<li><strong><code>ProductCard.vue</code></strong>: Tarjeta para mostrar la información de un producto.</li>
+<li><strong><code>PedidoCard.vue</code></strong>: Tarjeta para mostrar la información de un pedido.</li>
+<li><strong><code>Notification.vue</code></strong>: Componente para mostrar notificaciones al usuario.</li>
+</ul>
+<h3 id="2-vistas-principales-srcviews">2. <strong>Vistas Principales (<code>src/views/</code>)</strong></h3>
+<ul>
+<li><strong><code>HomePage.vue</code></strong>: Página de inicio con una breve descripción del grupo de consumo.</li>
+<li><strong><code>LoginPage.vue</code></strong>: Página de inicio de sesión para usuarios registrados.</li>
+<li><strong><code>RegisterPage.vue</code></strong>: Página de registro para nuevos usuarios.</li>
+<li><strong><code>DashboardPage.vue</code></strong>: Página principal del usuario, donde puede ver su cesta mensual y acceder a otras funcionalidades.</li>
+<li><strong><code>ProductosPage.vue</code></strong>: Página para gestionar productos (añadir, editar, eliminar).</li>
+<li><strong><code>ProveedoresPage.vue</code></strong>: Página para gestionar proveedores (añadir, editar, eliminar).</li>
+<li><strong><code>PedidosPage.vue</code></strong>: Página para gestionar pedidos (abrir, cerrar, ver detalles).</li>
+<li><strong><code>HistorialPage.vue</code></strong>: Página para ver el historial de pedidos realizados.</li>
+<li><strong><code>ConfiguracionPage.vue</code></strong>: Página para que los usuarios configuren su cuenta.</li>
+<li><strong><code>SoportePage.vue</code></strong>: Página de soporte y ayuda con preguntas frecuentes y formulario de contacto.</li>
+</ul>
+<h3 id="3-router-srcrouterindexjs">3. <strong>Router (<code>src/router/index.js</code>)</strong></h3>
+<p>Configura las rutas de la aplicación y asocia cada ruta con su componente correspondiente.</p>
+<h3 id="4-servicios-srcservicesapijs">4. <strong>Servicios (<code>src/services/api.js</code>)</strong></h3>
+<p>Contiene la configuración de Axios y los métodos para interactuar con la API del backend.</p>
+<h3 id="5-store-srcstoreindexjs">5. <strong>Store (<code>src/store/index.js</code>)</strong></h3>
+<p>Opcional. Si se usa Vuex, aquí se define el estado global de la aplicación, las mutaciones y las acciones.</p>
+<h3 id="6-punto-de-entrada-srcmainjs">6. <strong>Punto de Entrada (<code>src/main.js</code>)</strong></h3>
+<p>Configura Vue, el router, el store (si se usa) y monta la aplicación en el DOM.</p>
+<h3 id="7-componente-principal-srcappvue">7. <strong>Componente Principal (<code>src/App.vue</code>)</strong></h3>
+<p>Contiene la estructura base de la aplicación, como el <code>NavBar</code>, <code>Footer</code> y el <code>router-view</code> para renderizar las vistas.</p>
+<hr>
+<h2 id="requisitos-del-frontend">Requisitos del Frontend</h2>
+<h3 id="1-autenticaci%C3%B3n-y-autorizaci%C3%B3n">1. <strong>Autenticación y Autorización</strong></h3>
+<ul>
+<li>Los usuarios deben poder iniciar sesión y registrarse.</li>
+<li>Las rutas protegidas solo deben ser accesibles para usuarios autenticados.</li>
+</ul>
+<h3 id="2-gesti%C3%B3n-de-productos">2. <strong>Gestión de Productos</strong></h3>
+<ul>
+<li>Los usuarios gestores deben poder añadir, editar y eliminar productos.</li>
+<li>Los usuarios deben poder ver los productos disponibles y añadirlos a su cesta.</li>
+</ul>
+<h3 id="3-gesti%C3%B3n-de-pedidos">3. <strong>Gestión de Pedidos</strong></h3>
+<ul>
+<li>Los usuarios gestores deben poder abrir y cerrar pedidos.</li>
+<li>Los usuarios deben poder ver los pedidos abiertos y añadir productos a ellos.</li>
+</ul>
+<h3 id="4-historial-de-pedidos">4. <strong>Historial de Pedidos</strong></h3>
+<ul>
+<li>Los usuarios deben poder ver un historial de sus pedidos realizados.</li>
+</ul>
+<h3 id="5-configuraci%C3%B3n-de-cuenta">5. <strong>Configuración de Cuenta</strong></h3>
+<ul>
+<li>Los usuarios deben poder actualizar su información personal y cambiar su contraseña.</li>
+</ul>
+<h3 id="6-soporte-y-ayuda">6. <strong>Soporte y Ayuda</strong></h3>
+<ul>
+<li>Los usuarios deben poder acceder a preguntas frecuentes y enviar consultas de soporte.</li>
+</ul>
+
+</body>
+</html>

@@ -1,6 +1,3 @@
-Securizar tanto el **frontend** como el **backend** antes de alojarlos en un servidor en Internet es crucial para proteger la aplicación contra ataques y garantizar la privacidad de los usuarios. A continuación, te detallo los pasos y mejores prácticas para securizar ambos lados de la aplicación.
-
----
 
 ## 1. **Securización del Backend**
 
@@ -176,5 +173,3 @@ Securizar tanto el **frontend** como el **backend** antes de alojarlos en un ser
    - Configura el servidor con HTTPS, un firewall, y realiza copias de seguridad.
 4. **Herramientas**:
    - Usa herramientas de escaneo y pruebas de penetración para asegurar la aplicación.
-
-Siguiendo estas prácticas, tu aplicación estará bien protegida y lista para ser alojada en un servidor en Internet. ¡Espero que esto te sea útil! 😊

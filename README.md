@@ -109,6 +109,8 @@
   - [SaldoRoutes.js](#saldoRoutesjs)
   - [Validators.js (Middlewares)](#validatorsjs-middlewares)
 
+---
+
 # Descripción del Proyecto
 
 El objetivo de este proyecto es desarrollar una aplicación web que facilite la gestión de un grupo de consumo local y ecológico, compuesto por aproximadamente cuarenta usuarios (familias) y quince productores. Actualmente, la gestión de pedidos y productos se realiza de manera manual a través de tablas en Google Sheets, lo que puede resultar ineficiente y propenso a errores.
@@ -208,20 +210,18 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
 - **Cálculos Automáticos**: Automatización de los cálculos de gastos y deudas, eliminando la necesidad de realizar cálculos manuales en hojas de cálculo.
 - **Interacción entre Usuarios**: Facilitar la comunicación entre usuarios y productores, mejorando la colaboración y la eficiencia del grupo.
 
-¡Claro! Aquí tienes una versión intermedia, más escueta que la primera pero sin los errores de escritura y manteniendo un tono coloquial pero profesional:
-
 ---
 
 ### Herramientas
 
 - **GitHub**: Para el control de versiones y el repositorio remoto.
-- **Visual Studio Code**: Editor de código muy versatil, con mucha comunidad, e infinidad de extensiones:
+- **Visual Studio Code**: Editor de código muy versátil, con mucha comunidad, e infinidad de extensiones:
   - **Git Graph**: Para visualizar ramas y commits de Git de manera gráfica.
   - **Debugger for Firefox**: Para depurar el código directamente en Firefox.
   - **Vue**: La extensión oficial de Vue, con autocompletado y herramientas de depuración.
 - **Penpot**: Lo uso para prototipar interfaces. Es gratis y muy intuitivo.
 - **Draw.io**: Para crear diagramas rápidos, como flujos de trabajo o esquemas de la base de datos.
-- **Gimp**: Editor de imagener para retocar o optimizar imágenes para la app.
+- **Gimp**: Editor de imágenes para retocar o optimizar imágenes para la app.
 - **Clouding.io**: VPS que he configurado con Debian para alojar la app en producción. Es rápido, seguro y fácil de configurar.
 
 ---
@@ -249,9 +249,9 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
   - **axios**: Para hacer peticiones HTTP a la API desde el frontend.
   - **vuex**: Para gestionar el estado global de la aplicación de manera centralizada.
 
---- 
+---
 
-### Arquitectura del Sistema**
+### Arquitectura del Sistema
 Este diagrama muestra los componentes principales del sistema y cómo interactúan entre sí.
 
 #### Componentes:
@@ -265,6 +265,8 @@ Este diagrama muestra los componentes principales del sistema y cómo interactú
 [Usuario] -> [Frontend (Vue.js)] -> [Backend (Node.js + Express)] -> [Base de Datos (PostgreSQL)]
 [Backend] -> [Servicio de Notificaciones (Email/SMS)]
 ```
+
+---
 
 ### **Flujo de Usuario**
 Este diagrama representa el flujo de un usuario típico en la aplicación.
@@ -281,6 +283,8 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
 ```
 [Inicio de Sesión/Registro] -> [Dashboard] -> [Gestión de Productos] -> [Gestión de Pedidos] -> [Historial de Pedidos] -> [Configuración de Cuenta]
 ```
+
+---
 
 # Roadmap del Proyecto
 
@@ -328,6 +332,8 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
 ## 11. Mantenimiento
 - [ ] Establecer un plan para el soporte técnico y la resolución de problemas.
 - [ ] Planificar actualizaciones regulares para mejorar la aplicación.
+
+---
 
 # Prototipos de la Aplicación Web
 
@@ -498,6 +504,8 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
     - Fecha aproximada de reparto.
     - Periodicidad. Para programar el pedido para que se abra con los mismos parámetros cada X días.
 
+---
+
 # Flujo de Usuario para la Aplicación Web
 
 ## 1. Gestión de Productos
@@ -536,7 +544,7 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
      - El usuario confirma la entrega o reparto.
      - El sistema actualiza el estado del pedido a **"Entregado"** o **"Repartido"**.
 
-     
+---
 
 ## 2. Gestión de Pedidos
 - **Flujo de Usuario**:
@@ -551,6 +559,8 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
      - Selecciona un pedido para ver detalles, duplicar o cancelar si está pendiente.
      - En los detalles se muestra el listado de productos, cantidades, usuario que ha comprado, importe, etc.
 
+---
+
 ## 3. Cálculos Financieros (para administradores)
 - **Flujo de Usuario**:
   1. **Acceso a la sección de Finanzas**:
@@ -561,6 +571,8 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
   3. **Gestión de Deudas**:
      - El usuario puede ver a quién debe dinero y el importe.
      - Opción para marcar deudas como pagadas.
+
+---
 
 ## 4. Gestión de Usuarios (para administradores)
 - **Flujo de Usuario**:
@@ -578,6 +590,8 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
      - Elige "Editar" para modificar la información o "Eliminar" para quitar el usuario.
      - Confirma la acción.
 
+---
+
 ## 5. Notificaciones y Recordatorios
 - **Flujo de Usuario**:
   1. **Configuración de Notificaciones**:
@@ -586,6 +600,8 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
      - Activa o desactiva las notificaciones para fechas de pedidos y vencimientos.
   2. **Recepción de Notificaciones**:
      - El usuario recibe notificaciones por correo electrónico o en la aplicación sobre fechas límite de pedidos y actualizaciones.
+
+---
 
 ## 6. Historial de Pedidos
 - **Flujo de Usuario**:
@@ -607,6 +623,8 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
      - El usuario puede seleccionar "Repetir Pedido" para crear un nuevo pedido con los mismos productos.
      - Se redirige al flujo de creación de pedidos con los productos preseleccionados.
 
+---
+
 ## 7. Configuración de Cuenta
 - **Flujo de Usuario**:
   1. **Acceso a la sección de Configuración de Cuenta**:
@@ -622,6 +640,8 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
      - Hace clic en "Guardar Cambios" para aplicar las modificaciones.
   4. **Cerrar Sesión**:
      - El usuario puede seleccionar "Cerrar Sesión" para salir de la aplicación.
+
+---
 
 ## 8. Panel de Administración (para administradores)
 - **Flujo de Usuario**:
@@ -641,6 +661,8 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
        - Notificaciones automáticas.
      - Hace clic en "Guardar Cambios" para aplicar las modificaciones.
 
+---
+
 ## 9. Informes y Estadísticas
 - **Flujo de Usuario**:
   1. **Acceso a la sección de Informes**:
@@ -657,6 +679,7 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
      - Opción para descargar los informes en formato PDF o CSV.
      - Se muestra un mensaje de confirmación de que el informe ha sido descargado.
 
+---
 
 ### 4. **Diagrama de Flujo de Pedidos**
 Este diagrama muestra el flujo de un pedido desde su creación hasta su entrega.
@@ -740,6 +763,7 @@ Este diagrama muestra los componentes principales del frontend y cómo interact�
 [App.vue] -> [Vistas] -> [Notification]
 ```
 
+---
 
 # Datos
 
@@ -768,6 +792,8 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 [Usuario] --< [Notificacion]
 ```
 
+---
+
 ## Tablas Principales
 
 ### 1. Usuario
@@ -782,6 +808,8 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 | `Activo`         | `BOOLEAN`         | Indica si el usuario está activo.    |
 | `Saldo`          | `DECIMAL(10, 2)`  | Saldo actual del usuario.            |
 
+---
+
 ### 2. Proveedor
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
@@ -794,15 +822,20 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 | `Envio_Movil`    | `BOOLEAN`         | Avisar mediante SMS o WhatsApp.      |
 | `Envio_Mail`     | `BOOLEAN`         | Avisar mediante correo electrónico.  |
 
+---
+
 ### 3. Producto
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
 | `ID_Producto`    | `SERIAL`          | Clave primaria.                      |
 | `Nombre`         | `VARCHAR(100)`    | Nombre del producto.                 |
+| `Imagen`         | `VARCHAR(100)`    | URL relativa de imagen del producto. |
 | `Descripcion`    | `TEXT`            | Descripción del producto.            |
 | `Precio`         | `DECIMAL(10, 2)`  | Precio del producto.                 |
 | `Frecuencia_Pedido` | `VARCHAR(50)`  | Frecuencia de pedido (semanal, mensual, etc.). |
 | `ID_Proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
+
+---
 
 ### 4. Pedido
 | Columna          | Tipo de Dato      | Descripción                          |
@@ -815,6 +848,8 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 | `Fecha_Entrega`  | `TIMESTAMP`       | Fecha y hora de entrega.             |
 | `Estado`         | `VARCHAR(50)`     | Estado del pedido (pendiente, en proceso, entregado, repartido, cancelado). |
 
+---
+
 ### 5. Detalle_Pedido
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
@@ -825,11 +860,15 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 | `Precio_Total`   | `DECIMAL(10, 2)`  | Precio total del producto.           |
 | `ID_Usuario_Comprador` | `INT`     | Clave foránea (relación con `Usuario`). |
 
+---
+
 ### 6. Usuario_Proveedor (Relación muchos a muchos)
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
 | `ID_Usuario`     | `INT`             | Clave foránea (relación con `Usuario`). |
 | `ID_Proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
+
+---
 
 ### 7. Pedido_Periodico
 | Columna          | Tipo de Dato      | Descripción                          |
@@ -844,6 +883,8 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 | `Dia_Cierre`     | `INT`             | Día de la semana en que se cierra el pedido. |
 | `Dia_Entrega`    | `INT`             | Día aproximado de entrega.           |
 
+---
+
 ### 8. Pago (Nueva)
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
@@ -854,6 +895,8 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 | `Fecha_Pago`     | `TIMESTAMP`       | Fecha y hora del pago.               |
 | `Estado`         | `VARCHAR(50)`     | Estado del pago (pendiente, completado). |
 
+---
+
 ### 9. Notificacion (Nueva)
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
@@ -862,7 +905,6 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 | `Mensaje`        | `TEXT`            | Contenido de la notificación.        |
 | `Fecha`          | `TIMESTAMP`       | Fecha y hora de la notificación.     |
 | `Leida`          | `BOOLEAN`         | Indica si la notificación ha sido leída. |
-
 
 ---
 
@@ -910,6 +952,8 @@ frontend/
 ├── package.json             # Dependencias y scripts del proyecto
 └── vue.config.js            # Configuración específica de Vue CLI
 ```
+
+---
 
 ## Descripción de los Archivos
 
@@ -972,4 +1016,3 @@ Contiene la estructura base de la aplicación, como el `NavBar`, `Footer` y el `
 ### 6. **Soporte y Ayuda**
 - Los usuarios deben poder acceder a preguntas frecuentes y enviar consultas de soporte.
 
----
