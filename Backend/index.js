@@ -25,8 +25,9 @@ const PORT = process.env.PORT || 3000;
 swaggerSetup(app);
 
 //app.use(express.json());
+// Solo permitir conexion desde estos origenes
 app.use(cors({
-  origin: 'http://localhost:8080', // Permite solicitudes desde este origen
+  origin: process.env.CLIENT_ORIGIN || 'http://localhost:8080',
 }));
 
 
@@ -46,7 +47,7 @@ app.use('/api/saldos', saldoRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ error: 'Algo salió mal en el servidor' });
+  res.status(err.status || 500).json({ error: err.message || 'Algo salió mal en el servidor' });
 });
 
 app.listen(PORT, () => {
