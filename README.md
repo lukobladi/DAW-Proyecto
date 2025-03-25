@@ -1,4 +1,3 @@
-
 # DAW-Proyecto
 
 ## Tabla de Contenidos
@@ -70,44 +69,6 @@
   - [Consultas SQL](#consultas-sql)
     - [Crear Tablas](#crear-tablas)
 - [Backend API Rest Node Express](#backend-api-rest-node-express)
-  - [Estructura](#estructura)
-  - [Index.js](#indexjs)
-  - [DetallePedidoController.js](#detallepedidocontrollerjs)
-  - [DetallePedido.js (Modelo)](#detallepedidojs-modelo)
-  - [DetallePedidoRoutes.js](#detallepedidoroutesjs)
-  - [db.js](#dbjs)
-  - [swagger.js](#swaggerjs)
-  - [config.env](#configenv)
-  - [package.json](#packagejson)
-  - [TestRoutes.js](#testroutesjs)
-  - [UsuarioController.js](#usuariocontrollerjs)
-  - [Usuario.js (Modelo)](#usuariojs-modelo)
-  - [UsuarioRoutes.js](#usuarioroutesjs)
-  - [ProductoController.js](#productocontrollerjs)
-  - [Producto.js (Modelo)](#productojs-modelo)
-  - [ProductoRoutes.js](#productoroutesjs)
-  - [ProveedorController.js](#proveedorcontrollerjs)
-  - [Proveedor.js (Modelo)](#proveedorjs-modelo)
-  - [ProveedorRoutes.js](#proveedorroutesjs)
-  - [PedidoController.js](#pedidocontrollerjs)
-  - [Pedido.js (Modelo)](#pedidojs-modelo)
-  - [PedidoRoutes.js](#pedidoroutesjs)
-  - [PedidoPeriodicoController.js](#pedidoperiodicocontrollerjs)
-  - [PedidoPeriodico.js (Modelo)](#pedidoperiodicojs-modelo)
-  - [PedidoPeriodicoRoutes.js](#pedidoperiodicoroutesjs)
-  - [UsuarioProveedorController.js](#usuarioproveedorcontrollerjs)
-  - [UsuarioProveedor.js (Modelo)](#usuarioproveedorjs-modelo)
-  - [UsuarioProveedorRoutes.js](#usuarioproveedorroutesjs)
-  - [PagoController.js](#pagocontrollerjs)
-  - [NotificacionController.js](#notificacioncontrollerjs)
-  - [SaldoController.js](#saldocontrollerjs)
-  - [Pago.js (Modelo)](#pagojs-modelo)
-  - [Notificacion.js (Modelo)](#notificacionjs-modelo)
-  - [Saldo.js (Modelo)](#saldojs-modelo)
-  - [PagoRoutes.js](#pagoRoutesjs)
-  - [NotificacionRoutes.js](#notificacionRoutesjs)
-  - [SaldoRoutes.js](#saldoRoutesjs)
-  - [Validators.js (Middlewares)](#validatorsjs-middlewares)
 
 ---
 
@@ -230,8 +191,8 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
 
 #### Backend API Rest
 
-- **PostgreSQL**: La base de datos elegida. Es robusta, escalable y perfecta para gestionar los datos de la app.
-- **Swagger**: Para documentar la API de manera interactiva. Así cualquiera puede entender cómo usarla.
+- **PostgreSQL**: El motor de base de datos elegida. Es robusta y escalable y quiero probar una nueva BDD.
+- **Swagger**: Herramienta para documentar la API de manera interactiva. Así cualquiera puede entender cómo usarla..
 - **Node.js**: El motor del backend. Corre JavaScript en el servidor, lo que me permite usar el mismo lenguaje en front y back.
 - **Express**: Framework en Node para crear la API. Es flexible y fácil de usar.
   - **Cors**: Para permitir que el frontend se comunique con el backend sin problemas de CORS.
@@ -243,7 +204,7 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
 
 #### Frontend Web
 
-- **Vue.js**: Framework favorito para el frontend. Es sencillo, potente y muy reactivo.
+- **Vue.js**: Framework para el frontend. Es sencillo y con un desarrollo agil y quiero probar una tecnología que desconozco.
   - **vue-router**: Para gestionar la navegación entre vistas en una aplicación de una sola página (SPA).
   - **Bootstrap**: Para crear interfaces modernas y responsivas sin complicaciones.
   - **axios**: Para hacer peticiones HTTP a la API desde el frontend.
@@ -255,7 +216,7 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
 Este diagrama muestra los componentes principales del sistema y cómo interactúan entre sí.
 
 #### Componentes:
-- **Frontend (Vue.js)**: Interfaz de usuario para los usuarios y administradores.
+- **Frontend (Vue.js)**: Interfaz de usuario para los usuarios del grupo de consumo.
 - **Backend (Node.js + Express)**: API REST que gestiona las solicitudes del frontend.
 - **Base de Datos (PostgreSQL)**: Almacena la información de usuarios, productos, proveedores, pedidos, etc.
 - **Servicios Externos**: Notificaciones por correo electrónico o SMS.
@@ -281,7 +242,10 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
 
 #### Diagrama:
 ```
-[Inicio de Sesión/Registro] -> [Dashboard] -> [Gestión de Productos] -> [Gestión de Pedidos] -> [Historial de Pedidos] -> [Configuración de Cuenta]
+[Inicio de Sesión/Registro] -> [Dashboard]  -> [Gestión de Productos] 
+                                            -> [Gestión de Pedidos] 
+                                            -> [Historial de Pedidos] 
+                                            -> [Configuración de Cuenta]
 ```
 
 ---
@@ -289,40 +253,40 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
 # Roadmap del Proyecto
 
 ## 1. Definición de Requisitos
-- [ ] Crear una lista de funcionalidades clave.
+- [X] Crear una lista de funcionalidades clave.
 
 ## 2. Planificación del Proyecto
-- [ ] Establecer un cronograma con hitos y plazos.
+- [X] Establecer un cronograma con hitos y plazos.
 
 ## 3. Diseño de la Aplicación
 - [ ] Crear wireframes o prototipos de la interfaz de usuario.
-- [ ] Definir el flujo de usuario para cada funcionalidad.
+- [X] Definir el flujo de usuario para cada funcionalidad.
 
 ## 4. Configuración del Entorno de Desarrollo
-- [ ] Instalar Node.js, Express, PostgreSQL, Vue.js y Bootstrap.
-- [ ] Configurar un repositorio en GitHub para gestionar el código.
+- [X] Instalar Node.js, Express, PostgreSQL, Vue.js y Bootstrap.
+- [X] Configurar un repositorio en GitHub para gestionar el código.
 
 ## 5. Desarrollo del Back-End
-- [ ] Definir los modelos de datos en PostgreSQL (productos, pedidos, usuarios).
-- [ ] Implementar las rutas de la API en Express.
+- [X] Definir los modelos de datos en PostgreSQL (productos, pedidos, usuarios).
+- [X] Implementar las rutas de la API en Express.
 - [ ] Configurar la autenticación con JWT.
-- [ ] Establecer la conexión a la base de datos utilizando la biblioteca `pg`.
+- [X] Establecer la conexión a la base de datos utilizando la biblioteca `pg`.
 
 ## 6. Desarrollo del Front-End
 - [ ] Construir la interfaz de usuario utilizando Vue.js y Bootstrap.
-- [ ] Conectar el front-end con la API a través de Axios.
-- [ ] Considerar el uso de Vuex para la gestión del estado.
+- [X] Conectar el front-end con la API a través de Axios.
+- [X] Considerar el uso de Vuex para la gestión del estado.
 
 ## 7. Pruebas
 - [ ] Implementar pruebas unitarias para componentes y funciones.
 - [ ] Realizar pruebas de integración entre el front-end y el back-end.
 
 ## 8. Documentación
-- [ ] Documentar la API utilizando herramientas como Swagger.
+- [X] Documentar la API utilizando herramientas como Swagger.
 - [ ] Crear una guía de usuario para ayudar a los miembros del grupo.
 
 ## 9. Despliegue
-- [ ] Elegir un servicio de hosting para desplegar la aplicación.
+- [X] Elegir un servicio de hosting para desplegar la aplicación.
 - [ ] Configurar el entorno de producción para la base de datos y la aplicación.
 
 ## 10. Recopilación de Feedback y Mejora Continua
@@ -352,6 +316,7 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
   - Formulario de registro con campos para:
     - Nombre completo.
     - Correo electrónico.
+    - Movil
     - Contraseña.
     - Confirmar contraseña.
   - Botón de "Registrarse".
@@ -398,12 +363,13 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
 
 ## 6. Pantalla de Compras
 - **Elementos Clave**:
-  - Agrupados por grupos de productos (proveedor)
+  - Agrupados por proveedor/grupo productos
+  - Tiene que diferenciarse bien los proveedor/grupo productos que esten abiertos(pedidos abiertos)
   - Lista de productos con:
     - Nombre del producto.
     - Descripción.
     - Precio.
-    - Botón de "Añadir a la cesta/pedido conjunto".
+    - Botón de "Añadir a la cesta/pedido conjunto". Solo si el pedido está abierto.
   - Filtros para buscar productos por categoría o proveedor.
 
 **Interacciones**:
@@ -412,6 +378,8 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
 
 ## 7. Pantalla de Historial de Pedidos
 - **Elementos Clave**:
+  - Usuario.
+  - Si es admin, desplegable para seleccionar el usuario (en caso de querer utilizar la misma pantalla para que el administrador pueda gestionar pedidos. Igual no es la mejor opción)
   - Lista de pedidos anteriores con:
     - Fecha de entrega.
     - Importe.
@@ -421,8 +389,10 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
 
 ## 8. Pantalla de Detalles de Pedidos
 - **Elementos Clave**:
+  - Usuario.  
   - Lista de productos del pedido:
     - Usuario que lo ha comprado.
+    - proveedor/grupo productos
     - Unidades.
     - Importe.
 
@@ -433,18 +403,24 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
     - Correo electrónico.
     - Teléfono.
     - Estado (activo/inactivo).
+    - Rol
+    - Proveedor/es asignados
     - Botones para "Editar" o "Eliminar" usuarios.
   - Opción para añadir nuevos usuarios.
 
 **Interacciones**:
-- Al hacer clic en "Editar", se abre la Pantalla de Edición de Usuario.
+- Al hacer clic en "Editar", se abre modal de Edición de Usuario.
 - Al hacer clic en "Eliminar", se muestra un mensaje de confirmación y se elimina el usuario.
 
 ## 10. Pantalla de Configuración de Cuenta
 - **Elementos Clave**:
+  - USuario
   - Formulario para actualizar información del usuario:
     - Nombre.
     - Correo electrónico.
+    - Móvil
+    - Rol
+    - Proveedor/es
     - Contraseña (opcional). 
   - Botón de "Guardar Cambios".
 
@@ -465,7 +441,9 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
   - Admin permiso total.
   - Usuarios que gestionan un proveedor, permiso de modificar.
   - Lista de proveedores con:
-    - Nombre.
+    - Nombre proveedor/grupo productos
+    - Contacto
+    - Método de pago
     - Correo electrónico.
     - Teléfono.
     - Estado (activo/inactivo).
@@ -483,6 +461,8 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
     - Nombre.
     - Descripción.
     - Precio.
+    - Proveedor/grupo productos.
+    - Imagen
     - Estado (activo/inactivo).
     - Botones para "Editar" o "Eliminar" productos.
   - Opción para añadir nuevos productos.
@@ -493,6 +473,7 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
   - El usuario gestor del proveedor será el encargado de abrir pedidos.
   - Lista de pedidos con:
     - Id.
+    - Proveedor/grupo productos
     - Fecha de entrega (si hay).
     - Fecha de apertura.
     - Fecha de cierre.
@@ -504,30 +485,59 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
     - Fecha aproximada de reparto.
     - Periodicidad. Para programar el pedido para que se abra con los mismos parámetros cada X días.
 
+## 15. Barra de navegación
+- **Elementos Clave**:
+  - Usuario
+  - Cerrar sesión
+  - Dashboard
+  - Historial pedidos
+  - COmpras
+  - Gestión de usuarios (solo admin)
+  - Configuracion de cuenta
+  - Ayuda
+  - Gestión de proveedores (solo admin)
+  - Gestión de productos (solo admin)
+  - Gestión de pedidos (solo admin)
+
+## 16. Pie de página
+- **Elementos Clave**:
+  - RRSS
+  - Datos de la web
+  -
+  -
+  -
+  
 ---
 
 # Flujo de Usuario para la Aplicación Web
 
 ## 1. Gestión de Productos
 - **Flujo de Usuario**:
+
+  3. **Añadir un Producto (al proveedor/grupo de productos)** (para administradores y el usuario responsable de ese productor/grupodeproductos):
+     - El administrador selecciona "Añadir Producto".
+     - Completa un formulario con la información del producto (nombre, descripción, precio, proveedor/grupodeproductos).
+     - Hace clic en "Guardar" para añadir el producto a la base de datos.
+  4. **Editar o Eliminar un Producto** (para administradores y el usuario responsable de ese grupodeproductos/proveedor):
+     - El administrador selecciona un producto de la lista.
+     - Elige "Editar" para modificar la información o "Eliminar" para quitar el producto.
+     - Confirma la acción.
+
+
+---
+
+## 2. Gestión de Compras
+- **Flujo de Usuario**:
   1. **Acceso a la sección de Productos**:
      - El usuario inicia sesión en la aplicación.
      - Navega al menú y selecciona "Productos".
   2. **Visualización de Productos**:
-     - Se muestra una lista de productos disponibles con detalles (nombre, descripción, precio, proveedor/productor).
+     - Se muestra una lista de productos disponibles con detalles (nombre, descripción, precio, proveedor/grupodeproductos).
      - El usuario selecciona un grupo de productos (proveedor).
      - Si el pedido a ese proveedor está abierto, estarán activados los botones para añadir productos.
      - El usuario selecciona productos y cantidades.
      - El usuario hace clic en **"Añadir al Pedido"**.
      - El usuario puede aplicar filtros para buscar productos específicos.
-  3. **Añadir un Producto (al proveedor/grupo de productos)** (para administradores y el usuario responsable de ese productor/proveedor):
-     - El administrador selecciona "Añadir Producto".
-     - Completa un formulario con la información del producto (nombre, descripción, precio, proveedor/productor).
-     - Hace clic en "Guardar" para añadir el producto a la base de datos.
-  4. **Editar o Eliminar un Producto** (para administradores y el usuario responsable de ese productor/proveedor):
-     - El administrador selecciona un producto de la lista.
-     - Elige "Editar" para modificar la información o "Eliminar" para quitar el producto.
-     - Confirma la acción.
   5. **Pantalla de dashboard - Cesta de Compras Mensual**:
      - La cesta se resetea mensualmente. Excepto productos no entregados. 
      - El usuario ve un listado de los productos pedidos ese mes.
@@ -540,16 +550,20 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
      - Estados: En proceso, En reparto, Entregado, Repartido.
   8. **Entrega del Pedido**:
      - El proveedor entrega los productos.
-     - Puede que se haga el reparto de pedidos o no.
-     - El usuario confirma la entrega o reparto.
-     - El sistema actualiza el estado del pedido a **"Entregado"** o **"Repartido"**.
+     - El usuario confirma la entrega.
+     - El sistema actualiza el estado del pedido a **"Entregado"** .
+
+       8. **Reparto del Pedido**:
+     - El usuario gestor del proveedor entrega los productos.
+     - El usuario confirma  reparto.
+     - El sistema actualiza el estado del pedido a  **"Repartido"**.
 
 ---
 
 ## 2. Gestión de Pedidos
 - **Flujo de Usuario**:
   1. **Acceso a la sección de Pedidos**:
-     - El usuario inicia sesión y selecciona "Pedidos" en el menú.
+     - El usuario gestor del proveedor o el admin inicia sesión y selecciona "Pedidos" en el menú.
   2. **Crear un Nuevo Pedido (conjunto)** (para administradores y el usuario responsable de ese productor/proveedor):
      - El usuario hace clic en "Abrir Pedido".
      - Se muestra un modal para crear el pedido.
@@ -579,7 +593,7 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
   1. **Acceso a la sección de Gestión de Usuarios**:
      - El administrador inicia sesión y selecciona "Usuarios" en el menú.
   2. **Visualización de Usuarios**:
-     - Se muestra una lista de usuarios con detalles (nombre, correo electrónico, estado).
+     - Se muestra una lista de usuarios con detalles (nombre, correo electrónico, estado, movil, activo, rol, proveedor/es).
      - Opción para buscar usuarios específicos.
   3. **Añadir un Nuevo Usuario**:
      - El administrador hace clic en "Añadir Usuario".
@@ -634,6 +648,10 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
        - Nombre.
        - Correo electrónico.
        - Opciones de seguridad.
+       - Movil
+       - Activo
+       - Rol
+       - Proveedor/es
   3. **Actualizar Información**:
      - El usuario puede editar su nombre o correo electrónico.
      - Opción para cambiar la contraseña.
@@ -686,7 +704,7 @@ Este diagrama muestra el flujo de un pedido desde su creación hasta su entrega.
 
 #### Pasos:
 1. **Apertura de Pedido**: El usuario gestor abre un pedido.
-2. **Añadir Productos**: Los usuarios añaden productos al pedido.
+2. **Compras/Añadir Productos**: Los usuarios añaden productos al pedido.
 3. **Cierre de Pedido**: El usuario gestor cierra el pedido.
 4. **Notificación al Proveedor**: El sistema notifica al proveedor.
 5. **Entrega de Productos**: El proveedor entrega los productos.
@@ -713,6 +731,8 @@ Este diagrama muestra la estructura de las páginas de la aplicación y cómo se
 - **Historial**: Página de historial de pedidos.
 - **Configuración**: Página de configuración de cuenta.
 - **Soporte**: Página de soporte y ayuda.
+- **Compras**: Página donde el usuario puede comprar productos (añadirlos al pedido abierto) o ver los productos de proveedores que no tienen pedido abierto.
+
 
 #### Diagrama:
 ```
@@ -814,11 +834,12 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
 | `ID_Proveedor`   | `SERIAL`          | Clave primaria.                      |
-| `Nombre`         | `VARCHAR(100)`    | Nombre del proveedor.                |
+| `Nombre`         | `VARCHAR(100)`    | Nombre del proveedor/grupo productos |
 | `Contacto`       | `VARCHAR(100)`    | Nombre de la persona de contacto.    |
 | `Telefono`       | `VARCHAR(20)`     | Teléfono del proveedor.              |
 | `Movil`          | `VARCHAR(20)`     | Teléfono móvil del proveedor.        |
 | `Correo`         | `VARCHAR(100)`    | Correo electrónico del proveedor.    |
+| `Metodo_Pago`    | `VARCHAR(300)`    | Como se paga al proveedor            |
 | `Envio_Movil`    | `BOOLEAN`         | Avisar mediante SMS o WhatsApp.      |
 | `Envio_Mail`     | `BOOLEAN`         | Avisar mediante correo electrónico.  |
 
