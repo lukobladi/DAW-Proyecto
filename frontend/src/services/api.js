@@ -11,6 +11,12 @@ const apiClient = axios.create({
 });
 
 export default {
+  login(credentials) {
+    return apiClient.post('/usuarios/login', credentials);
+  },
+  recoverPassword(data) {
+    return apiClient.post('/usuarios/recuperar-contrasenia', data);
+  },
   // Ejemplo de métodos para interactuar con la API
   getUsuarios() {
     return apiClient.get('/usuarios');
@@ -37,4 +43,5 @@ export default {
   getDetallesPedido(pedidoId) {
     return apiClient.get(`/pedidos/${pedidoId}`);
   },
+
 };

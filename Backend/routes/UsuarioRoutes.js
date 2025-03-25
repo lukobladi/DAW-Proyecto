@@ -3,101 +3,7 @@ const UsuarioController = require('../controllers/UsuarioController');
 
 const router = express.Router();
 
-/**
- * @swagger
- * /api/usuarios/registrar:
- *   post:
- *     summary: Registrar un nuevo usuario
- *     tags: [Usuarios]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               nombre:
- *                 type: string
- *                 example: Juan
- *               correo:
- *                 type: string
- *                 example: juan@example.com
- *               contraseña:
- *                 type: string
- *                 example: 123456
- *               rol:
- *                 type: string
- *                 example: usuario
- *     responses:
- *       201:
- *         description: Usuario registrado correctamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                   example: 1
- *                 nombre:
- *                   type: string
- *                   example: Juan
- *                 correo:
- *                   type: string
- *                   example: juan@example.com
- *                 rol:
- *                   type: string
- *                   example: usuario
- *       500:
- *         description: Error al registrar el usuario
- */
-router.post('/registrar', UsuarioController.registrar);
 
-/**
- * @swagger
- * /api/usuarios/login:
- *   post:
- *     summary: Autenticar un usuario (login)
- *     tags: [Usuarios]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               correo:
- *                 type: string
- *                 example: juan@example.com
- *               contraseña:
- *                 type: string
- *                 example: 123456
- *     responses:
- *       200:
- *         description: Autenticación exitosa
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                   example: 1
- *                 nombre:
- *                   type: string
- *                   example: Juan
- *                 correo:
- *                   type: string
- *                   example: juan@example.com
- *                 rol:
- *                   type: string
- *                   example: usuario
- *       401:
- *         description: Credenciales incorrectas
- *       500:
- *         description: Error al autenticar el usuario
- */
-router.post('/login', UsuarioController.login);
 
 /**
  * @swagger
@@ -172,6 +78,147 @@ router.get('/', UsuarioController.listar);
  */
 router.get('/:id', UsuarioController.obtenerPorId);
 
+
+/**
+ * @swagger
+ * /api/usuarios/registrar:
+ *   post:
+ *     summary: Registrar un nuevo usuario
+ *     tags: [Usuarios]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *                 example: Juan
+ *               correo:
+ *                 type: string
+ *                 example: juan@example.com
+ *               contraseña:
+ *                 type: string
+ *                 example: 123456
+ *               rol:
+ *                 type: string
+ *                 example: usuario
+ *               movil:
+ *                 type: string
+ *                 example: 123456789
+ *     responses:
+ *       201:
+ *         description: Usuario registrado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                   example: 1
+ *                 nombre:
+ *                   type: string
+ *                   example: Juan
+ *                 correo:
+ *                   type: string
+ *                   example: juan@example.com
+ *                 rol:
+ *                   type: string
+ *                   example: usuario
+ *                 movil:
+ *                   type: string
+ *                   example: 123456789
+ *       500:
+ *         description: Error al registrar el usuario
+ */
+router.post('/registrar', UsuarioController.registrar);
+
+/**
+ * @swagger
+ * /api/usuarios/login:
+ *   post:
+ *     summary: Autenticar un usuario (login)
+ *     tags: [Usuarios]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               correoOMovil:
+ *                 type: string
+ *                 example: juan@example.com
+ *               contraseña:
+ *                 type: string
+ *                 example: 123456
+ *     responses:
+ *       200:
+ *         description: Autenticación exitosa
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                   example: 1
+ *                 nombre:
+ *                   type: string
+ *                   example: Juan
+ *                 correo:
+ *                   type: string
+ *                   example: juan@example.com
+ *                 rol:
+ *                   type: string
+ *                   example: usuario
+ *                 movil:
+ *                   type: string
+ *                   example: 123456789
+ *       401:
+ *         description: Credenciales incorrectas
+ *       500:
+ *         description: Error al autenticar el usuario
+ */
+router.post('/login', UsuarioController.login);
+
+
+/**
+ * @swagger
+ * /api/usuarios/recuperar-contrasenia:
+ *   post:
+ *     summary: Enviar enlace de recuperación de contraseña
+ *     tags: [Usuarios]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               correoOMovil:
+ *                 type: string
+ *                 example: juan@example.com
+ *     responses:
+ *       200:
+ *         description: Enlace de recuperación enviado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                   example: Enlace de recuperación enviado correctamente
+ *       400:
+ *         description: Solicitud inválida
+ *       500:
+ *         description: Error al procesar la solicitud
+ */
+router.post('/recuperar-contrasenia', UsuarioController.recuperarContrasenia);
+
 /**
  * @swagger
  * /api/usuarios/{id}:
@@ -204,6 +251,9 @@ router.get('/:id', UsuarioController.obtenerPorId);
  *               rol:
  *                 type: string
  *                 example: admin
+ *               movil:
+ *                 type: string
+ *                 example: 987654321
  *     responses:
  *       200:
  *         description: Usuario actualizado correctamente
@@ -224,6 +274,9 @@ router.get('/:id', UsuarioController.obtenerPorId);
  *                 rol:
  *                   type: string
  *                   example: admin
+ *                 movil:
+ *                   type: string
+ *                   example: 987654321
  *       404:
  *         description: Usuario no encontrado
  *       500:

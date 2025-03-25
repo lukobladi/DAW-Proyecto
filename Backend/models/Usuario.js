@@ -2,21 +2,24 @@ const pool = require('../db');
 
 const Usuario = {
   // Crear un nuevo usuario
-  async create(nombre, correo, contraseña, rol) {
+  async create(nombre, correo, contraseña, rol, movil) {
     const query = `
-      INSERT INTO Usuario (Nombre, Correo, Contraseña, Rol)
-      VALUES ($1, $2, $3, $4)
+      INSERT INTO Usuario (Nombre, Correo, Contraseña, Rol, Movil)
+      VALUES ($1, $2, $3, $4, $5)
       RETURNING *;
     `;
-    const values = [nombre, correo, contraseña, rol];
+    const values = [nombre, correo, contraseña, rol, movil];
     const { rows } = await pool.query(query, values);
     return rows[0];
   },
 
-  // Obtener un usuario por correo
-  async findByEmail(correo) {
-    const query = 'SELECT * FROM Usuario WHERE Correo = $1;';
-    const { rows } = await pool.query(query, [correo]);
+  // Obtener un usuario por correo o móvil
+  async findByEmailOrMobile(correoOMovil) {
+    const query = `
+      SELECT * FROM Usuario
+      WHERE Correo = $1 OR Movil = $1;
+    `;
+    const { rows } = await pool.query(query, [correoOMovil]);
     return rows[0];
   },
 
@@ -35,15 +38,14 @@ const Usuario = {
   },
 
   // Actualizar un usuario
-  async update(id, nombre, correo, contraseña, rol) {
+  async updateContrasenia(id, nuevaContrasenia) {
     const query = `
       UPDATE Usuario
-      SET Nombre = $1, Correo = $2, Contraseña = $3, Rol = $4
-      WHERE ID_Usuario = $5
+      SET Contrasenia = $2
+      WHERE ID_Usuario = $1
       RETURNING *;
     `;
-    const values = [nombre, correo, contraseña, rol, id];
-    const { rows } = await pool.query(query, values);
+    const { rows } = await pool.query(query, [id, nuevaContrasenia]);
     return rows[0];
   },
 

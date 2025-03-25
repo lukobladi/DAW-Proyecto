@@ -1,11 +1,13 @@
 const Usuario = require('../models/Usuario');
+const emailService = require('../services/emailService');
+
 
 const UsuarioController = {
   // Registrar un nuevo usuario
   async registrar(req, res) {
-    const { nombre, correo, contraseña, rol } = req.body;
+    const { nombre, correo, contraseña, rol, movil } = req.body;
     try {
-      const nuevoUsuario = await Usuario.create(nombre, correo, contraseña, rol);
+      const nuevoUsuario = await Usuario.create(nombre, correo, contraseña, rol, movil);
       res.status(201).json(nuevoUsuario);
     } catch (err) {
       console.error(err);
@@ -15,16 +17,42 @@ const UsuarioController = {
 
   // Autenticar un usuario (login)
   async login(req, res) {
-    const { correo, contraseña } = req.body;
+    const { correoOMovil, contraseña } = req.body;
     try {
-      const usuario = await Usuario.findByEmail(correo);
+      const usuario = await Usuario.findByEmailOrMobile(correoOMovil);
       if (!usuario || usuario.contraseña !== contraseña) {
         return res.status(401).send('Credenciales incorrectas');
       }
-      res.json(usuario);
+      res.json({ token: 'fake-jwt-token', usuario });
     } catch (err) {
       console.error(err);
       res.status(500).send('Error al iniciar sesión');
+    }
+  },
+
+  async recuperarContrasenia(req, res) {
+    const { correoOMovil } = req.body;
+
+    if (!correoOMovil) {
+      return res.status(400).json({ error: 'Correo o móvil es requerido' });
+    }
+
+    try {
+      const usuario = await Usuario.findByEmailOrMobile(correoOMovil);
+
+      if (!usuario) {
+        return res.status(404).json({ error: 'Usuario no encontrado' });
+      }
+
+      const enlaceRecuperacion = `http://localhost:8080/recuperar-contrasenia/${usuario.id}`;
+      const mensaje = `Hola ${usuario.nombre},\n\nHaz clic en el siguiente enlace para recuperar tu contraseña:\n\n${enlaceRecuperacion}\n\nSi no solicitaste esta acción, ignora este correo.`;
+
+      await emailService.enviarCorreo(usuario.correo, 'Recuperación de Contraseña', mensaje);
+
+      res.status(200).json({ mensaje: 'Enlace de recuperación enviado correctamente' });
+    } catch (error) {
+      console.error('Error al procesar la solicitud:', error);
+      res.status(500).json({ error: 'Error al procesar la solicitud' });
     }
   },
 
@@ -57,9 +85,9 @@ const UsuarioController = {
   // Actualizar un usuario
   async actualizar(req, res) {
     const { id } = req.params;
-    const { nombre, correo, contraseña, rol } = req.body;
+    const { nombre, correo, contraseña, rol, movil } = req.body;
     try {
-      const usuarioActualizado = await Usuario.update(id, nombre, correo, contraseña, rol);
+      const usuarioActualizado = await Usuario.update(id, nombre, correo, contraseña, rol, movil);
       res.json(usuarioActualizado);
     } catch (err) {
       console.error(err);

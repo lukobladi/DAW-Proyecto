@@ -29,14 +29,10 @@
 </template>
 
 <script>
-import NavBar from '@/components/NavBar.vue';
-import Footer from '@/components/FooterBar.vue';
+import { alertStore } from '@/store/alertStore';
 
 export default {
-  components: {
-    NavBar,
-    Footer
-  },
+
   data() {
     return {
       nombre: '',
@@ -46,10 +42,23 @@ export default {
     };
   },
   methods: {
-    register() {
-      // Lógica para registrar al usuario
-      console.log('Registrando usuario...');
-    }
+    async register() {
+      if (this.contraseña !== this.confirmarContraseña) {
+        alertStore.showAlert('Las contraseñas no coinciden.', 'danger');
+        return;
+      }
+
+      try {
+        // Simulación de registro exitoso
+        console.log('Registrando usuario...');
+        alertStore.showAlert('Registro exitoso. Ahora puedes iniciar sesión.', 'success');
+        this.$router.push({ name: 'Login' });
+      } catch (error) {
+        console.error('Error al registrar usuario:', error);
+        const errorMessage = error.response?.data?.error || 'Error al registrar usuario. Inténtalo más tarde.';
+        alertStore.showAlert(errorMessage, 'danger');
+      }
+    },
   }
 };
 </script>

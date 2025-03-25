@@ -24,7 +24,7 @@ const PORT = process.env.PORT || 3000;
 // Configura Swagger
 swaggerSetup(app);
 
-//app.use(express.json());
+app.use(express.json());
 // Solo permitir conexion desde estos origenes
 app.use(cors({
   origin: process.env.CLIENT_ORIGIN || 'http://localhost:8080',

@@ -69,6 +69,8 @@
   - [Consultas SQL](#consultas-sql)
     - [Crear Tablas](#crear-tablas)
 - [Backend API Rest Node Express](#backend-api-rest-node-express)
+- [Diseño Visual](#diseño-visual)
+- [Wireframes](#wireframes)
 
 ---
 
@@ -929,95 +931,112 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 
 ---
 
-# Frontend
+# Backend API Rest Node Express
 
-## Descripción del Frontend
+### Descripción del Backend
 
-El frontend de la aplicación está desarrollado con **Vue.js** y **Bootstrap**. Se conecta al backend a través de una API REST para gestionar usuarios, productos, proveedores y pedidos. La aplicación está diseñada para ser responsive y ofrece una interfaz intuitiva para los usuarios.
+El backend de la aplicación está desarrollado con **Node.js** y **Express**. Se conecta a una base de datos **PostgreSQL** y expone una API REST para gestionar usuarios, productos, proveedores y pedidos. La aplicación está diseñada para ser escalable y segura.
 
-## Estructura del Proyecto
+### Estructura del Proyecto
 
-El frontend está estructurado de la siguiente manera:
+El backend está estructurado de la siguiente manera:
 
 ```
-frontend/
-├── public/
-│   └── index.html           # Página principal de la aplicación
+backend/
 ├── src/
-│   ├── assets/              # Recursos estáticos (imágenes, estilos globales)
-│   ├── components/          # Componentes reutilizables
-│   │   ├── NavBar.vue       # Barra de navegación
-│   │   ├── Footer.vue       # Pie de página
-│   │   ├── ProductCard.vue  # Tarjeta de producto
-│   │   ├── PedidoCard.vue   # Tarjeta de pedido
-│   │   └── Notification.vue # Componente de notificaciones
-│   ├── views/               # Vistas principales de la aplicación
-│   │   ├── HomePage.vue     # Página de inicio
-│   │   ├── LoginPage.vue    # Página de inicio de sesión
-│   │   ├── RegisterPage.vue # Página de registro
-│   │   ├── DashboardPage.vue # Página de dashboard
-│   │   ├── ProductosPage.vue # Página de gestión de productos
-│   │   ├── ProveedoresPage.vue # Página de gestión de proveedores
-│   │   ├── PedidosPage.vue  # Página de gestión de pedidos
-│   │   ├── HistorialPage.vue # Página de historial de pedidos
-│   │   ├── ConfiguracionPage.vue # Página de configuración de cuenta
-│   │   └── SoportePage.vue  # Página de soporte y ayuda
-│   ├── router/              # Configuración de las rutas de la aplicación
-│   │   └── index.js         # Definición de rutas
-│   ├── services/            # Servicios para interactuar con la API
-│   │   └── api.js           # Configuración de Axios y métodos de la API
-│   ├── store/               # Gestión del estado global con Vuex (opcional)
-│   │   └── index.js         # Configuración de Vuex
-│   ├── App.vue              # Componente principal de la aplicación
-│   └── main.js              # Punto de entrada de la aplicación
-├── package.json             # Dependencias y scripts del proyecto
-└── vue.config.js            # Configuración específica de Vue CLI
+│   ├── controllers/        # Controladores para manejar las solicitudes
+│   │   ├── authController.js # Controlador de autenticación
+│   │   ├── userController.js # Controlador de usuarios
+│   │   ├── productController.js # Controlador de productos
+│   │   ├── providerController.js # Controlador de proveedores
+│   │   ├── orderController.js # Controlador de pedidos
+│   │   └── notificationController.js # Controlador de notificaciones
+│   ├── models/             # Modelos de datos
+│   │   ├── userModel.js    # Modelo de usuario
+│   │   ├── productModel.js # Modelo de producto
+│   │   ├── providerModel.js # Modelo de proveedor
+│   │   ├── orderModel.js   # Modelo de pedido
+│   │   └── notificationModel.js # Modelo de notificación
+│   ├── routes/             # Rutas de la API
+│   │   ├── authRoutes.js   # Rutas de autenticación
+│   │   ├── userRoutes.js   # Rutas de usuarios
+│   │   ├── productRoutes.js # Rutas de productos
+│   │   ├── providerRoutes.js # Rutas de proveedores
+│   │   ├── orderRoutes.js  # Rutas de pedidos
+│   │   └── notificationRoutes.js # Rutas de notificaciones
+│   ├── config/             # Configuración de la aplicación
+│   │   ├── dbConfig.js     # Configuración de la base de datos
+│   │   ├── serverConfig.js # Configuración del servidor
+│   │   └── swaggerConfig.js # Configuración de Swagger
+│   ├── middleware/         # Middleware para la aplicación
+│   │   ├── authMiddleware.js # Middleware de autenticación
+│   │   ├── errorMiddleware.js # Middleware de manejo de errores
+│   │   └── validationMiddleware.js # Middleware de validación
+│   ├── utils/              # Utilidades y funciones auxiliares
+│   │   ├── jwtUtils.js     # Utilidades para manejar JWT
+│   │   ├── emailUtils.js   # Utilidades para enviar correos electrónicos
+│   │   └── smsUtils.js     # Utilidades para enviar SMS
+│   ├── app.js              # Configuración principal de la aplicación
+│   └── server.js           # Punto de entrada del servidor
+├── package.json            # Dependencias y scripts del proyecto
+├── .env                    # Variables de entorno
+└── swagger.yaml            # Documentación de la API con Swagger
 ```
 
 ---
 
 ## Descripción de los Archivos
 
-### 1. **Componentes Reutilizables (`src/components/`)**
-- **`NavBar.vue`**: Barra de navegación superior con enlaces a las principales secciones de la aplicación.
-- **`Footer.vue`**: Pie de página con información de contacto y enlaces útiles.
-- **`ProductCard.vue`**: Tarjeta para mostrar la información de un producto.
-- **`PedidoCard.vue`**: Tarjeta para mostrar la información de un pedido.
-- **`Notification.vue`**: Componente para mostrar notificaciones al usuario.
+### 1. **Controladores (`src/controllers/`)**
+- **`authController.js`**: Maneja la autenticación de usuarios (registro, inicio de sesión, recuperación de contraseña).
+- **`userController.js`**: Maneja las operaciones relacionadas con los usuarios (crear, editar, eliminar).
+- **`productController.js`**: Maneja las operaciones relacionadas con los productos (crear, editar, eliminar).
+- **`providerController.js`**: Maneja las operaciones relacionadas con los proveedores (crear, editar, eliminar).
+- **`orderController.js`**: Maneja las operaciones relacionadas con los pedidos (crear, editar, eliminar).
+- **`notificationController.js`**: Maneja las operaciones relacionadas con las notificaciones (crear, editar, eliminar).
 
-### 2. **Vistas Principales (`src/views/`)**
-- **`HomePage.vue`**: Página de inicio con una breve descripción del grupo de consumo.
-- **`LoginPage.vue`**: Página de inicio de sesión para usuarios registrados.
-- **`RegisterPage.vue`**: Página de registro para nuevos usuarios.
-- **`DashboardPage.vue`**: Página principal del usuario, donde puede ver su cesta mensual y acceder a otras funcionalidades.
-- **`ProductosPage.vue`**: Página para gestionar productos (añadir, editar, eliminar).
-- **`ProveedoresPage.vue`**: Página para gestionar proveedores (añadir, editar, eliminar).
-- **`PedidosPage.vue`**: Página para gestionar pedidos (abrir, cerrar, ver detalles).
-- **`HistorialPage.vue`**: Página para ver el historial de pedidos realizados.
-- **`ConfiguracionPage.vue`**: Página para que los usuarios configuren su cuenta.
-- **`SoportePage.vue`**: Página de soporte y ayuda con preguntas frecuentes y formulario de contacto.
+### 2. **Modelos (`src/models/`)**
+- **`userModel.js`**: Define el esquema y las operaciones para la tabla de usuarios.
+- **`productModel.js`**: Define el esquema y las operaciones para la tabla de productos.
+- **`providerModel.js`**: Define el esquema y las operaciones para la tabla de proveedores.
+- **`orderModel.js`**: Define el esquema y las operaciones para la tabla de pedidos.
+- **`notificationModel.js`**: Define el esquema y las operaciones para la tabla de notificaciones.
 
-### 3. **Router (`src/router/index.js`)**
-Configura las rutas de la aplicación y asocia cada ruta con su componente correspondiente.
+### 3. **Rutas (`src/routes/`)**
+- **`authRoutes.js`**: Define las rutas de autenticación (registro, inicio de sesión, recuperación de contraseña).
+- **`userRoutes.js`**: Define las rutas para las operaciones de usuarios.
+- **`productRoutes.js`**: Define las rutas para las operaciones de productos.
+- **`providerRoutes.js`**: Define las rutas para las operaciones de proveedores.
+- **`orderRoutes.js`**: Define las rutas para las operaciones de pedidos.
+- **`notificationRoutes.js`**: Define las rutas para las operaciones de notificaciones.
 
-### 4. **Servicios (`src/services/api.js`)**
-Contiene la configuración de Axios y los métodos para interactuar con la API del backend.
+### 4. **Configuración (`src/config/`)**
+- **`dbConfig.js`**: Configura la conexión a la base de datos PostgreSQL.
+- **`serverConfig.js`**: Configura el servidor Express.
+- **`swaggerConfig.js`**: Configura Swagger para la documentación de la API.
 
-### 5. **Store (`src/store/index.js`)**
-Opcional. Si se usa Vuex, aquí se define el estado global de la aplicación, las mutaciones y las acciones.
+### 5. **Middleware (`src/middleware/`)**
+- **`authMiddleware.js`**: Middleware para verificar la autenticación de usuarios.
+- **`errorMiddleware.js`**: Middleware para manejar errores en la aplicación.
+- **`validationMiddleware.js`**: Middleware para validar los datos de las solicitudes.
 
-### 6. **Punto de Entrada (`src/main.js`)**
-Configura Vue, el router, el store (si se usa) y monta la aplicación en el DOM.
+### 6. **Utilidades (`src/utils/`)**
+- **`jwtUtils.js`**: Funciones auxiliares para manejar JWT (generar, verificar).
+- **`emailUtils.js`**: Funciones auxiliares para enviar correos electrónicos.
+- **`smsUtils.js`**: Funciones auxiliares para enviar SMS.
 
-### 7. **Componente Principal (`src/App.vue`)**
-Contiene la estructura base de la aplicación, como el `NavBar`, `Footer` y el `router-view` para renderizar las vistas.
+### 7. **Punto de Entrada (`src/server.js`)**
+Configura y arranca el servidor Express.
+
+### 8. **Configuración Principal (`src/app.js`)**
+Configura la aplicación Express, incluyendo las rutas, middleware y conexión a la base de datos.
 
 ---
 
-## Requisitos del Frontend
+## Requisitos del Backend
 
 ### 1. **Autenticación y Autorización**
-- Los usuarios deben poder iniciar sesión y registrarse.
+- Los usuarios deben poder registrarse, iniciar sesión y recuperar su contraseña.
 - Las rutas protegidas solo deben ser accesibles para usuarios autenticados.
 
 ### 2. **Gestión de Productos**
@@ -1034,6 +1053,368 @@ Contiene la estructura base de la aplicación, como el `NavBar`, `Footer` y el `
 ### 5. **Configuración de Cuenta**
 - Los usuarios deben poder actualizar su información personal y cambiar su contraseña.
 
-### 6. **Soporte y Ayuda**
-- Los usuarios deben poder acceder a preguntas frecuentes y enviar consultas de soporte.
+### 6. **Notificaciones**
+- Los usuarios deben recibir notificaciones sobre fechas límite de pedidos y actualizaciones.
 
+### 7. **Documentación de la API**
+- La API debe estar documentada utilizando Swagger para facilitar su uso y comprensión.
+
+---
+
+## Ejemplo de Rutas de la API
+
+### 1. **Autenticación**
+- **POST `/api/auth/register`**: Registro de nuevos usuarios.
+- **POST `/api/auth/login`**: Inicio de sesión de usuarios.
+- **POST `/api/auth/recover`**: Recuperación de contraseña.
+
+### 2. **Usuarios**
+- **GET `/api/users`**: Obtener la lista de usuarios.
+- **GET `/api/users/:id`**: Obtener la información de un usuario específico.
+- **PUT `/api/users/:id`**: Actualizar la información de un usuario.
+- **DELETE `/api/users/:id`**: Eliminar un usuario.
+
+### 3. **Productos**
+- **GET `/api/products`**: Obtener la lista de productos.
+- **GET `/api/products/:id`**: Obtener la información de un producto específico.
+- **POST `/api/products`**: Añadir un nuevo producto.
+- **PUT `/api/products/:id`**: Actualizar la información de un producto.
+- **DELETE `/api/products/:id`**: Eliminar un producto.
+
+### 4. **Proveedores**
+- **GET `/api/providers`**: Obtener la lista de proveedores.
+- **GET `/api/providers/:id`**: Obtener la información de un proveedor específico.
+- **POST `/api/providers`**: Añadir un nuevo proveedor.
+- **PUT `/api/providers/:id`**: Actualizar la información de un proveedor.
+- **DELETE `/api/providers/:id`**: Eliminar un proveedor.
+
+### 5. **Pedidos**
+- **GET `/api/orders`**: Obtener la lista de pedidos.
+- **GET `/api/orders/:id`**: Obtener la información de un pedido específico.
+- **POST `/api/orders`**: Crear un nuevo pedido.
+- **PUT `/api/orders/:id`**: Actualizar la información de un pedido.
+- **DELETE `/api/orders/:id`**: Eliminar un pedido.
+
+### 6. **Notificaciones**
+- **GET `/api/notifications`**: Obtener la lista de notificaciones.
+- **GET `/api/notifications/:id`**: Obtener la información de una notificación específica.
+- **POST `/api/notifications`**: Crear una nueva notificación.
+- **PUT `/api/notifications/:id`**: Actualizar la información de una notificación.
+- **DELETE `/api/notifications/:id`**: Eliminar una notificación.
+
+---
+
+---
+
+## Diseño Visual
+
+### 1. Guía de Estilo
+
+#### Paleta de Colores
+- **Color Primario**: `#4CAF50` (Verde) - Representa la sostenibilidad y la ecología.
+- **Color Secundario**: `#FF9800` (Naranja) - Para botones y elementos destacados.
+- **Color de Fondo**: `#FFFFFF` (Blanco) - Para una apariencia limpia y moderna.
+- **Color de Texto**: `#333333` (Gris oscuro) - Para asegurar buena legibilidad.
+- **Color de Enlaces**: `#007BFF` (Azul) - Para enlaces y acciones interactivas.
+- **Color de Error**: `#DC3545` (Rojo) - Para mensajes de error y advertencias.
+
+#### Tipografía
+- **Fuente Principal**: 
+  - **Nombre**: `Open Sans`
+  - **Estilo**: Regular
+  - **Tamaño**: `16px` para texto normal, `24px` para encabezados.
+  
+- **Fuente Secundaria**: 
+  - **Nombre**: `Roboto`
+  - **Estilo**: Italic
+  - **Tamaño**: `14px` para subtítulos y notas.
+
+#### Iconografía
+- Utiliza iconos de **Font Awesome** o **Material Icons** para mantener la coherencia visual.
+- Asegúrate de que los iconos sean simples y fáciles de entender.
+
+---
+
+### 2. Elementos de Interfaz
+
+#### Botones
+- **Estilo**: 
+  - Bordes redondeados (`5px` de radio).
+  - Sombra sutil para dar profundidad (`box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)`).
+- **Colores**: 
+  - Fondo: Color secundario (`#FF9800`).
+  - Texto: Blanco (`#FFFFFF`).
+- **Efecto Hover**: 
+  - Cambiar a un tono más oscuro del color secundario (`#E68900`).
+
+#### Formularios
+- **Estilo de Campos**: 
+  - Bordes redondeados (`5px` de radio).
+  - Sombra ligera para destacar (`box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)`).
+- **Colores**: 
+  - Fondo: Blanco (`#FFFFFF`).
+  - Texto: Gris oscuro (`#333333`).
+- **Efecto Focus**: 
+  - Resaltar el borde con el color primario (`#4CAF50`).
+
+#### Tarjetas de Producto
+- **Estilo**: 
+  - Bordes redondeados (`10px` de radio).
+  - Sombra para dar un efecto de elevación (`box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)`).
+- **Colores**: 
+  - Fondo: Blanco (`#FFFFFF`).
+  - Texto: Gris oscuro (`#333333`).
+- **Elementos**: 
+  - Imagen del producto en la parte superior.
+  - Nombre del producto y precio debajo de la imagen.
+
+---
+
+## Wireframes
+
+### Pantalla de Inicio
++-------------------------------------+
+| Logo                                |
++-------------------------------------+
+| Menú: [Inicio] [Productos] [Pedidos] [Soporte] |
++-------------------------------------+
+| Descripción del grupo               |
++-------------------------------------+
+| [Iniciar Sesión] [Registrarse]      |
++-------------------------------------+
+
+### Pantalla de Registro
++-------------------------------------+
+| Registro                            |
++-------------------------------------+
+| Nombre: [________________________]  |
+| Correo: [________________________]  |
+| Contraseña: [_____________________]  |
+| [Registrarse]                       |
++-------------------------------------+
+
+### Pantalla de Inicio de Sesión
++-------------------------------------+
+| Iniciar Sesión                      |
++-------------------------------------+
+| Correo: [________________________]  |
+| Contraseña: [_____________________]  |
+| [Iniciar Sesión]                   |
++-------------------------------------+
+
+### Pantalla de Dashboard
++-------------------------------------+
+| Dashboard                           |
++-------------------------------------+
+| Resumen de Pedidos:                |
+| - Pedido 1                          |
+| - Pedido 2                          |
+| [Realizar Pedido]                  |
++-------------------------------------+
+| Notificaciones:                     |
+| - Notificación 1                    |
+| - Notificación 2                    |
++-------------------------------------+
+
+### Pantalla de Productos
++-------------------------------------+
+| Productos                           |
++-------------------------------------+
+| Producto 1: [Detalles] [Añadir]    |
+| Producto 2: [Detalles] [Añadir]    |
+| Producto 3: [Detalles] [Añadir]    |
++-------------------------------------+
+
+### Pantalla de Realización de Pedidos
++-------------------------------------+
+| Realizar Pedido                    |
++-------------------------------------+
+| Producto 1: [Cantidad: ___]        |
+| Producto 2: [Cantidad: ___]        |
+| [Resumen del Pedido]               |
+| [Confirmar Pedido]                 |
++-------------------------------------+
+
+### Pantalla de Historial de Pedidos
++-------------------------------------+
+| Historial de Pedidos               |
++-------------------------------------+
+| Pedido 1: [Detalles] [Estado]      |
+| Pedido 2: [Detalles] [Estado]      |
++-------------------------------------+
+
+### Pantalla de Gestión de Usuarios (Administradores)
++-------------------------------------+
+| Gestión de Usuarios                 |
++-------------------------------------+
+| Usuario 1: [Editar] [Eliminar]     |
+| Usuario 2: [Editar] [Eliminar]     |
++-------------------------------------+
+
+### Pantalla de Configuración de Cuenta
++-------------------------------------+
+| Configuración de Cuenta             |
++-------------------------------------+
+| Nombre: [________________________]  |
+| Correo: [________________________]  |
+| [Actualizar Información]            |
+| [Cerrar Sesión]                    |
++-------------------------------------+
+
+### Pantalla de Soporte y Ayuda
++-------------------------------------+
+| Soporte y Ayuda                    |
++-------------------------------------+
+| Preguntas Frecuentes:              |
+| - Pregunta 1                       |
+| - Pregunta 2                       |
+| [Enviar Consulta]                  |
++-------------------------------------+
+
+### Pantalla de Gestión de Proveedores
++-------------------------------------+
+| Gestión de Proveedores              |
++-------------------------------------+
+| Proveedor 1: [Editar] [Eliminar]   |
+| Proveedor 2: [Editar] [Eliminar]   |
+| [Añadir Proveedor]                 |
++-------------------------------------+
+| Detalles del Proveedor:            |
+| - Nombre                           |
+| - Contacto                         |
+| - Teléfono                         |
+| - Correo                           |
+| - Método de Pago                   |
++-------------------------------------+
+
+### Pantalla de Gestión de Productos
++-------------------------------------+
+| Gestión de Productos                |
++-------------------------------------+
+| Producto 1: [Editar] [Eliminar]    |
+| Producto 2: [Editar] [Eliminar]    |
+| [Añadir Producto]                  |
++-------------------------------------+
+| Detalles del Producto:             |
+| - Nombre                           |
+| - Descripción                      |
+| - Precio                           |
+| - Proveedor                        |
+| - Imagen                           |
++-------------------------------------+
+
+### Pantalla de Gestión de Pedidos
++-------------------------------------+
+| Gestión de Pedidos                  |
++-------------------------------------+
+| Pedido 1: [Detalles] [Cancelar]    |
+| Pedido 2: [Detalles] [Cancelar]    |
+| [Abrir Pedido]                     |
++-------------------------------------+
+| Detalles del Pedido:               |
+| - Fecha de Apertura                |
+| - Fecha de Cierre                  |
+| - Fecha de Entrega                 |
+| - Productos                        |
+| - Estado                           |
++-------------------------------------+
+
+### Pantalla de Notificaciones
++-------------------------------------+
+| Notificaciones                      |
++-------------------------------------+
+| Notificación 1: [Marcar como Leída]|
+| Notificación 2: [Marcar como Leída]|
++-------------------------------------+
+| Detalles de la Notificación:       |
+| - Mensaje                          |
+| - Fecha                            |
+| - Estado (Leída/No Leída)          |
++-------------------------------------+
+
+
+## Componentes
+
+### Componente `NavBar`
+- **Descripción**: Barra de navegación principal de la aplicación.
+- **Elementos Clave**:
+  - Enlaces a las secciones principales: Dashboard, Compras, Historial, Configuración, etc.
+  - Botones de "Iniciar Sesión" y "Cerrar Sesión".
+  - Visibilidad condicional de enlaces según el rol del usuario (admin o usuario regular).
+
+### Componente `Footer`
+- **Descripción**: Pie de página de la aplicación.
+- **Elementos Clave**:
+  - Enlaces a redes sociales.
+  - Información de contacto del grupo.
+  - Aviso legal y política de privacidad.
+
+### Componente `ProductCard`
+- **Descripción**: Tarjeta para mostrar información de un producto.
+- **Elementos Clave**:
+  - Imagen del producto.
+  - Nombre y descripción.
+  - Precio.
+  - Botón "Añadir al Pedido".
+
+### Componente `PedidoCard`
+- **Descripción**: Tarjeta para mostrar información de un pedido.
+- **Elementos Clave**:
+  - Fecha de apertura y cierre.
+  - Estado del pedido.
+  - Botón "Ver Detalles".
+
+### Componente `Notification`
+- **Descripción**: Componente para mostrar notificaciones al usuario.
+- **Elementos Clave**:
+  - Mensaje de la notificación.
+  - Fecha de la notificación.
+  - Botón "Marcar como Leída".
+
+### Componente `UserForm`
+- **Descripción**: Formulario para añadir o editar usuarios.
+- **Elementos Clave**:
+  - Campos para nombre, correo, móvil, rol, y proveedores asignados.
+  - Botón "Guardar Cambios".
+
+### Componente `ProviderForm`
+- **Descripción**: Formulario para añadir o editar proveedores.
+- **Elementos Clave**:
+  - Campos para nombre, contacto, teléfono, correo, y método de pago.
+  - Botón "Guardar Cambios".
+
+### Componente `OrderForm`
+- **Descripción**: Formulario para abrir o editar pedidos.
+- **Elementos Clave**:
+  - Campos para fecha de apertura, fecha de cierre, fecha de entrega, y periodicidad.
+  - Botón "Guardar Cambios".
+
+---
+
+## Diseño Visual
+
+### Pantalla de Gestión de Proveedores
+- **Estilo**:
+  - Fondo blanco con bordes redondeados para las tarjetas de proveedores.
+  - Botones con colores secundarios (`#FF9800`) para acciones como "Editar" y "Eliminar".
+  - Sombra ligera para destacar las tarjetas.
+
+### Pantalla de Gestión de Productos
+- **Estilo**:
+  - Tarjetas de productos con bordes redondeados y sombra ligera.
+  - Botones con colores secundarios (`#FF9800`) para acciones como "Editar" y "Eliminar".
+  - Imágenes de productos centradas en la parte superior de las tarjetas.
+
+### Pantalla de Gestión de Pedidos
+- **Estilo**:
+  - Lista de pedidos con diseño de tabla.
+  - Botones con colores secundarios (`#FF9800`) para acciones como "Detalles" y "Cancelar".
+  - Modal para abrir nuevos pedidos con campos bien espaciados y bordes redondeados.
+
+### Pantalla de Notificaciones
+- **Estilo**:
+  - Lista de notificaciones con diseño de tarjetas.
+  - Botones con colores primarios (`#4CAF50`) para marcar como leídas.
+  - Mensajes destacados con fondo gris claro para notificaciones no leídas.
+
+---

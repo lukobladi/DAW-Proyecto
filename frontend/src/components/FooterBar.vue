@@ -14,13 +14,13 @@
       </div>
       <div class="footer-section">
         <h3>Redes Sociales</h3>
-        <a href="https://facebook.com" class="footer-link">Facebook</a>
-        <a href="https://twitter.com" class="footer-link">Twitter</a>
-        <a href="https://instagram.com" class="footer-link">Instagram</a>
+        <a href="https://facebook.com" class="footer-link" aria-label="Visítanos en Facebook">Facebook</a>
+       <a href="https://twitter.com" class="footer-link" aria-label="Síguenos en Twitter">Twitter</a>
+        <a href="https://instagram.com" class="footer-link" aria-label="Síguenos en Instagram">Instagram</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2023 Grupo de Consumo. Todos los derechos reservados.</p>
+      <p>&copy; 2025 Grupo de Consumo. Todos los derechos reservados.</p>
     </div>
   </footer>
 </template>
@@ -37,6 +37,7 @@ export default {
   color: white;
   padding: 2rem 1rem;
   margin-top: auto;
+  font-family: 'Open Sans', sans-serif; 
 }
 
 .footer-content {

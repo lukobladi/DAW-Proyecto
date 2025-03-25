@@ -1,16 +1,24 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    // Versión del archivo de configuración
     "version": "0.2.0",
     "configurations": [
         {
+            // Tipo de configuración: Node.js
             "type": "node",
+            // Tipo de solicitud: iniciar el programa
             "request": "launch",
+            // Nombre de la configuración
             "name": "Launch Program",
+            // Archivo principal del programa
             "program": "${workspaceFolder}/index.js",
+            // Ejecutable de Node.js
             "runtimeExecutable": "node",
-            "preLaunchTask": "sudo systemctl restart postgresql"
+            // Tarea previa al inicio: reiniciar PostgreSQL
+            "preLaunchTask": "sudo systemctl restart postgresql", // Asegura que PostgreSQL se reinicie antes de depurar
+            // Variables de entorno
+            "env": {
+                "NODE_ENV": "development" // Establece el entorno en desarrollo
+            }
         }
     ]
 }
