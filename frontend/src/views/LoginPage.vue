@@ -18,6 +18,10 @@
         <p class="forgot-password">
           ¿Olvidaste tu contraseña? <router-link to="/recuperar-contraseña">Recupérala aquí</router-link>
         </p>
+        <div class="text-center mt-4">
+          <p>¿No tienes una cuenta?</p>
+          <router-link to="/register" class="btn btn-secondary w-100">Registrarse</router-link>
+        </div>
       </div>
     </div>
     <Footer />

@@ -21,6 +21,7 @@
     </div>
     <div class="navbar-actions">
       <button v-if="!isAuthenticated" @click="goToLogin" class="btn btn-primary">Iniciar Sesión</button>
+      <router-link v-if="!isAuthenticated" to="/register" class="btn btn-secondary">Registrarse</router-link>
       <button v-if="isAuthenticated" @click="logout" class="btn btn-danger">Cerrar Sesión</button>
     </div>
   </nav>
