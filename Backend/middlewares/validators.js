@@ -5,7 +5,7 @@ const validators = {
   crearUsuario: [
     body('nombre').notEmpty().withMessage('El nombre es obligatorio'),
     body('correo').isEmail().withMessage('El correo no es válido'),
-    body('contraseña').isLength({ min: 6 }).withMessage('La contraseña debe tener al menos 6 caracteres'),
+    body('password').isLength({ min: 6 }).withMessage('La contraseña debe tener al menos 6 caracteres'),
   ],
   // Validación para crear un pedido
   crearPedido: [

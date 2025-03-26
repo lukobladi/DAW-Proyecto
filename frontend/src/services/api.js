@@ -17,6 +17,12 @@ export default {
   recoverPassword(data) {
     return apiClient.post('/usuarios/recuperar-contrasenia', data);
   },
+  registrar(data) {
+    return apiClient.post('/usuarios/registrar', data);
+  },
+
+
+
   // Ejemplo de métodos para interactuar con la API
   getUsuarios() {
     return apiClient.get('/usuarios');

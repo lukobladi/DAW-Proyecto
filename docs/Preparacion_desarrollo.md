@@ -285,6 +285,9 @@ GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO ekonsumo_user;
 2. Instalar conector PostgreSQL:
    ```bash
    npm install dotenv pg
+
+   npm install nodemailer
+   
    ```
 
 3. Crear tablas:

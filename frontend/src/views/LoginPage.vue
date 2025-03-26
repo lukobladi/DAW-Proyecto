@@ -20,7 +20,7 @@
         </p>
         <div class="text-center mt-4">
           <p>¿No tienes una cuenta?</p>
-          <router-link to="/register" class="btn btn-secondary w-100">Registrarse</router-link>
+          <router-link to="/registrar" class="btn btn-secondary w-100">Registrarse</router-link>
         </div>
       </div>
     </div>

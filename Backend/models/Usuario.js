@@ -2,13 +2,13 @@ const pool = require('../db');
 
 const Usuario = {
   // Crear un nuevo usuario
-  async create(nombre, correo, contraseña, rol, movil) {
+  async create(nombre, correo, password, rol, movil) {
     const query = `
-      INSERT INTO Usuario (Nombre, Correo, Contraseña, Rol, Movil)
+      INSERT INTO Usuario (Nombre, Correo, Pass, Rol, Movil)
       VALUES ($1, $2, $3, $4, $5)
       RETURNING *;
     `;
-    const values = [nombre, correo, contraseña, rol, movil];
+    const values = [nombre, correo, password, rol, movil];
     const { rows } = await pool.query(query, values);
     return rows[0];
   },
@@ -38,14 +38,14 @@ const Usuario = {
   },
 
   // Actualizar un usuario
-  async updateContrasenia(id, nuevaContrasenia) {
+  async updatePassword(id, nuevaPassword) {
     const query = `
       UPDATE Usuario
-      SET Contrasenia = $2
+      SET Pass = $2
       WHERE ID_Usuario = $1
       RETURNING *;
     `;
-    const { rows } = await pool.query(query, [id, nuevaContrasenia]);
+    const { rows } = await pool.query(query, [id, nuevaPassword]);
     return rows[0];
   },
 

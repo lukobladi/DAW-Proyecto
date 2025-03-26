@@ -33,7 +33,7 @@ CREATE TABLE Usuario (
     ID_Usuario SERIAL PRIMARY KEY,
     Nombre VARCHAR(100) NOT NULL,
     Correo VARCHAR(100) UNIQUE NOT NULL,
-    Contraseña VARCHAR(100) NOT NULL,
+    Pass VARCHAR(100) NOT NULL,
     Movil VARCHAR(20),
     Rol VARCHAR(50) NOT NULL CHECK (Rol IN ('admin', 'usuario')),
     Activo BOOLEAN DEFAULT FALSE,

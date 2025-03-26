@@ -1,5 +1,4 @@
--- Insertar datos de prueba en la tabla Usuario
-INSERT INTO Usuario (Nombre, Correo, Contraseña, Movil, Rol, Activo, Saldo)
+INSERT INTO Usuario (Nombre, Correo, Pass, Movil, Rol, Activo, Saldo)
 VALUES
     ('Juan Pérez', 'juan.perez@example.com', 'password123', '600123456', 'admin', TRUE, 100.00),
     ('Ana Gómez', 'ana.gomez@example.com', 'password456', '600654321', 'usuario', TRUE, 50.00),

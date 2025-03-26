@@ -5,7 +5,7 @@
       <p>Compra productos locales y ecológicos de manera colaborativa.</p>
       <div class="buttons">
         <button v-if="!isAuthenticated" @click="goToLogin" class="btn btn-primary">Iniciar Sesión</button>
-        <button v-if="!isAuthenticated" @click="goToRegister" class="btn btn-secondary">Registrarse</button>
+        <button v-if="!isAuthenticated" @click="goToRegistrar" class="btn btn-secondary">Registrarse</button>
       </div>
     </div>
     <div class="mensaje-section">
@@ -31,8 +31,8 @@ export default {
     goToLogin() {
       this.$router.push({ name: 'Login' }); // Redirige a la página de inicio de sesión
     },
-    goToRegister() {
-      this.$router.push({ name: 'Register' }); // Redirige a la página de registro
+    goToRegistrar() {
+      this.$router.push({ name: 'Registrar' }); // Redirige a la página de registro
     },
   },
 };

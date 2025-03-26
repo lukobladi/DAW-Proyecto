@@ -13,12 +13,12 @@
           <input type="email" id="correo" v-model="correo" required>
         </div>
         <div class="form-group">
-          <label for="contraseña">Nueva Contraseña</label>
-          <input type="password" id="contraseña" v-model="contraseña">
+          <label for="password">Nueva Contraseña</label>
+          <input type="password" id="password" v-model="password">
         </div>
         <div class="form-group">
-          <label for="confirmar-contraseña">Confirmar Nueva Contraseña</label>
-          <input type="password" id="confirmar-contraseña" v-model="confirmarContraseña">
+          <label for="confirmar-password">Confirmar Nueva Contraseña</label>
+          <input type="password" id="confirmar-password" v-model="confirmarPassword">
         </div>
         <button type="submit" class="btn btn-primary">Guardar Cambios</button>
       </form>
@@ -35,8 +35,8 @@ export default {
     return {
       nombre: 'Juan Pérez',
       correo: 'juan@example.com',
-      contraseña: '',
-      confirmarContraseña: ''
+      password: '',
+      confirmarPassword: ''
     };
   },
   methods: {

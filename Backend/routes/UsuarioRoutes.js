@@ -98,7 +98,7 @@ router.get('/:id', UsuarioController.obtenerPorId);
  *               correo:
  *                 type: string
  *                 example: juan@example.com
- *               contraseña:
+ *               password:
  *                 type: string
  *                 example: 123456
  *               rol:
@@ -151,7 +151,7 @@ router.post('/registrar', UsuarioController.registrar);
  *               correoOMovil:
  *                 type: string
  *                 example: juan@example.com
- *               contraseña:
+ *               password:
  *                 type: string
  *                 example: 123456
  *     responses:
@@ -187,7 +187,7 @@ router.post('/login', UsuarioController.login);
 
 /**
  * @swagger
- * /api/usuarios/recuperar-contrasenia:
+ * /api/usuarios/recuperar-password:
  *   post:
  *     summary: Enviar enlace de recuperación de contraseña
  *     tags: [Usuarios]
@@ -217,7 +217,7 @@ router.post('/login', UsuarioController.login);
  *       500:
  *         description: Error al procesar la solicitud
  */
-router.post('/recuperar-contrasenia', UsuarioController.recuperarContrasenia);
+router.post('/recuperar-password', UsuarioController.recuperarPassword);
 
 /**
  * @swagger
@@ -245,7 +245,7 @@ router.post('/recuperar-contrasenia', UsuarioController.recuperarContrasenia);
  *               correo:
  *                 type: string
  *                 example: juan.perez@example.com
- *               contraseña:
+ *               password:
  *                 type: string
  *                 example: 654321
  *               rol:

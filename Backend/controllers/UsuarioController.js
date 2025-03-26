@@ -5,22 +5,22 @@ const emailService = require('../services/emailService');
 const UsuarioController = {
   // Registrar un nuevo usuario
   async registrar(req, res) {
-    const { nombre, correo, contraseña, rol, movil } = req.body;
+    const { nombre, correo, password, rol, movil } = req.body;
     try {
-      const nuevoUsuario = await Usuario.create(nombre, correo, contraseña, rol, movil);
+      const nuevoUsuario = await Usuario.create(nombre, correo, password, rol, movil);
       res.status(201).json(nuevoUsuario);
     } catch (err) {
       console.error(err);
-      res.status(500).send('Error al registrar el usuario');
+      res.status(500).send('Error al registrar el usuario: ' + err);
     }
   },
 
   // Autenticar un usuario (login)
   async login(req, res) {
-    const { correoOMovil, contraseña } = req.body;
+    const { correoOMovil, password } = req.body;
     try {
       const usuario = await Usuario.findByEmailOrMobile(correoOMovil);
-      if (!usuario || usuario.contraseña !== contraseña) {
+      if (!usuario || usuario.password !== password) {
         return res.status(401).send('Credenciales incorrectas');
       }
       res.json({ token: 'fake-jwt-token', usuario });
@@ -30,7 +30,7 @@ const UsuarioController = {
     }
   },
 
-  async recuperarContrasenia(req, res) {
+  async recuperarPassword(req, res) {
     const { correoOMovil } = req.body;
 
     if (!correoOMovil) {
@@ -44,7 +44,7 @@ const UsuarioController = {
         return res.status(404).json({ error: 'Usuario no encontrado' });
       }
 
-      const enlaceRecuperacion = `http://localhost:8080/recuperar-contrasenia/${usuario.id}`;
+      const enlaceRecuperacion = `http://localhost:8080/recuperar-password/${usuario.id}`;
       const mensaje = `Hola ${usuario.nombre},\n\nHaz clic en el siguiente enlace para recuperar tu contraseña:\n\n${enlaceRecuperacion}\n\nSi no solicitaste esta acción, ignora este correo.`;
 
       await emailService.enviarCorreo(usuario.correo, 'Recuperación de Contraseña', mensaje);
@@ -85,9 +85,9 @@ const UsuarioController = {
   // Actualizar un usuario
   async actualizar(req, res) {
     const { id } = req.params;
-    const { nombre, correo, contraseña, rol, movil } = req.body;
+    const { nombre, correo, password, rol, movil } = req.body;
     try {
-      const usuarioActualizado = await Usuario.update(id, nombre, correo, contraseña, rol, movil);
+      const usuarioActualizado = await Usuario.update(id, nombre, correo, password, rol, movil);
       res.json(usuarioActualizado);
     } catch (err) {
       console.error(err);

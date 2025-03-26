@@ -1,23 +1,23 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import store from '@/store'; // Importa el store para verificar el estado de autenticación
-import HomePage from '../views/HomePage.vue';
-import LoginPage from '../views/LoginPage.vue';
-import RecuperarContrasenia from '@/views/RecuperarContrasenia.vue';
-import RegisterPage from '../views/RegisterPage.vue';
-import DashboardPage from '../views/DashboardPage.vue';
-import ComprasPage from '../views/ComprasPage.vue';
-import HistorialPage from '../views/HistorialPage.vue';
-import DetallesPedidoPage from '../views/DetallesPedidoPage.vue';
-import GestionUsuariosPage from '../views/GestionUsuariosPage.vue';
-import ConfiguracionPage from '../views/ConfiguracionPage.vue';
-import SoportePage from '../views/SoportePage.vue';
-import GestionProveedoresPage from '../views/GestionProveedoresPage.vue';
-import GestionProductosPage from '../views/GestionProductosPage.vue';
-import GestionPedidosPage from '../views/GestionPedidosPage.vue';
-import GestionPedidosPeriodicosPage from '../views/GestionPedidosPeriodicosPage.vue';
-import GestionPagosPage from '../views/GestionPagosPage.vue';
-import GestionNotificacionesPage from '../views/GestionNotificacionesPage.vue';
-import GestionSaldosPage from '../views/GestionSaldosPage.vue';
+import HomePage from '@/views/HomePage.vue';
+import LoginPage from '@/views/LoginPage.vue';
+import RecuperarPasswordPage from '@/views/RecuperarPasswordPage.vue';
+import RegistrarPage from '@/views/RegistrarPage.vue';
+import DashboardPage from '@/views/DashboardPage.vue';
+import ComprasPage from '@/views/ComprasPage.vue';
+import HistorialPage from '@/views/HistorialPage.vue';
+import DetallesPedidoPage from '@/views/DetallesPedidoPage.vue';
+import GestionUsuariosPage from '@/views/GestionUsuariosPage.vue';
+import ConfiguracionPage from '@/views/ConfiguracionPage.vue';
+import SoportePage from '@/views/SoportePage.vue';
+import GestionProveedoresPage from '@/views/GestionProveedoresPage.vue';
+import GestionProductosPage from '@/views/GestionProductosPage.vue';
+import GestionPedidosPage from '@/views/GestionPedidosPage.vue';
+import GestionPedidosPeriodicosPage from '@/views/GestionPedidosPeriodicosPage.vue';
+import GestionPagosPage from '@/views/GestionPagosPage.vue';
+import GestionNotificacionesPage from '@/views/GestionNotificacionesPage.vue';
+import GestionSaldosPage from '@/views/GestionSaldosPage.vue';
 
 const routes = [
   {
@@ -31,14 +31,14 @@ const routes = [
     component: LoginPage,
   },
   {
-    path: '/recuperar-contraseña',
-    name: 'RecuperarContraseña',
-    component: RecuperarContrasenia,
+    path: '/recuperar-password',
+    name: 'RecuperarPassword',
+    component: RecuperarPasswordPage,
   },
   {
-    path: '/register',
-    name: 'Register',
-    component: RegisterPage,
+    path: '/registrar',
+    name: 'Registrar',
+    component: RegistrarPage,
   },
   {
     path: '/dashboard',
