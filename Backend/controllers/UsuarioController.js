@@ -26,6 +26,11 @@ const UsuarioController = {
         return res.status(401).send('Credenciales incorrectas');
       }
 
+      // Verificar si el usuario está activo
+      if (!usuario.activo) {
+        return res.status(403).send('El usuario no está activo. Contacta al administrador.');
+      }
+
       const isPasswordValid = await Usuario.verifyPassword(password, usuario.pass);
       if (!isPasswordValid) {
         return res.status(401).send('Credenciales incorrectas');

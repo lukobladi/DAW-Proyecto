@@ -5,7 +5,7 @@ const Usuario = {
     async verifyPassword(password, hashedPassword) {
       return bcrypt.compare(password, hashedPassword); // Compara la contraseña con el hash
     },
-    
+
   // Crear un nuevo usuario
   async create(nombre, correo, password, rol, movil) {
     const hashedPassword = await bcrypt.hash(password, 10); // Genera el hash de la contraseña
@@ -23,9 +23,10 @@ const Usuario = {
   async findByEmailOrMobile(correoOMovil) {
     const query = `
       SELECT * FROM Usuario
-      WHERE Correo = $1 OR Movil = $1;
+      WHERE (Correo = $1 OR Movil = $1);
     `;
-    const { rows } = await pool.query(query, [correoOMovil]);
+    const values = [correoOMovil];
+    const { rows } = await pool.query(query, values);
     return rows[0];
   },
 

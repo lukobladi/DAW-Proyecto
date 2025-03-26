@@ -42,6 +42,14 @@
   - [9. Despliegue](#9-despliegue)
   - [10. Recopilación de Feedback y Mejora Continua](#10-recopilación-de-feedback-y-mejora-continua)
   - [11. Mantenimiento](#11-mantenimiento)
+    - [**Autenticación y Autorización con JWT**](#autenticación-y-autorización-con-jwt)
+      - [¿Qué es JWT?](#qué-es-jwt)
+      - [Flujo de Autenticación con JWT:](#flujo-de-autenticación-con-jwt)
+      - [Estructura del Token JWT:](#estructura-del-token-jwt)
+      - [Implementación en el Proyecto:](#implementación-en-el-proyecto)
+      - [Ventajas de JWT:](#ventajas-de-jwt)
+    - [**Rutas Protegidas**](#rutas-protegidas)
+    - [**Errores Comunes con JWT**](#errores-comunes-con-jwt)
 - [Prototipos de la Aplicación Web](#prototipos-de-la-aplicación-web)
   - [1. Pantalla de Inicio](#1-pantalla-de-inicio)
   - [2. Pantalla de Registro](#2-pantalla-de-registro)
@@ -284,9 +292,9 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
 
 #### Backend API Rest
 
-- **PostgreSQL**: El motor de base de datos elegida. Es robusta y escalable y quiero probar una nueva BDD.
-- **Swagger**: Herramienta para documentar la API de manera interactiva. Así cualquiera puede entender cómo usarla..
-- **Node.js**: El motor del backend. Corre JavaScript en el servidor, lo que me permite usar el mismo lenguaje en front y back.
+- **PostgreSQL**: El motor de base de datos elegido. Es robusto y escalable, ideal para manejar datos complejos.
+- **Swagger**: Herramienta para documentar la API de manera interactiva. Así cualquiera puede entender cómo usarla.
+- **Node.js**: El motor del backend. Corre JavaScript en el servidor, lo que permite usar el mismo lenguaje en frontend y backend.
 - **Express**: Framework en Node para crear la API. Es flexible y fácil de usar.
   - **Cors**: Para permitir que el frontend se comunique con el backend sin problemas de CORS.
   - **express-validator**: Para validar y sanitizar los datos que llegan al backend.
@@ -295,8 +303,10 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
   - **dotenv**: Para gestionar variables de entorno, como credenciales de la base de datos.
   - **multer**: Para manejar la subida de archivos, como las imágenes de los productos.
   - **nodemailer**: Permite enviar emails mediante diferentes servicios de correo.
-  - **bcrypt**: Permite almacenar las contraseñas hasheadas.
-  - **jsonwebtoken**: Permite generar y verificar tokens JWT (JSON Web Tokens). 
+  - **bcrypt**: Permite almacenar las contraseñas de forma segura mediante hashing.
+  - **jsonwebtoken (JWT)**: Permite generar y verificar tokens JWT (JSON Web Tokens) para implementar autenticación y autorización seguras.
+
+---
 
 #### Frontend Web
 
@@ -394,6 +404,121 @@ Este diagrama representa el flujo de un usuario típico en la aplicación.
 - [ ] Planificar actualizaciones regulares para mejorar la aplicación.
 
 ---
+
+
+### **Autenticación y Autorización con JWT**
+
+#### ¿Qué es JWT?
+**JSON Web Tokens (JWT)** es un estándar para representar datos de forma segura entre dos partes. En este proyecto, se utiliza para autenticar usuarios y proteger rutas sensibles en la API.
+
+#### Flujo de Autenticación con JWT:
+1. **Inicio de Sesión**:
+   - El usuario envía sus credenciales (correo/móvil y contraseña) al backend.
+   - El backend valida las credenciales y genera un token JWT si son correctas.
+   - El token se devuelve al frontend y se almacena en el `localStorage` o `sessionStorage`.
+
+2. **Acceso a Rutas Protegidas**:
+   - El frontend incluye el token en el encabezado `Authorization` de cada solicitud HTTP.
+   - El backend verifica el token antes de permitir el acceso a las rutas protegidas.
+
+3. **Cierre de Sesión**:
+   - El frontend elimina el token del almacenamiento local.
+   - El usuario ya no puede acceder a rutas protegidas.
+
+#### Estructura del Token JWT:
+Un token JWT consta de tres partes:
+1. **Header**: Contiene el tipo de token y el algoritmo de firma.
+2. **Payload**: Contiene los datos del usuario (como `id`, `correo`, `rol`) y la fecha de expiración.
+3. **Signature**: Garantiza que el token no ha sido alterado.
+
+Ejemplo de un token JWT:
+```
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiY29ycmVvIjoiam9obkBleGFtcGxlLmNvbSIsInJvbCI6InVzZXIiLCJpYXQiOjE2MjYyNzYwMDAsImV4cCI6MTYyNjI3OTYwMH0.4f5c8b1d8e9e8f8f8f8f8f8f8f8f8f8f8f8f8f8
+```
+
+
+#### Implementación en el Proyecto:
+1. **Generación del Token**:
+   - Se utiliza la biblioteca `jsonwebtoken` para generar el token en el backend.
+   - Ejemplo:
+     ```javascript
+     const jwt = require('jsonwebtoken');
+     const SECRET_KEY = 'clave_secreta';
+
+     const token = jwt.sign(
+       { id: usuario.id, correo: usuario.correo, rol: usuario.rol },
+       SECRET_KEY,
+       { expiresIn: '1h' } // El token expira en 1 hora
+     );
+     ```
+
+2. **Verificación del Token**:
+   - Se utiliza un middleware para verificar el token en las rutas protegidas.
+   - Ejemplo:
+     ```javascript
+     const authMiddleware = (req, res, next) => {
+       const token = req.headers['authorization'];
+       if (!token) {
+         return res.status(401).send('Acceso denegado. No se proporcionó un token.');
+       }
+
+       try {
+         const decoded = jwt.verify(token, SECRET_KEY);
+         req.user = decoded; // Agrega los datos del usuario al objeto `req`
+         next();
+       } catch (err) {
+         res.status(401).send('Token inválido o expirado.');
+       }
+     };
+     ```
+
+3. **Uso en el Frontend**:
+   - El token se almacena en el `localStorage` después de iniciar sesión:
+     ```javascript
+     localStorage.setItem('authToken', token);
+     ```
+   - Se incluye en las solicitudes HTTP usando Axios:
+     ```javascript
+     apiClient.interceptors.request.use((config) => {
+       const token = localStorage.getItem('authToken');
+       if (token) {
+         config.headers['Authorization'] = token;
+       }
+       return config;
+     });
+     ```
+
+#### Ventajas de JWT:
+- **Seguridad**: Los datos están firmados y no pueden ser alterados.
+- **Escalabilidad**: No requiere almacenar sesiones en el servidor.
+- **Flexibilidad**: Puede incluir información adicional en el payload.
+
+---
+
+### **Rutas Protegidas**
+Las siguientes rutas están protegidas y requieren un token JWT válido para acceder:
+- **GET `/api/usuarios/perfil`**: Obtiene el perfil del usuario autenticado.
+- **POST `/api/pedidos`**: Crea un nuevo pedido.
+- **PUT `/api/productos/:id`**: Actualiza un producto existente.
+- **DELETE `/api/usuarios/:id`**: Elimina un usuario (solo para administradores).
+
+---
+
+### **Errores Comunes con JWT**
+1. **Token no proporcionado**:
+   - Mensaje: `Acceso denegado. No se proporcionó un token.`
+   - Solución: Asegúrate de incluir el token en el encabezado `Authorization`.
+
+2. **Token inválido o expirado**:
+   - Mensaje: `Token inválido o expirado.`
+   - Solución: Solicita un nuevo token iniciando sesión nuevamente.
+
+3. **Falta de permisos**:
+   - Mensaje: `Acceso denegado. No tienes permisos para realizar esta acción.`
+   - Solución: Verifica que el usuario tenga el rol adecuado para acceder a la ruta.
+
+---
+
 
 # Prototipos de la Aplicación Web
 
