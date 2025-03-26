@@ -1,5 +1,7 @@
-const Usuario = require('../models/Usuario');
-const emailService = require('../services/emailService');
+const Usuario = require('@/models/Usuario');
+const emailService = require('@/services/emailService');
+const jwt = require('jsonwebtoken');
+const SECRET_KEY = '1234'; // Cambiar esto por una clave secreta más segura
 
 
 const UsuarioController = {
@@ -20,10 +22,23 @@ const UsuarioController = {
     const { correoOMovil, password } = req.body;
     try {
       const usuario = await Usuario.findByEmailOrMobile(correoOMovil);
-      if (!usuario || usuario.password !== password) {
+      if (!usuario) {
         return res.status(401).send('Credenciales incorrectas');
       }
-      res.json({ token: 'fake-jwt-token', usuario });
+
+      const isPasswordValid = await Usuario.verifyPassword(password, usuario.pass);
+      if (!isPasswordValid) {
+        return res.status(401).send('Credenciales incorrectas');
+      }
+
+      // Generar un token JWT
+      const token = jwt.sign(
+        { id: usuario.id_usuario, correo: usuario.correo, rol: usuario.rol },
+        SECRET_KEY,
+        { expiresIn: '1h' } // El token expira en 1 hora
+      );
+
+      res.json({ token, usuario });
     } catch (err) {
       console.error(err);
       res.status(500).send('Error al iniciar sesión');

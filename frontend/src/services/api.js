@@ -3,11 +3,19 @@ import axios from 'axios';
 
 const apiClient = axios.create({
   baseURL: 'http://localhost:3000/api', // URL de tu backend
-  withCredentials: false,
+  //withCredentials: false,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
   },
+});
+
+apiClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem('authToken');
+  if (token) {
+    config.headers['Authorization'] = token;
+  }
+  return config;
 });
 
 export default {

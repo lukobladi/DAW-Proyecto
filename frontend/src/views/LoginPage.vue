@@ -44,11 +44,11 @@ export default {
       try {
         const response = await api.login({
           correoOMovil: this.correoOMovil,
-          contrasenia: this.contraseña, // Cambiado de contraseña a contrasenia
+          password: this.contraseña,
         });
 
         const token = response.data.token;
-        localStorage.setItem('authToken', token);
+        localStorage.setItem('authToken', token); // Guarda el token en el almacenamiento local
 
         this.$store.dispatch('login', {
           correoOMovil: this.correoOMovil,
@@ -62,7 +62,7 @@ export default {
         const errorMessage = error.response?.data?.error || 'Credenciales incorrectas. Por favor, inténtalo de nuevo.';
         alertStore.showAlert(errorMessage, 'danger');
       }
-    },
+    }
   },
 };
 </script>
