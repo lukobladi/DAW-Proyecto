@@ -18,11 +18,12 @@
       <router-link v-if="isAdmin" to="/gestion-proveedores" class="navbar-item">Gestión de Proveedores</router-link>
       <router-link v-if="isAdmin" to="/gestion-productos" class="navbar-item">Gestión de Productos</router-link>
       <router-link v-if="isAdmin" to="/gestion-pedidos" class="navbar-item">Gestión de Pedidos</router-link>
-    </div>
-    <div class="navbar-actions">
-      <button v-if="!isAuthenticated" @click="goToLogin" class="btn btn-primary">Iniciar Sesión</button>
-      <router-link v-if="!isAuthenticated" to="/registrar" class="btn btn-secondary">Registrarse</router-link>
-      <button v-if="isAuthenticated" @click="logout" class="btn btn-danger">Cerrar Sesión</button>
+      <router-link v-if="!isAuthenticated" to="/login" class="navbar-item navbar-login">
+        <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+      </router-link>
+      <router-link v-if="isAuthenticated" @click.native="logout" class="navbar-item navbar-logout">
+        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+      </router-link>
     </div>
   </nav>
 </template>
@@ -47,17 +48,14 @@ export default {
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen; // Alterna el estado del menú
     },
-    goToLogin() {
-      this.$router.push({ name: 'Login' });
-    },
     async logout() {
-    try {
-      await this.$store.dispatch('logout'); // Espera a que Vuex complete la acción
-      this.$router.push({ name: 'Home' }); // Redirige al usuario a la página de inicio
-    } catch (error) {
-      console.error('Error al cerrar sesión:', error);
-    }
-  },
+      try {
+        await this.$store.dispatch('logout'); // Espera a que Vuex complete la acción
+        this.$router.push({ name: 'Home' }); // Redirige al usuario a la página de inicio
+      } catch (error) {
+        console.error('Error al cerrar sesión:', error);
+      }
+    },
   },
 };
 </script>
@@ -109,33 +107,34 @@ export default {
   border-radius: 5px;
 }
 
-/* Botones */
-.btn-primary {
-  background-color: #FF9800;
-  color: white;
+/* Estilo para el elemento de inicio de sesión */
+.navbar-login {
+  font-weight: bold;
+  color: #FF9800;
+}
+
+.navbar-login i {
+  margin-right: 0.5rem;
+}
+
+.navbar-login:hover {
+  background-color: #FFE0B2;
   border-radius: 5px;
-  padding: 0.5rem 1rem;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
-.btn-primary:hover {
-  background-color: #E68900;
+/* Estilo para el elemento de cerrar sesión */
+.navbar-logout {
+  font-weight: bold;
+  color: #DC3545;
 }
 
-.btn-danger {
-  background-color: #DC3545;
-  color: white;
+.navbar-logout i {
+  margin-right: 0.5rem;
+}
+
+.navbar-logout:hover {
+  background-color: #F8D7DA;
   border-radius: 5px;
-  padding: 0.5rem 1rem;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.btn-danger:hover {
-  background-color: #C82333;
 }
 
 /* Responsividad */
