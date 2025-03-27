@@ -12,6 +12,3 @@ app.use(router);
 app.use(store); 
 app.mount('#app');
 
-//createApp(App).use(router).mount('#app');
-
-//createApp(App).mount('#app')

@@ -22,12 +22,12 @@ import GestionSaldosPage from '@/views/GestionSaldosPage.vue';
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'Home', // Nombre de la ruta para la página de inicio
     component: HomePage,
   },
   {
     path: '/login',
-    name: 'Login',
+    name: 'Login', // Nombre de la ruta para la página de inicio de sesión
     component: LoginPage,
   },
   {

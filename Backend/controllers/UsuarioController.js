@@ -1,5 +1,5 @@
-const Usuario = require('@/models/Usuario');
-const emailService = require('@/services/emailService');
+const Usuario = require('../models/Usuario');
+const emailService = require('../services/emailService');
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = '1234'; // Cambiar esto por una clave secreta más segura
 
@@ -47,6 +47,24 @@ const UsuarioController = {
     } catch (err) {
       console.error(err);
       res.status(500).send('Error al iniciar sesión');
+    }
+  },
+
+  // Activar o desactivar usuario
+  async toggleActivation(req, res) {
+    const { id } = req.params;
+    const { activo } = req.body; // `activo` debe ser un booleano (true o false)
+  
+    try {
+      const usuarioActualizado = await Usuario.toggleActivation(id, activo);
+      if (!usuarioActualizado) {
+        return res.status(404).send('Usuario no encontrado');
+      }
+      const estado = activo ? 'activado' : 'desactivado';
+      res.json({ mensaje: `Usuario ${estado} correctamente`, usuario: usuarioActualizado });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al actualizar el estado del usuario');
     }
   },
 
@@ -105,9 +123,12 @@ const UsuarioController = {
   // Actualizar un usuario
   async actualizar(req, res) {
     const { id } = req.params;
-    const { nombre, correo, password, rol, movil } = req.body;
+    const { nombre, correo, rol, movil } = req.body; // Excluye la contraseña
     try {
-      const usuarioActualizado = await Usuario.update(id, nombre, correo, password, rol, movil);
+      const usuarioActualizado = await Usuario.update(id, nombre, correo, rol, movil);
+      if (!usuarioActualizado) {
+        return res.status(404).send('Usuario no encontrado');
+      }
       res.json(usuarioActualizado);
     } catch (err) {
       console.error(err);

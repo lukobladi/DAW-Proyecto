@@ -246,9 +246,28 @@ GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO ekonsumo_user;
    npm install cors
    ```
 
+
+### 6. Instalar Swagger
+```bash
+npm install swagger-jsdoc swagger-ui-express
+```
+
 5. Instala Validator:
    ```bash
    npm install express-validator
+
+   npm install nodemailer
+   
+
+   npm install multer
+
+   npm install bcrypt 
+
+   npm install jsonwebtoken
+
+    npm install express cors express-validator nodemailer multer bcrypt jsonwebtoken dotenv pg swagger-jsdoc swagger-ui-express
+
+
    ```
 
 6. Crea un archivo `index.js` con un ejemplo básico:
@@ -286,8 +305,7 @@ GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO ekonsumo_user;
    ```bash
    npm install dotenv pg
 
-   npm install nodemailer
-   
+
    ```
 
 3. Crear tablas:
@@ -405,10 +423,6 @@ GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO ekonsumo_user;
 1. Crear una carpeta llamada `routes` en la raíz.
 2. Dentro de `routes`, crear un archivo `usuarioRoutes.js`.
 
-### 6. Instalar Swagger
-```bash
-npm install swagger-jsdoc swagger-ui-express
-```
 
 ### 7. Iniciar el Servidor
 1. Inicia el servidor de desarrollo:

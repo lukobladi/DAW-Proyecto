@@ -1,10 +1,11 @@
+const bcrypt = require('bcrypt'); // Importar bcrypt
 const pool = require('../db');
 
 const Usuario = {
-    // Verificar contraseña
-    async verifyPassword(password, hashedPassword) {
-      return bcrypt.compare(password, hashedPassword); // Compara la contraseña con el hash
-    },
+  // Verificar contraseña
+  async verifyPassword(password, hashedPassword) {
+    return bcrypt.compare(password, hashedPassword); // Compara la contraseña con el hash
+  },
 
   // Crear un nuevo usuario
   async create(nombre, correo, password, rol, movil) {
@@ -15,6 +16,19 @@ const Usuario = {
       RETURNING *;
     `;
     const values = [nombre, correo, hashedPassword, rol, movil];
+    const { rows } = await pool.query(query, values);
+    return rows[0];
+  },
+
+  // Activar o desarctivar usuario
+  async toggleActivation(id, activo) {
+    const query = `
+      UPDATE Usuario
+      SET Activo = $2
+      WHERE ID_Usuario = $1
+      RETURNING *;
+    `;
+    const values = [id, activo];
     const { rows } = await pool.query(query, values);
     return rows[0];
   },
@@ -45,14 +59,28 @@ const Usuario = {
   },
 
   // Actualizar un usuario
+  async update(id, nombre, correo, rol, movil) {
+    const query = `
+      UPDATE Usuario
+      SET Nombre = $2, Correo = $3, Rol = $4, Movil = $5
+      WHERE ID_Usuario = $1
+      RETURNING *;
+    `;
+    const values = [id, nombre, correo, rol, movil];
+    const { rows } = await pool.query(query, values);
+    return rows[0];
+  },
+
+  // Actualizar la contraseña de un usuario
   async updatePassword(id, nuevaPassword) {
+    const hashedPassword = await bcrypt.hash(nuevaPassword, 10); // Genera el hash de la nueva contraseña
     const query = `
       UPDATE Usuario
       SET Pass = $2
       WHERE ID_Usuario = $1
       RETURNING *;
     `;
-    const { rows } = await pool.query(query, [id, nuevaPassword]);
+    const { rows } = await pool.query(query, [id, hashedPassword]);
     return rows[0];
   },
 

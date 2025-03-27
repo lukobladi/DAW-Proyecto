@@ -21,7 +21,7 @@
       <router-link v-if="!isAuthenticated" to="/login" class="navbar-item navbar-login">
         <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
       </router-link>
-      <router-link v-if="isAuthenticated" @click.native="logout" class="navbar-item navbar-logout">
+      <router-link v-if="isAuthenticated" @click="logout" to="/home" class="navbar-item navbar-logout">
         <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
       </router-link>
     </div>
@@ -50,8 +50,13 @@ export default {
     },
     async logout() {
       try {
-        await this.$store.dispatch('logout'); // Espera a que Vuex complete la acción
-        this.$router.push({ name: 'Home' }); // Redirige al usuario a la página de inicio
+        await this.$store.dispatch('logout'); // Llama a la acción de Vuex para cerrar sesión
+        localStorage.removeItem('authToken'); // Elimina el token del almacenamiento local
+
+        // Redirige al usuario a la página de inicio de sesión
+        this.$router.push({ name: 'Login' }).catch((err) => {
+          console.error('Error al redirigir a la página de inicio de sesión:', err);
+        });
       } catch (error) {
         console.error('Error al cerrar sesión:', error);
       }

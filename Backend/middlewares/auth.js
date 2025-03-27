@@ -1,19 +1,17 @@
 const jwt = require('jsonwebtoken');
-const SECRET_KEY = 'tu_clave_secreta'; // Usa la misma clave secreta que en el controlador
+const SECRET_KEY = '1234'; // Usa una clave secreta más segura
 
-const authMiddleware = (req, res, next) => {
-  const token = req.headers['authorization'];
+module.exports = (req, res, next) => {
+  const token = req.headers['authorization']?.split(' ')[1]; // Obtener el token del encabezado Authorization
   if (!token) {
-    return res.status(401).send('Acceso denegado. No se proporcionó un token.');
+    return res.status(401).send('Acceso no autorizado: Token no proporcionado');
   }
 
   try {
-    const decoded = jwt.verify(token, SECRET_KEY);
-    req.user = decoded; // Agrega los datos del usuario al objeto `req`
+    const decoded = jwt.verify(token, SECRET_KEY); // Verificar el token
+    req.user = decoded; // Agregar los datos del usuario al objeto `req`
     next();
   } catch (err) {
-    res.status(401).send('Token inválido o expirado.');
+    res.status(401).send('Acceso no autorizado: Token inválido');
   }
 };
-
-module.exports = authMiddleware;

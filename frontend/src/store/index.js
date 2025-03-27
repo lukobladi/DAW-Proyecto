@@ -3,9 +3,9 @@ import { createStore } from 'vuex';
 export default createStore({
   state: {
     auth: {
-      isAuthenticated: false, // Cambia a true cuando el usuario inicia sesión
+      isAuthenticated: false, // Cambia a false al cerrar sesión
       user: {
-        role: null, // 'admin' o 'user'
+        role: null, // Limpia el rol del usuario
       },
     },
   },
@@ -20,11 +20,11 @@ export default createStore({
   actions: {
     login({ commit }, user) {
       commit('setAuth', true);
-      commit('setUser', user); // user debe incluir información como el rol
+      commit('setUser', user);
     },
     logout({ commit }) {
       commit('setAuth', false);
-      commit('setUser', { role: null }); // Limpia la información del usuario
+      commit('setUser', { role: null });
     },
   },
 });

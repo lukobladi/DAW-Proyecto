@@ -1,9 +1,10 @@
 const express = require('express');
-const UsuarioController = require('@/controllers/UsuarioController');
-const authMiddleware = require('@/middlewares/auth');
+const UsuarioController = require('../controllers/UsuarioController');
+const authMiddleware = require('../middlewares/auth'); // Middleware de autenticación
+const adminMiddleware = require('../middlewares/admin'); // Middleware de autorización para administradores
+
 
 const router = express.Router();
-
 
 
 /**
@@ -37,7 +38,7 @@ const router = express.Router();
  *       500:
  *         description: Error al obtener los usuarios
  */
-router.get('/', UsuarioController.listar);
+router.get('/', authMiddleware, adminMiddleware, UsuarioController.listar); // Solo administradores
 
 /**
  * @swagger
@@ -77,7 +78,7 @@ router.get('/', UsuarioController.listar);
  *       500:
  *         description: Error al obtener el usuario
  */
-router.get('/:id', UsuarioController.obtenerPorId);
+router.get('/:id', authMiddleware, UsuarioController.obtenerPorId); // Usuarios autenticados
 
 
 /**
@@ -138,10 +139,57 @@ router.post('/registrar', UsuarioController.registrar);
 
 /**
  * @swagger
+ * /api/usuarios/{id}/activar:
+ *   patch:
+ *     summary: Activar o desactivar un usuario
+ *     tags: 
+ *       - Usuarios
+ *     security:
+ *       - bearerAuth: [] # Indica que esta ruta requiere autenticación
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del usuario
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               activo:
+ *                 type: boolean
+ *                 example: true
+ *     responses:
+ *       200:
+ *         description: Usuario activado o desactivado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                   example: Usuario activado correctamente
+ *                 usuario:
+ *                   $ref: '#/components/schemas/Usuario'
+ *       404:
+ *         description: Usuario no encontrado
+ *       500:
+ *         description: Error al actualizar el estado del usuario
+ */
+router.patch('/:id/activar', authMiddleware, adminMiddleware, UsuarioController.toggleActivation);
+
+/**
+ * @swagger
  * /api/usuarios/login:
  *   post:
  *     summary: Autenticar un usuario (login)
- *     tags: [Usuarios]
+ *     tags: 
+ *       - Usuarios
  *     requestBody:
  *       required: true
  *       content:
@@ -151,10 +199,10 @@ router.post('/registrar', UsuarioController.registrar);
  *             properties:
  *               correoOMovil:
  *                 type: string
- *                 example: juan@example.com
+ *                 example: enekoloko7@hotmail.com
  *               password:
  *                 type: string
- *                 example: 123456
+ *                 example: 1234
  *     responses:
  *       200:
  *         description: Autenticación exitosa
@@ -163,25 +211,30 @@ router.post('/registrar', UsuarioController.registrar);
  *             schema:
  *               type: object
  *               properties:
- *                 id:
+ *                 id_usuario:
  *                   type: integer
- *                   example: 1
+ *                   example: 6
  *                 nombre:
  *                   type: string
- *                   example: Juan
+ *                   example: eneko
  *                 correo:
  *                   type: string
- *                   example: juan@example.com
+ *                   example: enekoloko7@hotmail.com
  *                 rol:
  *                   type: string
  *                   example: usuario
  *                 movil:
  *                   type: string
- *                   example: 123456789
+ *                   example: 656656656
+ *                 token:
+ *                   type: string
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *       403:
+ *         description: El usuario no está activo. Contacta al administrador.
  *       401:
  *         description: Credenciales incorrectas
  *       500:
- *         description: Error al autenticar el usuario
+ *         description: Error al iniciar sesión
  */
 router.post('/login', UsuarioController.login);
 
@@ -246,9 +299,6 @@ router.post('/recuperar-password', UsuarioController.recuperarPassword);
  *               correo:
  *                 type: string
  *                 example: juan.perez@example.com
- *               password:
- *                 type: string
- *                 example: 654321
  *               rol:
  *                 type: string
  *                 example: admin
@@ -283,7 +333,7 @@ router.post('/recuperar-password', UsuarioController.recuperarPassword);
  *       500:
  *         description: Error al actualizar el usuario
  */
-router.put('/:id', UsuarioController.actualizar);
+router.put('/:id', authMiddleware, UsuarioController.actualizar); // Usuarios autenticados
 
 /**
  * @swagger
@@ -306,6 +356,6 @@ router.put('/:id', UsuarioController.actualizar);
  *       500:
  *         description: Error al eliminar el usuario
  */
-router.delete('/:id', UsuarioController.eliminar);
+router.delete('/:id', authMiddleware, adminMiddleware, UsuarioController.eliminar); // Solo administradores
 
 module.exports = router;
