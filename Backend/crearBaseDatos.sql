@@ -48,7 +48,7 @@ CREATE TABLE Proveedor (
     Movil VARCHAR(20),
     Correo VARCHAR(100),
     Metodo_Pago VARCHAR(100),
-    Frecuencia_Pedido_Aproximada VARCHAR(50) CHECK (Frecuencia_Pedido_Aproximada IN ('semanal', 'mensual', 'bimestral', 'trimestral', 'semestral')),
+    Frecuencia_Pedido_Aproximada VARCHAR(50) CHECK (Frecuencia_Pedido_Aproximada IN ('semanal', 'mensual', 'bimestral', 'trimestral', 'semestral', 'anual')),
     Envio_Movil BOOLEAN DEFAULT FALSE,
     Envio_Mail BOOLEAN DEFAULT TRUE,
     Activo BOOLEAN DEFAULT TRUE,

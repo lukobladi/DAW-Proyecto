@@ -1,8 +1,13 @@
 const pool = require('../db');
 
+const validFrecuencias = ['semanal', 'mensual', 'bimestral', 'trimestral', 'semestral', 'anual'];
+
 const Proveedor = {
   // Crear un nuevo proveedor con Fecha_Modificacion
   async create(nombre, contacto, telefono, movil, correo, metodo_pago, frecuencia_pedido_aproximada, envio_movil, envio_mail) {
+    if (!frecuencia_pedido_aproximada || !validFrecuencias.includes(frecuencia_pedido_aproximada)) {
+      throw new Error('Invalid frecuencia_pedido_aproximada value');
+    }
     const query = `
       INSERT INTO Proveedor (Nombre, Contacto, Telefono, Movil, Correo, Metodo_Pago, Frecuencia_Pedido_Aproximada, Envio_Movil, Envio_Mail, Fecha_Modificacion)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, CURRENT_TIMESTAMP)
@@ -29,6 +34,9 @@ const Proveedor = {
 
   // Actualizar un proveedor
   async update(id, nombre, contacto, telefono, movil, correo, metodo_pago, frecuencia_pedido_aproximada, envio_movil, envio_mail) {
+    if (!validFrecuencias.includes(frecuencia_pedido_aproximada)) {
+      throw new Error('Invalid frecuencia_pedido_aproximada value');
+    }
     const query = `
       UPDATE Proveedor
       SET Nombre = $1, Contacto = $2, Telefono = $3, Movil = $4, Correo = $5, Metodo_Pago = $6, Frecuencia_Pedido_Aproximada = $7, Envio_Movil = $8, Envio_Mail = $9, Fecha_Modificacion = CURRENT_TIMESTAMP
@@ -41,10 +49,10 @@ const Proveedor = {
   },
 
   // Eliminar un proveedor
-  // async delete(id) {
-  //   const query = 'DELETE FROM Proveedor WHERE ID_Proveedor = $1;';
-  //   await pool.query(query, [id]);
-  // },
+  async delete(id) {
+    const query = 'DELETE FROM Proveedor WHERE ID_Proveedor = $1;';
+    await pool.query(query, [id]);
+  },
 
   // Cambiar el estado activo/inactivo de un proveedor
   async toggleActiveStatus(id, isActive) {

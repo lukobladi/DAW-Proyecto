@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
+    "bootstrap": "^5.3.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
@@ -11,5 +12,12 @@
     "pg": "^8.14.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.1.0"
+  },
+  "scripts": {
+    "start": "node index.js"
   }
 }

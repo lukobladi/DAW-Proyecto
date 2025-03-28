@@ -2,78 +2,113 @@ const Proveedor = require('../../models/Proveedor');
 const pool = require('../../db');
 
 describe('Proveedor Model', () => {
-  let proveedorId; // Para almacenar el ID del proveedor creado
+  let proveedorId;
   const proveedorData = {
-    nombre: 'Proveedor Ejemplo',
-    direccion: 'Calle Falsa 123',
+    nombre: 'Test Proveedor',
+    contacto: 'Juan Pérez',
     telefono: '123456789',
-    email: 'proveedor@ejemplo.com',
+    movil: '987654321',
+    correo: 'test.proveedor@example.com',
+    metodo_pago: 'Transferencia',
+    frecuencia_pedido_aproximada: 'semanal',
+    envio_movil: true,
+    envio_mail: true,
   };
 
-  afterAll(async () => {
-    await pool.end(); // Cierra la conexión a la base de datos después de las pruebas
+  beforeEach(async () => {
+    const nuevoProveedor = await Proveedor.create(
+      proveedorData.nombre,
+      proveedorData.contacto,
+      proveedorData.telefono,
+      proveedorData.movil,
+      proveedorData.correo,
+      proveedorData.metodo_pago,
+      proveedorData.frecuencia_pedido_aproximada,
+      proveedorData.envio_movil,
+      proveedorData.envio_mail
+    );
+    proveedorId = nuevoProveedor.id_proveedor;
   });
 
   afterEach(async () => {
-    // Limpiar los proveedores creados durante los tests
-    await pool.query('DELETE FROM proveedor WHERE nombre = $1', ['Proveedor Ejemplo']);
-    const proveedores = await Proveedor.findAll();
-    expect(proveedores.filter(p => p.nombre === 'Proveedor Ejemplo')).toHaveLength(0); // Validar que no queden registros
-  });
-
-  it('Debería crear un nuevo proveedor', async () => {
-    const nuevoProveedor = await Proveedor.create(
-      proveedorData.nombre,
-      proveedorData.direccion,
-      proveedorData.telefono,
-      proveedorData.email
-    );
-    expect(nuevoProveedor).toHaveProperty('id_proveedor');
-    proveedorId = nuevoProveedor.id_proveedor; // Guardar el ID del proveedor creado
-  });
-
-  it('Debería obtener todos los proveedores', async () => {
-    const proveedores = await Proveedor.findAll();
-    expect(proveedores).toBeInstanceOf(Array);
-    if (proveedores.length > 0) {
-      expect(proveedores[0]).toHaveProperty('id_proveedor');
-      expect(proveedores[0]).toHaveProperty('nombre');
+    if (proveedorId) {
+      await Proveedor.delete(proveedorId);
+      proveedorId = null;
     }
   });
 
-  it('Debería obtener un proveedor por ID', async () => {
+  afterAll(async () => {
+    await pool.end(); // Ensure pool is closed to prevent open handles
+  });
+
+  it('should create a new provider', async () => {
+    const nuevoProveedor = await Proveedor.create(
+      'Nuevo Proveedor',
+      'Maria López',
+      '111222333',
+      '444555666',
+      'nuevo.proveedor@example.com',
+      'Efectivo',
+      'mensual',
+      false,
+      true
+    );
+    expect(nuevoProveedor).toHaveProperty('id_proveedor');
+    await Proveedor.delete(nuevoProveedor.id_proveedor); // Clean up
+  });
+
+  it('should retrieve all providers', async () => {
+    const proveedores = await Proveedor.findAll();
+    expect(proveedores).toBeInstanceOf(Array);
+    expect(proveedores.length).toBeGreaterThan(0);
+  });
+
+  it('should retrieve a provider by ID', async () => {
     const proveedor = await Proveedor.findById(proveedorId);
+    expect(proveedor).not.toBeNull();
     expect(proveedor).toHaveProperty('id_proveedor', proveedorId);
   });
 
-  it('Debería actualizar un proveedor', async () => {
-    const proveedorActualizado = await Proveedor.update(
+  it('should update a provider', async () => {
+    const updatedProveedor = await Proveedor.update(
       proveedorId,
       'Proveedor Actualizado',
-      proveedorData.direccion,
-      proveedorData.telefono,
-      proveedorData.email
+      'Carlos Gómez',
+      '999888777',
+      '666555444',
+      'actualizado.proveedor@example.com',
+      'Cheque',
+      'mensual',
+      true,
+      false
     );
-    expect(proveedorActualizado).toHaveProperty('nombre', 'Proveedor Actualizado');
+    expect(updatedProveedor).not.toBeNull();
+    expect(updatedProveedor).toHaveProperty('nombre', 'Proveedor Actualizado');
   });
 
-  it('Debería eliminar un proveedor', async () => {
-    await Proveedor.delete(proveedorId);
-    const proveedor = await Proveedor.findById(proveedorId);
+  it('should toggle the active status of a provider', async () => {
+    const proveedorInactivo = await Proveedor.toggleActiveStatus(proveedorId, false);
+    expect(proveedorInactivo).toHaveProperty('activo', false);
+
+    const proveedorActivo = await Proveedor.toggleActiveStatus(proveedorId, true);
+    expect(proveedorActivo).toHaveProperty('activo', true);
+  });
+
+  it('should delete a provider', async () => {
+    const nuevoProveedor = await Proveedor.create(
+      'Proveedor a Eliminar',
+      'Luis Martínez',
+      '123123123',
+      '321321321',
+      'eliminar.proveedor@example.com',
+      'Tarjeta',
+      'semanal',
+      true,
+      false
+    );
+    const deletedProveedor = await Proveedor.delete(nuevoProveedor.id_proveedor);
+    expect(deletedProveedor).toBeUndefined(); // No return value expected
+    const proveedor = await Proveedor.findById(nuevoProveedor.id_proveedor);
     expect(proveedor).toBeUndefined();
   });
-
-  it('Debería manejar un caso de error al eliminar un proveedor inexistente', async () => {
-    try {
-      await Proveedor.delete(9999); // ID inexistente
-    } catch (error) {
-      expect(error).toBeDefined();
-    }
-  });
-});
-
-
-// Cerrar conexiones
-afterAll(async () => {
-  await pool.end(); // Cierra la conexión a la base de datos
 });

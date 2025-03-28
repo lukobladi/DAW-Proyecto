@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt'); // Importar bcrypt
+const bcrypt = require('bcryptjs'); // Reemplazar bcrypt con bcryptjs
 const pool = require('../db');
 
 const Usuario = {
@@ -55,7 +55,7 @@ const Usuario = {
   async findById(id) {
     const query = 'SELECT * FROM Usuario WHERE ID_Usuario = $1;';
     const { rows } = await pool.query(query, [id]);
-    return rows[0];
+    return rows.length > 0 ? rows[0] : null; // Return null if no user is found
   },
 
   // Actualizar un usuario
@@ -68,7 +68,7 @@ const Usuario = {
     `;
     const values = [id, nombre, correo, rol, movil];
     const { rows } = await pool.query(query, values);
-    return rows[0];
+    return rows.length > 0 ? rows[0] : null; // Return null if no user is updated
   },
 
   // Actualizar la contraseña de un usuario
@@ -85,10 +85,11 @@ const Usuario = {
   },
 
   // Eliminar un usuario
-  // async delete(id) {
-  //   const query = 'DELETE FROM Usuario WHERE ID_Usuario = $1;';
-  //   await pool.query(query, [id]);
-  // },
+  async delete(id) {
+    const query = 'DELETE FROM Usuario WHERE ID_Usuario = $1 RETURNING *;';
+    const { rows } = await pool.query(query, [id]);
+    return rows.length > 0 ? rows[0] : null; // Return null if no user was deleted
+  },
 
   async calcularSaldo(id_usuario) {
     const query = `
@@ -96,8 +97,8 @@ const Usuario = {
       FROM Pago
       WHERE ID_Usuario_Deudor = $1 AND Estado = 'pendiente';
     `;
-    const { rows } = await db.query(query, [id_usuario]);
-    return rows[0].saldo || 0;
+    const { rows } = await pool.query(query, [id_usuario]); // Cambiar db.query a pool.query
+    return parseFloat(rows[0].saldo) || 0; // Convertir a número
   }
 };
 

@@ -1,7 +1,7 @@
 const Usuario = require('../models/Usuario');
 const emailService = require('../services/emailService');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const SECRET_KEY = process.env.JWT_SECRET; // Use the environment variable for the secret key
 
 const UsuarioController = {

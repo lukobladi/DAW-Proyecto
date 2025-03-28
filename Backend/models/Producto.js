@@ -53,10 +53,10 @@ const Producto = {
   },
 
   // Eliminar un producto
-  // async delete(id) {
-  //   const query = 'DELETE FROM Producto WHERE id_producto = $1;';
-  //   await pool.query(query, [id]);
-  // },
+  async delete(id) {
+    const query = 'DELETE FROM Producto WHERE ID_Producto = $1;';
+    await pool.query(query, [id]);
+  },
 };
 
 module.exports = Producto;

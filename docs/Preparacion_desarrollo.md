@@ -255,8 +255,7 @@ npm install swagger-jsdoc swagger-ui-express
 5. Instala paquetes y librerias:
    ```bash
 
-    npm install express cors express-validator nodemailer multer bcrypt jsonwebtoken dotenv pg swagger-jsdoc swagger-ui-express bootstrap 
-
+    npm install express cors express-validator nodemailer multer bcryptjs jsonwebtoken dotenv pg swagger-jsdoc swagger-ui-express bootstrap 
 
    ```
 

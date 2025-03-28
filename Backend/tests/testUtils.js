@@ -1,7 +1,7 @@
 const request = require('supertest');
 const pool = require('../db'); // Importa la conexión a la base de datos
 const app = require('../index'); // Importa la app
-const bcrypt = require('bcrypt'); // Add bcrypt for password hashing
+const bcrypt = require('bcryptjs'); // Add bcrypt for password hashing
 const jwt = require('jsonwebtoken'); // Ensure JWT is imported
 
 let token; // Variable para almacenar el token de autenticación

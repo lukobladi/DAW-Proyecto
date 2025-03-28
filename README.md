@@ -305,7 +305,7 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
   - **dotenv**: Para gestionar variables de entorno, como credenciales de la base de datos.
   - **multer**: Para manejar la subida de archivos, como las imágenes de los productos.
   - **nodemailer**: Permite enviar emails mediante diferentes servicios de correo.
-  - **bcrypt**: Permite almacenar las contraseñas de forma segura mediante hashing.
+  - **bcryptjs**: Permite almacenar las contraseñas de forma segura mediante hashing.
   - **jsonwebtoken (JWT)**: Permite generar y verificar tokens JWT (JSON Web Tokens) para implementar autenticación y autorización seguras.
   - **Jest**: Framework de pruebas para JavaScript.
   - **Supertest**: Herramienta para realizar pruebas de endpoints HTTP.
