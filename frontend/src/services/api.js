@@ -28,6 +28,16 @@ export default {
   registrar(data) {
     return apiClient.post('/usuarios/registrar', data);
   },
+  getUsuarios() {
+    return apiClient.get('/usuarios/obtenerTodos');
+  },
+  actualizarUsuario(id, data) {
+    return apiClient.put(`/usuarios/actualizar/${id}`, data);
+  },
+  eliminarUsuario(id) {
+    return apiClient.delete(`/usuarios/eliminar/${id}`);
+  },
+
 
 
 
@@ -37,9 +47,6 @@ export default {
 
   
   // Ejemplo de métodos para interactuar con la API
-  getUsuarios() {
-    return apiClient.get('/usuarios');
-  },
   getProductos() {
     return apiClient.get('/productos');
   },

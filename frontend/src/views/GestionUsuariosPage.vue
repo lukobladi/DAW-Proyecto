@@ -101,6 +101,8 @@
 
 
 <script>
+import api from '@/services/api';
+import { alertStore } from '@/store/alertStore';
 
 export default {
   data() {
@@ -115,33 +117,49 @@ export default {
         activo: true,
         saldo: 0.0,
       },
-      usuarios: [
-        {
-          id: 1,
-          nombre: 'Juan Pérez',
-          correo: 'juan@example.com',
-          movil: '622019870',
-          rol: 'admin',
-          activo: true,
-          saldo: 100.0,
-          ultimoPedido: '2023-10-01',
-          proveedores: ['Frutas Frescas S.L.', 'Carnes Selectas'],
-        },
-        {
-          id: 2,
-          nombre: 'Ana Gómez',
-          correo: 'ana.gomez@example.com',
-          movil: '600654321',
-          rol: 'usuario',
-          activo: false,
-          saldo: 50.0,
-          ultimoPedido: '2023-09-25',
-          proveedores: ['Bebidas del Norte'],
-        },
-      ],
+      usuarios: [],
     };
   },
   methods: {
+    async fetchUsuarios() {
+      try {
+        const response = await api.getUsuarios();
+        this.usuarios = response.data;
+      } catch (error) {
+        console.error('Error al obtener usuarios:', error);
+        alertStore.showAlert('Error al obtener usuarios. Inténtalo más tarde.', 'danger');
+      }
+    },
+    async guardarUsuario() {
+      try {
+        if (this.modoEdicion) {
+          await api.actualizarUsuario(this.nuevoUsuario.id, this.nuevoUsuario);
+          alertStore.showAlert('Usuario actualizado correctamente.', 'success');
+        } else {
+          await api.registrar(this.nuevoUsuario);
+          alertStore.showAlert('Usuario añadido correctamente.', 'success');
+        }
+        this.fetchUsuarios();
+        const modal = window.bootstrap.Modal.getInstance(document.getElementById('addUserModal'));
+        modal.hide();
+      } catch (error) {
+        console.error('Error al guardar usuario:', error);
+        alertStore.showAlert('Error al guardar usuario. Inténtalo más tarde.', 'danger');
+      }
+    },
+    async eliminarUsuario(usuarioId) {
+      const confirmacion = confirm('¿Estás seguro de que deseas eliminar este usuario?');
+      if (!confirmacion) return;
+
+      try {
+        await api.eliminarUsuario(usuarioId);
+        alertStore.showAlert('Usuario eliminado correctamente.', 'success');
+        this.fetchUsuarios();
+      } catch (error) {
+        console.error('Error al eliminar usuario:', error);
+        alertStore.showAlert('Error al eliminar usuario. Inténtalo más tarde.', 'danger');
+      }
+    },
     abrirModal(edicion, usuario = null) {
       this.modoEdicion = edicion;
       if (edicion && usuario) {
@@ -162,28 +180,9 @@ export default {
       const modal = new window.bootstrap.Modal(document.getElementById('addUserModal'));
       modal.show();
     },
-    guardarUsuario() {
-      if (this.modoEdicion) {
-        // Actualizar el usuario existente
-        const index = this.usuarios.findIndex((u) => u.id === this.nuevoUsuario.id);
-        if (index !== -1) {
-          this.usuarios.splice(index, 1, { ...this.nuevoUsuario });
-        }
-      } else {
-        // Añadir un nuevo usuario
-        const nuevoId = this.usuarios.length ? Math.max(...this.usuarios.map((u) => u.id)) + 1 : 1;
-        this.usuarios.push({ id: nuevoId, ...this.nuevoUsuario });
-      }
-      // Cerrar el modal
-      const modal = window.bootstrap.Modal.getInstance(document.getElementById('addUserModal'));
-      modal.hide();
-    },
-    eliminarUsuario(usuarioId) {
-      const confirmacion = confirm('¿Estás seguro de que deseas eliminar este usuario?');
-      if (confirmacion) {
-        this.usuarios = this.usuarios.filter((usuario) => usuario.id !== usuarioId);
-      }
-    },
+  },
+  mounted() {
+    this.fetchUsuarios();
   },
 };
 </script>
