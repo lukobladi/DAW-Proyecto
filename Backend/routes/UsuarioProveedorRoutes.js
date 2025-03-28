@@ -12,7 +12,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/usuario-proveedor:
+ * /api/usuario-proveedor/crear:
  *   post:
  *     summary: Crear una nueva relación entre usuario y proveedor
  *     tags: [UsuarioProveedor]
@@ -46,11 +46,11 @@ const router = express.Router();
  *       500:
  *         description: Error del servidor
  */
-router.post('/', UsuarioProveedorController.crearRelacion);
+router.post('/crear', UsuarioProveedorController.crearRelacion);
 
 /**
  * @swagger
- * /api/usuario-proveedor/usuario/{id_usuario}:
+ * /api/usuario-proveedor/obtenerProveedoresUsuario/{id_usuario}:
  *   get:
  *     summary: Obtener todas las relaciones de un usuario
  *     tags: [UsuarioProveedor]
@@ -80,7 +80,41 @@ router.post('/', UsuarioProveedorController.crearRelacion);
  *       500:
  *         description: Error del servidor
  */
-router.get('/usuario/:id_usuario', UsuarioProveedorController.obtenerRelacionesPorUsuario);
+router.get('/obtenerProveedoresUsuario/:id_usuario', UsuarioProveedorController.obtenerRelacionesPorUsuario);
+
+/**
+ * @swagger
+ * /api/usuario-proveedor/obtenerUsuariosProveedor/{id_proveedor}:
+ *   get:
+ *     summary: Obtener todas las relaciones de un proveedor
+ *     tags: [UsuarioProveedor]
+ *     parameters:
+ *       - in: path
+ *         name: id_proveedor
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         example: 1
+ *     responses:
+ *       200:
+ *         description: Lista de relaciones del proveedor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id_usuario:
+ *                     type: integer
+ *                     example: 1
+ *                   id_proveedor:
+ *                     type: integer
+ *                     example: 1
+ *       500:
+ *         description: Error del servidor
+ */
+router.get('/obtenerUsuariosProveedor/:id_proveedor', UsuarioProveedorController.obtenerRelacionesPorProveedor);
 
 /**
  * @swagger

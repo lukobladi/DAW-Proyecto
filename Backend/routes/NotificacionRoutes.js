@@ -12,7 +12,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/notificaciones:
+ * /api/notificaciones/enviar:
  *   post:
  *     summary: Enviar una notificación
  *     tags: [Notificaciones]
@@ -56,11 +56,11 @@ const router = express.Router();
  *       500:
  *         description: Error al enviar la notificación
  */
-router.post('/', NotificacionController.enviar);
+router.post('/enviar/', NotificacionController.enviar);
 
 /**
  * @swagger
- * /api/notificaciones/{id}/marcar-leida:
+ * /api/notificaciones/marcar-leida/{id}:
  *   put:
  *     summary: Marcar una notificación como leída
  *     tags: [Notificaciones]
@@ -100,6 +100,6 @@ router.post('/', NotificacionController.enviar);
  *       500:
  *         description: Error al marcar la notificación como leída
  */
-router.put('/:id/marcar-leida', NotificacionController.marcarLeida);
+router.put('/marcar-leida/:id', NotificacionController.marcarLeida);
 
 module.exports = router;

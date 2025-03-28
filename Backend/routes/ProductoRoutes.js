@@ -13,7 +13,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/productos:
+ * /api/productos/crear:
  *   post:
  *     summary: Crear un nuevo producto
  *     tags: [Productos]
@@ -70,11 +70,11 @@ const router = express.Router();
  *       500:
  *         description: Error al crear el producto
  */
-router.post('/', upload.single('imagen'), ProductoController.crear);
+router.post('/crear', upload.single('imagen'), ProductoController.crear);
 
 /**
  * @swagger
- * /api/productos:
+ * /api/productos/obtenerTodos:
  *   get:
  *     summary: Obtener todos los productos
  *     tags: [Productos]
@@ -110,11 +110,11 @@ router.post('/', upload.single('imagen'), ProductoController.crear);
  *       500:
  *         description: Error al obtener los productos
  */
-router.get('/', ProductoController.listar);
+router.get('/obtenerTodos', ProductoController.listar);
 
 /**
  * @swagger
- * /api/productos/{id}:
+ * /api/productos/obtener/{id}:
  *   get:
  *     summary: Obtener un producto por ID
  *     tags: [Productos]
@@ -157,11 +157,11 @@ router.get('/', ProductoController.listar);
  *       500:
  *         description: Error al obtener el producto
  */
-router.get('/:id', ProductoController.obtenerPorId);
+router.get('/obtener/:id', ProductoController.obtenerPorId);
 
 /**
  * @swagger
- * /api/productos/{id}:
+ * /api/productos/actualizar/{id}:
  *   put:
  *     summary: Actualizar un producto
  *     tags: [Productos]
@@ -227,7 +227,7 @@ router.get('/:id', ProductoController.obtenerPorId);
  *       500:
  *         description: Error al actualizar el producto
  */
-router.put('/:id', upload.single('imagen'), ProductoController.actualizar);
+router.put('/actualizar/:id', upload.single('imagen'), ProductoController.actualizar);
 
 /**
  * @swagger
@@ -250,6 +250,6 @@ router.put('/:id', upload.single('imagen'), ProductoController.actualizar);
  *       500:
  *         description: Error al eliminar el producto
  */
-router.delete('/:id', ProductoController.eliminar);
+router.delete('/eliminar/:id', ProductoController.eliminar);
 
 module.exports = router;

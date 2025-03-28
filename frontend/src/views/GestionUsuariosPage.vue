@@ -1,79 +1,296 @@
 <template>
   <div class="gestion-usuarios-page">
-    <NavBar />
-    <div class="gestion-usuarios-content">
-      <h2>Gestión de Usuarios</h2>
-      <button @click="añadirUsuario" class="btn btn-primary">Añadir Usuario</button>
+
+    <div class="gestion-usuarios-container">
+      <div class="gestion-usuarios-header">
+        <h2>Gestión de Usuarios</h2>
+        <button @click="abrirModal(false)" class="btn btn-primary">Añadir Usuario</button>
+      </div>
       <div class="lista-usuarios">
-        <div v-for="usuario in usuarios" :key="usuario.id" class="usuario-card">
-          <h3>{{ usuario.nombre }}</h3>
-          <p>Correo: {{ usuario.correo }}</p>
-          <p>Estado: {{ usuario.activo ? 'Activo' : 'Inactivo' }}</p>
-          <button @click="editarUsuario(usuario.id)" class="btn btn-secondary">Editar</button>
-          <button @click="eliminarUsuario(usuario.id)" class="btn btn-danger">Eliminar</button>
+        <table class="usuarios-table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Correo</th>
+              <th>Móvil</th>
+              <th>Rol</th>
+              <th>Estado</th>
+              <th>Saldo</th>
+              <th>Último pedido</th>
+              <th>Proveedores Asignados</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="usuario in usuarios" :key="usuario.id">
+              <td>{{ usuario.nombre }}</td>
+              <td>{{ usuario.correo }}</td>
+              <td>{{ usuario.movil }}</td>
+              <td>{{ usuario.rol }}</td>
+              <td>{{ usuario.activo ? 'Activo' : 'Inactivo' }}</td>
+              <td>{{ usuario.saldo.toFixed(2) }} €</td>
+              <td>{{ usuario.ultimoPedido }}</td>
+              <td>
+                <ul>
+                  <li v-for="proveedor in usuario.proveedores" :key="proveedor">{{ proveedor }}</li>
+                </ul>
+              </td>
+              <td >
+                  <button type="button" class="btn btn-primary"><i class="far fa-eye"></i></button>
+                  <button @click="abrirModal(true, usuario)"  type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>
+              <button  @click="eliminarUsuario(usuario.id)"  type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Modal para añadir o editar usuario -->
+    <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addUserModalLabel">
+              {{ modoEdicion ? 'Editar Usuario' : 'Añadir Usuario' }}
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form @submit.prevent="guardarUsuario">
+              <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input v-model="nuevoUsuario.nombre" type="text" class="form-control" id="nombre" required />
+              </div>
+              <div class="mb-3">
+                <label for="correo" class="form-label">Correo</label>
+                <input v-model="nuevoUsuario.correo" type="email" class="form-control" id="correo" required />
+              </div>
+              <div class="mb-3">
+                <label for="movil" class="form-label">Móvil</label>
+                <input v-model="nuevoUsuario.movil" type="text" class="form-control" id="movil" required />
+              </div>
+              <div class="mb-3">
+                <label for="rol" class="form-label">Rol</label>
+                <select v-model="nuevoUsuario.rol" class="form-select" id="rol" required>
+                  <option value="admin">Admin</option>
+                  <option value="usuario">Usuario</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="activo" class="form-label">Estado</label>
+                <select v-model="nuevoUsuario.activo" class="form-select" id="activo" required>
+                  <option :value="true">Activo</option>
+                  <option :value="false">Inactivo</option>
+                </select>
+              </div>
+
+              <button type="submit" class="btn btn-primary">
+                {{ modoEdicion ? 'Guardar Cambios' : 'Añadir Usuario' }}
+              </button>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          </div>
         </div>
       </div>
     </div>
-    <Footer />
   </div>
 </template>
+
 
 <script>
 
 export default {
-
   data() {
     return {
+      modoEdicion: false, // Indica si el modal está en modo edición
+      usuarioSeleccionado: null, // Usuario que se está editando
+      nuevoUsuario: {
+        nombre: '',
+        correo: '',
+        movil: '',
+        rol: 'usuario',
+        activo: true,
+        saldo: 0.0,
+      },
       usuarios: [
-        // Ejemplo de datos de usuarios
-        { id: 1, nombre: 'Juan Pérez', correo: 'juan@example.com', activo: true },
-        { id: 2, nombre: 'Ana Gómez', correo: 'ana@example.com', activo: false }
-      ]
+        {
+          id: 1,
+          nombre: 'Juan Pérez',
+          correo: 'juan@example.com',
+          movil: '622019870',
+          rol: 'admin',
+          activo: true,
+          saldo: 100.0,
+          ultimoPedido: '2023-10-01',
+          proveedores: ['Frutas Frescas S.L.', 'Carnes Selectas'],
+        },
+        {
+          id: 2,
+          nombre: 'Ana Gómez',
+          correo: 'ana.gomez@example.com',
+          movil: '600654321',
+          rol: 'usuario',
+          activo: false,
+          saldo: 50.0,
+          ultimoPedido: '2023-09-25',
+          proveedores: ['Bebidas del Norte'],
+        },
+      ],
     };
   },
   methods: {
-    añadirUsuario() {
-      // Lógica para añadir un nuevo usuario
-      console.log('Añadiendo usuario...');
+    abrirModal(edicion, usuario = null) {
+      this.modoEdicion = edicion;
+      if (edicion && usuario) {
+        // Cargar datos del usuario en el formulario
+        this.nuevoUsuario = { ...usuario };
+      } else {
+        // Resetear el formulario para añadir un nuevo usuario
+        this.nuevoUsuario = {
+          nombre: '',
+          correo: '',
+          movil: '',
+          rol: 'usuario',
+          activo: true,
+          saldo: 0.0,
+        };
+      }
+      // Abrir el modal
+      const modal = new window.bootstrap.Modal(document.getElementById('addUserModal'));
+      modal.show();
     },
-    editarUsuario(usuarioId) {
-      // Lógica para editar un usuario
-      console.log('Editando usuario:', usuarioId);
+    guardarUsuario() {
+      if (this.modoEdicion) {
+        // Actualizar el usuario existente
+        const index = this.usuarios.findIndex((u) => u.id === this.nuevoUsuario.id);
+        if (index !== -1) {
+          this.usuarios.splice(index, 1, { ...this.nuevoUsuario });
+        }
+      } else {
+        // Añadir un nuevo usuario
+        const nuevoId = this.usuarios.length ? Math.max(...this.usuarios.map((u) => u.id)) + 1 : 1;
+        this.usuarios.push({ id: nuevoId, ...this.nuevoUsuario });
+      }
+      // Cerrar el modal
+      const modal = window.bootstrap.Modal.getInstance(document.getElementById('addUserModal'));
+      modal.hide();
     },
     eliminarUsuario(usuarioId) {
-      // Lógica para eliminar un usuario
-      console.log('Eliminando usuario:', usuarioId);
-    }
-  }
+      const confirmacion = confirm('¿Estás seguro de que deseas eliminar este usuario?');
+      if (confirmacion) {
+        this.usuarios = this.usuarios.filter((usuario) => usuario.id !== usuarioId);
+      }
+    },
+  },
 };
 </script>
 
 <style scoped>
+
+/* Estilo general de la página */
 .gestion-usuarios-page {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background: #f9f9f9; /* Fondo claro */
+  color: #333333; /* Color de texto */
 }
 
-.gestion-usuarios-content {
-  flex: 1;
+/* Contenedor principal */
+.gestion-usuarios-container {
+  width: 100%;
+  max-width: 1200px;
+
   padding: 2rem;
+  background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semitransparente */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
 }
 
-.lista-usuarios {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
+/* Encabezado */
+.gestion-usuarios-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
-.usuario-card {
-  border: 1px solid #ccc;
-  padding: 1rem;
-  border-radius: 8px;
+.gestion-usuarios-header h2 {
+  font-size: 2rem;
+  color: #4CAF50; /* Verde primario */
 }
 
-.btn {
+/* Tabla de usuarios */
+.usuarios-table {
+  width: 100%;
+  border-collapse: collapse;
   margin-top: 1rem;
-  margin-right: 0.5rem;
 }
+
+.usuarios-table th,
+.usuarios-table td {
+  border: 1px solid #e0e0e0;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.usuarios-table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+.usuarios-table td ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.usuarios-table td ul li {
+  margin: 0;
+  padding: 0;
+}
+
+/* Botones */
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #FF9800; /* Naranja */
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #E68900; /* Naranja más oscuro */
+}
+
+.btn-secondary {
+  background-color: #007BFF; /* Azul */
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #0056b3; /* Azul más oscuro */
+}
+
+.btn-danger {
+  background-color: #DC3545; /* Rojo */
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #a71d2a; /* Rojo más oscuro */
+}
+
+ 
+
 </style>

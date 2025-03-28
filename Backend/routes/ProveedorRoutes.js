@@ -12,7 +12,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/proveedores:
+ * /api/proveedores/crear:
  *   post:
  *     summary: Crear un nuevo proveedor
  *     tags: [Proveedores]
@@ -61,11 +61,11 @@ const router = express.Router();
  *       500:
  *         description: Error al crear el proveedor
  */
-router.post('/', ProveedorController.crear);
+router.post('/crear', ProveedorController.crear);
 
 /**
  * @swagger
- * /api/proveedores:
+ * /api/proveedores/obtenerTodos:
  *   get:
  *     summary: Obtener todos los proveedores
  *     tags: [Proveedores]
@@ -97,11 +97,11 @@ router.post('/', ProveedorController.crear);
  *       500:
  *         description: Error al obtener los proveedores
  */
-router.get('/', ProveedorController.listar);
+router.get('/obtenerTodos', ProveedorController.listar);
 
 /**
  * @swagger
- * /api/proveedores/{id}:
+ * /api/proveedores/obtener/{id}:
  *   get:
  *     summary: Obtener un proveedor por ID
  *     tags: [Proveedores]
@@ -140,11 +140,11 @@ router.get('/', ProveedorController.listar);
  *       500:
  *         description: Error al obtener el proveedor
  */
-router.get('/:id', ProveedorController.obtenerPorId);
+router.get('/obtener/:id', ProveedorController.obtenerPorId);
 
 /**
  * @swagger
- * /api/proveedores/{id}:
+ * /api/proveedores/actualizar/{id}:
  *   put:
  *     summary: Actualizar un proveedor
  *     tags: [Proveedores]
@@ -202,11 +202,11 @@ router.get('/:id', ProveedorController.obtenerPorId);
  *       500:
  *         description: Error al actualizar el proveedor
  */
-router.put('/:id', ProveedorController.actualizar);
+router.put('/actualizar/:id', ProveedorController.actualizar);
 
 /**
  * @swagger
- * /api/proveedores/{id}:
+ * /api/proveedores/eliminar/{id}:
  *   delete:
  *     summary: Eliminar un proveedor
  *     tags: [Proveedores]
@@ -225,6 +225,6 @@ router.put('/:id', ProveedorController.actualizar);
  *       500:
  *         description: Error al eliminar el proveedor
  */
-router.delete('/:id', ProveedorController.eliminar);
+router.delete('/eliminar/:id', ProveedorController.eliminar);
 
 module.exports = router;

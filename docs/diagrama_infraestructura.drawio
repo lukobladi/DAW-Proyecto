@@ -1,0 +1,72 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64; rv:136.0) Gecko/20100101 Firefox/136.0" version="26.1.3">
+  <diagram name="Página-1" id="AKp2szD8FXiZ9ifqf1pR">
+    <mxGraphModel dx="1434" dy="1848" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="wMPOvVGwrKvJ22NSE2A--1" value="Vuex" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.database;whiteSpace=wrap;" parent="1" vertex="1">
+          <mxGeometry x="120" y="123" width="80" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="wMPOvVGwrKvJ22NSE2A--4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="wMPOvVGwrKvJ22NSE2A--2" target="wMPOvVGwrKvJ22NSE2A--1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wMPOvVGwrKvJ22NSE2A--13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="wMPOvVGwrKvJ22NSE2A--2" target="wMPOvVGwrKvJ22NSE2A--10" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="480" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wMPOvVGwrKvJ22NSE2A--2" value="" style="verticalLabelPosition=bottom;aspect=fixed;html=1;shape=mxgraph.salesforce.web;" parent="1" vertex="1">
+          <mxGeometry x="240.88" y="137.5" width="158.23" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="wMPOvVGwrKvJ22NSE2A--5" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;&lt;b&gt;&lt;u&gt;Frontend&lt;/u&gt;&lt;/b&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="290" y="90" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="wMPOvVGwrKvJ22NSE2A--8" value="&lt;span style=&quot;color: rgb(255, 0, 0);&quot;&gt;&lt;span style=&quot;color: rgb(255, 0, 0);&quot;&gt;&lt;font style=&quot;font-size: 20px;&quot;&gt;VUE.js&lt;br&gt;Bootstrap&lt;/font&gt;&lt;/span&gt;&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="250" y="150" width="90" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="wMPOvVGwrKvJ22NSE2A--21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="wMPOvVGwrKvJ22NSE2A--10" target="wMPOvVGwrKvJ22NSE2A--20" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wMPOvVGwrKvJ22NSE2A--10" value="" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;fontColor=#4277BB;labelBackgroundColor=default;fontSize=12;spacingTop=3;image=img/lib/ibm/infrastructure/mobile_backend.svg;" parent="1" vertex="1">
+          <mxGeometry x="515" y="140" width="131" height="131" as="geometry" />
+        </mxCell>
+        <mxCell id="wMPOvVGwrKvJ22NSE2A--11" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;&lt;b&gt;&lt;u&gt;Backend&lt;/u&gt;&lt;/b&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="556" y="90" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="wMPOvVGwrKvJ22NSE2A--12" value="&lt;b&gt;&lt;font style=&quot;font-size: 14px; color: rgb(255, 255, 255);&quot;&gt;Express&lt;/font&gt;&lt;/b&gt;&lt;div&gt;&lt;b&gt;&lt;font style=&quot;font-size: 14px; color: rgb(255, 255, 255);&quot;&gt; &lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;b&gt;&lt;font style=&quot;font-size: 14px; color: rgb(255, 255, 255);&quot;&gt;&lt;br&gt;Swagger&lt;/font&gt;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;glass=0;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="552" y="139" width="60" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="wMPOvVGwrKvJ22NSE2A--14" value="" style="sketch=0;html=1;aspect=fixed;strokeColor=none;shadow=0;fillColor=#3B8DF1;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;shape=mxgraph.gcp2.lock" parent="1" vertex="1">
+          <mxGeometry x="455" y="170" width="39" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="wMPOvVGwrKvJ22NSE2A--16" value="JWT" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="443" y="210" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="wMPOvVGwrKvJ22NSE2A--17" value="Axios" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="387" y="176" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="wMPOvVGwrKvJ22NSE2A--18" value="Mailer" style="shape=mxgraph.signs.tech.mail;html=1;pointerEvents=1;fillColor=#000000;strokeColor=none;verticalLabelPosition=bottom;verticalAlign=top;align=center;" parent="1" vertex="1">
+          <mxGeometry x="730" y="80" width="70" height="49" as="geometry" />
+        </mxCell>
+        <mxCell id="wMPOvVGwrKvJ22NSE2A--20" value="Multer" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3D;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.folder;" parent="1" vertex="1">
+          <mxGeometry x="730" y="190" width="54.93" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="wMPOvVGwrKvJ22NSE2A--22" value="PostgreSQL" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.database;whiteSpace=wrap;" parent="1" vertex="1">
+          <mxGeometry x="724.5" y="280" width="75.5" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="wMPOvVGwrKvJ22NSE2A--23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="wMPOvVGwrKvJ22NSE2A--10" target="wMPOvVGwrKvJ22NSE2A--22" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wMPOvVGwrKvJ22NSE2A--24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="wMPOvVGwrKvJ22NSE2A--10" target="wMPOvVGwrKvJ22NSE2A--18" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="J4z7ShaNFjMMkxp0RQtu-1" value="LocalStorage" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.database;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="120" y="193" width="80" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="J4z7ShaNFjMMkxp0RQtu-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="wMPOvVGwrKvJ22NSE2A--2" target="J4z7ShaNFjMMkxp0RQtu-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

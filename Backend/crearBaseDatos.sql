@@ -66,6 +66,7 @@ CREATE TABLE Pedido (
     ID_Pedido SERIAL PRIMARY KEY,
     ID_Usuario_Encargado INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
     ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
+    Fecha_Modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Fecha_Apertura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Fecha_Cierre TIMESTAMP,
     Fecha_Entrega TIMESTAMP,
@@ -78,7 +79,8 @@ CREATE TABLE Detalle_Pedido (
     ID_Producto INT REFERENCES Producto(ID_Producto) ON DELETE CASCADE,
     Cantidad INT NOT NULL,
     Precio_Unitario DECIMAL(10, 2) NOT NULL,
-    ID_Usuario_Comprador INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE
+    ID_Usuario_Comprador INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+        Fecha_Modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE Usuario_Proveedor (

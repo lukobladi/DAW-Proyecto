@@ -12,7 +12,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/detalle-pedido:
+ * /api/detalle-pedido/crear/:
  *   post:
  *     summary: Crear un nuevo detalle de pedido
  *     tags: [Detalle_Pedido]
@@ -63,7 +63,7 @@ const router = express.Router();
  *       500:
  *         description: Error al crear el detalle de pedido
  */
-router.post('/', DetallePedidoController.crear);
+router.post('/crear/', DetallePedidoController.crear);
 
 /**
  * @swagger
@@ -113,7 +113,7 @@ router.get('/pedido/:id_pedido', DetallePedidoController.listarPorPedido);
 
 /**
  * @swagger
- * /api/detalle-pedido/{id}:
+ * /api/detalle-pedido/actualizar/{id}:
  *   put:
  *     summary: Actualizar un detalle de pedido
  *     tags: [Detalle_Pedido]
@@ -173,11 +173,11 @@ router.get('/pedido/:id_pedido', DetallePedidoController.listarPorPedido);
  *       500:
  *         description: Error al actualizar el detalle de pedido
  */
-router.put('/:id', DetallePedidoController.actualizar);
+router.put('/actualizar/:id', DetallePedidoController.actualizar);
 
 /**
  * @swagger
- * /api/detalle-pedido/{id}:
+ * /api/detalle-pedido/eliminar/{id}:
  *   delete:
  *     summary: Eliminar un detalle de pedido
  *     tags: [Detalle_Pedido]
@@ -196,6 +196,6 @@ router.put('/:id', DetallePedidoController.actualizar);
  *       500:
  *         description: Error al eliminar el detalle de pedido
  */
-router.delete('/:id', DetallePedidoController.eliminar);
+router.delete('/eliminar/:id', DetallePedidoController.eliminar);
 
 module.exports = router;

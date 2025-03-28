@@ -9,7 +9,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/usuarios:
+ * /api/usuarios/obtenerTodos:
  *   get:
  *     summary: Obtener todos los usuarios
  *     tags: [Usuarios]
@@ -31,18 +31,18 @@ const router = express.Router();
  *                     example: Juan
  *                   correo:
  *                     type: string
- *                     example: juan@example.com
+ *                     example: enekoloko7@hotmail.com
  *                   rol:
  *                     type: string
  *                     example: usuario
  *       500:
  *         description: Error al obtener los usuarios
  */
-router.get('/', authMiddleware, adminMiddleware, UsuarioController.listar); // Solo administradores
+router.get('/obtenerTodos', authMiddleware, adminMiddleware, UsuarioController.listar); // Solo administradores
 
 /**
  * @swagger
- * /api/usuarios/{id}:
+ * /api/usuarios/obtener/{id}:
  *   get:
  *     summary: Obtener un usuario por ID
  *     tags: [Usuarios]
@@ -69,7 +69,7 @@ router.get('/', authMiddleware, adminMiddleware, UsuarioController.listar); // S
  *                   example: Juan
  *                 correo:
  *                   type: string
- *                   example: juan@example.com
+ *                   example: enekoloko7@hotmail.com
  *                 rol:
  *                   type: string
  *                   example: usuario
@@ -78,7 +78,7 @@ router.get('/', authMiddleware, adminMiddleware, UsuarioController.listar); // S
  *       500:
  *         description: Error al obtener el usuario
  */
-router.get('/:id', authMiddleware, UsuarioController.obtenerPorId); // Usuarios autenticados
+router.get('/obtener/:id', authMiddleware, UsuarioController.obtenerPorId); // Usuarios autenticados
 
 
 /**
@@ -99,7 +99,7 @@ router.get('/:id', authMiddleware, UsuarioController.obtenerPorId); // Usuarios 
  *                 example: Juan
  *               correo:
  *                 type: string
- *                 example: juan@example.com
+ *                 example: enekoloko7@hotmail.com
  *               password:
  *                 type: string
  *                 example: 123456
@@ -125,7 +125,7 @@ router.get('/:id', authMiddleware, UsuarioController.obtenerPorId); // Usuarios 
  *                   example: Juan
  *                 correo:
  *                   type: string
- *                   example: juan@example.com
+ *                   example: enekoloko7@hotmail.com
  *                 rol:
  *                   type: string
  *                   example: usuario
@@ -139,7 +139,7 @@ router.post('/registrar', UsuarioController.registrar);
 
 /**
  * @swagger
- * /api/usuarios/{id}/activar:
+ * /api/usuarios/activar/{id}:
  *   patch:
  *     summary: Activar o desactivar un usuario
  *     tags: 
@@ -181,7 +181,7 @@ router.post('/registrar', UsuarioController.registrar);
  *       500:
  *         description: Error al actualizar el estado del usuario
  */
-router.patch('/:id/activar', authMiddleware, adminMiddleware, UsuarioController.toggleActivation);
+router.patch('/activar/:id', authMiddleware, adminMiddleware, UsuarioController.cambiarEstadoActivo);
 
 /**
  * @swagger
@@ -275,7 +275,7 @@ router.post('/recuperar-password', UsuarioController.recuperarPassword);
 
 /**
  * @swagger
- * /api/usuarios/{id}:
+ * /api/usuarios/actualizar/{id}:
  *   put:
  *     summary: Actualizar un usuario
  *     tags: [Usuarios]
@@ -298,7 +298,7 @@ router.post('/recuperar-password', UsuarioController.recuperarPassword);
  *                 example: Juan Pérez
  *               correo:
  *                 type: string
- *                 example: juan.perez@example.com
+ *                 example: enekoloko7@hotmail.com
  *               rol:
  *                 type: string
  *                 example: admin
@@ -321,7 +321,7 @@ router.post('/recuperar-password', UsuarioController.recuperarPassword);
  *                   example: Juan Pérez
  *                 correo:
  *                   type: string
- *                   example: juan.perez@example.com
+ *                   example: enekoloko7@hotmail.com
  *                 rol:
  *                   type: string
  *                   example: admin
@@ -333,11 +333,11 @@ router.post('/recuperar-password', UsuarioController.recuperarPassword);
  *       500:
  *         description: Error al actualizar el usuario
  */
-router.put('/:id', authMiddleware, UsuarioController.actualizar); // Usuarios autenticados
+router.put('/actualizar/:id', authMiddleware, UsuarioController.actualizar); // Usuarios autenticados
 
 /**
  * @swagger
- * /api/usuarios/{id}:
+ * /api/usuarios/eliminar/{id}:
  *   delete:
  *     summary: Eliminar un usuario
  *     tags: [Usuarios]
@@ -356,6 +356,38 @@ router.put('/:id', authMiddleware, UsuarioController.actualizar); // Usuarios au
  *       500:
  *         description: Error al eliminar el usuario
  */
-router.delete('/:id', authMiddleware, adminMiddleware, UsuarioController.eliminar); // Solo administradores
+router.delete('/eliminar/:id', authMiddleware, adminMiddleware, UsuarioController.eliminar); // Solo administradores
+
+/**
+ * @swagger
+ * /api/usuarios/obtenerSaldo/{id_usuario}:
+ *   get:
+ *     summary: Obtener el saldo de un usuario
+ *     tags: [Usuarios]
+ *     parameters:
+ *       - in: path
+ *         name: id_usuario
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del usuario
+ *     responses:
+ *       200:
+ *         description: Saldo del usuario
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 saldo:
+ *                   type: number
+ *                   format: float
+ *                   example: 150.75
+ *       404:
+ *         description: Usuario no encontrado
+ *       500:
+ *         description: Error al calcular el saldo
+ */
+router.get('/obtener/:id_usuario', UsuarioController.calcularSaldo);
 
 module.exports = router;

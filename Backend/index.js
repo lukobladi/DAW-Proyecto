@@ -14,7 +14,6 @@ const usuarioProveedorRoutes = require('./routes/UsuarioProveedorRoutes');
 const pedidoPeriodicoRoutes = require('./routes/PedidoPeriodicoRoutes');
 const pagoRoutes = require('./routes/PagoRoutes');
 const notificacionRoutes = require('./routes/NotificacionRoutes');
-const saldoRoutes = require('./routes/SaldoRoutes');
 
 const upload = require('./config/multer'); 
 
@@ -43,7 +42,6 @@ app.use('/api/usuario-proveedor', usuarioProveedorRoutes);
 app.use('/api/pedido-periodico', pedidoPeriodicoRoutes);
 app.use('/api/pagos', pagoRoutes);
 app.use('/api/notificaciones', notificacionRoutes);
-app.use('/api/saldos', saldoRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

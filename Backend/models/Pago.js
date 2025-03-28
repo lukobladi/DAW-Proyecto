@@ -14,7 +14,17 @@ class Pago {
 
   static async findAll() {
     const query = `
-      SELECT * FROM Pago;
+      SELECT 
+        p.ID_Pago,
+        p.Monto,
+        p.Estado,
+        u_deudor.ID_Usuario AS ID_Usuario_Deudor,
+        u_deudor.Nombre AS Nombre_Deudor,
+        u_creditor.ID_Usuario AS ID_Usuario_Creditor,
+        u_creditor.Nombre AS Nombre_Creditor
+      FROM Pago p
+      JOIN Usuario u_deudor ON p.ID_Usuario_Deudor = u_deudor.ID_Usuario
+      JOIN Usuario u_creditor ON p.ID_Usuario_Creditor = u_creditor.ID_Usuario;
     `;
     const { rows } = await db.query(query);
     return rows;
@@ -29,6 +39,44 @@ class Pago {
     `;
     const { rows } = await db.query(query, [estado, id]);
     return rows[0];
+  }
+
+  static async findPendientesDeudor(id_usuario_deudor) {
+    const query = `
+      SELECT 
+        p.ID_Pago,
+        p.Monto,
+        p.Estado,
+        u_deudor.ID_Usuario AS ID_Usuario_Deudor,
+        u_deudor.Nombre AS Nombre_Deudor,
+        u_creditor.ID_Usuario AS ID_Usuario_Creditor,
+        u_creditor.Nombre AS Nombre_Creditor
+      FROM Pago p
+      JOIN Usuario u_deudor ON p.ID_Usuario_Deudor = u_deudor.ID_Usuario
+      JOIN Usuario u_creditor ON p.ID_Usuario_Creditor = u_creditor.ID_Usuario
+      WHERE p.ID_Usuario_Deudor = $1 AND p.Estado = 'pendiente';
+    `;
+    const { rows } = await db.query(query, [id_usuario_deudor]);
+    return rows;
+  }
+
+  static async findPendientesCreditor(id_usuario_creditor) {
+    const query = `
+      SELECT 
+        p.ID_Pago,
+        p.Monto,
+        p.Estado,
+        u_deudor.ID_Usuario AS ID_Usuario_Deudor,
+        u_deudor.Nombre AS Nombre_Deudor,
+        u_creditor.ID_Usuario AS ID_Usuario_Creditor,
+        u_creditor.Nombre AS Nombre_Creditor
+      FROM Pago p
+      JOIN Usuario u_deudor ON p.ID_Usuario_Deudor = u_deudor.ID_Usuario
+      JOIN Usuario u_creditor ON p.ID_Usuario_Creditor = u_creditor.ID_Usuario
+      WHERE p.ID_Usuario_Creditor = $1 AND p.Estado = 'pendiente';
+    `;
+    const { rows } = await db.query(query, [id_usuario_creditor]);
+    return rows;
   }
 }
 

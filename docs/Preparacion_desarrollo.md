@@ -252,20 +252,10 @@ GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO ekonsumo_user;
 npm install swagger-jsdoc swagger-ui-express
 ```
 
-5. Instala Validator:
+5. Instala paquetes y librerias:
    ```bash
-   npm install express-validator
 
-   npm install nodemailer
-   
-
-   npm install multer
-
-   npm install bcrypt 
-
-   npm install jsonwebtoken
-
-    npm install express cors express-validator nodemailer multer bcrypt jsonwebtoken dotenv pg swagger-jsdoc swagger-ui-express
+    npm install express cors express-validator nodemailer multer bcrypt jsonwebtoken dotenv pg swagger-jsdoc swagger-ui-express bootstrap
 
 
    ```

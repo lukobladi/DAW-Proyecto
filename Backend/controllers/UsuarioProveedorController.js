@@ -22,6 +22,16 @@ class UsuarioProveedorController {
     }
   }
 
+  static async obtenerRelacionesPorProveedor(req, res) {
+    try {
+      const { id_proveedor } = req.params;
+      const relaciones = await UsuarioProveedor.obtenerPorProveedor(id_proveedor);
+      res.status(200).json(relaciones);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
   static async eliminarRelacion(req, res) {
     try {
       const { id_usuario, id_proveedor } = req.params;

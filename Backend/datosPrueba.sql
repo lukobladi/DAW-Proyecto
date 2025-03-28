@@ -1,6 +1,6 @@
 INSERT INTO Usuario (Nombre, Correo, Pass, Movil, Rol, Activo, Saldo)
 VALUES
-    ('Juan Pérez', 'juan.perez@example.com', 'password123', '600123456', 'admin', TRUE, 100.00),
+    ('Eneko', 'enekoloko7@hotmail.com', '1234', '622019870', 'admin', TRUE, 100.00),
     ('Ana Gómez', 'ana.gomez@example.com', 'password456', '600654321', 'usuario', TRUE, 50.00),
     ('Luis Martínez', 'luis.martinez@example.com', 'password789', '600987654', 'usuario', TRUE, 75.00),
     ('María López', 'maria.lopez@example.com', 'password012', '600112233', 'usuario', FALSE, 0.00);

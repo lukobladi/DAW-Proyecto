@@ -2,19 +2,20 @@ const nodemailer = require('nodemailer');
 
 const emailService = {
   async enviarCorreo(destinatario, asunto, mensaje) {
+    console.log('enviarCorreo ');
     try {
       // Configurar el transporte de correo
       const transporter = nodemailer.createTransport({
         service: 'gmail', // Cambia esto según tu proveedor de correo
         auth: {
-          user: 'tu-correo@gmail.com', // Tu correo
-          pass: 'tu-contraseña', // Tu contraseña o app password
+          user: 'emartinmon6@educacion.navarra.es', // Tu correo
+          pass: 'oirj btiv qobe tukr ', // Tu contraseña o app password
         },
       });
 
       // Configurar el correo
       const mailOptions = {
-        from: 'tu-correo@gmail.com',
+        from: 'emartinmon6@educacion.navarra.es',
         to: destinatario,
         subject: asunto,
         text: mensaje,

@@ -19,11 +19,20 @@ class UsuarioProveedor {
     return rows;
   }
 
+  static async obtenerPorProveedor(id_proveedor) {
+    const query = 'SELECT * FROM Usuario_Proveedor WHERE ID_Proveedor = $1;';
+    const { rows } = await pool.query(query, [id_proveedor]);
+    return rows;
+  }
+
   static async eliminar({ id_usuario, id_proveedor }) {
     const query = 'DELETE FROM Usuario_Proveedor WHERE ID_Usuario = $1 AND ID_Proveedor = $2 RETURNING *;';
     const { rows } = await pool.query(query, [id_usuario, id_proveedor]);
     return rows[0];
   }
+
+  
+  
 }
 
 module.exports = UsuarioProveedor;

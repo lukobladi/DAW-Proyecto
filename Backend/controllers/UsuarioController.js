@@ -51,7 +51,7 @@ const UsuarioController = {
   },
 
   // Activar o desactivar usuario
-  async toggleActivation(req, res) {
+  async cambiarEstadoActivo(req, res) {
     const { id } = req.params;
     const { activo } = req.body; // `activo` debe ser un booleano (true o false)
   
@@ -76,14 +76,22 @@ const UsuarioController = {
     }
 
     try {
+      console.log('try');
       const usuario = await Usuario.findByEmailOrMobile(correoOMovil);
 
       if (!usuario) {
         return res.status(404).json({ error: 'Usuario no encontrado' });
       }
+      console.log('usuario ' + usuario);
 
       const enlaceRecuperacion = `http://localhost:8080/recuperar-password/${usuario.id}`;
+
+      console.log('enlaceRecuperacion ' + enlaceRecuperacion);
+
       const mensaje = `Hola ${usuario.nombre},\n\nHaz clic en el siguiente enlace para recuperar tu contraseña:\n\n${enlaceRecuperacion}\n\nSi no solicitaste esta acción, ignora este correo.`;
+
+      console.log('mensaje ' + mensaje);
+
 
       await emailService.enviarCorreo(usuario.correo, 'Recuperación de Contraseña', mensaje);
 
@@ -147,6 +155,19 @@ const UsuarioController = {
       res.status(500).send('Error al eliminar el usuario');
     }
   },
+
+    // Calcular el saldo de un usuario
+    async calcularSaldo(req, res) {
+      const { id_usuario } = req.params;
+      try {
+        const saldo = await Usuario.calcularSaldo(id_usuario);
+        res.json({ saldo });
+      } catch (err) {
+        console.error(err);
+        res.status(500).send('Error al calcular el saldo');
+      }
+    },
+
 };
 
 module.exports = UsuarioController;

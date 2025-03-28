@@ -290,11 +290,13 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
 
 ### Tecnologías de Programación
 
+- **Node.js**: Entorno de ejecución JavaScript que permite usar el mismo lenguaje en frontend y backend.
+- **npm**: Gestor de paquetes de Node.js. Permite instalar paquetes y librerías y gestiona dependencias.
+
 #### Backend API Rest
 
 - **PostgreSQL**: El motor de base de datos elegido. Es robusto y escalable, ideal para manejar datos complejos.
 - **Swagger**: Herramienta para documentar la API de manera interactiva. Así cualquiera puede entender cómo usarla.
-- **Node.js**: El motor del backend. Corre JavaScript en el servidor, lo que permite usar el mismo lenguaje en frontend y backend.
 - **Express**: Framework en Node para crear la API. Es flexible y fácil de usar.
   - **Cors**: Para permitir que el frontend se comunique con el backend sin problemas de CORS.
   - **express-validator**: Para validar y sanitizar los datos que llegan al backend.
@@ -310,7 +312,7 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
 
 #### Frontend Web
 
-- **Vue.js**: Framework para el frontend. Es sencillo y con un desarrollo agil y quiero probar una tecnología que desconozco.
+- **Vue.js**: Framework de Node para el frontend. Es sencillo y con un desarrollo agil y quiero probar una tecnología que desconozco.
   - **vue-router**: Para gestionar la navegación entre vistas en una aplicación de una sola página (SPA).
   - **Bootstrap**: Para crear interfaces modernas y responsivas sin complicaciones.
   - **axios**: Para hacer peticiones HTTP a la API desde el frontend.
@@ -322,10 +324,10 @@ La nueva aplicación web permitirá automatizar y optimizar todos estos procesos
 Este diagrama muestra los componentes principales del sistema y cómo interactúan entre sí.
 
 #### Componentes:
-- **Frontend (Vue.js)**: Interfaz de usuario para los usuarios del grupo de consumo.
+- **Frontend (Node.js + Vue.js + Bootstrap)**: Interfaz de usuario para los usuarios del grupo de consumo.
 - **Backend (Node.js + Express)**: API REST que gestiona las solicitudes del frontend.
 - **Base de Datos (PostgreSQL)**: Almacena la información de usuarios, productos, proveedores, pedidos, etc.
-- **Servicios Externos**: Notificaciones por correo electrónico o SMS.
+- **Servicios Externos**: Notificaciones por correo electrónico o SMS. Librearias Node.js
 
 #### Diagrama:
 ```
@@ -1085,6 +1087,7 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 | `ID_Pedido`      | `SERIAL`          | Clave primaria.                      |
 | `ID_Usuario_Encargado` | `INT`     | Clave foránea (relación con `Usuario`). |
 | `ID_Proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
+| `Fecha_Modificacion` | `TIMESTAMP`       | Fecha y hora de modificacion del pedido. |
 | `Fecha_Apertura` | `TIMESTAMP`       | Fecha y hora de apertura del pedido. |
 | `Fecha_Cierre`   | `TIMESTAMP`       | Fecha límite para modificar el pedido. |
 | `Fecha_Entrega`  | `TIMESTAMP`       | Fecha y hora de entrega.             |
@@ -1101,6 +1104,7 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 | `Cantidad`       | `INT`             | Cantidad del producto.               |
 | `Precio_Total`   | `DECIMAL(10, 2)`  | Precio total del producto.           |
 | `ID_Usuario_Comprador` | `INT`     | Clave foránea (relación con `Usuario`). |
+| `Fecha_Modificacion` | `TIMESTAMP`       | Fecha y hora de modificacion del detalle. |
 
 ---
 

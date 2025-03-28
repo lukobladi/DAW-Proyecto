@@ -12,7 +12,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/pedido-periodico:
+ * /api/pedido-periodico/crear:
  *   post:
  *     summary: Crear un nuevo pedido periódico
  *     tags: [PedidoPeriodico]
@@ -73,11 +73,11 @@ const router = express.Router();
  *       500:
  *         description: Error del servidor
  */
-router.post('/', PedidoPeriodicoController.crearPedidoPeriodico);
+router.post('/crear', PedidoPeriodicoController.crearPedidoPeriodico);
 
 /**
  * @swagger
- * /api/pedido-periodico:
+ * /api/pedido-periodico/obtenerTodos:
  *   get:
  *     summary: Obtener todos los pedidos periódicos
  *     tags: [PedidoPeriodico]
@@ -117,11 +117,11 @@ router.post('/', PedidoPeriodicoController.crearPedidoPeriodico);
  *       500:
  *         description: Error del servidor
  */
-router.get('/', PedidoPeriodicoController.obtenerPedidosPeriodicos);
+router.get('/obtenerTodos', PedidoPeriodicoController.obtenerPedidosPeriodicos);
 
 /**
  * @swagger
- * /api/pedido-periodico/usuario/{id_usuario}:
+ * /api/pedido-periodico/obtenerTodos/usuario/{id_usuario}:
  *   get:
  *     summary: Obtener pedidos periódicos de un usuario
  *     tags: [PedidoPeriodico]
@@ -168,11 +168,11 @@ router.get('/', PedidoPeriodicoController.obtenerPedidosPeriodicos);
  *       500:
  *         description: Error del servidor
  */
-router.get('/usuario/:id_usuario', PedidoPeriodicoController.obtenerPedidosPeriodicosPorUsuario);
+router.get('/obtenerTodos/usuario/:id_usuario', PedidoPeriodicoController.obtenerPedidosPeriodicosPorUsuario);
 
 /**
  * @swagger
- * /api/pedido-periodico/{id}:
+ * /api/pedido-periodico/actualizar/{id}:
  *   put:
  *     summary: Actualizar un pedido periódico
  *     tags: [PedidoPeriodico]
@@ -242,11 +242,11 @@ router.get('/usuario/:id_usuario', PedidoPeriodicoController.obtenerPedidosPerio
  *       500:
  *         description: Error del servidor
  */
-router.put('/:id', PedidoPeriodicoController.actualizarPedidoPeriodico);
+router.put('/actualizar/:id', PedidoPeriodicoController.actualizarPedidoPeriodico);
 
 /**
  * @swagger
- * /api/pedido-periodico/{id}:
+ * /api/pedido-periodico/eliminar/{id}:
  *   delete:
  *     summary: Eliminar un pedido periódico
  *     tags: [PedidoPeriodico]
@@ -273,6 +273,6 @@ router.put('/:id', PedidoPeriodicoController.actualizarPedidoPeriodico);
  *       500:
  *         description: Error del servidor
  */
-router.delete('/:id', PedidoPeriodicoController.eliminarPedidoPeriodico);
+router.delete('/eliminar/:id', PedidoPeriodicoController.eliminarPedidoPeriodico);
 
 module.exports = router;

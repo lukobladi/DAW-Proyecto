@@ -13,7 +13,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/pagos:
+ * /api/pagos/crear:
  *   post:
  *     summary: Crear un nuevo pago
  *     tags: [Pagos]
@@ -64,11 +64,11 @@ const router = express.Router();
  *       500:
  *         description: Error al crear el pago
  */
-router.post('/', validators.crearPedido, PagoController.crear);
+router.post('/crear/', validators.crearPedido, PagoController.crear);
 
 /**
  * @swagger
- * /api/pagos:
+ * /api/pagos/obtenerTodos/:
  *   get:
  *     summary: Obtener todos los pagos
  *     tags: [Pagos]
@@ -101,11 +101,100 @@ router.post('/', validators.crearPedido, PagoController.crear);
  *       500:
  *         description: Error al obtener los pagos
  */
-router.get('/', PagoController.listar);
+router.get('/obtenerTodos/', PagoController.listar);
 
 /**
  * @swagger
- * /api/pagos/{id}/cambiar-estado:
+ * /api/pagos/pendientes-deudor/{id_usuario_deudor}:
+ *   get:
+ *     summary: Obtener todos los pagos pendientes de un usuario deudor
+ *     tags: [Pagos]
+ *     parameters:
+ *       - in: path
+ *         name: id_usuario_deudor
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del usuario deudor
+ *     responses:
+ *       200:
+ *         description: Lista de pagos pendientes del deudor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id_pago:
+ *                     type: integer
+ *                     example: 1
+ *                   id_usuario_deudor:
+ *                     type: integer
+ *                     example: 1
+ *                   id_usuario_creditor:
+ *                     type: integer
+ *                     example: 2
+ *                   monto:
+ *                     type: number
+ *                     format: float
+ *                     example: 100.50
+ *                   estado:
+ *                     type: string
+ *                     example: "pendiente"
+ *       500:
+ *         description: Error al obtener los pagos
+ */
+router.get('/pendientes-deudor/:id_usuario_deudor', PagoController.obtenerPendientesDeudor);
+
+/**
+ * @swagger
+ * /api/pagos/pendientes-creditor/{id_usuario_creditor}:
+ *   get:
+ *     summary: Obtener todos los pagos pendientes de un usuario acreedor
+ *     tags: [Pagos]
+ *     parameters:
+ *       - in: path
+ *         name: id_usuario_creditor
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del usuario acreedor
+ *     responses:
+ *       200:
+ *         description: Lista de pagos pendientes del acreedor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id_pago:
+ *                     type: integer
+ *                     example: 1
+ *                   id_usuario_deudor:
+ *                     type: integer
+ *                     example: 1
+ *                   id_usuario_creditor:
+ *                     type: integer
+ *                     example: 2
+ *                   monto:
+ *                     type: number
+ *                     format: float
+ *                     example: 100.50
+ *                   estado:
+ *                     type: string
+ *                     example: "pendiente"
+ *       500:
+ *         description: Error al obtener los pagos
+ */
+router.get('/pendientes-creditor/:id_usuario_creditor', PagoController.obtenerPendientesCreditor);
+
+
+/**
+ * @swagger
+ * /api/pagos/cambiar-estado/{id}:
  *   put:
  *     summary: Cambiar el estado de un pago
  *     tags: [Pagos]
@@ -155,6 +244,6 @@ router.get('/', PagoController.listar);
  *       500:
  *         description: Error al cambiar el estado del pago
  */
-router.put('/:id/cambiar-estado', PagoController.cambiarEstado);
+router.put('/cambiar-estado/:id', PagoController.cambiarEstado);
 
 module.exports = router;

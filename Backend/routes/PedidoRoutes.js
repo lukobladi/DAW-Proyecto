@@ -12,7 +12,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/pedidos:
+ * /api/pedidos/crear:
  *   post:
  *     summary: Crear un nuevo pedido
  *     tags: [Pedidos]
@@ -57,11 +57,11 @@ const router = express.Router();
  *       500:
  *         description: Error al crear el pedido
  */
-router.post('/', PedidoController.crear);
+router.post('/crear', PedidoController.crear);
 
 /**
  * @swagger
- * /api/pedidos:
+ * /api/pedidos/obtenerTodos:
  *   get:
  *     summary: Obtener todos los pedidos
  *     tags: [Pedidos]
@@ -91,11 +91,11 @@ router.post('/', PedidoController.crear);
  *       500:
  *         description: Error al obtener los pedidos
  */
-router.get('/', PedidoController.listar);
+router.get('/obtenerTodos', PedidoController.listar);
 
 /**
  * @swagger
- * /api/pedidos/{id}:
+ * /api/pedidos/obtener/{id}:
  *   get:
  *     summary: Obtener un pedido por ID
  *     tags: [Pedidos]
@@ -132,11 +132,11 @@ router.get('/', PedidoController.listar);
  *       500:
  *         description: Error al obtener el pedido
  */
-router.get('/:id', PedidoController.obtenerPorId);
+router.get('/obtener/:id', PedidoController.obtenerPorId);
 
 /**
  * @swagger
- * /api/pedidos/{id}:
+ * /api/pedidos/actualizar/{id}:
  *   put:
  *     summary: Actualizar un pedido
  *     tags: [Pedidos]
@@ -190,11 +190,11 @@ router.get('/:id', PedidoController.obtenerPorId);
  *       500:
  *         description: Error al actualizar el pedido
  */
-router.put('/:id', PedidoController.actualizar);
+router.put('/actualizar/:id', PedidoController.actualizar);
 
 /**
  * @swagger
- * /api/pedidos/{id}:
+ * /api/pedidos/eliminar/{id}:
  *   delete:
  *     summary: Eliminar un pedido
  *     tags: [Pedidos]
@@ -213,6 +213,6 @@ router.put('/:id', PedidoController.actualizar);
  *       500:
  *         description: Error al eliminar el pedido
  */
-router.delete('/:id', PedidoController.eliminar);
+router.delete('/eliminar/:id', PedidoController.eliminar);
 
 module.exports = router;

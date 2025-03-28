@@ -23,7 +23,7 @@ export default {
     return apiClient.post('/usuarios/login', credentials);
   },
   recoverPassword(data) {
-    return apiClient.post('/usuarios/recuperar-contrasenia', data);
+    return apiClient.post('/usuarios/recuperar-password', data);
   },
   registrar(data) {
     return apiClient.post('/usuarios/registrar', data);
@@ -31,6 +31,11 @@ export default {
 
 
 
+
+
+
+
+  
   // Ejemplo de métodos para interactuar con la API
   getUsuarios() {
     return apiClient.get('/usuarios');

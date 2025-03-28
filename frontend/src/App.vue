@@ -14,6 +14,7 @@
 </template>
 
 <script>
+
 import { computed } from 'vue'; // Importación correcta de `computed`
 import { alertStore } from './store/alertStore'; // Importación del estado global
 import NavBar from './components/NavBar.vue';

@@ -36,6 +36,30 @@ const PagoController = {
       res.status(500).send('Error al cambiar el estado del pago');
     }
   },
+
+  // Obtener pagos pendientes de un usuario deudor
+  async obtenerPendientesDeudor(req, res) {
+    const { id_usuario_deudor } = req.params;
+    try {
+      const pagos = await Pago.findPendientesDeudor(id_usuario_deudor);
+      res.json(pagos);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al obtener los pagos pendientes del deudor');
+    }
+  },
+
+  // Obtener pagos pendientes de un usuario acreedor
+  async obtenerPendientesCreditor(req, res) {
+    const { id_usuario_creditor } = req.params;
+    try {
+      const pagos = await Pago.findPendientesCreditor(id_usuario_creditor);
+      res.json(pagos);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al obtener los pagos pendientes del acreedor');
+    }
+  },
 };
 
 module.exports = PagoController;
