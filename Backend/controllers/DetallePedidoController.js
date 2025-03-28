@@ -3,9 +3,9 @@ const DetallePedido = require('../models/DetallePedido');
 const DetallePedidoController = {
   // Crear un nuevo detalle de pedido
   async crear(req, res) {
-    const { id_pedido, id_producto, cantidad, precio_total } = req.body;
+    const { id_pedido, id_producto, cantidad, precio_unitario, id_usuario_comprador } = req.body;
     try {
-      const nuevoDetalle = await DetallePedido.create(id_pedido, id_producto, cantidad, precio_total);
+      const nuevoDetalle = await DetallePedido.create(id_pedido, id_producto, cantidad, precio_unitario, id_usuario_comprador);
       res.status(201).json(nuevoDetalle);
     } catch (err) {
       console.error(err);
@@ -28,15 +28,16 @@ const DetallePedidoController = {
   // Actualizar un detalle de pedido
   async actualizar(req, res) {
     const { id } = req.params;
-    const { id_pedido, id_producto, cantidad, precio_total } = req.body;
+    const { id_pedido, id_producto, cantidad, precio_unitario, id_usuario_comprador } = req.body;
     try {
-      const detalleActualizado = await DetallePedido.update(id, id_pedido, id_producto, cantidad, precio_total);
+      const detalleActualizado = await DetallePedido.update(id, id_pedido, id_producto, cantidad, precio_unitario, id_usuario_comprador);
       res.json(detalleActualizado);
     } catch (err) {
       console.error(err);
       res.status(500).send('Error al actualizar el detalle del pedido');
     }
   },
+
 
   // Eliminar un detalle de pedido
   async eliminar(req, res) {

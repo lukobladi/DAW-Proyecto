@@ -1,6 +1,7 @@
-// backend/routes/PedidoPeriodicoRoutes.js
 const express = require('express');
 const PedidoPeriodicoController = require('../controllers/PedidoPeriodicoController');
+const authMiddleware = require('../middlewares/auth'); // Middleware de autenticación
+
 const router = express.Router();
 
 /**
@@ -16,6 +17,8 @@ const router = express.Router();
  *   post:
  *     summary: Crear un nuevo pedido periódico
  *     tags: [PedidoPeriodico]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -23,15 +26,13 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             properties:
- *               id_usuario:
+ *               id_proveedor:
  *                 type: integer
  *                 example: 1
- *               id_producto:
- *                 type: integer
- *                 example: 1
- *               cantidad:
- *                 type: integer
- *                 example: 5
+ *               fecha_inicio:
+ *                 type: string
+ *                 format: date-time
+ *                 example: "2023-10-01T00:00:00Z"
  *               fecha_fin:
  *                 type: string
  *                 format: date-time
@@ -39,41 +40,25 @@ const router = express.Router();
  *               activo:
  *                 type: boolean
  *                 example: true
+ *               periodicidad:
+ *                 type: integer
+ *                 example: 30
+ *               dia_apertura:
+ *                 type: integer
+ *                 example: 1
+ *               dia_cierre:
+ *                 type: integer
+ *                 example: 15
+ *               dia_entrega:
+ *                 type: integer
+ *                 example: 20
  *     responses:
  *       201:
  *         description: Pedido periódico creado exitosamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id_pedido_periodico:
- *                   type: integer
- *                   example: 1
- *                 id_usuario:
- *                   type: integer
- *                   example: 1
- *                 id_producto:
- *                   type: integer
- *                   example: 1
- *                 cantidad:
- *                   type: integer
- *                   example: 5
- *                 fecha_inicio:
- *                   type: string
- *                   format: date-time
- *                   example: "2023-10-01T00:00:00Z"
- *                 fecha_fin:
- *                   type: string
- *                   format: date-time
- *                   example: "2023-12-31T23:59:59Z"
- *                 activo:
- *                   type: boolean
- *                   example: true
  *       500:
  *         description: Error del servidor
  */
-router.post('/crear', PedidoPeriodicoController.crearPedidoPeriodico);
+router.post('/crear', authMiddleware, PedidoPeriodicoController.crearPedidoPeriodico);
 
 /**
  * @swagger
@@ -81,43 +66,15 @@ router.post('/crear', PedidoPeriodicoController.crearPedidoPeriodico);
  *   get:
  *     summary: Obtener todos los pedidos periódicos
  *     tags: [PedidoPeriodico]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Lista de pedidos periódicos
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id_pedido_periodico:
- *                     type: integer
- *                     example: 1
- *                   id_usuario:
- *                     type: integer
- *                     example: 1
- *                   id_producto:
- *                     type: integer
- *                     example: 1
- *                   cantidad:
- *                     type: integer
- *                     example: 5
- *                   fecha_inicio:
- *                     type: string
- *                     format: date-time
- *                     example: "2023-10-01T00:00:00Z"
- *                   fecha_fin:
- *                     type: string
- *                     format: date-time
- *                     example: "2023-12-31T23:59:59Z"
- *                   activo:
- *                     type: boolean
- *                     example: true
  *       500:
  *         description: Error del servidor
  */
-router.get('/obtenerTodos', PedidoPeriodicoController.obtenerPedidosPeriodicos);
+router.get('/obtenerTodos', authMiddleware, PedidoPeriodicoController.obtenerPedidosPeriodicos);
 
 /**
  * @swagger
@@ -125,6 +82,8 @@ router.get('/obtenerTodos', PedidoPeriodicoController.obtenerPedidosPeriodicos);
  *   get:
  *     summary: Obtener pedidos periódicos de un usuario
  *     tags: [PedidoPeriodico]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id_usuario
@@ -135,40 +94,10 @@ router.get('/obtenerTodos', PedidoPeriodicoController.obtenerPedidosPeriodicos);
  *     responses:
  *       200:
  *         description: Lista de pedidos periódicos del usuario
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id_pedido_periodico:
- *                     type: integer
- *                     example: 1
- *                   id_usuario:
- *                     type: integer
- *                     example: 1
- *                   id_producto:
- *                     type: integer
- *                     example: 1
- *                   cantidad:
- *                     type: integer
- *                     example: 5
- *                   fecha_inicio:
- *                     type: string
- *                     format: date-time
- *                     example: "2023-10-01T00:00:00Z"
- *                   fecha_fin:
- *                     type: string
- *                     format: date-time
- *                     example: "2023-12-31T23:59:59Z"
- *                   activo:
- *                     type: boolean
- *                     example: true
  *       500:
  *         description: Error del servidor
  */
-router.get('/obtenerTodos/usuario/:id_usuario', PedidoPeriodicoController.obtenerPedidosPeriodicosPorUsuario);
+router.get('/obtenerTodos/usuario/:id_usuario', authMiddleware, PedidoPeriodicoController.obtenerPedidosPeriodicosPorUsuario);
 
 /**
  * @swagger
@@ -176,6 +105,8 @@ router.get('/obtenerTodos/usuario/:id_usuario', PedidoPeriodicoController.obtene
  *   put:
  *     summary: Actualizar un pedido periódico
  *     tags: [PedidoPeriodico]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -190,15 +121,13 @@ router.get('/obtenerTodos/usuario/:id_usuario', PedidoPeriodicoController.obtene
  *           schema:
  *             type: object
  *             properties:
- *               id_usuario:
+ *               id_proveedor:
  *                 type: integer
  *                 example: 1
- *               id_producto:
- *                 type: integer
- *                 example: 1
- *               cantidad:
- *                 type: integer
- *                 example: 10
+ *               fecha_inicio:
+ *                 type: string
+ *                 format: date-time
+ *                 example: "2023-10-01T00:00:00Z"
  *               fecha_fin:
  *                 type: string
  *                 format: date-time
@@ -206,43 +135,27 @@ router.get('/obtenerTodos/usuario/:id_usuario', PedidoPeriodicoController.obtene
  *               activo:
  *                 type: boolean
  *                 example: false
+ *               periodicidad:
+ *                 type: integer
+ *                 example: 30
+ *               dia_apertura:
+ *                 type: integer
+ *                 example: 1
+ *               dia_cierre:
+ *                 type: integer
+ *                 example: 15
+ *               dia_entrega:
+ *                 type: integer
+ *                 example: 20
  *     responses:
  *       200:
  *         description: Pedido periódico actualizado
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id_pedido_periodico:
- *                   type: integer
- *                   example: 1
- *                 id_usuario:
- *                   type: integer
- *                   example: 1
- *                 id_producto:
- *                   type: integer
- *                   example: 1
- *                 cantidad:
- *                   type: integer
- *                   example: 10
- *                 fecha_inicio:
- *                   type: string
- *                   format: date-time
- *                   example: "2023-10-01T00:00:00Z"
- *                 fecha_fin:
- *                   type: string
- *                   format: date-time
- *                   example: "2023-12-31T23:59:59Z"
- *                 activo:
- *                   type: boolean
- *                   example: false
  *       404:
  *         description: Pedido periódico no encontrado
  *       500:
  *         description: Error del servidor
  */
-router.put('/actualizar/:id', PedidoPeriodicoController.actualizarPedidoPeriodico);
+router.put('/actualizar/:id', authMiddleware, PedidoPeriodicoController.actualizarPedidoPeriodico);
 
 /**
  * @swagger
@@ -250,6 +163,8 @@ router.put('/actualizar/:id', PedidoPeriodicoController.actualizarPedidoPeriodic
  *   delete:
  *     summary: Eliminar un pedido periódico
  *     tags: [PedidoPeriodico]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -260,19 +175,46 @@ router.put('/actualizar/:id', PedidoPeriodicoController.actualizarPedidoPeriodic
  *     responses:
  *       200:
  *         description: Pedido periódico eliminado
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Pedido periódico eliminado correctamente"
  *       404:
  *         description: Pedido periódico no encontrado
  *       500:
  *         description: Error del servidor
  */
-router.delete('/eliminar/:id', PedidoPeriodicoController.eliminarPedidoPeriodico);
+router.delete('/eliminar/:id', authMiddleware, PedidoPeriodicoController.eliminarPedidoPeriodico);
+
+/**
+ * @swagger
+ * /api/pedido-periodico/cambiarEstadoActivo/{id}:
+ *   patch:
+ *     summary: Cambiar el estado activo de un pedido periódico
+ *     tags: [PedidoPeriodico]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         example: 1
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               activo:
+ *                 type: boolean
+ *                 example: true
+ *     responses:
+ *       200:
+ *         description: Estado activo del pedido periódico actualizado
+ *       404:
+ *         description: Pedido periódico no encontrado
+ *       500:
+ *         description: Error del servidor
+ */
+router.patch('/cambiarEstadoActivo/:id', authMiddleware, PedidoPeriodicoController.cambiarEstadoActivo);
 
 module.exports = router;

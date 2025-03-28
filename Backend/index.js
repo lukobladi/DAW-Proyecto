@@ -48,7 +48,13 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json({ error: err.message || 'Algo salió mal en el servidor' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-  console.log(`Documentación de la API: http://localhost:${PORT}/api-docs`);
-});
+// Exportar la app para pruebas
+module.exports = app;
+
+// Iniciar el servidor solo si no se está ejecutando en modo de prueba
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+    console.log(`Documentación de la API: http://localhost:${PORT}/api-docs`);
+  });
+}

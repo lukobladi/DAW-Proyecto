@@ -2,13 +2,13 @@ const pool = require('../db');
 
 const DetallePedido = {
   // Crear un nuevo detalle de pedido
-  async create(id_pedido, id_producto, cantidad, precio_total) {
+  async create(id_pedido, id_producto, cantidad, precio_unitario, id_usuario_comprador) {
     const query = `
-      INSERT INTO Detalle_Pedido (ID_Pedido, ID_Producto, Cantidad, Precio_Total)
-      VALUES ($1, $2, $3, $4)
+      INSERT INTO Detalle_Pedido (ID_Pedido, ID_Producto, Cantidad, Precio_Unitario, ID_Usuario_Comprador, Fecha_Modificacion)
+      VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)
       RETURNING *;
     `;
-    const values = [id_pedido, id_producto, cantidad, precio_total];
+    const values = [id_pedido, id_producto, cantidad, precio_unitario, id_usuario_comprador];
     const { rows } = await pool.query(query, values);
     return rows[0];
   },
@@ -24,7 +24,7 @@ const DetallePedido = {
   async update(id, id_pedido, id_producto, cantidad, precio_total) {
     const query = `
       UPDATE Detalle_Pedido
-      SET ID_Pedido = $1, ID_Producto = $2, Cantidad = $3, Precio_Total = $4
+      SET ID_Pedido = $1, ID_Producto = $2, Cantidad = $3, Precio_Total = $4, Fecha_Modificacion = CURRENT_TIMESTAMP
       WHERE ID_Detalle = $5
       RETURNING *;
     `;
@@ -33,10 +33,17 @@ const DetallePedido = {
     return rows[0];
   },
 
-  // Eliminar un detalle de pedido
+  // Eliminar un detalle de pedido. En vez de eliminar de la base de datos ponemos las unidades a 0. Así queda registro.
   async delete(id) {
-    const query = 'DELETE FROM Detalle_Pedido WHERE ID_Detalle = $1;';
-    await pool.query(query, [id]);
+    const query = `
+      UPDATE Detalle_Pedido
+      SET Cantidad = 0, Fecha_Modificacion = CURRENT_TIMESTAMP
+      WHERE ID_Detalle = $1
+      RETURNING *;
+    `;
+    const values = [id];
+    const { rows } = await pool.query(query, values);
+    return rows[0];
   },
 };
 

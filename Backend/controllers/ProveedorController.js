@@ -63,6 +63,24 @@ const ProveedorController = {
       res.status(500).send('Error al eliminar el proveedor');
     }
   },
+
+  // Activar o desactivar un proveedor
+  async cambiarEstadoActivo(req, res) {
+    const { id } = req.params;
+    const { activo } = req.body; // `activo` debe ser un booleano (true o false)
+    try {
+      const proveedor = await Proveedor.findById(id);
+      if (!proveedor) {
+        return res.status(404).send('Proveedor no encontrado');
+      }
+      proveedor.activo = activo;
+      await proveedor.save();
+      res.json(proveedor);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al cambiar el estado del proveedor');
+    }
+  }
 };
 
 module.exports = ProveedorController;

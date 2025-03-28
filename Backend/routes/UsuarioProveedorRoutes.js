@@ -1,6 +1,7 @@
-// backend/routes/UsuarioProveedorRoutes.js
 const express = require('express');
 const UsuarioProveedorController = require('../controllers/UsuarioProveedorController');
+const authMiddleware = require('../middlewares/auth'); // Middleware de autenticación
+
 const router = express.Router();
 
 /**
@@ -16,6 +17,8 @@ const router = express.Router();
  *   post:
  *     summary: Crear una nueva relación entre usuario y proveedor
  *     tags: [UsuarioProveedor]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -32,21 +35,10 @@ const router = express.Router();
  *     responses:
  *       201:
  *         description: Relación creada exitosamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id_usuario:
- *                   type: integer
- *                   example: 1
- *                 id_proveedor:
- *                   type: integer
- *                   example: 1
  *       500:
  *         description: Error del servidor
  */
-router.post('/crear', UsuarioProveedorController.crearRelacion);
+router.post('/crear', authMiddleware, UsuarioProveedorController.crearRelacion);
 
 /**
  * @swagger
@@ -54,6 +46,8 @@ router.post('/crear', UsuarioProveedorController.crearRelacion);
  *   get:
  *     summary: Obtener todas las relaciones de un usuario
  *     tags: [UsuarioProveedor]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id_usuario
@@ -64,23 +58,10 @@ router.post('/crear', UsuarioProveedorController.crearRelacion);
  *     responses:
  *       200:
  *         description: Lista de relaciones del usuario
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id_usuario:
- *                     type: integer
- *                     example: 1
- *                   id_proveedor:
- *                     type: integer
- *                     example: 1
  *       500:
  *         description: Error del servidor
  */
-router.get('/obtenerProveedoresUsuario/:id_usuario', UsuarioProveedorController.obtenerRelacionesPorUsuario);
+router.get('/obtenerProveedoresUsuario/:id_usuario', authMiddleware, UsuarioProveedorController.obtenerRelacionesPorUsuario);
 
 /**
  * @swagger
@@ -88,6 +69,8 @@ router.get('/obtenerProveedoresUsuario/:id_usuario', UsuarioProveedorController.
  *   get:
  *     summary: Obtener todas las relaciones de un proveedor
  *     tags: [UsuarioProveedor]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id_proveedor
@@ -98,38 +81,27 @@ router.get('/obtenerProveedoresUsuario/:id_usuario', UsuarioProveedorController.
  *     responses:
  *       200:
  *         description: Lista de relaciones del proveedor
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id_usuario:
- *                     type: integer
- *                     example: 1
- *                   id_proveedor:
- *                     type: integer
- *                     example: 1
  *       500:
  *         description: Error del servidor
  */
-router.get('/obtenerUsuariosProveedor/:id_proveedor', UsuarioProveedorController.obtenerRelacionesPorProveedor);
+router.get('/obtenerUsuariosProveedor/:id_proveedor', authMiddleware, UsuarioProveedorController.obtenerRelacionesPorProveedor);
 
 /**
  * @swagger
- * /api/usuario-proveedor:
+ * /api/usuario-proveedor/eliminar/{id_usuario}/{id_proveedor}:
  *   delete:
  *     summary: Eliminar una relación entre usuario y proveedor
  *     tags: [UsuarioProveedor]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
- *       - in: query
+ *       - in: path
  *         name: id_usuario
  *         required: true
  *         schema:
  *           type: integer
  *         example: 1
- *       - in: query
+ *       - in: path
  *         name: id_proveedor
  *         required: true
  *         schema:
@@ -138,19 +110,11 @@ router.get('/obtenerUsuariosProveedor/:id_proveedor', UsuarioProveedorController
  *     responses:
  *       200:
  *         description: Relación eliminada exitosamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Relación eliminada correctamente"
  *       404:
  *         description: Relación no encontrada
  *       500:
  *         description: Error del servidor
  */
-router.delete('/', UsuarioProveedorController.eliminarRelacion);
+router.delete('/eliminar/:id_usuario/:id_proveedor', authMiddleware, UsuarioProveedorController.eliminarRelacion);
 
 module.exports = router;

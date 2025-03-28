@@ -1,6 +1,7 @@
 const express = require('express');
 const ProductoController = require('../controllers/ProductoController');
-const upload = require('../config/multer'); // Importa Multer
+const authMiddleware = require('../middlewares/auth'); // Middleware de autenticación
+const upload = require('../config/multer'); // Middleware para manejar archivos
 
 const router = express.Router();
 
@@ -17,6 +18,8 @@ const router = express.Router();
  *   post:
  *     summary: Crear un nuevo producto
  *     tags: [Productos]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -43,34 +46,10 @@ const router = express.Router();
  *     responses:
  *       201:
  *         description: Producto creado correctamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id_producto:
- *                   type: integer
- *                   example: 1
- *                 nombre:
- *                   type: string
- *                   example: "Manzana"
- *                 descripcion:
- *                   type: string
- *                   example: "Manzana roja orgánica"
- *                 precio:
- *                   type: number
- *                   format: float
- *                   example: 1.50
- *                 id_proveedor:
- *                   type: integer
- *                   example: 1
- *                 imagen:
- *                   type: string
- *                   example: "/uploads/imagen.jpg"
  *       500:
  *         description: Error al crear el producto
  */
-router.post('/crear', upload.single('imagen'), ProductoController.crear);
+router.post('/crear', authMiddleware, upload.single('imagen'), ProductoController.crear);
 
 /**
  * @swagger
@@ -78,39 +57,15 @@ router.post('/crear', upload.single('imagen'), ProductoController.crear);
  *   get:
  *     summary: Obtener todos los productos
  *     tags: [Productos]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Lista de productos
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id_producto:
- *                     type: integer
- *                     example: 1
- *                   nombre:
- *                     type: string
- *                     example: "Manzana"
- *                   descripcion:
- *                     type: string
- *                     example: "Manzana roja orgánica"
- *                   precio:
- *                     type: number
- *                     format: float
- *                     example: 1.50
- *                   id_proveedor:
- *                     type: integer
- *                     example: 1
- *                   imagen:
- *                     type: string
- *                     example: "/uploads/imagen.jpg"
  *       500:
  *         description: Error al obtener los productos
  */
-router.get('/obtenerTodos', ProductoController.listar);
+router.get('/obtenerTodos', authMiddleware, ProductoController.listar);
 
 /**
  * @swagger
@@ -118,6 +73,8 @@ router.get('/obtenerTodos', ProductoController.listar);
  *   get:
  *     summary: Obtener un producto por ID
  *     tags: [Productos]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -128,36 +85,12 @@ router.get('/obtenerTodos', ProductoController.listar);
  *     responses:
  *       200:
  *         description: Producto encontrado
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id_producto:
- *                   type: integer
- *                   example: 1
- *                 nombre:
- *                   type: string
- *                   example: "Manzana"
- *                 descripcion:
- *                   type: string
- *                   example: "Manzana roja orgánica"
- *                 precio:
- *                   type: number
- *                   format: float
- *                   example: 1.50
- *                 id_proveedor:
- *                   type: integer
- *                   example: 1
- *                 imagen:
- *                   type: string
- *                   example: "/uploads/imagen.jpg"
  *       404:
  *         description: Producto no encontrado
  *       500:
  *         description: Error al obtener el producto
  */
-router.get('/obtener/:id', ProductoController.obtenerPorId);
+router.get('/obtener/:id', authMiddleware, ProductoController.obtenerPorId);
 
 /**
  * @swagger
@@ -165,6 +98,8 @@ router.get('/obtener/:id', ProductoController.obtenerPorId);
  *   put:
  *     summary: Actualizar un producto
  *     tags: [Productos]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -198,43 +133,21 @@ router.get('/obtener/:id', ProductoController.obtenerPorId);
  *     responses:
  *       200:
  *         description: Producto actualizado correctamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id_producto:
- *                   type: integer
- *                   example: 1
- *                 nombre:
- *                   type: string
- *                   example: "Manzana Verde"
- *                 descripcion:
- *                   type: string
- *                   example: "Manzana verde orgánica"
- *                 precio:
- *                   type: number
- *                   format: float
- *                   example: 1.75
- *                 id_proveedor:
- *                   type: integer
- *                   example: 1
- *                 imagen:
- *                   type: string
- *                   example: "/uploads/imagen.jpg"
  *       404:
  *         description: Producto no encontrado
  *       500:
  *         description: Error al actualizar el producto
  */
-router.put('/actualizar/:id', upload.single('imagen'), ProductoController.actualizar);
+router.put('/actualizar/:id', authMiddleware, upload.single('imagen'), ProductoController.actualizar);
 
 /**
  * @swagger
- * /api/productos/{id}:
+ * /api/productos/eliminar/{id}:
  *   delete:
  *     summary: Eliminar un producto
  *     tags: [Productos]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -250,6 +163,41 @@ router.put('/actualizar/:id', upload.single('imagen'), ProductoController.actual
  *       500:
  *         description: Error al eliminar el producto
  */
-router.delete('/eliminar/:id', ProductoController.eliminar);
+router.delete('/eliminar/:id', authMiddleware, ProductoController.eliminar);
+
+/**
+ * @swagger
+ * /api/productos/cambiarEstadoActivo/{id}:
+ *   patch:
+ *     summary: Cambiar el estado activo de un producto
+ *     tags: [Productos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del producto
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               activo:
+ *                 type: boolean
+ *                 example: true
+ *     responses:
+ *       200:
+ *         description: Estado activo del producto actualizado correctamente
+ *       404:
+ *         description: Producto no encontrado
+ *       500:
+ *         description: Error al cambiar el estado activo del producto
+ */
+router.patch('/cambiarEstadoActivo/:id', authMiddleware, ProductoController.cambiarEstadoActivo);
 
 module.exports = router;

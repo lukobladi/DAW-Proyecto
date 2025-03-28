@@ -1,9 +1,9 @@
 INSERT INTO Usuario (Nombre, Correo, Pass, Movil, Rol, Activo, Saldo)
 VALUES
-    ('Eneko', 'enekoloko7@hotmail.com', '1234', '622019870', 'admin', TRUE, 100.00),
-    ('Ana Gómez', 'ana.gomez@example.com', 'password456', '600654321', 'usuario', TRUE, 50.00),
-    ('Luis Martínez', 'luis.martinez@example.com', 'password789', '600987654', 'usuario', TRUE, 75.00),
-    ('María López', 'maria.lopez@example.com', 'password012', '600112233', 'usuario', FALSE, 0.00);
+    ('Eneko', 'enekoloko7@hotmail.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '622019870', 'admin', TRUE, 100.00),
+    ('Ana Gómez', 'ana.gomez@example.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '600654321', 'usuario', TRUE, 50.00),
+    ('Luis Martínez', 'luis.martinez@example.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '600987654', 'usuario', TRUE, 75.00),
+    ('María López', 'maria.lopez@example.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '600112233', 'usuario', FALSE, 0.00);
 
 -- Insertar datos de prueba en la tabla Proveedor
 INSERT INTO Proveedor (Nombre, Contacto, Telefono, Movil, Correo, Metodo_Pago, Frecuencia_Pedido_Aproximada, Envio_Movil, Envio_Mail)

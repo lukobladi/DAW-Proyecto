@@ -1,8 +1,8 @@
 const Usuario = require('../models/Usuario');
 const emailService = require('../services/emailService');
 const jwt = require('jsonwebtoken');
-const SECRET_KEY = '1234'; // Cambiar esto por una clave secreta más segura
-
+const bcrypt = require('bcrypt');
+const SECRET_KEY = process.env.JWT_SECRET; // Use the environment variable for the secret key
 
 const UsuarioController = {
   // Registrar un nuevo usuario
@@ -20,33 +20,40 @@ const UsuarioController = {
   // Autenticar un usuario (login)
   async login(req, res) {
     const { correoOMovil, password } = req.body;
+
     try {
-      const usuario = await Usuario.findByEmailOrMobile(correoOMovil);
-      if (!usuario) {
-        return res.status(401).send('Credenciales incorrectas');
+      const user = await Usuario.findByEmailOrMobile(correoOMovil);
+
+      if (!user) {
+        console.error('Login failed: User not found'); // Debugging log
+        return res.status(401).json({ message: 'Credenciales incorrectas' });
       }
 
-      // Verificar si el usuario está activo
-      if (!usuario.activo) {
-        return res.status(403).send('El usuario no está activo. Contacta al administrador.');
+      const validPassword = await bcrypt.compare(password, user.pass);
+      if (!validPassword) {
+        console.error('Login failed: Invalid password'); // Debugging log
+        return res.status(401).json({ message: 'Credenciales incorrectas' });
       }
 
-      const isPasswordValid = await Usuario.verifyPassword(password, usuario.pass);
-      if (!isPasswordValid) {
-        return res.status(401).send('Credenciales incorrectas');
-      }
-
-      // Generar un token JWT
       const token = jwt.sign(
-        { id: usuario.id_usuario, correo: usuario.correo, rol: usuario.rol },
-        SECRET_KEY,
-        { expiresIn: '1h' } // El token expira en 1 hora
+        { id_usuario: user.id_usuario, rol: user.rol },
+        SECRET_KEY, // Use the environment variable
+        { expiresIn: '1h' }
       );
 
-      res.json({ token, usuario });
+      console.log('Login successful, token generated:', token); // Debugging log
+
+      res.status(200).json({
+        id_usuario: user.id_usuario,
+        nombre: user.nombre,
+        correo: user.correo,
+        rol: user.rol,
+        movil: user.movil,
+        token,
+      });
     } catch (err) {
-      console.error(err);
-      res.status(500).send('Error al iniciar sesión');
+      console.error('Error during login:', err.message); // Debugging log
+      res.status(500).json({ message: 'Error al iniciar sesión' });
     }
   },
 

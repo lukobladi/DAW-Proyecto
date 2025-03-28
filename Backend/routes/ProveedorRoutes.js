@@ -1,5 +1,7 @@
+
 const express = require('express');
 const ProveedorController = require('../controllers/ProveedorController');
+const authMiddleware = require('../middlewares/auth'); // Middleware de autenticación
 
 const router = express.Router();
 
@@ -16,6 +18,8 @@ const router = express.Router();
  *   post:
  *     summary: Crear un nuevo proveedor
  *     tags: [Proveedores]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -38,30 +42,10 @@ const router = express.Router();
  *     responses:
  *       201:
  *         description: Proveedor creado correctamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id_proveedor:
- *                   type: integer
- *                   example: 1
- *                 nombre:
- *                   type: string
- *                   example: "EcoFruits S.A."
- *                 contacto:
- *                   type: string
- *                   example: "Juan Pérez"
- *                 telefono:
- *                   type: string
- *                   example: "+34 123 456 789"
- *                 correo:
- *                   type: string
- *                   example: "info@ecofruits.com"
  *       500:
  *         description: Error al crear el proveedor
  */
-router.post('/crear', ProveedorController.crear);
+router.post('/crear', authMiddleware, ProveedorController.crear);
 
 /**
  * @swagger
@@ -69,35 +53,15 @@ router.post('/crear', ProveedorController.crear);
  *   get:
  *     summary: Obtener todos los proveedores
  *     tags: [Proveedores]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Lista de proveedores
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id_proveedor:
- *                     type: integer
- *                     example: 1
- *                   nombre:
- *                     type: string
- *                     example: "EcoFruits S.A."
- *                   contacto:
- *                     type: string
- *                     example: "Juan Pérez"
- *                   telefono:
- *                     type: string
- *                     example: "+34 123 456 789"
- *                   correo:
- *                     type: string
- *                     example: "info@ecofruits.com"
  *       500:
  *         description: Error al obtener los proveedores
  */
-router.get('/obtenerTodos', ProveedorController.listar);
+router.get('/obtenerTodos', authMiddleware, ProveedorController.listar);
 
 /**
  * @swagger
@@ -105,6 +69,8 @@ router.get('/obtenerTodos', ProveedorController.listar);
  *   get:
  *     summary: Obtener un proveedor por ID
  *     tags: [Proveedores]
+ *     security:
+ *       - bearerAuth []
  *     parameters:
  *       - in: path
  *         name: id
@@ -115,39 +81,21 @@ router.get('/obtenerTodos', ProveedorController.listar);
  *     responses:
  *       200:
  *         description: Proveedor encontrado
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id_proveedor:
- *                   type: integer
- *                   example: 1
- *                 nombre:
- *                   type: string
- *                   example: "EcoFruits S.A."
- *                 contacto:
- *                   type: string
- *                   example: "Juan Pérez"
- *                 telefono:
- *                   type: string
- *                   example: "+34 123 456 789"
- *                 correo:
- *                   type: string
- *                   example: "info@ecofruits.com"
  *       404:
  *         description: Proveedor no encontrado
  *       500:
  *         description: Error al obtener el proveedor
  */
-router.get('/obtener/:id', ProveedorController.obtenerPorId);
+router.get('/obtener/:id', authMiddleware, ProveedorController.obtenerPorId);
 
 /**
  * @swagger
- * /api/proveedores/actualizar/{id}:
- *   put:
- *     summary: Actualizar un proveedor
+ * /api/proveedores/cambiarEstadoActivo/{id}:
+ *   patch:
+ *     summary: Cambiar el estado activo de un proveedor
  *     tags: [Proveedores]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -162,69 +110,17 @@ router.get('/obtener/:id', ProveedorController.obtenerPorId);
  *           schema:
  *             type: object
  *             properties:
- *               nombre:
- *                 type: string
- *                 example: "EcoFruits España"
- *               contacto:
- *                 type: string
- *                 example: "Ana Gómez"
- *               telefono:
- *                 type: string
- *                 example: "+34 987 654 321"
- *               correo:
- *                 type: string
- *                 example: "contacto@ecofruits.es"
+ *               estadoActivo:
+ *                 type: boolean
+ *                 example: true
  *     responses:
  *       200:
- *         description: Proveedor actualizado correctamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id_proveedor:
- *                   type: integer
- *                   example: 1
- *                 nombre:
- *                   type: string
- *                   example: "EcoFruits España"
- *                 contacto:
- *                   type: string
- *                   example: "Ana Gómez"
- *                 telefono:
- *                   type: string
- *                   example: "+34 987 654 321"
- *                 correo:
- *                   type: string
- *                   example: "contacto@ecofruits.es"
+ *         description: Estado del proveedor actualizado correctamente
  *       404:
  *         description: Proveedor no encontrado
  *       500:
- *         description: Error al actualizar el proveedor
+ *         description: Error al actualizar el estado del proveedor
  */
-router.put('/actualizar/:id', ProveedorController.actualizar);
-
-/**
- * @swagger
- * /api/proveedores/eliminar/{id}:
- *   delete:
- *     summary: Eliminar un proveedor
- *     tags: [Proveedores]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: ID del proveedor
- *     responses:
- *       204:
- *         description: Proveedor eliminado correctamente
- *       404:
- *         description: Proveedor no encontrado
- *       500:
- *         description: Error al eliminar el proveedor
- */
-router.delete('/eliminar/:id', ProveedorController.eliminar);
+router.patch('/cambiarEstadoActivo/:id', authMiddleware, ProveedorController.cambiarEstadoActivo);
 
 module.exports = router;

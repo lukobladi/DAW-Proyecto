@@ -50,7 +50,9 @@ CREATE TABLE Proveedor (
     Metodo_Pago VARCHAR(100),
     Frecuencia_Pedido_Aproximada VARCHAR(50) CHECK (Frecuencia_Pedido_Aproximada IN ('semanal', 'mensual', 'bimestral', 'trimestral', 'semestral')),
     Envio_Movil BOOLEAN DEFAULT FALSE,
-    Envio_Mail BOOLEAN DEFAULT TRUE
+    Envio_Mail BOOLEAN DEFAULT TRUE,
+    Activo BOOLEAN DEFAULT TRUE,
+    Fecha_Modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE Producto (
@@ -59,6 +61,8 @@ CREATE TABLE Producto (
     Descripcion TEXT,
     Precio DECIMAL(10, 2) NOT NULL,
     ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
+    Fecha_Modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Activo BOOLEAN DEFAULT TRUE,
     Imagen VARCHAR(255) -- Urlk de kla imagen
 );
 
@@ -80,7 +84,7 @@ CREATE TABLE Detalle_Pedido (
     Cantidad INT NOT NULL,
     Precio_Unitario DECIMAL(10, 2) NOT NULL,
     ID_Usuario_Comprador INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
-        Fecha_Modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    Fecha_Modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE Usuario_Proveedor (

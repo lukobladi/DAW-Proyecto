@@ -3,9 +3,9 @@ const Pedido = require('../models/Pedido');
 const PedidoController = {
   // Crear un nuevo pedido
   async crear(req, res) {
-    const { fecha, id_usuario, estado } = req.body;
+    const { fecha_apertura, fecha_cierre, fecha_entrega, id_usuario_encargado, id_proveedor, estado } = req.body;
     try {
-      const nuevoPedido = await Pedido.create(fecha, id_usuario, estado);
+      const nuevoPedido = await Pedido.create(fecha_apertura, fecha_cierre, fecha_entrega, id_usuario_encargado, id_proveedor, estado);
       res.status(201).json(nuevoPedido);
     } catch (err) {
       console.error(err);
@@ -42,9 +42,9 @@ const PedidoController = {
   // Actualizar un pedido
   async actualizar(req, res) {
     const { id } = req.params;
-    const { fecha, id_usuario, estado } = req.body;
+    const { fecha_apertura, fecha_cierre, fecha_entrega, id_usuario_encargado, id_proveedor, estado } = req.body;
     try {
-      const pedidoActualizado = await Pedido.update(id, fecha, id_usuario, estado);
+      const pedidoActualizado = await Pedido.update(id, fecha_apertura, fecha_cierre, fecha_entrega, id_usuario_encargado, id_proveedor, estado);
       res.json(pedidoActualizado);
     } catch (err) {
       console.error(err);
@@ -63,6 +63,23 @@ const PedidoController = {
       res.status(500).send('Error al eliminar el pedido');
     }
   },
+
+  // Cambiar el estado de un pedido
+  async cambiarEstado(req, res) {
+    const { id } = req.params;
+    const { estado } = req.body;
+    try {
+      const pedido = await Pedido.findById(id);
+      if (!pedido) {
+        return res.status(404).send('Pedido no encontrado');
+      }
+      const pedidoActualizado = await Pedido.updateEstado(id, estado);
+      res.json(pedidoActualizado);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al cambiar el estado del pedido');
+    }
+  }
 };
 
 module.exports = PedidoController;

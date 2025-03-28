@@ -26,14 +26,20 @@ const PagoController = {
 
   // Cambiar el estado de un pago
   async cambiarEstado(req, res) {
-    const { id } = req.params;
-    const { estado } = req.body;
     try {
+      const { id } = req.params;
+      const { estado } = req.body;
+  
+      const pago = await Pago.findById(id);
+      if (!pago) {
+        return res.status(404).json({ error: 'Pago no encontrado' });
+      }
+  
       const pagoActualizado = await Pago.cambiarEstado(id, estado);
-      res.json(pagoActualizado);
+      res.status(200).json(pagoActualizado);
     } catch (err) {
       console.error(err);
-      res.status(500).send('Error al cambiar el estado del pago');
+      res.status(500).json({ error: 'Error al cambiar el estado del pago' });
     }
   },
 

@@ -1,5 +1,6 @@
 const express = require('express');
 const PedidoController = require('../controllers/PedidoController');
+const authMiddleware = require('../middlewares/auth'); // Middleware de autenticación
 
 const router = express.Router();
 
@@ -16,6 +17,8 @@ const router = express.Router();
  *   post:
  *     summary: Crear un nuevo pedido
  *     tags: [Pedidos]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -23,41 +26,26 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             properties:
- *               fecha:
+ *               fecha_apertura:
  *                 type: string
  *                 format: date-time
  *                 example: "2023-10-01T12:00:00Z"
- *               id_usuario:
+ *               id_usuario_encargado:
  *                 type: integer
  *                 example: 1
+ *               id_proveedor:
+ *                 type: integer
+ *                 example: 2
  *               estado:
  *                 type: string
- *                 example: "Pendiente"
+ *                 example: "pendiente"
  *     responses:
  *       201:
  *         description: Pedido creado correctamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id_pedido:
- *                   type: integer
- *                   example: 1
- *                 fecha:
- *                   type: string
- *                   format: date-time
- *                   example: "2023-10-01T12:00:00Z"
- *                 id_usuario:
- *                   type: integer
- *                   example: 1
- *                 estado:
- *                   type: string
- *                   example: "Pendiente"
  *       500:
  *         description: Error al crear el pedido
  */
-router.post('/crear', PedidoController.crear);
+router.post('/crear', authMiddleware, PedidoController.crear);
 
 /**
  * @swagger
@@ -65,33 +53,15 @@ router.post('/crear', PedidoController.crear);
  *   get:
  *     summary: Obtener todos los pedidos
  *     tags: [Pedidos]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Lista de pedidos
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id_pedido:
- *                     type: integer
- *                     example: 1
- *                   fecha:
- *                     type: string
- *                     format: date-time
- *                     example: "2023-10-01T12:00:00Z"
- *                   id_usuario:
- *                     type: integer
- *                     example: 1
- *                   estado:
- *                     type: string
- *                     example: "Pendiente"
  *       500:
  *         description: Error al obtener los pedidos
  */
-router.get('/obtenerTodos', PedidoController.listar);
+router.get('/obtenerTodos', authMiddleware, PedidoController.listar);
 
 /**
  * @swagger
@@ -99,6 +69,8 @@ router.get('/obtenerTodos', PedidoController.listar);
  *   get:
  *     summary: Obtener un pedido por ID
  *     tags: [Pedidos]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -109,30 +81,12 @@ router.get('/obtenerTodos', PedidoController.listar);
  *     responses:
  *       200:
  *         description: Pedido encontrado
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id_pedido:
- *                   type: integer
- *                   example: 1
- *                 fecha:
- *                   type: string
- *                   format: date-time
- *                   example: "2023-10-01T12:00:00Z"
- *                 id_usuario:
- *                   type: integer
- *                   example: 1
- *                 estado:
- *                   type: string
- *                   example: "Pendiente"
  *       404:
  *         description: Pedido no encontrado
  *       500:
  *         description: Error al obtener el pedido
  */
-router.get('/obtener/:id', PedidoController.obtenerPorId);
+router.get('/obtener/:id', authMiddleware, PedidoController.obtenerPorId);
 
 /**
  * @swagger
@@ -140,6 +94,8 @@ router.get('/obtener/:id', PedidoController.obtenerPorId);
  *   put:
  *     summary: Actualizar un pedido
  *     tags: [Pedidos]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -154,43 +110,28 @@ router.get('/obtener/:id', PedidoController.obtenerPorId);
  *           schema:
  *             type: object
  *             properties:
- *               fecha:
+ *               fecha_apertura:
  *                 type: string
  *                 format: date-time
  *                 example: "2023-10-01T12:00:00Z"
- *               id_usuario:
+ *               id_usuario_encargado:
  *                 type: integer
  *                 example: 1
+ *               id_proveedor:
+ *                 type: integer
+ *                 example: 2
  *               estado:
  *                 type: string
- *                 example: "Completado"
+ *                 example: "en proceso"
  *     responses:
  *       200:
  *         description: Pedido actualizado correctamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id_pedido:
- *                   type: integer
- *                   example: 1
- *                 fecha:
- *                   type: string
- *                   format: date-time
- *                   example: "2023-10-01T12:00:00Z"
- *                 id_usuario:
- *                   type: integer
- *                   example: 1
- *                 estado:
- *                   type: string
- *                   example: "Completado"
  *       404:
  *         description: Pedido no encontrado
  *       500:
  *         description: Error al actualizar el pedido
  */
-router.put('/actualizar/:id', PedidoController.actualizar);
+router.put('/actualizar/:id', authMiddleware, PedidoController.actualizar);
 
 /**
  * @swagger
@@ -198,6 +139,8 @@ router.put('/actualizar/:id', PedidoController.actualizar);
  *   delete:
  *     summary: Eliminar un pedido
  *     tags: [Pedidos]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -213,6 +156,44 @@ router.put('/actualizar/:id', PedidoController.actualizar);
  *       500:
  *         description: Error al eliminar el pedido
  */
-router.delete('/eliminar/:id', PedidoController.eliminar);
+router.delete('/eliminar/:id', authMiddleware, PedidoController.eliminar);
+
+/**
+ * @swagger
+ * /api/pedidos/cambiarEstado/{id}:
+ *   patch:
+ *     summary: Cambiar el estado de un pedido
+ *     tags: [Pedidos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del pedido
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               estado:
+ *                 type: string
+ *                 enum: [pendiente, en proceso, entregado, repartido, cancelado]
+ *                 example: "en proceso"
+ *     responses:
+ *       200:
+ *         description: Estado del pedido actualizado correctamente
+ *       400:
+ *         description: Estado no válido
+ *       404:
+ *         description: Pedido no encontrado
+ *       500:
+ *         description: Error al cambiar el estado del pedido
+ */
+router.patch('/cambiarEstado/:id', authMiddleware, PedidoController.cambiarEstado);
 
 module.exports = router;

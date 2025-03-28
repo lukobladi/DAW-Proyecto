@@ -1,5 +1,6 @@
 const express = require('express');
 const NotificacionController = require('../controllers/NotificacionController');
+const authMiddleware = require('../middlewares/auth'); // Middleware de autenticación
 
 const router = express.Router();
 
@@ -16,6 +17,8 @@ const router = express.Router();
  *   post:
  *     summary: Enviar una notificación
  *     tags: [Notificaciones]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -56,7 +59,7 @@ const router = express.Router();
  *       500:
  *         description: Error al enviar la notificación
  */
-router.post('/enviar/', NotificacionController.enviar);
+router.post('/enviar/', authMiddleware, NotificacionController.enviar);
 
 /**
  * @swagger
@@ -64,6 +67,8 @@ router.post('/enviar/', NotificacionController.enviar);
  *   put:
  *     summary: Marcar una notificación como leída
  *     tags: [Notificaciones]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -100,6 +105,7 @@ router.post('/enviar/', NotificacionController.enviar);
  *       500:
  *         description: Error al marcar la notificación como leída
  */
-router.put('/marcar-leida/:id', NotificacionController.marcarLeida);
+router.put('/marcar-leida/:id', authMiddleware, NotificacionController.marcarLeida);
 
 module.exports = router;
+

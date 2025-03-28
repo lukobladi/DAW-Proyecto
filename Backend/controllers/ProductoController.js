@@ -68,6 +68,25 @@ const ProductoController = {
       res.status(500).send('Error al eliminar el producto');
     }
   },
+
+  // Cambiar el estado de un producto
+  async cambiarEstadoActivo(req, res) {
+    const { id } = req.params;
+    const { activo } = req.body; // `activo` debe ser un booleano (true o false)
+
+    try {
+      const producto = await Producto.findById(id);
+      if (!producto) {
+        return res.status(404).send('Producto no encontrado');
+      }
+
+      const productoActualizado = await Producto.updateEstado(id, activo);
+      res.json(productoActualizado);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al cambiar el estado del producto');
+    }
+  }
 };
 
 module.exports = ProductoController;

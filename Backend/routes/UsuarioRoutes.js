@@ -295,7 +295,7 @@ router.post('/recuperar-password', UsuarioController.recuperarPassword);
  *             properties:
  *               nombre:
  *                 type: string
- *                 example: Juan Pérez
+ *                 example: Eneko
  *               correo:
  *                 type: string
  *                 example: enekoloko7@hotmail.com
@@ -318,7 +318,7 @@ router.post('/recuperar-password', UsuarioController.recuperarPassword);
  *                   example: 1
  *                 nombre:
  *                   type: string
- *                   example: Juan Pérez
+ *                   example: Eneko
  *                 correo:
  *                   type: string
  *                   example: enekoloko7@hotmail.com
@@ -388,6 +388,8 @@ router.delete('/eliminar/:id', authMiddleware, adminMiddleware, UsuarioControlle
  *       500:
  *         description: Error al calcular el saldo
  */
-router.get('/obtener/:id_usuario', UsuarioController.calcularSaldo);
+router.get('/obtener/:id_usuario', authMiddleware, UsuarioController.calcularSaldo);
+
+
 
 module.exports = router;

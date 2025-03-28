@@ -255,7 +255,15 @@ npm install swagger-jsdoc swagger-ui-express
 5. Instala paquetes y librerias:
    ```bash
 
-    npm install express cors express-validator nodemailer multer bcrypt jsonwebtoken dotenv pg swagger-jsdoc swagger-ui-express bootstrap
+    npm install express cors express-validator nodemailer multer bcrypt jsonwebtoken dotenv pg swagger-jsdoc swagger-ui-express bootstrap 
+
+
+   ```
+
+   6. Instala paquetes y librerias Testing:
+   ```bash
+
+   npm install --save-dev jest supertest
 
 
    ```
@@ -342,6 +350,7 @@ npm install swagger-jsdoc swagger-ui-express
        ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
        Fecha_Apertura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
        Fecha_Cierre TIMESTAMP,
+       Fecha_Entrega TIMESTAMP,
        Fecha_Entrega TIMESTAMP,
        Estado VARCHAR(50) NOT NULL CHECK (Estado IN ('pendiente', 'en proceso', 'entregado', 'repartido', 'cancelado'))
    );

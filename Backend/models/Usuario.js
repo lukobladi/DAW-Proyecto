@@ -85,10 +85,10 @@ const Usuario = {
   },
 
   // Eliminar un usuario
-  async delete(id) {
-    const query = 'DELETE FROM Usuario WHERE ID_Usuario = $1;';
-    await pool.query(query, [id]);
-  },
+  // async delete(id) {
+  //   const query = 'DELETE FROM Usuario WHERE ID_Usuario = $1;';
+  //   await pool.query(query, [id]);
+  // },
 
   async calcularSaldo(id_usuario) {
     const query = `
