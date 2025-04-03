@@ -163,13 +163,115 @@
 
 ---
 
-## Resumen
 
-1. **Backend**:
-   - Usa HTTPS, valida entradas, protege rutas, configura CORS, y oculta información sensible.
-2. **Frontend**:
-   - Usa HTTPS, protege rutas, sanitiza entradas, y configura cabeceras de seguridad.
-3. **Alojamiento**:
-   - Configura el servidor con HTTPS, un firewall, y realiza copias de seguridad.
-4. **Herramientas**:
-   - Usa herramientas de escaneo y pruebas de penetración para asegurar la aplicación.
+
+---
+
+### **1. Advertencias de `npm`**
+Las advertencias `EBADENGINE` indican que algunas dependencias (`@nuxt/kit` y `@nuxt/schema`) no son compatibles con la versión de Node.js instalada en el servidor (`v20.19.0`). Estas dependencias requieren versiones específicas de Node.js (`^14.16.0 || ^16.10.0 || ^17.0.0 || ^18.0.0 || ^19.0.0`).
+
+#### **Solución**
+Puedes instalar una versión compatible de Node.js en el servidor utilizando `nvm` (Node Version Manager):
+
+1. **Instalar `nvm` en el servidor:**
+   ```bash
+   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+   source ~/.bashrc
+   ```
+
+2. **Instalar una versión compatible de Node.js (por ejemplo, `18.x`):**
+   ```bash
+   nvm install 18
+   nvm use 18
+   ```
+
+3. **Verifica la versión de Node.js:**
+   ```bash
+   node -v
+   ```
+
+4. **Reinstala las dependencias del frontend y backend:**
+   ```bash
+   cd /var/www/daw-proyecto/frontend
+   npm install
+   npm run build
+
+   cd /var/www/daw-proyecto/backend
+   npm install
+   ```
+
+---
+
+### **2. Advertencias de Webpack**
+Las advertencias de Webpack indican que algunos archivos (como `img/cestaesparza.4aeb8395.png`) y puntos de entrada (`app`) exceden los límites recomendados de tamaño, lo que podría afectar el rendimiento.
+
+#### **Solución**
+1. **Optimiza las imágenes:**
+   Comprime las imágenes grandes utilizando herramientas como [TinyPNG](https://tinypng.com/) o `imagemin`.
+
+   Por ejemplo, puedes usar `imagemin-cli` para optimizar imágenes en el servidor:
+   ```bash
+   npm install -g imagemin-cli
+   imagemin /var/www/daw-proyecto/frontend/src/assets/* --out-dir=/var/www/daw-proyecto/frontend/src/assets/
+   ```
+
+2. **Habilita la carga diferida (lazy loading):**
+   Divide el código en partes más pequeñas para mejorar el rendimiento. Por ejemplo, usa `import()` para cargar componentes de forma diferida en Vue:
+
+   ```javascript
+   const MiComponente = () => import('@/components/MiComponente.vue');
+   ```
+
+---
+
+### **3. Error de Enlace Simbólico en Nginx**
+El error `ln: failed to create symbolic link '/etc/nginx/sites-enabled/daw-proyecto': File exists` indica que el enlace simbólico para la configuración de Nginx ya existe.
+
+#### **Solución**
+Elimina el enlace simbólico existente antes de crearlo nuevamente:
+
+```bash
+sudo rm /etc/nginx/sites-enabled/daw-proyecto
+sudo ln -s /etc/nginx/sites-available/daw-proyecto /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
+```
+
+---
+
+### **4. Vulnerabilidades Detectadas**
+El comando `npm audit` detectó vulnerabilidades en las dependencias.
+
+#### **Solución**
+Ejecuta el siguiente comando para intentar solucionarlas automáticamente:
+
+```bash
+npm audit fix
+```
+
+Si algunas vulnerabilidades persisten, puedes usar el siguiente comando (aunque podría introducir cambios importantes):
+
+```bash
+npm audit fix --force
+```
+
+---
+
+### **5. Verifica el Estado del Backend y Frontend**
+- **Backend:** Verifica que el backend esté corriendo correctamente con PM2:
+  ```bash
+  pm2 list
+  ```
+
+- **Frontend:** Asegúrate de que Nginx esté sirviendo el frontend correctamente. Abre el navegador y accede a tu dominio (`http://ekonsumo.duckdns.org`).
+
+---
+
+### **Resumen**
+1. Cambia la versión de Node.js a una compatible (por ejemplo, `18.x`) usando `nvm`.
+2. Optimiza las imágenes y habilita la carga diferida para mejorar el rendimiento del frontend.
+3. Elimina el enlace simbólico duplicado en Nginx y reinicia el servicio.
+4. Soluciona las vulnerabilidades detectadas con `npm audit fix`.
+5. Verifica que el backend y frontend estén funcionando correctamente.
+
+Si necesitas más ayuda, ¡házmelo saber! 😊

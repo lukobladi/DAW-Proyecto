@@ -1,0 +1,7 @@
+# Ignorar configuración de Visual Studio Code
+Backend/.vscode/
+frontend/.vscode/
+
+# Ignorar dependencias de Node.js
+Backend/node_modules/
+frontend/node_modules/
