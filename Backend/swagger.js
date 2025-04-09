@@ -1,5 +1,6 @@
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const path = require('path');
 
 const swaggerOptions = {
   swaggerDefinition: {
@@ -11,8 +12,8 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: 'http://localhost:3000',
-        description: 'Servidor de desarrollo',
+        url: 'http://ekonsumo.duckdns.org:3000',
+        description: 'Servidor remoto',
       },
     ],
     components: {
@@ -30,10 +31,14 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: ['./routes/*.js'],
+  apis: [path.join(__dirname, 'routes/*.js')], // Cambia a una ruta absoluta
+
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
+
+console.log('Mostrar swaggerDocs');
+console.log(swaggerDocs);
 
 module.exports = (app) => {
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
