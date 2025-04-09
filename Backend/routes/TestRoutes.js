@@ -24,7 +24,7 @@ const router = express.Router();
  *       500:
  *         description: Error en la conexión
  */
-router.get('/test', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     // Probar la conexión a la base de datos
     const dbResult = await pool.query('SELECT NOW()');
