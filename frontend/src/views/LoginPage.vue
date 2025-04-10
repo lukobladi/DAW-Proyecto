@@ -58,7 +58,7 @@ export default {
         this.$router.push({ name: 'Dashboard' });
         alertStore.showAlert('Inicio de sesión exitoso.', 'success');
       } catch (error) {
-        console.error('Error al iniciar sesión:', error);
+        console.error('Error al iniciar sesión:', error.message);
         // Manejar diferentes códigos de estado HTTP
         if (error.response?.status === 403) {
           alertStore.showAlert('El usuario no está activo. Contacta al administrador.', 'danger');

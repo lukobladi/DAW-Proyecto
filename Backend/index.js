@@ -33,20 +33,12 @@ swaggerSetup(app);
 
 app.use(express.json());
 // Solo permitir conexion desde estos origenes
-app.options('*', cors()); // Manejar solicitudes preflight para todas las rutas
+//app.options('*', cors()); // Manejar solicitudes preflight para todas las rutas
 app.use(cors({
-  origin: [
-    'http://localhost:80',
-    'http://localhost:3000',
-    'http://localhost:8080',
-    'http://ekonsumo.duckdns.org',
-    'https://ekonsumo.duckdns.org',
-    'http://ekonsumo.duckdns.org:8080',
-    'http://ekonsumo.duckdns.org:3000'
-  ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  credentials: true, // Permitir credenciales (cookies, autorización, etc.)
+  origin: false, // Disable Express CORS since Nginx handles it
+  credentials: true
 }));
+
 
 
 // Usar las rutas
