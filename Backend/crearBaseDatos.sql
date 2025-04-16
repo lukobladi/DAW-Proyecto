@@ -37,7 +37,8 @@ CREATE TABLE Usuario (
     Movil VARCHAR(20),
     Rol VARCHAR(50) NOT NULL CHECK (Rol IN ('admin', 'usuario')),
     Activo BOOLEAN DEFAULT FALSE,
-    Saldo DECIMAL(10, 2) DEFAULT 0
+    Saldo DECIMAL(10, 2) DEFAULT 0,
+    Fecha_Modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE Proveedor (

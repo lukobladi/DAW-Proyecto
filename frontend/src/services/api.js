@@ -2,18 +2,14 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:3000/api', // URL de tu backend
-  //withCredentials: false,
-  headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-  },
+  baseURL: 'http://ekonsumo.duckdns.org:3000/api', // Cambia esto si es necesario
+  withCredentials: true, // Permitir cookies y credenciales
 });
 
 apiClient.interceptors.request.use((config) => {
   const token = localStorage.getItem('authToken');
   if (token) {
-    config.headers['Authorization'] = token;
+    config.headers['Authorization'] = `Bearer ${token}`; 
   }
   return config;
 });
