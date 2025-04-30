@@ -2,7 +2,9 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'http://ekonsumo.duckdns.org:3000/api', // Cambia esto si es necesario
+  //   baseURL: 'http://ekonsumo.duckdns.org:3000/api', // Cambia esto si es necesario
+
+  baseURL: 'http://127.0.0.1:3000/api', // Cambia esto si es necesario
   withCredentials: true, // Permitir cookies y credenciales
 });
 
@@ -33,6 +35,7 @@ export default {
   eliminarUsuario(id) {
     return apiClient.delete(`/usuarios/eliminar/${id}`);
   },
+
 
 
 

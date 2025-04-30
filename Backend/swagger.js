@@ -15,6 +15,10 @@ const swaggerOptions = {
         url: 'http://ekonsumo.duckdns.org:3000',
         description: 'Servidor remoto',
       },
+      {
+        url: 'http://localhost:3000',
+        description: 'Servidor local',
+      },
     ],
     components: {
       securitySchemes: {
