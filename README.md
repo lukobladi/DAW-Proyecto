@@ -1,3 +1,6 @@
+# !!NOTA PARA EL FUTURO: mirar diseño de la web TromJaro: https://www.tromjaro.com/  !!
+
+
 # DAW-Proyecto
 
 ## Tabla de Contenidos
