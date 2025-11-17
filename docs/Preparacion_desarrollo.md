@@ -1,6 +1,4 @@
-Aquí tienes la versión corregida y mejor organizada del documento en formato **Markdown**. He ajustado la estructura, corregido errores de formato y mejorado la claridad del contenido.
 
----
 
 # Preparación para el Desarrollo de la Aplicación Web de Consumo Local y Ecológico
 
@@ -229,7 +227,7 @@ GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO ekonsumo_user;
 ### 1. Instalar Dependencias
 1. Navega a la carpeta del proyecto:
    ```bash
-   cd tu-repositorio
+   cd repositorio
    ```
 2. Instala las dependencias de Node.js:
    ```bash

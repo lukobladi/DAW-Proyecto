@@ -3,16 +3,16 @@
 ## Requisitos Previos
 1. **Servidor VPS**: Contratado en [Clouding.io](https://clouding.io/).
 2. **Sistema Operativo**: Debian 12 instalado en el VPS.
-3. **Dominio**: Configurado en [DuckDNS](https://www.duckdns.org/).
-4. **Acceso SSH**: A tu servidor VPS.
-5. **Proyecto**: Código del proyecto listo para ser desplegado.
+3. **Dominio**: Gratuito [DuckDNS](https://www.duckdns.org/).
+4. **Acceso SSH**: Acceso VPS.
+5. **Proyecto**: Código fuente npm.
 
 ---
 
 ## Pasos para Configurar el VPS
 
 ### 1. Acceso al Servidor
-1. Accede al servidor VPS mediante SSH:
+1. Acceder al servidor mediante SSH:
    ```bash
    ssh root@<IP_DEL_SERVIDOR>
    ```
@@ -25,27 +25,27 @@
 ---
 
 ### 2. Configurar DuckDNS
-1. Crea una cuenta en [DuckDNS](https://www.duckdns.org/) y añade un subdominio.
-2. Copia tu token de DuckDNS.
-3. Configura un script para actualizar la IP dinámica:
-   - Crea un archivo para el script:
+1. Crear cuenta en [DuckDNS](https://www.duckdns.org/) y añadir subdominio.
+2. Copiar token de DuckDNS.
+3. Configurar script para actualizar la IP dinámica:
+   - Crear archivo para script programado con CRON para que actualize la IP regularmente:
      ```bash
      nano /etc/cron.daily/duckdns
      ```
-   - Añade el siguiente contenido (reemplaza `<SUBDOMINIO>` y `<TOKEN>` con tus datos):
+   - Añadir el contenido (reemplazar `<SUBDOMINIO>` y `<TOKEN>` con los datos de DUCKDNS):
      ```bash
      #!/bin/bash
      echo url="https://www.duckdns.org/update?domains=<SUBDOMINIO>&token=<TOKEN>&ip=" | curl -k -o ~/duckdns.log -K -
      ```
-   - Haz el script ejecutable:
+   - Hacer el script ejecutable:
      ```bash
      chmod +x /etc/cron.daily/duckdns
      ```
-4. Verifica que el script funciona ejecutándolo manualmente:
+4. Verificar script manualmente:
    ```bash
    /etc/cron.daily/duckdns
    ```
-   Si todo está correcto, DuckDNS actualizará automáticamente tu IP.
+   Si todo está correcto, veremos la IP del servidor en DuckDNS apuntando al domainname.
 
 ---
 

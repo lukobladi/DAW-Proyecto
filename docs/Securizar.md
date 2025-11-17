@@ -2,29 +2,29 @@
 ## 1. **Securización del Backend**
 
 ### a) **Usar HTTPS**
-- **Descripción**: Asegúrate de que todas las comunicaciones entre el frontend y el backend estén cifradas usando HTTPS.
+- **Descripción**: Asegúrar que todas las comunicaciones entre el frontend y el backend estén cifradas usando HTTPS.
 - **Cómo hacerlo**:
   - Obtén un certificado SSL/TLS (puedes usar [Let's Encrypt](https://letsencrypt.org/) para obtener uno gratuito).
   - Configura tu servidor (por ejemplo, Nginx o Apache) para usar HTTPS.
   - Redirige todo el tráfico HTTP a HTTPS.
 
 ### b) **Proteger las Rutas de la API**
-- **Descripción**: Asegúrate de que las rutas de la API estén protegidas y solo sean accesibles para usuarios autenticados y autorizados.
+- **Descripción**: Asegúrar que las rutas de la API estén protegidas y solo sean accesibles para usuarios autenticados y autorizados.
 - **Cómo hacerlo**:
   - Usa **JSON Web Tokens (JWT)** para autenticar a los usuarios.
   - Implementa middlewares para verificar el token en cada solicitud.
   - Limita el acceso a rutas sensibles (por ejemplo, solo los administradores pueden acceder a la gestión de usuarios).
 
 ### c) **Validar y Sanitizar las Entradas**
-- **Descripción**: Evita ataques como **SQL Injection** o **XSS** validando y sanitizando todas las entradas del usuario.
+- **Descripción**: Evitar ataques como **SQL Injection** o **XSS** validando y sanitizando todas las entradas del usuario.
 - **Cómo hacerlo**:
   - Usa librerías como `express-validator` para validar los datos de entrada.
   - Sanitiza las entradas para eliminar caracteres peligrosos.
 
 ### d) **Configurar CORS Correctamente**
-- **Descripción**: Restringe las solicitudes de origen cruzado (CORS) para evitar que dominios no autorizados accedan a tu API.
+- **Descripción**: Restringir las solicitudes de origen cruzado (CORS) para evitar que dominios no autorizados accedan a la API.
 - **Cómo hacerlo**:
-  - Configura CORS para permitir solo los dominios de tu frontend.
+  - Configura CORS para permitir solo los dominios del frontend.
   - Usa el paquete `cors` en Express:
     ```javascript
     const cors = require('cors');
