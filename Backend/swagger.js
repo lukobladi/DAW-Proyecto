@@ -35,7 +35,7 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: [path.join(__dirname, 'routes/*.js')], // Cambia a una ruta absoluta
+  apis: [path.join(__dirname, 'routes/*.js')], 
 
 };
 

@@ -196,8 +196,7 @@ sudo mkdir -p /var/www/daw-proyecto/frontend
 
 # 3. Configurar Permisos
 # Una vez copiados los archivos, asegúrate de que los permisos sean correctos en el servidor:
-
-sudo chown -R eneko:eneko /var/www/daw-proyecto
+sudo chown -R www-data:www-data /var/www/daw-proyecto/
 sudo chmod -R 755 /var/www/daw-proyecto
 
 # 4. Instalar Dependencias

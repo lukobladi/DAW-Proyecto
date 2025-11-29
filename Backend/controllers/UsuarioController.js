@@ -25,23 +25,23 @@ const UsuarioController = {
       const user = await Usuario.findByEmailOrMobile(correoOMovil);
 
       if (!user) {
-        console.error('Login failed: User not found'); // Debugging log
+        console.error('Fallo de login: Usuario no encontrado'); // Log depuracion
         return res.status(401).json({ message: 'Credenciales incorrectas' });
       }
 
       const validPassword = await bcrypt.compare(password, user.pass);
       if (!validPassword) {
-        console.error('Login failed: Invalid password'); // Debugging log
+        console.error('Fallo de login: Password invalido'); // Log depuracion
         return res.status(401).json({ message: 'Credenciales incorrectas' });
       }
 
       const token = jwt.sign(
         { id_usuario: user.id_usuario, rol: user.rol },
-        SECRET_KEY, // Use the environment variable
+        SECRET_KEY, // Variasble global
         { expiresIn: '1h' }
       );
 
-      console.log('Login successful, token generated:', token); // Debugging log
+      console.log('Login correcto, token generado:', token); // Log depuracion
 
       res.status(200).json({
         id_usuario: user.id_usuario,
@@ -52,7 +52,7 @@ const UsuarioController = {
         token,
       });
     } catch (err) {
-      console.error('Error during login:', err.message); // Debugging log
+      console.error('Error en el login:', err.message); // Log depuracion
       res.status(500).json({ message: 'Error al iniciar sesión' });
     }
   },
@@ -60,7 +60,7 @@ const UsuarioController = {
   // Activar o desactivar usuario
   async cambiarEstadoActivo(req, res) {
     const { id } = req.params;
-    const { activo } = req.body; // `activo` debe ser un booleano (true o false)
+    const { activo } = req.body; // booleano 
   
     try {
       const usuarioActualizado = await Usuario.toggleActivation(id, activo);
@@ -91,7 +91,7 @@ const UsuarioController = {
       }
       console.log('usuario ' + usuario);
 
-      const enlaceRecuperacion = `http://localhost:8080/recuperar-password/${usuario.id}`;
+      const enlaceRecuperacion = `http://ekonsumo.duckdns.org/recuperar-password/${usuario.id}`;
 
       console.log('enlaceRecuperacion ' + enlaceRecuperacion);
 

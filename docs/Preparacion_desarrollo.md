@@ -31,7 +31,7 @@
   - `README.md`: Para la documentación del proyecto.
   - `.gitignore`: Para excluir archivos y carpetas innecesarias del control de versiones.
 
-## 3. Definición de Modelos de Datos
+## 3. Definición de Modelos de Datos !!Actualizaz!!
 
 - **Identificar Entidades**:
   - **Usuario**: ID, nombre, correo electrónico, contraseña, rol (usuario/admin).
@@ -40,7 +40,7 @@
 
 - **Crear Diagramas ER**: Utiliza herramientas como Lucidchart o Draw.io para crear diagramas de entidad-relación que representen las relaciones entre las entidades.
 
-## 4. Planificación de la API
+## 4. Planificación de la API !!Actualizaz!!
 
 - **Definir Endpoints**:
   - **Usuarios**:

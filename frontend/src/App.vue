@@ -9,7 +9,7 @@
     </transition>
     <NavBar />
     <router-view />
-    <Footer />
+    <FooterBar />
   </div>
 </template>
 
@@ -18,13 +18,13 @@
 import { computed } from 'vue'; // Importación correcta de `computed`
 import { alertStore } from './store/alertStore'; // Importación del estado global
 import NavBar from './components/NavBar.vue';
-import Footer from './components/FooterBar.vue';
+import FooterBar from './components/FooterBar.vue';
 
 export default {
   name: 'App',
   components: {
     NavBar,
-    Footer,
+    FooterBar,
   },
   setup() {
     // Computar la clase de la alerta según el tipo
@@ -47,7 +47,7 @@ export default {
   min-height: 100vh;
 }
 
-router-view {
+.router-view {
   flex: 1;
 }
 

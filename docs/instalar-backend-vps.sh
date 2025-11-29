@@ -163,7 +163,7 @@ read -p "¿Deseas configurar HTTPS con Let's Encrypt? (y/n): " install_https
 if [ "$install_https" = "y" ]; then
     echo "=== Instalando Certbot ==="
     sudo apt install -y certbot python3-certbot-nginx
-    sudo certbot --nginx -d tu-dominio.com  # Cambiar por tu dominio
+    sudo certbot --nginx -d ekonsumo.duckdns.org
     sudo systemctl restart nginx
 fi
 

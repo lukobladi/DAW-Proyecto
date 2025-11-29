@@ -39,3 +39,7 @@ coverage/
 
 # Directorios de dependencias adicionales
 bower_components/
+
+package-lock.json
+
+package.json

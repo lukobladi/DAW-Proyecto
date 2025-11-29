@@ -3,23 +3,23 @@ const jwt = require('jsonwebtoken');
 module.exports = (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
-    console.error('Authorization header missing'); // Debugging log
-    return res.status(401).json({ message: 'Authorization header missing' });
+    console.error('No se encuentra header Authorization'); // Log depuracion
+    return res.status(401).json({ message: 'No se encuentra header Authorization' });
   }
 
   const token = authHeader.split(' ')[1];
   if (!token) {
-    console.error('Token missing in Authorization header'); // Debugging log
-    return res.status(401).json({ message: 'Token missing' });
+    console.error('No se encuentra token en header Authorization'); // Log depuracion
+    return res.status(401).json({ message: 'Token no encontrado' });
   }
 
   try {
-    console.log('Verifying token:', token); // Debugging log
+    console.log('Verificando token:', token); // Log depuracion
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
     next();
   } catch (err) {
-    console.error('Invalid token:', err.message); // Debugging log
-    return res.status(401).json({ message: 'Invalid token' });
+    console.error('Token invalido:', err.message); // Log depuracion
+    return res.status(401).json({ message: 'Token invalido' });
   }
 };

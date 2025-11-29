@@ -72,7 +72,7 @@ const ProductoController = {
   // Cambiar el estado de un producto
   async cambiarEstadoActivo(req, res) {
     const { id } = req.params;
-    const { activo } = req.body; // `activo` debe ser un booleano (true o false)
+    const { activo } = req.body; // `activo` debe ser un booleano 
 
     try {
       const producto = await Producto.findById(id);
