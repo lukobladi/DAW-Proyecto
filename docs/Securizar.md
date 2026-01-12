@@ -55,7 +55,7 @@
   - No subas archivos como `.env` a tu repositorio de Git. Añádelos a `.gitignore`.
 
 ### g) **Actualizar Dependencias**
-- **Descripción**: Mantén todas las dependencias actualizadas para evitar vulnerabilidades conocidas.
+- **Descripción**: Mantiene todas las dependencias actualizadas para evitar vulnerabilidades conocidas.
 - **Cómo hacerlo**:
   - Usa `npm audit` para detectar vulnerabilidades.
   - Actualiza las dependencias regularmente con `npm update`.
@@ -243,13 +243,13 @@ sudo systemctl restart nginx
 El comando `npm audit` detectó vulnerabilidades en las dependencias.
 
 #### **Solución**
-Ejecuta el siguiente comando para intentar solucionarlas automáticamente:
+Ejecutar siguiente comando para intentar solucionarlas automáticamente:
 
 ```bash
 npm audit fix
 ```
 
-Si algunas vulnerabilidades persisten, puedes usar el siguiente comando (aunque podría introducir cambios importantes):
+Si algunas vulnerabilidades persisten, usar el siguiente comando (aunque podría introducir cambios importantes):
 
 ```bash
 npm audit fix --force
@@ -258,20 +258,10 @@ npm audit fix --force
 ---
 
 ### **5. Verifica el Estado del Backend y Frontend**
-- **Backend:** Verifica que el backend esté corriendo correctamente con PM2:
+- **Backend:** Verificar backend con PM2:
   ```bash
   pm2 list
   ```
 
-- **Frontend:** Asegúrate de que Nginx esté sirviendo el frontend correctamente. Abre el navegador y accede a tu dominio (`http://ekonsumo.duckdns.org`).
+- **Frontend:** Asegurar que Nginx esté sirviendo el frontend correctamente. Abre el navegador y accede a (`http://ekonsumo.duckdns.org`).
 
----
-
-### **Resumen**
-1. Cambia la versión de Node.js a una compatible (por ejemplo, `18.x`) usando `nvm`.
-2. Optimiza las imágenes y habilita la carga diferida para mejorar el rendimiento del frontend.
-3. Elimina el enlace simbólico duplicado en Nginx y reinicia el servicio.
-4. Soluciona las vulnerabilidades detectadas con `npm audit fix`.
-5. Verifica que el backend y frontend estén funcionando correctamente.
-
-Si necesitas más ayuda, ¡házmelo saber! 😊

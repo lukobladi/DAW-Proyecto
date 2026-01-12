@@ -1,8 +1,8 @@
 const request = require('supertest');
 const pool = require('../db'); // Importa la conexión a la base de datos
 const app = require('../index'); // Importa la app
-const bcrypt = require('bcryptjs'); // Add bcrypt for password hashing
-const jwt = require('jsonwebtoken'); // Ensure JWT is imported
+const bcrypt = require('bcryptjs'); // Necesario para hashear passwords
+const jwt = require('jsonwebtoken'); // Utilizar tokens JWT
 
 let token; // Variable para almacenar el token de autenticación
 
@@ -18,18 +18,18 @@ async function getAuthToken() {
     INSERT INTO usuario (nombre, correo, pass, rol, movil)
     VALUES ('Admin Test', 'enekoloko7@hotmail.com', $1, 'admin', '123456789')
     ON CONFLICT (correo) DO NOTHING;
-  `, [hashedPassword]); // Use hashed password
+  `, [hashedPassword]); // Utilizar password hasheado
 
   // Obtener el token de autenticación
   const res = await request(app).post('/api/usuarios/login').send({
     correoOMovil: 'enekoloko7@hotmail.com',
-    password: '1234', // Plain password for login
+    password: '1234', // Loguear con contraseña texto plano
   });
 
-  console.log('Login response:', res.body); // Debugging log to check the response
+  console.log('Login response:', res.body); // Comprobar respuesta
 
   if (!res.body.token) {
-    console.error('Login failed:', res.body); // Log the response if the token is missing
+    console.error('Login failed:', res.body); // Comprobar si falta token
     throw new Error('Token not generated during login');
   }
 

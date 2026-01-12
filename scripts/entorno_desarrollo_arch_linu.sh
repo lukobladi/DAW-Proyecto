@@ -47,6 +47,7 @@ mkdir -p $BACKEND_DIR
 mkdir -p $FRONTEND_DIR
 mkdir -p $SQL_DIR
 
+# Para utilizar la versionm de Node 19
 pacman -S nvm
 nvm install 19     
 nvm use 19

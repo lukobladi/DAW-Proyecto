@@ -6,7 +6,7 @@ const SECRET_KEY = process.env.JWT_SECRET;
 
 if (!SECRET_KEY) {
   console.error('JWT_SECRET no está definido en las variables de entorno');
-  process.exit(1); // Detén la aplicación si falta la clave secreta
+  process.exit(1); // Detiene la aplicación si falta la clave secreta
 }
 
 const swaggerSetup = require('./swagger');

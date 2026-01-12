@@ -1,4 +1,8 @@
 {
+  "name": "ekonsumo-backend",
+  "version": "1.0.0",
+  "description": "Backend API REST para Ekonsumo - Grupo de Consumo",
+  "private": true,
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "bootstrap": "^5.3.8",

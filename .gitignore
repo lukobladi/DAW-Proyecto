@@ -5,3 +5,5 @@ frontend/.vscode/
 # Ignorar dependencias de Node.js
 Backend/node_modules/
 frontend/node_modules/
+docs/.~lock.*
+audio/

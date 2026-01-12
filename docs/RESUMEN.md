@@ -41,7 +41,7 @@ RESUMEN
 
 ### Cronograma
 - **Inicio:** 01/3/2025
-- **Finalización:** 01/05/2025 (Mantenimiento en curso)
+- **Finalización:** 
 
 ### Resumen del Proyecto: Prototipos y Flujos de Usuario para la Aplicación Web de Consumo Local y Ecológico
 

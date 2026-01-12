@@ -127,7 +127,7 @@
 ---
 
 ### 6. Configurar Firewall (UFW)
-1. Instala UFW si no está instalado:
+1. Instalar UFW si no está instalado:
    ```bash
    apt install ufw
    ```
@@ -145,7 +145,7 @@
    ```bash
    scp -r /ruta/local/proyecto root@<IP_DEL_SERVIDOR>:/var/www/daw-proyecto
    ```
-2. Instala las dependencias del backend:
+2. Instalar las dependencias del backend:
    ```bash
    cd /var/www/daw-proyecto/backend
    npm install
@@ -176,7 +176,7 @@
    ```bash
    apt install certbot python3-certbot-nginx
    ```
-2. Genera un certificado SSL para tu dominio:
+2. Genera un certificado SSL para el dominio:
    ```bash
    certbot --nginx -d <SUBDOMINIO>.duckdns.org
    ```
@@ -184,7 +184,7 @@
    ```bash
    crontab -e
    ```
-   Añade la siguiente línea:
+   Añadir siguiente línea:
    ```bash
    0 0 * * * certbot renew --quiet
    ```
@@ -192,11 +192,11 @@
 ---
 
 ### 9. Verificar el Despliegue
-1. Abre un navegador y accede a tu dominio:
+1. Abrir navegador y accede al dominio:
    ```
    http://<SUBDOMINIO>.duckdns.org
    ```
-2. Si configuraste HTTPS, accede con:
+2. Si HTTPS, accede con:
    ```
    https://<SUBDOMINIO>.duckdns.org
    ```
@@ -204,7 +204,7 @@
 ---
 
 ## Notas Finales
-- **Logs de Nginx**: Si necesitas depurar problemas, revisa los logs:
+- **Logs de Nginx**: Depurar problemas, revisar los logs:
   ```bash
   tail -f /var/log/nginx/error.log
   ```
@@ -212,9 +212,8 @@
   ```bash
   pm2 logs daw-proyecto
   ```
-- **Actualizar el Proyecto**: Para actualizar el código, sube los cambios al servidor, reinicia PM2:
+- **Actualizar el Proyecto**: Para actualizar el código, subir los cambios al servidor, reiniciar PM2:
   ```bash
   pm2 restart daw-proyecto
   ```
 
-Con esta configuración, tu proyecto estará alojado en el VPS con un dominio dinámico gestionado por DuckDNS.
