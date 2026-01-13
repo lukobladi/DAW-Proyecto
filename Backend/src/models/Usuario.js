@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs'); // Reemplazar bcrypt con bcryptjs
-const pool = require('../db');
+const pool = require('../config/db');
 
 const Usuario = {
   // Verificar contraseña

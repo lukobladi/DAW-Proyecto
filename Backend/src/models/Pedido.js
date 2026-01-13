@@ -1,4 +1,4 @@
-const pool = require('../db');
+const pool = require('../config/db');
 
 const Pedido = {
   // Crear un nuevo pedido

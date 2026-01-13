@@ -10,39 +10,58 @@ if (!SECRET_KEY) {
 }
 
 const swaggerSetup = require('./swagger');
-const validators = require('./middlewares/validators');
+const validators = require('./src/middlewares/validators');
 
-const usuarioRoutes = require('./routes/UsuarioRoutes');
-const productoRoutes = require('./routes/ProductoRoutes');
-const proveedorRoutes = require('./routes/ProveedorRoutes');
-const pedidoRoutes = require('./routes/PedidoRoutes');
-const detallePedidoRoutes = require('./routes/DetallePedidoRoutes');
-const usuarioProveedorRoutes = require('./routes/UsuarioProveedorRoutes');
-const pedidoPeriodicoRoutes = require('./routes/PedidoPeriodicoRoutes');
-const pagoRoutes = require('./routes/PagoRoutes');
-const notificacionRoutes = require('./routes/NotificacionRoutes');
-const TestRoutes = require('./routes/TestRoutes'); // Importar las rutas de prueba
+const usuarioRoutes = require('./src/routes/UsuarioRoutes');
+const productoRoutes = require('./src/routes/ProductoRoutes');
+const proveedorRoutes = require('./src/routes/ProveedorRoutes');
+const pedidoRoutes = require('./src/routes/PedidoRoutes');
+const detallePedidoRoutes = require('./src/routes/DetallePedidoRoutes');
+const usuarioProveedorRoutes = require('./src/routes/UsuarioProveedorRoutes');
+const pedidoPeriodicoRoutes = require('./src/routes/PedidoPeriodicoRoutes');
+const pagoRoutes = require('./src/routes/PagoRoutes');
+const notificacionRoutes = require('./src/routes/NotificacionRoutes');
+const TestRoutes = require('./src/routes/TestRoutes'); // Importar las rutas de prueba
 
-const upload = require('./config/multer'); 
+const upload = require('./src/config/multer'); 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Configuración para desarrollo (localhost)
+const corsOptions = {
+  origin: ['http://localhost:8080', 'http://127.0.0.1:8080'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+};
+
+// Middleware CORS debe estar PRIMERO
+app.use(cors(corsOptions));
+
+// Middleware para manejar preflight OPTIONS manualmente (Express 5 compatible)
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Origin', req.headers.origin || 'http://localhost:8080');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    return res.status(200).end();
+  }
+  next();
+});
+
 // Configura Swagger
 swaggerSetup(app);
 
+// Middleware para parsear JSON
 app.use(express.json());
-// Solo permitir conexion desde estos origenes
-//app.options('*', cors()); // Manejar solicitudes preflight para todas las rutas
-app.use(cors({
-  origin: false, // Disable Express CORS since Nginx handles it
-  credentials: true
-}));
 
-
-
-// Usar las rutas
+// Servir archivos estáticos
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// =========== RUTAS DE LA API ===========
+
 
 app.use('/api/usuarios', usuarioRoutes);
 app.use('/api/productos', productoRoutes);
@@ -54,25 +73,31 @@ app.use('/api/pedido-periodico', pedidoPeriodicoRoutes);
 app.use('/api/pagos', pagoRoutes);
 app.use('/api/notificaciones', notificacionRoutes);
 
-app.use('/api/test', TestRoutes); // Usar las rutas de prueba
 app.get('/api', (req, res) => {
-  res.json({ message: 'API del proyecto de DAW' });
+  res.json({ 
+    message: 'API del proyecto de DAW',
+    cors: 'Configurado correctamente para desarrollo',
+    allowedOrigins: ['http://localhost:8080', 'http://127.0.0.1:8080']
+  });
 });
 
-app.use((req, res, next) => {
-  if (req.method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Origin', req.headers.origin);
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    res.header('Access-Control-Allow-Credentials', 'true');
-    return res.status(200).end();
-  }
-  next();
-});
+// =========== MANEJO DE ERRORES ===========
 
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(err.status || 500).json({ error: err.message || 'Algo salió mal en el servidor' });
+  console.error('Error:', err.stack);
+  res.status(err.status || 500).json({ 
+    error: err.message || 'Algo salió mal en el servidor',
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+  });
+});
+
+// Ruta 404 para API no encontrada
+app.use(/^\/api\//, (req, res) => {
+  res.status(404).json({ 
+    error: 'Ruta de API no encontrada',
+    path: req.originalUrl,
+    method: req.method
+  });
 });
 
 // Exportar la app para pruebas

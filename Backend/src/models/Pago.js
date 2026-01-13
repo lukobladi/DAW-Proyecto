@@ -1,4 +1,4 @@
-const db = require('../db');
+const db = require('../config/db');
 
 class Pago {
   static async create(id_usuario_deudor, id_usuario_creditor, monto, estado) {

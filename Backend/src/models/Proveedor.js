@@ -1,4 +1,4 @@
-const pool = require('../db');
+const pool = require('../config/db');
 
 const validFrecuencias = ['semanal', 'mensual', 'bimestral', 'trimestral', 'semestral', 'anual'];
 
