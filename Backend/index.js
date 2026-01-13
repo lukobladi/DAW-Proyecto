@@ -100,6 +100,13 @@ app.use(/^\/api\//, (req, res) => {
   });
 });
 
+// rate limiting para prevenir ataques
+const rateLimit = require('express-rate-limit');
+app.use('/api/', rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutos
+  max: 100 
+}));
+
 // Exportar la app para pruebas
 module.exports = app;
 

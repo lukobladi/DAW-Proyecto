@@ -1,18 +1,22 @@
 // db.js
 const { Pool } = require('pg');
-require('dotenv').config();
 
 const pool = new Pool({
-  // user: process.env.DB_USER,
-  // host: process.env.DB_HOST,
-  // database: process.env.DB_NAME,
-  // password: process.env.DB_PASSWORD,
-  // port: process.env.DB_PORT,
-  host: 'localhost',
-  port: '5432',
-  user: 'ekonsumo_user',
-  password: '1234',
-  database: 'ekonsumo'
+  host: process.env.DB_HOST || 'localhost',
+  port: process.env.DB_PORT || 5432,
+  user: process.env.DB_USER || 'ekonsumo_user',
+  password: process.env.DB_PASSWORD || '1234', // ⚠️ Solo para desarrollo
+  database: process.env.DB_NAME || 'ekonsumo',
+
+  max: 20, // máximo de conexiones en el pool
+  idleTimeoutMillis: 30000, 
+  connectionTimeoutMillis: 2000, 
 });
+
+pool.on('error', (err) => {
+  console.error('Error inesperado en el pool de PostgreSQL:', err);
+  process.exit(-1);
+});
+
 
 module.exports = pool;
