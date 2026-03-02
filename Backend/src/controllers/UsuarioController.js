@@ -91,7 +91,7 @@ const UsuarioController = {
       }
       console.log('usuario ' + usuario);
 
-      const enlaceRecuperacion = `http://ekonsumo.duckdns.org/recuperar-password/${usuario.id}`;
+      const enlaceRecuperacion = `${process.env.FRONTEND_URL}/recuperar-password/${usuario.id}`;
 
       console.log('enlaceRecuperacion ' + enlaceRecuperacion);
 

@@ -3,6 +3,66 @@
 
 # DAW-Proyecto
 
+## Instalación y Puesta en Marcha
+
+### Requisitos Previos
+
+Asegúrate de tener instalado el siguiente software antes de empezar:
+
+- [Node.js](https://nodejs.org/) (versión 14 o superior)
+- [npm](https://www.npmjs.com/) (normalmente se instala con Node.js)
+- [PostgreSQL](https://www.postgresql.org/)
+
+### Instalación
+
+1.  **Clona el repositorio:**
+    ```bash
+    git clone https://github.com/tu-usuario/DAW-Proyecto.git
+    cd DAW-Proyecto
+    ```
+
+2.  **Instala las dependencias del Backend:**
+    ```bash
+    cd Backend
+    npm install
+    ```
+
+3.  **Instala las dependencias del Frontend:**
+    ```bash
+    cd ../frontend
+    npm install
+    ```
+
+### Configuración
+
+1.  **Base de Datos:**
+    - Crea una base de datos en PostgreSQL para el proyecto.
+    - Puedes usar un cliente como `psql` o una herramienta gráfica como pgAdmin.
+
+2.  **Variables de Entorno:**
+    - Ve al directorio `Backend`.
+    - Crea una copia del archivo `.env.example` y renómbrala a `.env`.
+    - Abre el archivo `.env` y configura las variables de la base de datos (`DB_USER`, `DB_PASSWORD`, `DB_NAME`) y el `JWT_SECRET`.
+
+### Ejecución
+
+1.  **Inicia el servidor del Backend:**
+    ```bash
+    cd Backend
+    npm start
+    ```
+    El servidor se ejecutará en `http://localhost:3000` (o el puerto que hayas definido en `.env`).
+
+2.  **Inicia el servidor del Frontend:**
+    ```bash
+    cd frontend
+    npm run serve
+    ```
+    La aplicación frontend estará disponible en `http://localhost:8080`.
+
+---
+
+
 ## Tabla de Contenidos
 - [DAW-Proyecto](#daw-proyecto)
   - [Tabla de Contenidos](#tabla-de-contenidos)

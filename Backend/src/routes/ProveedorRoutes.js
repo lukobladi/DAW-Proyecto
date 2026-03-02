@@ -123,4 +123,75 @@ router.get('/obtener/:id', authMiddleware, ProveedorController.obtenerPorId);
  */
 router.patch('/cambiarEstadoActivo/:id', authMiddleware, ProveedorController.cambiarEstadoActivo);
 
+/**
+ * @swagger
+ * /api/proveedores/actualizar/{id}:
+ *   patch:
+ *     summary: Actualizar un proveedor
+ *     tags: [Proveedores]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del proveedor
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *                 example: "EcoFruits S.A. Updated"
+ *               contacto:
+ *                 type: string
+ *                 example: "Jane Doe"
+ *               telefono:
+ *                 type: string
+ *                 example: "+34 987 654 321"
+ *               correo:
+ *                 type: string
+ *                 example: "contact@ecofruits-updated.com"
+ *     responses:
+ *       200:
+ *         description: Proveedor actualizado correctamente
+ *       404:
+ *         description: Proveedor no encontrado
+ *       500:
+ *         description: Error al actualizar el proveedor
+ */
+router.patch('/actualizar/:id', authMiddleware, ProveedorController.actualizar);
+
+/**
+ * @swagger
+ * /api/proveedores/eliminar/{id}:
+ *   delete:
+ *     summary: Eliminar un proveedor
+ *     tags: [Proveedores]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del proveedor
+ *     responses:
+ *       204:
+ *         description: Proveedor eliminado correctamente
+ *       404:
+ *         description: Proveedor no encontrado
+ *       500:
+ *         description: Error al eliminar el proveedor
+ */
+router.delete('/eliminar/:id', authMiddleware, ProveedorController.eliminar);
+
+
+
 module.exports = router;

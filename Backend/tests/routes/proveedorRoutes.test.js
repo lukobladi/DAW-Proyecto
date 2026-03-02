@@ -1,7 +1,8 @@
+require('dotenv').config();
 const request = require('supertest');
 const app = require('../../index');
-const pool = require('../../db');
-const Proveedor = require('../../models/Proveedor');
+const pool = require('../../src/config/db');
+const Proveedor = require('../../src/models/Proveedor');
 
 describe('Proveedor Routes', () => {
   let adminToken;

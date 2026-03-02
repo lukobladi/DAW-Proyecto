@@ -1,12 +1,14 @@
 // db.js
 const { Pool } = require('pg');
 
+require('dotenv').config();
+
 const pool = new Pool({
-  host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 5432,
-  user: process.env.DB_USER || 'ekonsumo_user',
-  password: process.env.DB_PASSWORD || '1234', // ⚠️ Solo para desarrollo
-  database: process.env.DB_NAME || 'ekonsumo',
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
 
   max: 20, // máximo de conexiones en el pool
   idleTimeoutMillis: 30000, 

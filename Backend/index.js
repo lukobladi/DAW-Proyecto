@@ -4,9 +4,15 @@ const path = require('path');
 require('dotenv').config();
 const SECRET_KEY = process.env.JWT_SECRET;
 
-if (!SECRET_KEY) {
-  console.error('JWT_SECRET no está definido en las variables de entorno');
-  process.exit(1); // Detiene la aplicación si falta la clave secreta
+const logger = require('./src/config/logger');
+
+const requiredEnvVars = ['DB_HOST', 'DB_PORT', 'DB_USER', 'DB_PASSWORD', 'DB_NAME', 'JWT_SECRET', 'EMAIL_USER', 'EMAIL_PASS', 'FRONTEND_URL'];
+
+for (const varName of requiredEnvVars) {
+  if (!process.env[varName]) {
+    logger.error(`${varName} no está definido en las variables de entorno`);
+    process.exit(1);
+  }
 }
 
 const swaggerSetup = require('./swagger');
@@ -84,7 +90,7 @@ app.get('/api', (req, res) => {
 // =========== MANEJO DE ERRORES ===========
 
 app.use((err, req, res, next) => {
-  console.error('Error:', err.stack);
+  logger.error(err.stack);
   res.status(err.status || 500).json({ 
     error: err.message || 'Algo salió mal en el servidor',
     ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
@@ -113,7 +119,7 @@ module.exports = app;
 // Iniciar el servidor solo si no se está ejecutando en modo de prueba
 if (require.main === module) {
   app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
-    console.log(`Documentación de la API: http://localhost:${PORT}/api-docs`);
+    logger.info(`Servidor corriendo en http://localhost:${PORT}`);
+    logger.info(`Documentación de la API: http://localhost:${PORT}/api-docs`);
   });
 }

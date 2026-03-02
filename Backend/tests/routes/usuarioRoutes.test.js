@@ -1,7 +1,8 @@
+require('dotenv').config();
 const request = require('supertest');
 const app = require('../../index'); 
-const pool = require('../../db');
-const Usuario = require('../../models/Usuario');
+const pool = require('../../src/config/db');
+const Usuario = require('../../src/models/Usuario');
 
 describe('Usuario Routes', () => {
   let token;

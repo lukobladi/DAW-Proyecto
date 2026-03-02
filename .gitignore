@@ -1,11 +1,28 @@
-# Ignorar configuración de Visual Studio Code
-Backend/.vscode/
-frontend/.vscode/
-
 # Ignorar dependencias de Node.js
-Backend/node_modules/
-frontend/node_modules/
-docs/.~lock.*
-audio/
-AGENTS.md
+**/node_modules/
 
+# Archivos de entorno
+.env
+.env.*
+!.env.example
+
+# Archivos de logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+
+# Directorio de compilación de producción
+**/dist/
+
+# Archivos del sistema operativo
+.DS_Store
+
+# Ignorar configuración de Visual Studio Code
+.vscode/
+
+package-lock.json
+Backend/package-lock.json
+Backend/package-lock.json
+Backend/package-lock.json

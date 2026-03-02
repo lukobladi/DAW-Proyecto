@@ -1,0 +1,15 @@
+{
+  "name": "daw-proyecto-monorepo",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "start:backend": "npm start --workspace=backend",
+    "start:frontend": "npm run serve --workspace=frontend",
+    "test:backend": "npm test --workspace=backend",
+    "test:frontend": "npm run test:unit --workspace=frontend",
+    "lint:frontend": "npm run lint --workspace=frontend"
+  }
+}

@@ -1,5 +1,5 @@
-const Usuario = require('../../models/Usuario');
-const pool = require('../../db');
+const Usuario = require('../../src/models/Usuario');
+const pool = require('../../src/config/db');
 
 describe('Usuario Model', () => {
   let usuarioId; // Para almacenar el ID del usuario creado

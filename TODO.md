@@ -1,32 +1,32 @@
 # TODO Checklist del Proyecto
 
 ## General y Estructura
-- [ ] Limpiar el directorio raíz de archivos innecesarios (multimedia, zips).
-- [ ] Crear o verificar un archivo `.gitignore` completo en la raíz del proyecto.
-- [ ] Añadir un archivo `.env.example` en el backend para documentar las variables de entorno.
-- [ ] Escribir documentación general del proyecto en `README.md`, explicando cómo instalar y ejecutarlo.
-- [ ] (Opcional) Investigar el uso de `npm workspaces` para gestionar los dos proyectos.
+- [x] Limpiar el directorio raíz de archivos innecesarios (multimedia, zips).
+- [x] Crear o verificar un archivo `.gitignore` completo en la raíz del proyecto.
+- [x] Añadir un archivo `.env.example` en el backend para documentar las variables de entorno.
+- [x] Escribir documentación general del proyecto en `README.md`, explicando cómo instalar y ejecutarlo.
+- [x] (Opcional) Investigar el uso de `npm workspaces` para gestionar los dos proyectos.
 - [ ] Probar Backend completo manualmente
 - [ ] Probar Frontend completo manualmente
 - [ ] Revisar documentacion
 - [ ] Revisar despliegue
-- [ ] Unificar package.json de frontend y backend
+- [x] Unificar package.json de frontend y backend
 
 
 ## Backend
 - [ ] **Configuración**
-    - [ ] Instalar y configurar ESLint y Prettier para mantener un estilo de código consistente.
-    - [ ] Implementar un sistema de logging avanzado (ej. Winston) para un mejor seguimiento de errores.
-    - [ ] Credenciales seguras db.js
-    - [ ] EmailService.js securiza credenciales
-    - [ ] Validaciones Multer
-    - [ ] Credenciales a .env
-    - [ ] Jest/Supertest
+    - [x] Instalar y configurar ESLint y Prettier para mantener un estilo de código consistente.
+    - [x] Implementar un sistema de logging avanzado (ej. Winston) para un mejor seguimiento de errores.
+    - [x] Credenciales seguras db.js
+    - [x] EmailService.js securiza credenciales
+    - [x] Validaciones Multer
+    - [x] Credenciales a .env
+    - [x] Jest/Supertest
     - [ ] Testing
 - [ ] **Desarrollo de API**
-    - [ ] Revisar y completar la documentación de todos los endpoints con Swagger.
-    - [ ] Diseñar e implementar los modelos de datos que faltan.
-    - [ ] Desarrollar los endpoints restantes para el CRUD de todas las entidades.
+    - [X] Revisar y completar la documentación de todos los endpoints con Swagger.
+    - [X] Diseñar e implementar los modelos de datos que faltan.
+    - [X] Desarrollar los endpoints restantes para el CRUD de todas las entidades.
 - [ ] **Pruebas**
     - [ ] Incrementar la cobertura de pruebas unitarias para la lógica de negocio.
     - [ ] Añadir más pruebas de integración para los endpoints de la API.

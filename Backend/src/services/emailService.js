@@ -8,8 +8,8 @@ const emailService = {
       const transporter = nodemailer.createTransport({
         service: 'gmail', // Cambia esto según tu proveedor de correo
         auth: {
-          user: 'emartinmon6@educacion.navarra.es', // correo
-          pass: 'oirj btiv qobe tukr ', // password
+          user: process.env.EMAIL_USER, // correo
+          pass: process.env.EMAIL_PASS, // password
         },
       });
 

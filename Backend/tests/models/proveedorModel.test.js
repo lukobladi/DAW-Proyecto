@@ -1,5 +1,5 @@
-const Proveedor = require('../../models/Proveedor');
-const pool = require('../../db');
+const Proveedor = require('../../src/models/Proveedor');
+const pool = require('../../src/config/db');
 
 describe('Proveedor Model', () => {
   let proveedorId;
