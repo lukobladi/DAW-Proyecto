@@ -1,5 +1,5 @@
 {
-  "name": "daw-proyecto-monorepo",
+  "name": "daw-proyecto",
   "private": true,
   "workspaces": [
     "backend",
