@@ -20,15 +20,33 @@ const DetallePedido = {
     return rows;
   },
 
+  async findById(id) {
+    const query = 'SELECT * FROM Detalle_Pedido WHERE ID_Detalle = $1;';
+    const { rows } = await pool.query(query, [id]);
+    return rows[0];
+  },
+
   // Actualizar un detalle de pedido
-  async update(id, id_pedido, id_producto, cantidad, precio_total) {
+  async update(id, id_pedido, id_producto, cantidad, precio_unitario, id_usuario_comprador) {
     const query = `
       UPDATE Detalle_Pedido
-      SET ID_Pedido = $1, ID_Producto = $2, Cantidad = $3, Precio_Total = $4, Fecha_Modificacion = CURRENT_TIMESTAMP
-      WHERE ID_Detalle = $5
+      SET ID_Pedido = $1, ID_Producto = $2, Cantidad = $3, Precio_Unitario = $4, ID_Usuario_Comprador = $5, Fecha_Modificacion = CURRENT_TIMESTAMP
+      WHERE ID_Detalle = $6
       RETURNING *;
     `;
-    const values = [id_pedido, id_producto, cantidad, precio_total, id];
+    const values = [id_pedido, id_producto, cantidad, precio_unitario, id_usuario_comprador, id];
+    const { rows } = await pool.query(query, values);
+    return rows[0];
+  },
+
+  async updateCantidad(id, cantidad) {
+    const query = `
+      UPDATE Detalle_Pedido
+      SET Cantidad = $1, Fecha_Modificacion = CURRENT_TIMESTAMP
+      WHERE ID_Detalle = $2
+      RETURNING *;
+    `;
+    const values = [cantidad, id];
     const { rows } = await pool.query(query, values);
     return rows[0];
   },

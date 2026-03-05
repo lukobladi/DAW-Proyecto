@@ -132,18 +132,20 @@ const router = createRouter({
 });
 
 // Guard de navegación global
-router.beforeEach((to, from, next) => {
+router.beforeEach((to) => {
   const authStore = useAuthStore();
   authStore.hydrateAuthState();
   const isAuthenticated = authStore.isAuthenticated;
 
   if (to.meta.requiresAuth && !isAuthenticated) {
-    // Si la ruta requiere autenticación y el usuario no está autenticado, redirige a la página de inicio de sesión
-    next({ name: 'Login' });
-  } else {
-    // De lo contrario, permite la navegación
-    next();
+    return { name: 'Login' };
   }
+
+  if (to.name === 'Login' && isAuthenticated) {
+    return { name: 'Dashboard' };
+  }
+
+  return true;
 });
 
 export default router;

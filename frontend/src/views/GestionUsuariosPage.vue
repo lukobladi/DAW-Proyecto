@@ -1,104 +1,100 @@
 <template>
-  <div class="gestion-usuarios-page">
-
-    <div class="gestion-usuarios-container">
-      <div class="gestion-usuarios-header">
-        <h2>Gestión de Usuarios</h2>
-        <button @click="abrirModal(false)" class="btn btn-primary">Añadir Usuario</button>
-      </div>
-      <div class="lista-usuarios">
-        <table class="usuarios-table">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Correo</th>
-              <th>Móvil</th>
-              <th>Rol</th>
-              <th>Estado</th>
-              <th>Saldo</th>
-              <th>Último pedido</th>
-              <th>Proveedores Asignados</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="usuario in usuarios" :key="usuario.id">
-              <td>{{ usuario.nombre }}</td>
-              <td>{{ usuario.correo }}</td>
-              <td>{{ usuario.movil }}</td>
-              <td>{{ usuario.rol }}</td>
-              <td>{{ usuario.activo ? 'Activo' : 'Inactivo' }}</td>
-              <!-- <td>{{ usuario.saldo.toFixed(2) }} €</td> -->
-              <td>{{ usuario.ultimoPedido }}</td>
-              <td>
-                <ul>
-                  <li v-for="proveedor in usuario.proveedores" :key="proveedor">{{ proveedor }}</li>
-                </ul>
-              </td>
-              <td >
-                  <button type="button" class="btn btn-primary"><i class="far fa-eye"></i></button>
-                  <button @click="abrirModal(true, usuario)"  type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>
-              <button  @click="eliminarUsuario(usuario.id)"  type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+  <div class="gestion-usuarios-page container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="mb-0">Gestion de Usuarios</h2>
+      <button class="btn btn-primary" @click="abrirModalCrear">Anadir usuario</button>
     </div>
 
-    <!-- Modal para añadir o editar usuario -->
-    <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="addUserModalLabel">
-              {{ modoEdicion ? 'Editar Usuario' : 'Añadir Usuario' }}
-            </h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form @submit.prevent="guardarUsuario">
-              <div class="mb-3">
-                <label for="nombre" class="form-label">Nombre</label>
-                <input v-model="nuevoUsuario.nombre" type="text" class="form-control" id="nombre" required />
-              </div>
-              <div class="mb-3">
-                <label for="correo" class="form-label">Correo</label>
-                <input v-model="nuevoUsuario.correo" type="email" class="form-control" id="correo" required />
-              </div>
-              <div class="mb-3">
-                <label for="movil" class="form-label">Móvil</label>
-                <input v-model="nuevoUsuario.movil" type="text" class="form-control" id="movil" required />
-              </div>
-              <div class="mb-3">
-                <label for="rol" class="form-label">Rol</label>
-                <select v-model="nuevoUsuario.rol" class="form-select" id="rol" required>
-                  <option value="admin">Admin</option>
-                  <option value="usuario">Usuario</option>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label for="activo" class="form-label">Estado</label>
-                <select v-model="nuevoUsuario.activo" class="form-select" id="activo" required>
-                  <option :value="true">Activo</option>
-                  <option :value="false">Inactivo</option>
-                </select>
-              </div>
+    <div v-if="cargando" class="estado">Cargando usuarios...</div>
+    <div v-else-if="errorCarga" class="estado error">{{ errorCarga }}</div>
 
-              <button type="submit" class="btn btn-primary">
-                {{ modoEdicion ? 'Guardar Cambios' : 'Añadir Usuario' }}
+    <div v-else class="table-responsive">
+      <table class="table table-striped table-hover align-middle">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Movil</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th>Saldo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="usuario in usuarios" :key="usuario.id_usuario">
+            <td>{{ usuario.nombre }}</td>
+            <td>{{ usuario.correo }}</td>
+            <td>{{ usuario.movil || '-' }}</td>
+            <td>{{ usuario.rol }}</td>
+            <td>
+              <span :class="['estado-pill', usuario.activo ? 'activo' : 'inactivo']">
+                {{ usuario.activo ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+            <td>{{ Number(usuario.saldo || 0).toFixed(2) }} EUR</td>
+            <td class="acciones">
+              <button class="btn btn-sm btn-success" @click="abrirModalEditar(usuario)">
+                Editar
               </button>
-            </form>
+              <button
+                class="btn btn-sm btn-warning"
+                @click="cambiarEstado(usuario)"
+                :disabled="accionandoId === usuario.id_usuario"
+              >
+                {{ usuario.activo ? 'Desactivar' : 'Activar' }}
+              </button>
+              <button
+                class="btn btn-sm btn-danger"
+                @click="eliminarUsuario(usuario.id_usuario)"
+                :disabled="accionandoId === usuario.id_usuario"
+              >
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div v-if="mostrarModal" class="modal-overlay" @click.self="cerrarModal">
+      <div class="modal-card">
+        <h4>{{ modoEdicion ? 'Editar usuario' : 'Nuevo usuario' }}</h4>
+        <form @submit.prevent="guardarUsuario">
+          <div class="mb-2">
+            <label class="form-label">Nombre</label>
+            <input v-model="form.nombre" class="form-control" required />
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <div class="mb-2">
+            <label class="form-label">Correo</label>
+            <input v-model="form.correo" type="email" class="form-control" required />
           </div>
-        </div>
+          <div class="mb-2">
+            <label class="form-label">Movil</label>
+            <input v-model="form.movil" class="form-control" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Rol</label>
+            <select v-model="form.rol" class="form-select" required>
+              <option value="usuario">Usuario</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+          <div v-if="!modoEdicion" class="mb-3">
+            <label class="form-label">Contrasena inicial</label>
+            <input v-model="form.password" type="password" class="form-control" required />
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary" type="submit" :disabled="guardando">
+              {{ guardando ? 'Guardando...' : 'Guardar' }}
+            </button>
+            <button class="btn btn-secondary" type="button" @click="cerrarModal">Cancelar</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </template>
-
 
 <script>
 import api from '@/services/api';
@@ -107,189 +103,172 @@ import { alertStore } from '@/store/alertStore';
 export default {
   data() {
     return {
-      modoEdicion: false, // Indica si el modal está en modo edición
-      usuarioSeleccionado: null, // Usuario que se está editando
-      nuevoUsuario: {
+      usuarios: [],
+      cargando: false,
+      errorCarga: '',
+      accionandoId: null,
+      mostrarModal: false,
+      modoEdicion: false,
+      guardando: false,
+      form: {
+        id_usuario: null,
         nombre: '',
         correo: '',
         movil: '',
         rol: 'usuario',
-        activo: true,
-        saldo: 0.0,
+        password: '',
       },
-      usuarios: [],
     };
   },
+  async created() {
+    await this.cargarUsuarios();
+  },
   methods: {
-    async fetchUsuarios() {
+    async cargarUsuarios() {
+      this.cargando = true;
+      this.errorCarga = '';
       try {
         const response = await api.getUsuarios();
-        this.usuarios = response.data;
-      } catch (error) {
-        console.error('Error al obtener usuarios:', error);
-        alertStore.showAlert('Error al obtener usuarios. Inténtalo más tarde.', 'danger');
+        this.usuarios = response.data || [];
+      } catch {
+        this.errorCarga = 'No se pudo cargar la lista de usuarios.';
+      } finally {
+        this.cargando = false;
       }
+    },
+    abrirModalCrear() {
+      this.modoEdicion = false;
+      this.form = {
+        id_usuario: null,
+        nombre: '',
+        correo: '',
+        movil: '',
+        rol: 'usuario',
+        password: '',
+      };
+      this.mostrarModal = true;
+    },
+    abrirModalEditar(usuario) {
+      this.modoEdicion = true;
+      this.form = {
+        id_usuario: usuario.id_usuario,
+        nombre: usuario.nombre,
+        correo: usuario.correo,
+        movil: usuario.movil || '',
+        rol: usuario.rol,
+        password: '',
+      };
+      this.mostrarModal = true;
+    },
+    cerrarModal() {
+      this.mostrarModal = false;
     },
     async guardarUsuario() {
+      this.guardando = true;
       try {
         if (this.modoEdicion) {
-          await api.actualizarUsuario(this.nuevoUsuario.id, this.nuevoUsuario);
+          await api.actualizarUsuario(this.form.id_usuario, {
+            nombre: this.form.nombre,
+            correo: this.form.correo,
+            movil: this.form.movil,
+            rol: this.form.rol,
+          });
           alertStore.showAlert('Usuario actualizado correctamente.', 'success');
         } else {
-          await api.registrar(this.nuevoUsuario);
-          alertStore.showAlert('Usuario añadido correctamente.', 'success');
+          await api.registrar({
+            nombre: this.form.nombre,
+            correo: this.form.correo,
+            movil: this.form.movil,
+            rol: this.form.rol,
+            password: this.form.password,
+          });
+          alertStore.showAlert('Usuario creado correctamente.', 'success');
         }
-        this.fetchUsuarios();
-        const modal = window.bootstrap.Modal.getInstance(document.getElementById('addUserModal'));
-        modal.hide();
-      } catch (error) {
-        console.error('Error al guardar usuario:', error);
-        alertStore.showAlert('Error al guardar usuario. Inténtalo más tarde.', 'danger');
+        await this.cargarUsuarios();
+        this.cerrarModal();
+      } catch {
+        alertStore.showAlert('No se pudo guardar el usuario.', 'danger');
+      } finally {
+        this.guardando = false;
       }
     },
-    async eliminarUsuario(usuarioId) {
-      const confirmacion = confirm('¿Estás seguro de que deseas eliminar este usuario?');
-      if (!confirmacion) return;
-
+    async cambiarEstado(usuario) {
+      this.accionandoId = usuario.id_usuario;
       try {
-        await api.eliminarUsuario(usuarioId);
+        await api.cambiarEstadoUsuario(usuario.id_usuario, !usuario.activo);
+        await this.cargarUsuarios();
+      } catch {
+        alertStore.showAlert('No se pudo cambiar el estado del usuario.', 'danger');
+      } finally {
+        this.accionandoId = null;
+      }
+    },
+    async eliminarUsuario(idUsuario) {
+      if (!window.confirm('Se eliminara el usuario. Quieres continuar?')) {
+        return;
+      }
+
+      this.accionandoId = idUsuario;
+      try {
+        await api.eliminarUsuario(idUsuario);
         alertStore.showAlert('Usuario eliminado correctamente.', 'success');
-        this.fetchUsuarios();
-      } catch (error) {
-        console.error('Error al eliminar usuario:', error);
-        alertStore.showAlert('Error al eliminar usuario. Inténtalo más tarde.', 'danger');
+        await this.cargarUsuarios();
+      } catch {
+        alertStore.showAlert('No se pudo eliminar el usuario.', 'danger');
+      } finally {
+        this.accionandoId = null;
       }
     },
-    abrirModal(edicion, usuario = null) {
-      this.modoEdicion = edicion;
-      if (edicion && usuario) {
-        // Cargar datos del usuario en el formulario
-        this.nuevoUsuario = { ...usuario };
-      } else {
-        // Resetear el formulario para añadir un nuevo usuario
-        this.nuevoUsuario = {
-          nombre: '',
-          correo: '',
-          movil: '',
-          rol: 'usuario',
-          activo: true,
-          saldo: 0.0,
-        };
-      }
-      // Abrir el modal
-      const modal = new window.bootstrap.Modal(document.getElementById('addUserModal'));
-      modal.show();
-    },
-  },
-  mounted() {
-    this.fetchUsuarios();
   },
 };
 </script>
 
 <style scoped>
+.estado {
+  padding: 1rem 0;
+}
 
-/* Estilo general de la página */
-.gestion-usuarios-page {
+.estado.error {
+  color: #dc3545;
+}
+
+.acciones {
   display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background: #f9f9f9; /* Fondo claro */
-  color: #333333; /* Color de texto */
+  gap: 0.4rem;
 }
 
-/* Contenedor principal */
-.gestion-usuarios-container {
-  width: 100%;
-  max-width: 1200px;
-
-  padding: 2rem;
-  background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semitransparente */
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
-}
-
-/* Encabezado */
-.gestion-usuarios-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.gestion-usuarios-header h2 {
-  font-size: 2rem;
-  color: #4CAF50; /* Verde primario */
-}
-
-/* Tabla de usuarios */
-.usuarios-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-}
-
-.usuarios-table th,
-.usuarios-table td {
-  border: 1px solid #e0e0e0;
-  padding: 0.75rem;
-  text-align: left;
-}
-
-.usuarios-table th {
-  background-color: #f5f5f5;
-  font-weight: bold;
-}
-
-.usuarios-table td ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.usuarios-table td ul li {
-  margin: 0;
-  padding: 0;
-}
-
-/* Botones */
-.btn {
+.estado-pill {
   display: inline-block;
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.8rem;
 }
 
-.btn-primary {
-  background-color: #FF9800; /* Naranja */
-  color: white;
+.estado-pill.activo {
+  background: #d1e7dd;
+  color: #0f5132;
 }
 
-.btn-primary:hover {
-  background-color: #E68900; /* Naranja más oscuro */
+.estado-pill.inactivo {
+  background: #f8d7da;
+  color: #842029;
 }
 
-.btn-secondary {
-  background-color: #007BFF; /* Azul */
-  color: white;
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
 }
 
-.btn-secondary:hover {
-  background-color: #0056b3; /* Azul más oscuro */
+.modal-card {
+  width: min(92vw, 520px);
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem;
 }
-
-.btn-danger {
-  background-color: #DC3545; /* Rojo */
-  color: white;
-}
-
-.btn-danger:hover {
-  background-color: #a71d2a; /* Rojo más oscuro */
-}
-
- 
-
 </style>

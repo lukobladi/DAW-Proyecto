@@ -1,4 +1,25 @@
 const DetallePedido = require('../models/DetallePedido');
+const Pedido = require('../models/Pedido');
+
+function pedidoEstaAbierto(pedido) {
+  if (!pedido || pedido.estado !== 'pendiente') {
+    return false;
+  }
+
+  const ahora = new Date();
+  const apertura = pedido.fecha_apertura ? new Date(pedido.fecha_apertura) : null;
+  const cierre = pedido.fecha_cierre ? new Date(pedido.fecha_cierre) : null;
+
+  if (apertura && ahora < apertura) {
+    return false;
+  }
+
+  if (cierre && ahora > cierre) {
+    return false;
+  }
+
+  return true;
+}
 
 const DetallePedidoController = {
   // Crear un nuevo detalle de pedido
@@ -29,8 +50,42 @@ const DetallePedidoController = {
   async actualizar(req, res) {
     const { id } = req.params;
     const { id_pedido, id_producto, cantidad, precio_unitario, id_usuario_comprador } = req.body;
+
+    if (cantidad === undefined || cantidad === null || Number(cantidad) < 0) {
+      return res.status(400).json({ error: 'La cantidad debe ser un numero mayor o igual a 0' });
+    }
+
     try {
-      const detalleActualizado = await DetallePedido.update(id, id_pedido, id_producto, cantidad, precio_unitario, id_usuario_comprador);
+      const detalleActual = await DetallePedido.findById(id);
+      if (!detalleActual) {
+        return res.status(404).json({ error: 'Detalle de pedido no encontrado' });
+      }
+
+      const pedido = await Pedido.findById(detalleActual.id_pedido);
+      if (!pedidoEstaAbierto(pedido)) {
+        return res.status(409).json({ error: 'Solo se puede modificar un detalle de un pedido abierto' });
+      }
+
+      let detalleActualizado;
+
+      if (
+        id_pedido !== undefined &&
+        id_producto !== undefined &&
+        precio_unitario !== undefined &&
+        id_usuario_comprador !== undefined
+      ) {
+        detalleActualizado = await DetallePedido.update(
+          id,
+          id_pedido,
+          id_producto,
+          cantidad,
+          precio_unitario,
+          id_usuario_comprador
+        );
+      } else {
+        detalleActualizado = await DetallePedido.updateCantidad(id, cantidad);
+      }
+
       res.json(detalleActualizado);
     } catch (err) {
       console.error(err);

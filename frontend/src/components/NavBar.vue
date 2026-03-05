@@ -21,7 +21,7 @@
       <router-link v-if="!isAuthenticated" to="/login" class="navbar-item navbar-login">
         <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
       </router-link>
-      <router-link v-if="isAuthenticated" @click="logout" to="/home" class="navbar-item navbar-logout">
+      <router-link v-if="isAuthenticated" @click="logout" to="/" class="navbar-item navbar-logout">
         <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
       </router-link>
     </div>

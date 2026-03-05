@@ -53,11 +53,15 @@ const Pedido = {
     return rows[0];
   },
 
+  async updateEstado(id, estado) {
+    return this.changeStatus(id, estado);
+  },
+
   // Eliminar un pedido
-  // async delete(id) {
-  //   const query = 'DELETE FROM Pedido WHERE ID_Pedido = $1;';
-  //   await pool.query(query, [id]);
-  // },
+  async delete(id) {
+    const query = 'DELETE FROM Pedido WHERE ID_Pedido = $1;';
+    await pool.query(query, [id]);
+  },
 };
 
 module.exports = Pedido;

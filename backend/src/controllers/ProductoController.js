@@ -45,11 +45,19 @@ const ProductoController = {
   // Actualizar un producto con imagen
   async actualizar(req, res) {
     const { id } = req.params;
-    const { nombre, descripcion, precio, id_proveedor } = req.body;
+    const { nombre, descripcion, precio, id_proveedor, activo } = req.body;
     const imagen = req.file ? `/uploads/${req.file.filename}` : null; // URL de la imagen
 
     try {
-      const productoActualizado = await Producto.update(id, nombre, descripcion, precio, id_proveedor, imagen);
+      const productoActualizado = await Producto.update(
+        id,
+        nombre,
+        descripcion,
+        precio,
+        id_proveedor,
+        imagen,
+        activo
+      );
       res.json(productoActualizado);
     } catch (err) {
       console.error(err);

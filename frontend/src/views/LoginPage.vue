@@ -51,7 +51,13 @@ export default {
         const authStore = useAuthStore();
         authStore.login({
           token: response.data.token,
-          user: response.data.usuario || response.data.user,
+          user: {
+            id_usuario: response.data.id_usuario,
+            nombre: response.data.nombre,
+            correo: response.data.correo,
+            movil: response.data.movil,
+            rol: response.data.rol,
+          },
         });
 
         this.$router.push({ name: 'Dashboard' });

@@ -40,10 +40,14 @@ const Producto = {
     return rows[0];
   },
 
+  async updateEstado(id_producto, activo) {
+    return this.updateActivo(id_producto, activo);
+  },
+
   async update(id_producto, nombre, descripcion, precio, id_proveedor, imagen, activo) {
     const query = `
       UPDATE producto
-      SET nombre = $1, descripcion = $2, precio = $3, id_proveedor = $4, imagen = $5, activo = $6, fecha_modificacion = CURRENT_TIMESTAMP
+      SET nombre = $1, descripcion = $2, precio = $3, id_proveedor = $4, imagen = COALESCE($5, imagen), activo = COALESCE($6, activo), fecha_modificacion = CURRENT_TIMESTAMP
       WHERE id_producto = $7
       RETURNING *;
     `;

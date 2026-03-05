@@ -1,79 +1,290 @@
 <template>
-  <div class="gestion-proveedores-page">
-    <NavBar />
-    <div class="gestion-proveedores-content">
-      <h2>Gestión de Proveedores</h2>
-      <button @click="añadirProveedor" class="btn btn-primary">Añadir Proveedor</button>
-      <div class="lista-proveedores">
-        <div v-for="proveedor in proveedores" :key="proveedor.id" class="proveedor-card">
-          <h3>{{ proveedor.nombre }}</h3>
-          <p>Contacto: {{ proveedor.contacto }}</p>
-          <p>Estado: {{ proveedor.activo ? 'Activo' : 'Inactivo' }}</p>
-          <button @click="editarProveedor(proveedor.id)" class="btn btn-secondary">Editar</button>
-          <button @click="eliminarProveedor(proveedor.id)" class="btn btn-danger">Eliminar</button>
-        </div>
+  <div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="mb-0">Gestion de Proveedores</h2>
+      <button class="btn btn-primary" @click="abrirModalCrear">Anadir proveedor</button>
+    </div>
+
+    <div v-if="cargando" class="estado">Cargando proveedores...</div>
+    <div v-else-if="errorCarga" class="estado error">{{ errorCarga }}</div>
+
+    <div v-else class="table-responsive">
+      <table class="table table-striped align-middle">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Contacto</th>
+            <th>Correo</th>
+            <th>Frecuencia</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="proveedor in proveedores" :key="proveedor.id_proveedor">
+            <td>{{ proveedor.nombre }}</td>
+            <td>{{ proveedor.contacto || '-' }}</td>
+            <td>{{ proveedor.correo || '-' }}</td>
+            <td>{{ proveedor.frecuencia_pedido_aproximada || '-' }}</td>
+            <td>
+              <span :class="['estado-pill', proveedor.activo ? 'activo' : 'inactivo']">
+                {{ proveedor.activo ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+            <td class="acciones">
+              <button class="btn btn-sm btn-success" @click="abrirModalEditar(proveedor)">
+                Editar
+              </button>
+              <button
+                class="btn btn-sm btn-warning"
+                @click="cambiarEstado(proveedor)"
+                :disabled="accionandoId === proveedor.id_proveedor"
+              >
+                {{ proveedor.activo ? 'Desactivar' : 'Activar' }}
+              </button>
+              <button
+                class="btn btn-sm btn-danger"
+                @click="eliminarProveedor(proveedor.id_proveedor)"
+                :disabled="accionandoId === proveedor.id_proveedor"
+              >
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div v-if="mostrarModal" class="modal-overlay" @click.self="cerrarModal">
+      <div class="modal-card">
+        <h4>{{ modoEdicion ? 'Editar proveedor' : 'Nuevo proveedor' }}</h4>
+        <form @submit.prevent="guardarProveedor">
+          <div class="mb-2">
+            <label class="form-label">Nombre</label>
+            <input v-model="form.nombre" class="form-control" required />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Contacto</label>
+            <input v-model="form.contacto" class="form-control" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Telefono</label>
+            <input v-model="form.telefono" class="form-control" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Movil</label>
+            <input v-model="form.movil" class="form-control" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Correo</label>
+            <input v-model="form.correo" type="email" class="form-control" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Metodo de pago</label>
+            <input v-model="form.metodo_pago" class="form-control" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Frecuencia</label>
+            <select v-model="form.frecuencia_pedido_aproximada" class="form-select" required>
+              <option value="semanal">semanal</option>
+              <option value="mensual">mensual</option>
+              <option value="bimestral">bimestral</option>
+              <option value="trimestral">trimestral</option>
+              <option value="semestral">semestral</option>
+              <option value="anual">anual</option>
+            </select>
+          </div>
+          <div class="form-check mb-1">
+            <input id="envioMovil" v-model="form.envio_movil" class="form-check-input" type="checkbox" />
+            <label class="form-check-label" for="envioMovil">Aviso movil</label>
+          </div>
+          <div class="form-check mb-3">
+            <input id="envioMail" v-model="form.envio_mail" class="form-check-input" type="checkbox" />
+            <label class="form-check-label" for="envioMail">Aviso email</label>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary" type="submit" :disabled="guardando">
+              {{ guardando ? 'Guardando...' : 'Guardar' }}
+            </button>
+            <button class="btn btn-secondary" type="button" @click="cerrarModal">Cancelar</button>
+          </div>
+        </form>
       </div>
     </div>
-    <Footer />
   </div>
 </template>
 
 <script>
+import api from '@/services/api';
+import { alertStore } from '@/store/alertStore';
+
+function proveedorVacio() {
+  return {
+    id_proveedor: null,
+    nombre: '',
+    contacto: '',
+    telefono: '',
+    movil: '',
+    correo: '',
+    metodo_pago: '',
+    frecuencia_pedido_aproximada: 'semanal',
+    envio_movil: false,
+    envio_mail: true,
+  };
+}
 
 export default {
-
   data() {
     return {
-      proveedores: [
-        // Ejemplo de datos de proveedores
-        { id: 1, nombre: 'Proveedor A', contacto: 'contacto@proveedora.com', activo: true },
-        { id: 2, nombre: 'Proveedor B', contacto: 'contacto@proveedorb.com', activo: false }
-      ]
+      proveedores: [],
+      cargando: false,
+      errorCarga: '',
+      accionandoId: null,
+      mostrarModal: false,
+      modoEdicion: false,
+      guardando: false,
+      form: proveedorVacio(),
     };
   },
+  async created() {
+    await this.cargarProveedores();
+  },
   methods: {
-    añadirProveedor() {
-      // Lógica para añadir un nuevo proveedor
-      console.log('Añadiendo proveedor...');
+    async cargarProveedores() {
+      this.cargando = true;
+      this.errorCarga = '';
+      try {
+        const response = await api.getProveedores();
+        this.proveedores = response.data || [];
+      } catch {
+        this.errorCarga = 'No se pudo cargar la lista de proveedores.';
+      } finally {
+        this.cargando = false;
+      }
     },
-    editarProveedor(proveedorId) {
-      // Lógica para editar un proveedor
-      console.log('Editando proveedor:', proveedorId);
+    abrirModalCrear() {
+      this.modoEdicion = false;
+      this.form = proveedorVacio();
+      this.mostrarModal = true;
     },
-    eliminarProveedor(proveedorId) {
-      // Lógica para eliminar un proveedor
-      console.log('Eliminando proveedor:', proveedorId);
-    }
-  }
+    abrirModalEditar(proveedor) {
+      this.modoEdicion = true;
+      this.form = { ...proveedor };
+      this.mostrarModal = true;
+    },
+    cerrarModal() {
+      this.mostrarModal = false;
+    },
+    async guardarProveedor() {
+      this.guardando = true;
+      try {
+        const payload = {
+          nombre: this.form.nombre,
+          contacto: this.form.contacto,
+          telefono: this.form.telefono,
+          movil: this.form.movil,
+          correo: this.form.correo,
+          metodo_pago: this.form.metodo_pago,
+          frecuencia_pedido_aproximada: this.form.frecuencia_pedido_aproximada,
+          envio_movil: Boolean(this.form.envio_movil),
+          envio_mail: Boolean(this.form.envio_mail),
+        };
+
+        if (this.modoEdicion) {
+          await api.actualizarProveedor(this.form.id_proveedor, payload);
+          alertStore.showAlert('Proveedor actualizado correctamente.', 'success');
+        } else {
+          await api.crearProveedor(payload);
+          alertStore.showAlert('Proveedor creado correctamente.', 'success');
+        }
+
+        await this.cargarProveedores();
+        this.cerrarModal();
+      } catch {
+        alertStore.showAlert('No se pudo guardar el proveedor.', 'danger');
+      } finally {
+        this.guardando = false;
+      }
+    },
+    async cambiarEstado(proveedor) {
+      this.accionandoId = proveedor.id_proveedor;
+      try {
+        await api.cambiarEstadoProveedor(proveedor.id_proveedor, !proveedor.activo);
+        await this.cargarProveedores();
+      } catch {
+        alertStore.showAlert('No se pudo cambiar el estado del proveedor.', 'danger');
+      } finally {
+        this.accionandoId = null;
+      }
+    },
+    async eliminarProveedor(idProveedor) {
+      if (!window.confirm('Se eliminara el proveedor. Quieres continuar?')) {
+        return;
+      }
+
+      this.accionandoId = idProveedor;
+      try {
+        await api.eliminarProveedor(idProveedor);
+        alertStore.showAlert('Proveedor eliminado correctamente.', 'success');
+        await this.cargarProveedores();
+      } catch {
+        alertStore.showAlert('No se pudo eliminar el proveedor.', 'danger');
+      } finally {
+        this.accionandoId = null;
+      }
+    },
+  },
 };
 </script>
 
 <style scoped>
-.gestion-proveedores-page {
+.estado {
+  padding: 1rem 0;
+}
+
+.estado.error {
+  color: #dc3545;
+}
+
+.acciones {
   display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+  gap: 0.4rem;
 }
 
-.gestion-proveedores-content {
-  flex: 1;
-  padding: 2rem;
+.estado-pill {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.8rem;
 }
 
-.lista-proveedores {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
+.estado-pill.activo {
+  background: #d1e7dd;
+  color: #0f5132;
 }
 
-.proveedor-card {
-  border: 1px solid #ccc;
+.estado-pill.inactivo {
+  background: #f8d7da;
+  color: #842029;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+}
+
+.modal-card {
+  width: min(92vw, 520px);
+  max-height: 90vh;
+  overflow: auto;
+  background: #fff;
+  border-radius: 12px;
   padding: 1rem;
-  border-radius: 8px;
-}
-
-.btn {
-  margin-top: 1rem;
-  margin-right: 0.5rem;
 }
 </style>
