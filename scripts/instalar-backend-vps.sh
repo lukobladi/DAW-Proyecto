@@ -1,227 +1,228 @@
-# INSTALAR SCRIPT PARA QUE DUCKDNS REFRESQUE LA IP
-# ==============================================
-# Instalar crontab si no está instalado
-if ! ps -ef | grep cr[o]n; then
-    echo "Crontab no está instalado. Instalando crontab..."
-    apt update
-    apt install -y cron
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Instalacion base para VPS Debian 13 (backend + frontend).
+# Prepara SO, Node, PostgreSQL, Nginx, PM2, UFW y estructura de app.
+#
+# Uso recomendado (como root o con sudo):
+#   DOMAIN=ekonsumo.duckdns.org \
+#   DB_PASSWORD='O&5Y9X}R9f2v' \
+#   JWT_SECRET='bFUeXtDBV6lV6n3sLTJ3aWsgP5H1Wtyr1LkQYoAVTVU' \
+#   EMAIL_USER='emartinmon6@educacion.navarra.es' EMAIL_PASS='3n3sh.fp' \
+#   scripts/instalar-backend-vps.sh
+#
+# Opcional DuckDNS:
+#   DUCKDNS_DOMAIN=ekonsumo DUCKDNS_TOKEN=5cee5aa6-77fa-4e3d-b1f1-ec3afea1c773 scripts/instalar-backend-vps.sh
+
+if [[ "${EUID}" -ne 0 ]]; then
+  echo "Este script debe ejecutarse como root (o con sudo)."
+  exit 1
 fi
 
-# Instalar curl si no está instalado
-if ! command -v curl >/dev/null 2>&1; then
-    echo "Curl no está instalado. Instalando curl..."
-    apt update
-    apt install -y curl
+APP_USER="${APP_USER:-ekonsumo}"
+APP_GROUP="${APP_GROUP:-$APP_USER}"
+APP_DIR="${APP_DIR:-/var/www/daw-proyecto}"
+BACKEND_DIR="$APP_DIR/backend"
+FRONTEND_DIR="$APP_DIR/frontend"
+
+DOMAIN="${DOMAIN:-ekonsumo.duckdns.org}"
+PORT="${PORT:-3000}"
+OVERWRITE_ENV="${OVERWRITE_ENV:-0}"
+
+DB_HOST="${DB_HOST:-127.0.0.1}"
+DB_PORT="${DB_PORT:-5432}"
+DB_NAME="${DB_NAME:-ekonsumo}"
+DB_USER="${DB_USER:-ekonsumo_user}"
+DB_PASSWORD="${DB_PASSWORD:-}"
+
+JWT_SECRET="${JWT_SECRET:-}"
+EMAIL_USER="${EMAIL_USER:-}"
+EMAIL_PASS="${EMAIL_PASS:-}"
+FRONTEND_URL="${FRONTEND_URL:-https://$DOMAIN}"
+
+DUCKDNS_DOMAIN="${DUCKDNS_DOMAIN:-}"
+DUCKDNS_TOKEN="${DUCKDNS_TOKEN:-}"
+
+if [[ -z "$DB_PASSWORD" || -z "$JWT_SECRET" ]]; then
+  echo "ERROR: Debes definir DB_PASSWORD y JWT_SECRET en variables de entorno."
+  exit 1
 fi
 
-# Crear script para refrescar IP
-mkdir -p ~/duckdns
-cat > ~/duckdns/duck.sh <<EOF
-#!/bin/bash
-curl -k -o ~/duckdns/duck.log "https://www.duckdns.org/update?domains=ekonsumo&token=5cee5aa6-77fa-4e3d-b1f1-ec3afea1c773"
+ensure_env_key() {
+  local file="$1"
+  local key="$2"
+  local value="$3"
+
+  if ! grep -q "^${key}=" "$file"; then
+    printf '%s=%s\n' "$key" "$value" >> "$file"
+  fi
+}
+
+echo "==> Actualizando sistema"
+apt update
+apt upgrade -y
+
+echo "==> Instalando paquetes base"
+apt install -y curl ca-certificates gnupg lsb-release git rsync unzip build-essential \
+  nginx postgresql postgresql-contrib ufw cron
+
+echo "==> Instalando Node.js 22 LTS"
+if ! command -v node >/dev/null 2>&1 || ! node -v | grep -qE '^v22\.'; then
+  curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+  apt install -y nodejs
+fi
+
+echo "==> Instalando PM2"
+npm install -g pm2
+
+echo "==> Creando usuario del sistema si no existe"
+if ! id -u "$APP_USER" >/dev/null 2>&1; then
+  useradd -m -s /bin/bash "$APP_USER"
+fi
+
+echo "==> Creando estructura de carpetas"
+mkdir -p "$BACKEND_DIR" "$FRONTEND_DIR" "$APP_DIR/logs"
+chown -R "$APP_USER:$APP_GROUP" "$APP_DIR"
+
+echo "==> Configurando PostgreSQL"
+sudo -u postgres psql -v db_user="$DB_USER" -v db_password="$DB_PASSWORD" -v db_name="$DB_NAME" <<'SQL'
+SELECT format('CREATE ROLE %I LOGIN PASSWORD %L', :'db_user', :'db_password')
+WHERE NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = :'db_user')\gexec
+
+SELECT format('ALTER ROLE %I WITH LOGIN PASSWORD %L', :'db_user', :'db_password')\gexec
+
+SELECT format('CREATE DATABASE %I OWNER %I', :'db_name', :'db_user')
+WHERE NOT EXISTS (SELECT 1 FROM pg_database WHERE datname = :'db_name')\gexec
+SQL
+
+echo "==> Configurando backend/.env"
+if [[ ! -f "$BACKEND_DIR/.env" || "$OVERWRITE_ENV" == "1" ]]; then
+  cat > "$BACKEND_DIR/.env" <<EOF
+PORT=$PORT
+NODE_ENV=production
+JWT_SECRET=$JWT_SECRET
+DB_HOST=$DB_HOST
+DB_PORT=$DB_PORT
+DB_USER=$DB_USER
+DB_PASSWORD=$DB_PASSWORD
+DB_NAME=$DB_NAME
+EMAIL_USER=$EMAIL_USER
+EMAIL_PASS=$EMAIL_PASS
+FRONTEND_URL=$FRONTEND_URL
+EOF
+  chown "$APP_USER:$APP_GROUP" "$BACKEND_DIR/.env"
+  chmod 600 "$BACKEND_DIR/.env"
+else
+  ensure_env_key "$BACKEND_DIR/.env" "PORT" "$PORT"
+  ensure_env_key "$BACKEND_DIR/.env" "NODE_ENV" "production"
+  ensure_env_key "$BACKEND_DIR/.env" "JWT_SECRET" "$JWT_SECRET"
+  ensure_env_key "$BACKEND_DIR/.env" "DB_HOST" "$DB_HOST"
+  ensure_env_key "$BACKEND_DIR/.env" "DB_PORT" "$DB_PORT"
+  ensure_env_key "$BACKEND_DIR/.env" "DB_USER" "$DB_USER"
+  ensure_env_key "$BACKEND_DIR/.env" "DB_PASSWORD" "$DB_PASSWORD"
+  ensure_env_key "$BACKEND_DIR/.env" "DB_NAME" "$DB_NAME"
+  ensure_env_key "$BACKEND_DIR/.env" "EMAIL_USER" "$EMAIL_USER"
+  ensure_env_key "$BACKEND_DIR/.env" "EMAIL_PASS" "$EMAIL_PASS"
+  ensure_env_key "$BACKEND_DIR/.env" "FRONTEND_URL" "$FRONTEND_URL"
+  chown "$APP_USER:$APP_GROUP" "$BACKEND_DIR/.env"
+  chmod 600 "$BACKEND_DIR/.env"
+fi
+
+echo "==> Configurando Nginx"
+cat > /etc/nginx/sites-available/ekonsumo <<EOF
+server {
+  listen 80;
+  server_name $DOMAIN;
+
+  root $FRONTEND_DIR/dist;
+  index index.html;
+
+  location / {
+    try_files \$uri \$uri/ /index.html;
+  }
+
+  location /api/ {
+    proxy_pass http://127.0.0.1:$PORT;
+    proxy_http_version 1.1;
+    proxy_set_header Host \$host;
+    proxy_set_header X-Real-IP \$remote_addr;
+    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto \$scheme;
+  }
+
+  location = /api-docs {
+    proxy_pass http://127.0.0.1:$PORT/api-docs;
+    proxy_http_version 1.1;
+    proxy_set_header Host \$host;
+    proxy_set_header X-Real-IP \$remote_addr;
+    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto \$scheme;
+  }
+
+  location ^~ /api-docs/ {
+    proxy_pass http://127.0.0.1:$PORT/api-docs/;
+    proxy_http_version 1.1;
+    proxy_set_header Host \$host;
+    proxy_set_header X-Real-IP \$remote_addr;
+    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto \$scheme;
+  }
+
+  location /uploads/ {
+    alias $BACKEND_DIR/uploads/;
+    autoindex off;
+  }
+}
 EOF
 
-chmod 700 ~/duckdns/duck.sh
+rm -f /etc/nginx/sites-enabled/default
+ln -sf /etc/nginx/sites-available/ekonsumo /etc/nginx/sites-enabled/ekonsumo
+nginx -t
+systemctl enable nginx
+systemctl restart nginx
 
-# Añadir script a cron para que se ejecute periódicamente
-(crontab -l 2>/dev/null; echo "*/5 * * * * ~/duckdns/duck.sh >/dev/null 2>&1") | crontab -
+echo "==> Configurando UFW"
+ufw allow OpenSSH
+ufw allow 'Nginx Full'
+ufw --force enable
 
-# Probar el script
-~/duckdns/duck.sh
-cat ~/duckdns/duck.log
+echo "==> Activando servicios"
+systemctl enable postgresql
+systemctl restart postgresql
+systemctl enable cron
+systemctl restart cron
 
+echo "==> Configurando PM2 startup para $APP_USER"
+pm2 startup systemd -u "$APP_USER" --hp "/home/$APP_USER" || true
 
-
-# Crear usuario eneko si no existe
-if ! id -u eneko >/dev/null 2>&1; then
-    echo "Creando usuario eneko..."
-    useradd -m eneko
+if [[ -n "$DUCKDNS_DOMAIN" && -n "$DUCKDNS_TOKEN" ]]; then
+  echo "==> Configurando actualizacion DuckDNS"
+  cat > /usr/local/bin/duckdns-update <<EOF
+#!/usr/bin/env bash
+curl -fsS "https://www.duckdns.org/update?domains=$DUCKDNS_DOMAIN&token=$DUCKDNS_TOKEN&ip=" \
+  -o /var/log/duckdns.log
+EOF
+  chmod 700 /usr/local/bin/duckdns-update
+  if ! crontab -l 2>/dev/null | grep -q duckdns-update; then
+    (crontab -l 2>/dev/null; echo "*/5 * * * * /usr/local/bin/duckdns-update >/dev/null 2>&1") | crontab -
+  fi
 fi
 
-# Habilitar sudo para eneko
-echo "eneko ALL=(ALL) NOPASSWD:ALL" | tee /etc/sudoers.d/eneko >/dev/null
+cat <<EOF
 
-# Configurar el nombre de host
-echo "ekonsumo-esparza" > /etc/hostname
-echo "127.0.0.1       ekonsumo-esparza" >> /etc/hosts
+Instalacion base completada.
 
-# Deshabilitar el acceso root por SSH
-# sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
+Siguientes pasos:
+1) Subir codigo: scripts/subir_codigo_fuente.sh <usuario@host> $APP_DIR
+2) En VPS:
+   cd $BACKEND_DIR && npm ci --omit=dev
+   cd $FRONTEND_DIR && npm ci && npm run build
+   sudo -u $APP_USER pm2 start $BACKEND_DIR/index.js --name ekonsumo-backend --cwd $BACKEND_DIR --time
+   sudo -u $APP_USER pm2 save
+   systemctl reload nginx
 
-# Reiniciar el servicio SSH
-systemctl restart sshd.service
+Opcional ahora (recomendado): HTTPS con Certbot
+  apt install -y certbot python3-certbot-nginx
+  certbot --nginx -d $DOMAIN
 
-# Conectar como eneko
-echo "Para conectar al servidor, utilizar el siguiente comando:"
-echo "ssh eneko@ekonsumo.duckdns.org"
-
-
-
-
-# INSTALACIÓN Y CONFIGURACIÓN DEL BACKEND (Node.js + Express + PostgreSQL)
-# ==============================================
-
-echo "=== Actualizando el sistema ==="
-sudo apt update && sudo apt upgrade -y
-
-echo "=== Instalando Node.js y npm ==="
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt install -y nodejs
-
-echo "=== Instalando PostgreSQL ==="
-sudo apt install -y postgresql postgresql-contrib
-
-echo "=== Configurando PostgreSQL ==="
-sudo -u postgres psql -c "CREATE DATABASE ekonsumo;"
-sudo -u postgres psql -c "CREATE USER ekonsumo_user WITH PASSWORD '1234';"
-sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ekonsumo TO ekonsumo_user;"
-
-echo "=== Instalando PM2 ==="
-sudo npm install -g pm2
-
-echo "=== Configurando el backend ==="
-BACKEND_DIR="/var/www/daw-proyecto/backend"
-cd $BACKEND_DIR
-npm install
-
-echo "=== Creando archivo .env para el backend ==="
-cat > $BACKEND_DIR/.env <<EOL
-PORT=3000
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=ekonsumo
-DB_USER=ekonsumo_user
-DB_PASSWORD=1234  # Cuando funcione crear contraseña segura
-JWT_SECRET=1234        #  Cuando funcione crear contraseña segura
-EOL
-
-echo "=== Iniciando el backend con PM2 ==="
-pm2 start $BACKEND_DIR/index.js --name "daw-backend"
-pm2 save
-pm2 startup
-
-# ==============================================
-# INSTALACIÓN Y CONFIGURACIÓN DEL FRONTEND (Vue.js)
-# ==============================================
-
-echo "=== Instalando dependencias para Vue.js ==="
-sudo apt install -y nginx
-
-echo "=== Configurando el frontend ==="
-FRONTEND_DIR="/var/www/daw-proyecto/frontend"
-cd $FRONTEND_DIR
-npm install
-npm run build
-
-echo "=== Configurando Nginx para servir el frontend ==="
-sudo rm /etc/nginx/sites-enabled/default
-sudo cat > /etc/nginx/sites-available/daw-proyecto <<EOL
-server {
-    listen 80;
-    server_name ekonsumo.duckdns.org;  # Replace with your domain or IP
-
-    # Configuración para el frontend (Vue.js)
-    root $FRONTEND_DIR/dist;
-    index index.html;
-
-    location / {
-        try_files \$uri \$uri/ /index.html;
-    }
-
-    # Configuración para el backend (Proxy a Express)
-    location /api {
-        proxy_pass http://localhost:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade \$http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host \$host;
-        proxy_cache_bypass \$http_upgrade;
-        add_header Access-Control-Allow-Origin *;
-        add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS";
-        add_header Access-Control-Allow-Headers "Content-Type, Authorization";
-    
-    }
-    
-}
-EOL
-
-sudo ln -s /etc/nginx/sites-available/daw-proyecto /etc/nginx/sites-enabled/
-sudo nginx -t
-sudo systemctl restart nginx
-
-# ==============================================
-# CONFIGURACIÓN DEL FIREWALL (UFW)
-# ==============================================
-
-echo "=== Configurando el firewall ==="
-sudo apt install -y ufw
-sudo ufw allow 22     # SSH
-sudo ufw allow 80     # HTTP
-sudo ufw allow 443    # HTTPS (always enable if Certbot is installed)
-sudo ufw --force enable
-
-# ==============================================
-# INSTALACIÓN DE CERTBOT (HTTPS - Opcional)
-# ==============================================
-
-read -p "¿Deseas configurar HTTPS con Let's Encrypt? (y/n): " install_https
-if [ "$install_https" = "y" ]; then
-    echo "=== Instalando Certbot ==="
-    sudo apt install -y certbot python3-certbot-nginx
-    sudo certbot --nginx -d ekonsumo.duckdns.org  # Cambiar por tu dominio
-    sudo systemctl restart nginx
-fi
-
-echo "=== Instalación completada! ==="
-echo "Frontend: http://ekonsumo.duckdns.org"
-echo "Backend: http://ekonsumo.duckdns.org/api"
-
-
-# ==============================================
-# Subir código al servidor y arrancar
-# ==============================================
-
-sudo mkdir -p /var/www/daw-proyecto/backend
-sudo mkdir -p /var/www/daw-proyecto/frontend
-
-#Copiar el Backend
-#Desde local, ejecuta:
-
-# scp -r /ruta/local/backend eneko@ekonsumo.duckdns.org:/var/www/daw-proyecto/backend
-
-# Copiar el Frontend
-# Desde local, ejecuta:
-
-# scp -r /ruta/local/frontend eneko@ekonsumo.duckdns.org:/var/www/daw-proyecto/frontend
-
-# 3. Configurar Permisos
-# Una vez copiados los archivos, asegúrate de que los permisos sean correctos en el servidor:
-
-sudo chown -R eneko:eneko /var/www/daw-proyecto
-sudo chmod -R 755 /var/www/daw-proyecto
-
-# 4. Instalar Dependencias
-# En el servidor, instala las dependencias del backend y frontend.
-
-# Backend
-cd /var/www/daw-proyecto/backend
-npm install
-
-# Frontend
-cd /var/www/daw-proyecto/frontend
-npm install
-npm run build
-
-
-#5. Iniciar el Backend
-#Usa PM2 para iniciar el backend:
-
-pm2 start /var/www/daw-proyecto/backend/index.js --name "daw-backend"
-pm2 save
-pm2 startup
-
-# 6. Configurar Nginx
-# Tu script ya incluye la configuración de Nginx para servir el frontend y hacer proxy al backend. Asegúrate de que el archivo de configuración de Nginx esté habilitado:
-sudo ln -s /etc/nginx/sites-available/daw-proyecto /etc/nginx/sites-enabled/
-sudo nginx -t
-sudo systemctl restart nginx
+EOF

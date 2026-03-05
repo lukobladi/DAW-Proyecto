@@ -1,73 +1,81 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-# Configuración
-SERVER_USER="eneko"
-SERVER_HOST="ekonsumo.duckdns.org"
+# Sube codigo fuente al VPS usando rsync.
+# No sube node_modules, dist, coverage ni .env.
+#
+# Uso:
+#   scripts/subir_codigo_fuente.sh <usuario@host> [ruta_remota]
+#
+# Ejemplo:
+#   scripts/subir_codigo_fuente.sh eneko@ekonsumo.duckdns.org /var/www/daw-proyecto
 
-BACKEND_LOCAL_DIR="$HOME/Proyects/DAW-Proyecto/Backend"
-FRONTEND_LOCAL_DIR="$HOME/Proyects/DAW-Proyecto/frontend"
-SQL_DIR="$HOME/Proyects/DAW-Proyecto/sql"
-
-BACKEND_REMOTE_DIR="/var/www/daw-proyecto/backend"
-FRONTEND_REMOTE_DIR="/var/www/daw-proyecto/frontend"
-
-SSH_KEY="$HOME/.ssh/id_rsa"  # Ruta clave privada
-
-echo "=== Iniciando despliegue ==="
-
-echo "=== Configurando permisos en el servidor ==="
-ssh $SERVER_USER@$SERVER_HOST "sudo chown -R eneko:eneko $BACKEND_REMOTE_DIR && sudo chmod -R 775 $BACKEND_REMOTE_DIR"
-ssh $SERVER_USER@$SERVER_HOST "sudo chown -R eneko:eneko $FRONTEND_REMOTE_DIR && sudo chmod -R 775 $FRONTEND_REMOTE_DIR"
-
-
-# Verificar si existe clave SSH
-if [ ! -f "$SSH_KEY" ]; then
-    echo "=== Generando clave SSH ==="
-    ssh-keygen -t rsa -b 4096 -f "$SSH_KEY" -N ""
-    echo "=== Copiando clave pública al servidor ==="
-    ssh-copy-id -i "$SSH_KEY.pub" $SERVER_USER@$SERVER_HOST
+if [[ $# -lt 1 ]]; then
+  echo "Uso: $0 <usuario@host> [ruta_remota]"
+  exit 1
 fi
 
-# Función para SCP con clave SSH
-scp_ssh() {
-    scp -i "$SSH_KEY" "$@"
-}
+REMOTE="$1"
+REMOTE_DIR="${2:-/var/www/daw-proyecto}"
 
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-# Copiar archivos del backend
-echo "=== Copiando archivos del backend al servidor ==="
-scp_ssh -r \
-    $BACKEND_LOCAL_DIR/package.json \
-    $BACKEND_LOCAL_DIR/index.js \
-    $BACKEND_LOCAL_DIR/db.js \
-    $BACKEND_LOCAL_DIR/swagger.js \
-    $BACKEND_LOCAL_DIR/.env \
-    $SERVER_USER@$SERVER_HOST:$BACKEND_REMOTE_DIR
+SSH_OPTS="${SSH_OPTS:-}"
+RSYNC_RSH="ssh"
+if [[ -n "$SSH_OPTS" ]]; then
+  RSYNC_RSH="ssh $SSH_OPTS"
+fi
 
-scp_ssh -r $BACKEND_LOCAL_DIR/src $SERVER_USER@$SERVER_HOST:$BACKEND_REMOTE_DIR
-scp_ssh -r $BACKEND_LOCAL_DIR/uploads $SERVER_USER@$SERVER_HOST:$BACKEND_REMOTE_DIR
-scp_ssh -r $BACKEND_LOCAL_DIR/config $SERVER_USER@$SERVER_HOST:$BACKEND_REMOTE_DIR
-scp_ssh -r $BACKEND_LOCAL_DIR/services $SERVER_USER@$SERVER_HOST:$BACKEND_REMOTE_DIR
-scp_ssh -r $BACKEND_LOCAL_DIR/routes $SERVER_USER@$SERVER_HOST:$BACKEND_REMOTE_DIR
-scp_ssh -r $BACKEND_LOCAL_DIR/controllers $SERVER_USER@$SERVER_HOST:$BACKEND_REMOTE_DIR
-scp_ssh -r $BACKEND_LOCAL_DIR/models $SERVER_USER@$SERVER_HOST:$BACKEND_REMOTE_DIR
-scp_ssh -r $BACKEND_LOCAL_DIR/middlewares $SERVER_USER@$SERVER_HOST:$BACKEND_REMOTE_DIR
+EXCLUDES=(
+  --exclude=.git
+  --exclude=.github
+  --exclude=node_modules
+  --exclude=dist
+  --exclude=coverage
+  --exclude=.env
+  --exclude=.env.*
+  --exclude=.DS_Store
+)
 
-# Copiar archivos del frontend
-echo "=== Copiando archivos del frontend al servidor ==="
-scp_ssh -r \
-    $FRONTEND_LOCAL_DIR/babel.config.js \
-    $FRONTEND_LOCAL_DIR/package.json \
-    $SERVER_USER@$SERVER_HOST:$FRONTEND_REMOTE_DIR
+echo "==> Verificando conectividad SSH"
+if ! ssh $SSH_OPTS "$REMOTE" "echo 'SSH OK'" >/dev/null 2>&1; then
+  cat <<EOF
+No se pudo autenticar por SSH con $REMOTE.
 
-scp_ssh -r $FRONTEND_LOCAL_DIR/src $SERVER_USER@$SERVER_HOST:$FRONTEND_REMOTE_DIR
-scp_ssh -r $FRONTEND_LOCAL_DIR/public $SERVER_USER@$SERVER_HOST:$FRONTEND_REMOTE_DIR
+Si usas clave no default, ejecuta con:
+  SSH_OPTS='-i ~/.ssh/tu_clave' scripts/subir_codigo_fuente.sh $REMOTE $REMOTE_DIR
+EOF
+  exit 1
+fi
 
+echo "==> Creando directorios remotos"
+ssh $SSH_OPTS "$REMOTE" "mkdir -p '$REMOTE_DIR/backend' '$REMOTE_DIR/frontend' '$REMOTE_DIR/docs' '$REMOTE_DIR/scripts'"
 
-# Configurar permisos en el servidor
-echo "=== Configurando permisos en el servidor ==="
-ssh $SERVER_USER@$SERVER_HOST "sudo chown -R www-data:www-data $BACKEND_REMOTE_DIR && sudo chmod -R 775 $BACKEND_REMOTE_DIR"
-ssh $SERVER_USER@$SERVER_HOST "sudo chown -R www-data:www-data $FRONTEND_REMOTE_DIR && sudo chmod -R 775 $FRONTEND_REMOTE_DIR"
+echo "==> Sincronizando backend"
+rsync -az --delete -e "$RSYNC_RSH" "${EXCLUDES[@]}" \
+  "$ROOT_DIR/backend/" "$REMOTE:$REMOTE_DIR/backend/"
 
-echo "=== Despliegue completado ==="
+echo "==> Sincronizando frontend"
+rsync -az --delete -e "$RSYNC_RSH" "${EXCLUDES[@]}" \
+  "$ROOT_DIR/frontend/" "$REMOTE:$REMOTE_DIR/frontend/"
 
+echo "==> Sincronizando scripts y docs"
+rsync -az --delete -e "$RSYNC_RSH" "${EXCLUDES[@]}" \
+  "$ROOT_DIR/scripts/" "$REMOTE:$REMOTE_DIR/scripts/"
+rsync -az --delete -e "$RSYNC_RSH" "${EXCLUDES[@]}" \
+  "$ROOT_DIR/docs/" "$REMOTE:$REMOTE_DIR/docs/"
+
+echo "==> Ajustando permisos basicos"
+ssh $SSH_OPTS "$REMOTE" "chmod +x '$REMOTE_DIR/scripts/'*.sh || true"
+
+cat <<EOF
+
+Codigo actualizado en: $REMOTE_DIR
+
+Siguientes pasos sugeridos en el VPS:
+  cd $REMOTE_DIR/backend && npm ci --omit=dev
+  cd $REMOTE_DIR/frontend && npm ci && npm run build
+  pm2 restart ekonsumo-backend
+  sudo systemctl reload nginx
+
+EOF

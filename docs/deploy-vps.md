@@ -1,219 +1,159 @@
-# Documentación: Alojar Proyecto en un VPS con Debian 12
+# Deploy en VPS Debian 13 (Ekonsumo)
 
-## Requisitos Previos
-1. **Servidor VPS**: Contratado en [Clouding.io](https://clouding.io/).
-2. **Sistema Operativo**: Debian 12 instalado en el VPS.
-3. **Dominio**: Gratuito [DuckDNS](https://www.duckdns.org/).
-4. **Acceso SSH**: Acceso VPS.
-5. **Proyecto**: Código fuente npm.
+Guia actualizada para desplegar el monorepo (`backend` + `frontend`) en un VPS con Debian 13.
 
----
+## 1. Resumen de estrategia
 
-## Pasos para Configurar el VPS
+- Backend Node/Express en `PM2` (puerto interno 3000).
+- Frontend Vue/Vite compilado en `frontend/dist`.
+- `Nginx` sirve frontend y hace proxy de `/api` al backend.
+- `PostgreSQL` local en el VPS.
 
-### 1. Acceso al Servidor
-1. Acceder al servidor mediante SSH:
-   ```bash
-   ssh root@<IP_DEL_SERVIDOR>
-   ```
+## 2. Requisitos
 
-2. Actualiza el sistema:
-   ```bash
-   apt update && apt upgrade -y
-   ```
+- VPS Debian 13 limpio.
+- Dominio o subdominio (ejemplo: `ekonsumo.duckdns.org`).
+- Acceso SSH al servidor.
+- Variables secretas definidas para backend (`DB_PASSWORD`, `JWT_SECRET`, etc.).
 
----
+## 3. Preparar servidor (instalacion base)
 
-### 2. Configurar DuckDNS
-1. Crear cuenta en [DuckDNS](https://www.duckdns.org/) y añadir subdominio.
-2. Copiar token de DuckDNS.
-3. Configurar script para actualizar la IP dinámica:
-   - Crear archivo para script programado con CRON para que actualize la IP regularmente:
-     ```bash
-     nano /etc/cron.daily/duckdns
-     ```
-   - Añadir el contenido (reemplazar `<SUBDOMINIO>` y `<TOKEN>` con los datos de DUCKDNS):
-     ```bash
-     #!/bin/bash
-     echo url="https://www.duckdns.org/update?domains=<SUBDOMINIO>&token=<TOKEN>&ip=" | curl -k -o ~/duckdns.log -K -
-     ```
-   - Hacer el script ejecutable:
-     ```bash
-     chmod +x /etc/cron.daily/duckdns
-     ```
-4. Verificar script manualmente:
-   ```bash
-   /etc/cron.daily/duckdns
-   ```
-   Si todo está correcto, veremos la IP del servidor en DuckDNS apuntando al domainname.
+En el VPS (root o sudo):
 
----
+```bash
+git clone <tu_repo> /tmp/daw-proyecto
+cd /tmp/daw-proyecto
 
-### 3. Instalar Dependencias
-1. **Node.js y npm**:
-   ```bash
-   curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
-   apt install -y nodejs
-   ```
-2. **PostgreSQL**:
-   ```bash
-   apt install -y postgresql postgresql-contrib
-   ```
-3. **Nginx**:
-   ```bash
-   apt install -y nginx
-   ```
-4. **PM2** (para gestionar procesos de Node.js):
-   ```bash
-   npm install -g pm2
-   ```
+DOMAIN=ekonsumo.duckdns.org \
+DB_PASSWORD='cambia_esta_password' \
+JWT_SECRET='cambia_este_secret' \
+EMAIL_USER='correo@dominio.com' \
+EMAIL_PASS='password_correo' \
+scripts/instalar-backend-vps.sh
+```
 
----
+Notas:
 
-### 4. Configurar PostgreSQL
-1. Inicia el servicio de PostgreSQL:
-   ```bash
-   systemctl start postgresql
-   systemctl enable postgresql
-   ```
-2. Crea un usuario y una base de datos para tu proyecto:
-   ```bash
-   sudo -u postgres psql
-   ```
-   Dentro de la consola de PostgreSQL, ejecuta:
-   ```sql
-   CREATE USER daw_user WITH PASSWORD 'daw_password';
-   CREATE DATABASE daw_db OWNER daw_user;
-   ALTER USER daw_user CREATEDB;
-   \q
-   ```
+- El script crea estructura en `/var/www/daw-proyecto`.
+- Deja creado `backend/.env` (si no existe).
+- Configura Nginx y UFW.
+- Si defines `DUCKDNS_DOMAIN` y `DUCKDNS_TOKEN`, configura actualizacion automatica de IP.
 
----
+## 4. Subir codigo fuente desde local
 
-### 5. Configurar Nginx
-1. Crea un archivo de configuración para tu proyecto:
-   ```bash
-   nano /etc/nginx/sites-available/daw-proyecto
-   ```
-2. Añade la siguiente configuración (reemplaza `<SUBDOMINIO>.duckdns.org` con tu dominio):
-   ```nginx
-   server {
-       listen 80;
-       server_name <SUBDOMINIO>.duckdns.org;
+Desde tu maquina de desarrollo:
 
-       location / {
-           proxy_pass http://localhost:3000;
-           proxy_http_version 1.1;
-           proxy_set_header Upgrade $http_upgrade;
-           proxy_set_header Connection 'upgrade';
-           proxy_set_header Host $host;
-           proxy_cache_bypass $http_upgrade;
-       }
+```bash
+cd /home/mcl/Proyects/DAW-Proyecto
+scripts/subir_codigo_fuente.sh eneko@ekonsumo.duckdns.org /var/www/daw-proyecto
+```
 
-       location /static/ {
-           root /var/www/daw-proyecto;
-       }
+El script sincroniza:
 
-       error_page 404 /404.html;
-   }
-   ```
-3. Activa la configuración:
-   ```bash
-   ln -s /etc/nginx/sites-available/daw-proyecto /etc/nginx/sites-enabled/
-   nginx -t
-   systemctl restart nginx
-   ```
+- `backend/`
+- `frontend/`
+- `scripts/`
+- `docs/`
 
----
+Y excluye `node_modules`, `dist`, `coverage`, `.env`, `.git`.
 
-### 6. Configurar Firewall (UFW)
-1. Instalar UFW si no está instalado:
-   ```bash
-   apt install ufw
-   ```
-2. Permite conexiones SSH y tráfico HTTP/HTTPS:
-   ```bash
-   ufw allow OpenSSH
-   ufw allow 'Nginx Full'
-   ufw enable
-   ```
+## 5. Instalar dependencias y arrancar app
 
----
+En el VPS:
 
-### 7. Desplegar el Proyecto
-1. Sube tu proyecto al servidor (por ejemplo, usando `scp` o Git):
-   ```bash
-   scp -r /ruta/local/proyecto root@<IP_DEL_SERVIDOR>:/var/www/daw-proyecto
-   ```
-2. Instalar las dependencias del backend:
-   ```bash
-   cd /var/www/daw-proyecto/backend
-   npm install
-   ```
-3. Configura las variables de entorno (`.env`):
-   ```bash
-   nano .env
-   ```
-   Ejemplo:
-   ```env
-   DB_HOST=localhost
-   DB_USER=daw_user
-   DB_PASSWORD=daw_password
-   DB_NAME=daw_db
-   PORT=3000
-   ```
-4. Inicia el backend con PM2:
-   ```bash
-   pm2 start index.js --name daw-proyecto
-   pm2 save
-   pm2 startup
-   ```
+```bash
+cd /var/www/daw-proyecto/backend
+npm ci --omit=dev
 
----
+cd /var/www/daw-proyecto/frontend
+npm ci
+npm run build
 
-### 8. Configurar HTTPS (Opcional)
-1. Instala Certbot para Nginx:
-   ```bash
-   apt install certbot python3-certbot-nginx
-   ```
-2. Genera un certificado SSL para el dominio:
-   ```bash
-   certbot --nginx -d <SUBDOMINIO>.duckdns.org
-   ```
-3. Renueva automáticamente los certificados:
-   ```bash
-   crontab -e
-   ```
-   Añadir siguiente línea:
-   ```bash
-   0 0 * * * certbot renew --quiet
-   ```
+sudo -u ekonsumo pm2 start /var/www/daw-proyecto/backend/index.js --name ekonsumo-backend
+sudo -u ekonsumo pm2 save
 
----
+sudo systemctl reload nginx
+```
 
-### 9. Verificar el Despliegue
-1. Abrir navegador y accede al dominio:
-   ```
-   http://<SUBDOMINIO>.duckdns.org
-   ```
-2. Si HTTPS, accede con:
-   ```
-   https://<SUBDOMINIO>.duckdns.org
-   ```
+## 6. Verificaciones post-deploy
 
----
+```bash
+curl -I http://ekonsumo.duckdns.org
+curl -I http://ekonsumo.duckdns.org/api/test
 
-## Notas Finales
-- **Logs de Nginx**: Depurar problemas, revisar los logs:
-  ```bash
-  tail -f /var/log/nginx/error.log
-  ```
-- **Logs del Backend**: PM2 guarda los logs del backend:
-  ```bash
-  pm2 logs daw-proyecto
-  ```
-- **Actualizar el Proyecto**: Para actualizar el código, subir los cambios al servidor, reiniciar PM2:
-  ```bash
-  pm2 restart daw-proyecto
-  ```
+sudo -u ekonsumo pm2 list
+sudo -u ekonsumo pm2 logs ekonsumo-backend --lines 100
 
+sudo nginx -t
+sudo systemctl status nginx
+```
+
+## 7. HTTPS (recomendado en esta fase)
+
+Aunque el hardening completo puede ir en otra iteracion, **si recomiendo habilitar HTTPS ya**.
+
+```bash
+sudo apt install -y certbot python3-certbot-nginx
+sudo certbot --nginx -d ekonsumo.duckdns.org
+```
+
+Probar renovacion:
+
+```bash
+sudo certbot renew --dry-run
+```
+
+## 8. Actualizacion de codigo (operativa diaria)
+
+1. Local:
+
+```bash
+scripts/subir_codigo_fuente.sh eneko@ekonsumo.duckdns.org /var/www/daw-proyecto
+```
+
+2. VPS:
+
+```bash
+cd /var/www/daw-proyecto/backend && npm ci --omit=dev
+cd /var/www/daw-proyecto/frontend && npm ci && npm run build
+sudo -u ekonsumo pm2 restart ekonsumo-backend
+sudo systemctl reload nginx
+```
+
+## 9. Variables de entorno backend recomendadas
+
+`/var/www/daw-proyecto/backend/.env`
+
+```env
+PORT=3000
+NODE_ENV=production
+JWT_SECRET=<secreto_largo>
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_USER=ekonsumo_user
+DB_PASSWORD=<password_db>
+DB_NAME=ekonsumo
+EMAIL_USER=<correo>
+EMAIL_PASS=<password>
+FRONTEND_URL=https://ekonsumo.duckdns.org
+```
+
+## 10. Troubleshooting rapido
+
+- `502 Bad Gateway`:
+  - backend no arranco o cayo: `sudo -u ekonsumo pm2 logs ekonsumo-backend`
+- frontend no refleja cambios:
+  - no se ejecuto build: `cd frontend && npm run build`
+- Nginx error de config:
+  - `sudo nginx -t`
+- API devuelve 401:
+  - revisar `JWT_SECRET`, reloj del sistema y token en cliente.
+
+## 11. Seguridad: ahora o despues
+
+Recomendacion pragmatica:
+
+- **Ahora (minimo obligatorio):** UFW + HTTPS + no exponer secretos + actualizaciones + usuario no root.
+- **Despues (iteracion hardening):** Fail2ban, SSH hardening, cabeceras CSP estrictas, backup automatizado y monitorizacion.
+
+Checklist detallado en: `docs/Securizar.md`.

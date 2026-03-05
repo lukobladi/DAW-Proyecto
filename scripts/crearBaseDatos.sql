@@ -1,21 +1,37 @@
--- Crear el usuario para la base de datos (si no existe)
-DO $$
-BEGIN
-  IF NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'ekonsumo_user') THEN
-    CREATE USER ekonsumo_user WITH PASSWORD '1234';
-  END IF;
-END $$;
+-- Uso recomendado:
+-- psql -U postgres \
+--   -v db_user='ekonsumo_user' \
+--   -v db_password='cambia_esta_contrasena' \
+--   -v db_name='ekonsumo' \
+--   -f scripts/crearBaseDatos.sql
 
--- Crear la base de datos (si no existe)
-DO $$
-BEGIN
-  IF NOT EXISTS (SELECT FROM pg_database WHERE datname = 'ekonsumo') THEN
-    CREATE DATABASE ekonsumo OWNER ekonsumo_user;
-  END IF;
-END $$;
+\if :{?db_user}
+\else
+\set db_user ekonsumo_user
+\endif
+
+\if :{?db_name}
+\else
+\set db_name ekonsumo
+\endif
+
+\if :{?db_password}
+\else
+\echo 'ERROR: debes pasar db_password con -v db_password=...'
+\quit 1
+\endif
+
+-- Crear/actualizar usuario y base de datos sin usar DO para CREATE DATABASE.
+SELECT format('CREATE ROLE %I LOGIN PASSWORD %L', :'db_user', :'db_password')
+WHERE NOT EXISTS (SELECT 1 FROM pg_catalog.pg_roles WHERE rolname = :'db_user')\gexec
+
+SELECT format('ALTER ROLE %I WITH LOGIN PASSWORD %L', :'db_user', :'db_password')\gexec
+
+SELECT format('CREATE DATABASE %I OWNER %I', :'db_name', :'db_user')
+WHERE NOT EXISTS (SELECT 1 FROM pg_database WHERE datname = :'db_name')\gexec
 
 -- Conectar a la base de datos
-\c ekonsumo;
+\c :db_name
 
 -- Eliminar tablas si existen
 DROP TABLE IF EXISTS Detalle_Pedido CASCADE;
@@ -64,7 +80,7 @@ CREATE TABLE Producto (
     ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
     Fecha_Modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Activo BOOLEAN DEFAULT TRUE,
-    Imagen VARCHAR(255) -- Urlk de kla imagen
+    Imagen VARCHAR(255) -- URL de la imagen
 );
 
 CREATE TABLE Pedido (
@@ -123,10 +139,18 @@ CREATE TABLE Notificacion (
     Leida BOOLEAN DEFAULT FALSE
 );
 
--- Conceder permisos al usuario ekonsumo_user
-GRANT ALL PRIVILEGES ON DATABASE ekonsumo TO ekonsumo_user;
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO ekonsumo_user;
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO ekonsumo_user;
+-- Conceder permisos al usuario de aplicacion
+SELECT format('GRANT ALL PRIVILEGES ON DATABASE %I TO %I', :'db_name', :'db_user')\gexec
+SELECT format('GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO %I', :'db_user')\gexec
+SELECT format('GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO %I', :'db_user')\gexec
+SELECT format(
+  'ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO %I',
+  :'db_user'
+)\gexec
+SELECT format(
+  'ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON SEQUENCES TO %I',
+  :'db_user'
+)\gexec
 
 -- Mensaje de confirmación
 DO $$

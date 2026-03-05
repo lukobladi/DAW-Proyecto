@@ -1,3 +1,16 @@
+-- Limpiar datos para permitir re-ejecucion del script
+TRUNCATE TABLE
+  Notificacion,
+  Pago,
+  Pedido_Periodico,
+  Usuario_Proveedor,
+  Detalle_Pedido,
+  Pedido,
+  Producto,
+  Proveedor,
+  Usuario
+RESTART IDENTITY CASCADE;
+
 INSERT INTO Usuario (Nombre, Correo, Pass, Movil, Rol, Activo, Saldo)
 VALUES
     ('Eneko', 'enekoloko7@hotmail.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '622019870', 'admin', TRUE, 100.00),

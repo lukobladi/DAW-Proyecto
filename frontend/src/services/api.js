@@ -106,4 +106,7 @@ export default {
   eliminarDetallePedido(idDetalle) {
     return apiClient.delete(`/detalle-pedido/eliminar/${idDetalle}`);
   },
+  enviarNotificacion(data) {
+    return apiClient.post('/notificaciones/enviar/', data);
+  },
 };
