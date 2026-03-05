@@ -113,19 +113,21 @@ npm run build               # Production build (outputs to dist/)
 npm run build:dev           # Development build
 npm run build:prod          # Production build (explicit)
 npm run lint                # Lint .vue, .js, .jsx, .cjs, .mjs files (auto-fix)
+npm test                    # Run frontend tests (Vitest)
+npm run test:watch          # Run frontend tests in watch mode
 npm run preview             # Preview production build locally
 npm run clean               # Remove dist/ and node_modules/
 npm run reinstall           # Clean + npm install
 ```
 
-**Frontend tests are not yet implemented.** No test runner is configured.
+Frontend tests use **Vitest** + **@vue/test-utils** with `jsdom` environment.
 
 ### Architecture
 
 ```
 frontend/
   index.html                        # HTML entry point
-  vite.config.js                    # Vite config (@ alias, proxy /api -> :3000)
+  vite.config.mjs                   # Vite + Vitest config (@ alias, proxy /api -> :3000)
   src/
     main.js                         # App bootstrap (Vue, Router, Pinia, Bootstrap)
     App.vue                         # Root component (NavBar, router-view, Footer, alerts)

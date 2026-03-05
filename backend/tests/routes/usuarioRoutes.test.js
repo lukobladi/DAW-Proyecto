@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ quiet: true });
 const request = require('supertest');
 const app = require('../../index'); 
 const pool = require('../../src/config/db');

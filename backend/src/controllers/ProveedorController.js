@@ -3,9 +3,29 @@ const Proveedor = require('../models/Proveedor');
 const ProveedorController = {
   // Crear un nuevo proveedor
   async crear(req, res) {
-    const { nombre, contacto, telefono, correo } = req.body;
+    const {
+      nombre,
+      contacto,
+      telefono,
+      movil,
+      correo,
+      metodo_pago,
+      frecuencia_pedido_aproximada,
+      envio_movil,
+      envio_mail,
+    } = req.body;
     try {
-      const nuevoProveedor = await Proveedor.create(nombre, contacto, telefono, correo);
+      const nuevoProveedor = await Proveedor.create(
+        nombre,
+        contacto,
+        telefono,
+        movil,
+        correo,
+        metodo_pago,
+        frecuencia_pedido_aproximada,
+        envio_movil,
+        envio_mail
+      );
       res.status(201).json(nuevoProveedor);
     } catch (err) {
       console.error(err);
@@ -42,9 +62,30 @@ const ProveedorController = {
   // Actualizar un proveedor
   async actualizar(req, res) {
     const { id } = req.params;
-    const { nombre, contacto, telefono, correo } = req.body;
+    const {
+      nombre,
+      contacto,
+      telefono,
+      movil,
+      correo,
+      metodo_pago,
+      frecuencia_pedido_aproximada,
+      envio_movil,
+      envio_mail,
+    } = req.body;
     try {
-      const proveedorActualizado = await Proveedor.update(id, nombre, contacto, telefono, correo);
+      const proveedorActualizado = await Proveedor.update(
+        id,
+        nombre,
+        contacto,
+        telefono,
+        movil,
+        correo,
+        metodo_pago,
+        frecuencia_pedido_aproximada,
+        envio_movil,
+        envio_mail
+      );
       res.json(proveedorActualizado);
     } catch (err) {
       console.error(err);

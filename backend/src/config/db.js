@@ -1,7 +1,7 @@
 // db.js
 const { Pool } = require('pg');
 
-require('dotenv').config();
+require('dotenv').config({ quiet: process.env.NODE_ENV === 'test' });
 
 const pool = new Pool({
   host: process.env.DB_HOST,

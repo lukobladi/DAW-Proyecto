@@ -30,10 +30,6 @@ describe('Usuario Model', () => {
     }
   });
 
-  afterAll(async () => {
-    // No cerrar el pool aquí, ya que se reutiliza en otras pruebas
-  });
-
   it('Debería crear un nuevo usuario', async () => {
     const uniqueCorreo = `test+${Date.now()}@example.com`; // Generar un correo único
     const nuevoUsuario = await Usuario.create(
@@ -132,4 +128,8 @@ describe('Funciones adicionales del modelo Usuario', () => {
     const saldo = await Usuario.calcularSaldo(usuarioId);
     expect(saldo).toBe(0); // Asume que no hay pagos pendientes
   });
+});
+
+afterAll(async () => {
+  await pool.end();
 });

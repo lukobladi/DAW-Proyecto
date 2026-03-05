@@ -9,7 +9,7 @@
     "start:backend": "npm start --workspace=backend",
     "start:frontend": "npm run dev --workspace=frontend",
     "test:backend": "npm test --workspace=backend",
-    "test:frontend": "node -e \"console.log('No frontend tests configured yet')\"",
+    "test:frontend": "npm test --workspace=frontend",
     "lint:frontend": "npm run lint --workspace=frontend"
   }
 }

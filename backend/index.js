@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path'); 
-require('dotenv').config();
+require('dotenv').config({ quiet: process.env.NODE_ENV === 'test' });
 const SECRET_KEY = process.env.JWT_SECRET;
 
 if (!SECRET_KEY) {
@@ -102,10 +102,12 @@ app.use(/^\/api\//, (req, res) => {
 
 // rate limiting para prevenir ataques
 const rateLimit = require('express-rate-limit');
-app.use('/api/', rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 100 
-}));
+if (process.env.NODE_ENV !== 'test') {
+  app.use('/api/', rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutos
+    max: 100,
+  }));
+}
 
 // Exportar la app para pruebas
 module.exports = app;

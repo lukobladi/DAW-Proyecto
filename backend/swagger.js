@@ -41,8 +41,10 @@ const swaggerOptions = {
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
-console.log('Mostrar swaggerDocs');
-console.log(swaggerDocs);
+if (process.env.NODE_ENV !== 'test') {
+  console.log('Mostrar swaggerDocs');
+  console.log(swaggerDocs);
+}
 
 module.exports = (app) => {
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
