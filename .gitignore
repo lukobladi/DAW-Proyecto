@@ -28,3 +28,6 @@ Backend/package-lock.json
 Backend/package-lock.json
 
 docs/
+
+# Reportes de cobertura
+backend/coverage/

@@ -12,7 +12,7 @@ function getRoleFromToken(token) {
     const payloadJson = atob(payloadBase64.replace(/-/g, '+').replace(/_/g, '/'));
     const payload = JSON.parse(payloadJson);
     return payload.rol || payload.role || null;
-  } catch (error) {
+  } catch {
     return null;
   }
 }

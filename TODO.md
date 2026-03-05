@@ -45,10 +45,10 @@
     - [ ] Compras - Diseño
     - [ ] Soporte - Diseño
 - [ ] **Funcionalidades**
-    - [ ] Implementar la lógica de autenticación del cliente (login, logout, registro).
-    - [ ] Desarrollar las vistas y componentes para todas las funcionalidades (productos, pedidos, etc.).
-    - [ ] Añadir un sistema de notificaciones para feedback al usuario (ej. "Pedido creado con éxito").
-    - [ ] Dashboard - Funcionalidad
+    - [X] Implementar la lógica de autenticación del cliente (login, logout, registro).
+    - [X] Desarrollar las vistas y componentes para todas las funcionalidades (productos, pedidos, etc.).
+    - [X] Añadir un sistema de notificaciones para feedback al usuario (ej. "Pedido creado con éxito").
+    - [ ] Dashboard - Funcionalidad 
     - [ ] Historial - Ver detalles
     - [ ] Soporte - Funcionalidad
     - [ ] Gestion de usuarios - No funciona
