@@ -28,7 +28,7 @@
               <td>{{ usuario.movil }}</td>
               <td>{{ usuario.rol }}</td>
               <td>{{ usuario.activo ? 'Activo' : 'Inactivo' }}</td>
-              <td>{{ usuario.saldo.toFixed(2) }} €</td>
+              <!-- <td>{{ usuario.saldo.toFixed(2) }} €</td> -->
               <td>{{ usuario.ultimoPedido }}</td>
               <td>
                 <ul>

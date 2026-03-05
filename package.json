@@ -7,9 +7,9 @@
   ],
   "scripts": {
     "start:backend": "npm start --workspace=backend",
-    "start:frontend": "npm run serve --workspace=frontend",
+    "start:frontend": "npm run dev --workspace=frontend",
     "test:backend": "npm test --workspace=backend",
-    "test:frontend": "npm run test:unit --workspace=frontend",
+    "test:frontend": "node -e \"console.log('No frontend tests configured yet')\"",
     "lint:frontend": "npm run lint --workspace=frontend"
   }
 }

@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import { useAuthStore } from '@/store';
+
 export default {
   name: 'NavBar',
   data() {
@@ -38,10 +40,12 @@ export default {
   },
   computed: {
     isAuthenticated() {
-      return this.$store.state.auth.isAuthenticated; // Verifica si el usuario está autenticado
+      const authStore = useAuthStore();
+      return authStore.isAuthenticated;
     },
     isAdmin() {
-      return this.$store.state.auth.user.role === 'admin'; // Verifica si el usuario es administrador
+      const authStore = useAuthStore();
+      return authStore.user.role === 'admin';
     },
   },
   methods: {
@@ -50,8 +54,8 @@ export default {
     },
     async logout() {
       try {
-        await this.$store.dispatch('logout'); // Llama a la acción de Vuex para cerrar sesión
-        localStorage.removeItem('authToken'); // Elimina el token del almacenamiento local
+        const authStore = useAuthStore();
+        authStore.logout();
 
         // Redirige al usuario a la página de inicio de sesión
         this.$router.push({ name: 'Login' }).catch((err) => {

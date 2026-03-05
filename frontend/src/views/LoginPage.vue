@@ -31,6 +31,7 @@
 <script>
 import api from '@/services/api';
 import { alertStore } from '@/store/alertStore';
+import { useAuthStore } from '@/store';
 
 export default {
   data() {
@@ -47,12 +48,10 @@ export default {
           password: this.contraseña,
         });
 
-        const token = response.data.token;
-        localStorage.setItem('authToken', token); // Guarda el token en el almacenamiento local
-
-        this.$store.dispatch('login', {
-          correoOMovil: this.correoOMovil,
-          token: token,
+        const authStore = useAuthStore();
+        authStore.login({
+          token: response.data.token,
+          user: response.data.usuario || response.data.user,
         });
 
         this.$router.push({ name: 'Dashboard' });

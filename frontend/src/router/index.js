@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import store from '@/store'; // Importa el store para verificar el estado de autenticación
+import { useAuthStore } from '@/store';
 import HomePage from '@/views/HomePage.vue';
 import LoginPage from '@/views/LoginPage.vue';
 import RecuperarPasswordPage from '@/views/RecuperarPasswordPage.vue';
@@ -133,7 +133,9 @@ const router = createRouter({
 
 // Guard de navegación global
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = store.state.auth.isAuthenticated; // Verifica si el usuario está autenticado
+  const authStore = useAuthStore();
+  authStore.hydrateAuthState();
+  const isAuthenticated = authStore.isAuthenticated;
 
   if (to.meta.requiresAuth && !isAuthenticated) {
     // Si la ruta requiere autenticación y el usuario no está autenticado, redirige a la página de inicio de sesión

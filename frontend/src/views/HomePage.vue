@@ -21,10 +21,13 @@
 </template>
 
 <script>
+import { useAuthStore } from '@/store';
+
 export default {
   computed: {
     isAuthenticated() {
-      return this.$store.state.auth.isAuthenticated; // Verifica si el usuario está autenticado
+      const authStore = useAuthStore();
+      return authStore.isAuthenticated;
     },
   },
   methods: {

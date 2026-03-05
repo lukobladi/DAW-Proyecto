@@ -1,8 +1,8 @@
 <template>
   <div class="dashboard-page">
     <NavBar />
-    <div class="dashboard-content">
-      <h2>Dashboard</h2>
+    <div class="dashboard-content container">
+      <h2>¡Hola, {{ usuarioNombre }}!</h2>
       <div class="cesta-mensual">
         <h3>Cesta Mensual</h3>
         <p>Aquí puedes ver los productos que has pedido este mes.</p>

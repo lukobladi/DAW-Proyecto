@@ -1,10 +1,10 @@
 // src/services/api.js
 import axios from 'axios';
 
-const apiClient = axios.create({
-  //   baseURL: 'http://ekonsumo.duckdns.org:3000/api', 
+const baseURL = import.meta.env.VITE_API_URL || '/api';
 
-  baseURL: 'http://127.0.0.1:3000/api', 
+const apiClient = axios.create({
+  baseURL,
   withCredentials: true, // Permitir cookies y credenciales
 });
 
