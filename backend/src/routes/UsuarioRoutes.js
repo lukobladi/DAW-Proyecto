@@ -388,7 +388,7 @@ router.delete('/eliminar/:id', authMiddleware, adminMiddleware, UsuarioControlle
  *       500:
  *         description: Error al calcular el saldo
  */
-router.get('/obtener/:id_usuario', authMiddleware, UsuarioController.calcularSaldo);
+router.get('/obtenerSaldo/:id_usuario', authMiddleware, UsuarioController.calcularSaldo);
 
 
 

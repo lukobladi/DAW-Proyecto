@@ -21,6 +21,20 @@ const validators = {
     query('pagina').optional().isInt({ min: 1 }).withMessage('La página debe ser un número mayor a 0'),
     query('limite').optional().isInt({ min: 1 }).withMessage('El límite debe ser un número mayor a 0'),
   ],
+  // Validación para crear un pago
+  crearPago: [
+    body('id_usuario_deudor').isInt({ min: 1 }).withMessage('El ID del usuario deudor debe ser un número válido'),
+    body('id_usuario_creditor').isInt({ min: 1 }).withMessage('El ID del usuario acreedor debe ser un número válido'),
+    body('monto').isFloat({ gt: 0 }).withMessage('El monto debe ser mayor que 0'),
+    body('estado')
+      .optional()
+      .isIn(['pendiente', 'completado'])
+      .withMessage('El estado del pago debe ser pendiente o completado'),
+    body('periodo')
+      .optional({ nullable: true })
+      .matches(/^\d{4}-\d{2}(-\d{2})?$/)
+      .withMessage('El periodo debe tener formato YYYY-MM o YYYY-MM-DD'),
+  ],
 };
 
 module.exports = validators;

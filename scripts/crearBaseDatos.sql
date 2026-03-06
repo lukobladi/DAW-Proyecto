@@ -128,7 +128,15 @@ CREATE TABLE Pago (
     ID_Usuario_Creditor INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
     Monto DECIMAL(10, 2) NOT NULL,
     Fecha_Pago TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    Estado VARCHAR(50) NOT NULL CHECK (Estado IN ('pendiente', 'completado'))
+    Estado VARCHAR(50) NOT NULL CHECK (Estado IN ('pendiente', 'completado')),
+    Periodo DATE,
+    Origen VARCHAR(50) NOT NULL DEFAULT 'manual',
+    Concepto TEXT,
+    Deudor_Reporta_Pagado BOOLEAN NOT NULL DEFAULT FALSE,
+    Fecha_Reporte_Deudor TIMESTAMP,
+    Fecha_Confirmacion_Receptor TIMESTAMP,
+    Fecha_Modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT pago_unico_periodo_origen UNIQUE (ID_Usuario_Deudor, ID_Usuario_Creditor, Periodo, Origen)
 );
 
 CREATE TABLE Notificacion (

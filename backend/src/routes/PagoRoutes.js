@@ -1,6 +1,7 @@
 const express = require('express');
 const PagoController = require('../controllers/PagoController');
 const authMiddleware = require('../middlewares/auth'); // Middleware de autenticación
+const adminMiddleware = require('../middlewares/admin');
 const validators = require('../middlewares/validators');
 
 const router = express.Router();
@@ -46,7 +47,7 @@ const router = express.Router();
  *       500:
  *         description: Error al crear el pago
  */
-router.post('/crear/', authMiddleware, validators.crearPedido, PagoController.crear);
+router.post('/crear/', authMiddleware, validators.crearPago, PagoController.crear);
 
 /**
  * @swagger
@@ -63,6 +64,30 @@ router.post('/crear/', authMiddleware, validators.crearPedido, PagoController.cr
  *         description: Error al obtener los pagos
  */
 router.get('/obtenerTodos/', authMiddleware, PagoController.listar);
+
+/**
+ * @swagger
+ * /api/pagos/resumen-mensual:
+ *   get:
+ *     summary: Obtener resumen financiero mensual del usuario autenticado
+ *     tags: [Pagos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: periodo
+ *         required: false
+ *         schema:
+ *           type: string
+ *           example: 2026-03
+ *         description: Mes en formato YYYY-MM. Si no se indica, usa el mes actual.
+ *     responses:
+ *       200:
+ *         description: Resumen financiero mensual
+ *       500:
+ *         description: Error al obtener el resumen mensual
+ */
+router.get('/resumen-mensual', authMiddleware, PagoController.obtenerResumenMensual);
 
 /**
  * @swagger
@@ -112,6 +137,54 @@ router.get('/pendientes-creditor/:id_usuario_creditor', authMiddleware, PagoCont
 
 /**
  * @swagger
+ * /api/pagos/{id}/marcar-pagado:
+ *   patch:
+ *     summary: El deudor marca que ha pagado (no cierra la deuda)
+ *     tags: [Pagos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Pago marcado como enviado por deudor
+ *       403:
+ *         description: No autorizado
+ *       404:
+ *         description: Pago no encontrado
+ */
+router.patch('/:id/marcar-pagado', authMiddleware, PagoController.marcarPagado);
+
+/**
+ * @swagger
+ * /api/pagos/{id}/marcar-recibido:
+ *   patch:
+ *     summary: El acreedor confirma recibido y cierra la deuda
+ *     tags: [Pagos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Pago confirmado como recibido
+ *       403:
+ *         description: No autorizado
+ *       404:
+ *         description: Pago no encontrado
+ */
+router.patch('/:id/marcar-recibido', authMiddleware, PagoController.marcarRecibido);
+
+/**
+ * @swagger
  * /api/pagos/cambiar-estado/{id}:
  *   put:
  *     summary: Cambiar el estado de un pago
@@ -144,5 +217,31 @@ router.get('/pendientes-creditor/:id_usuario_creditor', authMiddleware, PagoCont
  *         description: Error al cambiar el estado del pago
  */
 router.put('/cambiar-estado/:id', authMiddleware, PagoController.cambiarEstado);
+
+/**
+ * @swagger
+ * /api/pagos/generar-liquidacion-mensual:
+ *   post:
+ *     summary: Generar o actualizar la liquidación mensual (solo admin)
+ *     tags: [Pagos]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               periodo:
+ *                 type: string
+ *                 example: 2026-03
+ *     responses:
+ *       200:
+ *         description: Liquidación mensual generada
+ *       403:
+ *         description: Acceso denegado
+ */
+router.post('/generar-liquidacion-mensual', authMiddleware, adminMiddleware, PagoController.generarLiquidacionMensual);
 
 module.exports = router;

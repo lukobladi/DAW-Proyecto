@@ -12,6 +12,7 @@
       <router-link to="/dashboard" class="navbar-item">Dashboard</router-link>
       <router-link to="/compras" class="navbar-item">Compras</router-link>
       <router-link to="/historial" class="navbar-item">Historial</router-link>
+      <router-link to="/gestion-pagos" class="navbar-item">Pagos</router-link>
       <router-link to="/gestion-usuarios" class="navbar-item">Gestión de Usuarios</router-link>
       <router-link to="/configuracion" class="navbar-item">Configuración</router-link>
       <router-link to="/soporte" class="navbar-item">Soporte</router-link>

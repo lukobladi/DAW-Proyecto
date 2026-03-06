@@ -10,6 +10,8 @@
     "start:frontend": "npm run dev --workspace=frontend",
     "test:backend": "npm test --workspace=backend",
     "test:frontend": "npm test --workspace=frontend",
-    "lint:frontend": "npm run lint --workspace=frontend"
+    "lint:frontend": "npm run lint --workspace=frontend",
+
+    "liquidacion:mensual": "npm --prefix backend run liquidacion:mensual"
   }
 }

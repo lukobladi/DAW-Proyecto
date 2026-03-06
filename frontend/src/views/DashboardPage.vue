@@ -3,6 +3,84 @@
     <div class="dashboard-content container">
       <h2>Hola, {{ usuarioNombre }}!</h2>
 
+      <section class="resumen-financiero">
+        <h3>Resumen financiero</h3>
+        <p>Estado de tus cuentas pendientes y gasto del mes actual.</p>
+
+        <div v-if="cargandoFinanzas" class="estado">Cargando resumen financiero...</div>
+
+        <template v-else>
+          <div class="resumen-cards">
+            <article class="resumen-card">
+              <h4>Saldo actual</h4>
+              <p class="monto">{{ formatMoney(resumenFinanciero.saldo_actual) }}</p>
+            </article>
+
+            <article class="resumen-card deuda">
+              <h4>Debes pagar</h4>
+              <p class="monto">{{ formatMoney(resumenFinanciero.total_pendiente_por_pagar) }}</p>
+            </article>
+
+            <article class="resumen-card cobrar">
+              <h4>Te deben</h4>
+              <p class="monto">{{ formatMoney(resumenFinanciero.total_pendiente_por_cobrar) }}</p>
+            </article>
+
+            <article class="resumen-card gasto">
+              <h4>Gasto de {{ resumenFinanciero.periodo_consultado || periodoActual }}</h4>
+              <p class="monto">{{ formatMoney(resumenFinanciero.total_gastado_mes) }}</p>
+            </article>
+          </div>
+
+          <div
+            v-if="
+              resumenFinanciero.total_pendiente_por_pagar <= 0 &&
+              resumenFinanciero.total_pendiente_por_cobrar <= 0
+            "
+            class="estado"
+          >
+            No tienes cuentas pendientes.
+          </div>
+
+          <div v-else class="deudas-lista">
+            <article v-for="deuda in resumenFinanciero.deudas_pendientes" :key="deuda.id_pago" class="deuda-card">
+              <p v-if="esDeudor(deuda)">
+                Debes <strong>{{ formatMoney(deuda.monto) }}</strong> a
+                <strong>{{ deuda.nombre_creditor }}</strong>
+              </p>
+              <p v-else>
+                <strong>{{ deuda.nombre_deudor }}</strong> te debe
+                <strong>{{ formatMoney(deuda.monto) }}</strong>
+              </p>
+              <p class="texto-secundario" v-if="deuda.periodo">
+                Periodo: {{ formatPeriodoDeuda(deuda.periodo) }}
+              </p>
+              <p class="texto-secundario" v-if="deuda.deudor_reporta_pagado && !esDeudor(deuda)">
+                El deudor indica que ya ha pagado.
+              </p>
+
+              <button
+                v-if="esDeudor(deuda)"
+                class="btn btn-outline-primary btn-sm"
+                :disabled="Boolean(deuda.deudor_reporta_pagado) || actualizandoPagoId === deuda.id_pago"
+                @click="marcarComoPagado(deuda)"
+              >
+                {{ deuda.deudor_reporta_pagado ? 'Pendiente de confirmacion' : 'Marcar como pagado' }}
+              </button>
+
+              <button
+                v-else
+                class="btn btn-success btn-sm"
+                :disabled="actualizandoPagoId === deuda.id_pago"
+                @click="marcarComoRecibido(deuda)"
+              >
+                Marcar como recibido
+              </button>
+            </article>
+          </div>
+        </template>
+      </section>
+
       <section class="cesta-mensual">
         <h3>Productos comprados pendientes de entrega</h3>
         <p>Listado de productos que ya has pedido y aun no estan repartidos.</p>
@@ -94,10 +172,21 @@ export default {
   data() {
     return {
       cargando: false,
+      cargandoFinanzas: false,
       errorCarga: '',
       productosPendientesEntrega: [],
       pedidosAbiertos: [],
       actualizandoDetalleId: null,
+      actualizandoPagoId: null,
+      periodoActual: new Date().toISOString().slice(0, 7),
+      resumenFinanciero: {
+        periodo_consultado: '',
+        saldo_actual: 0,
+        total_gastado_mes: 0,
+        total_pendiente_por_pagar: 0,
+        total_pendiente_por_cobrar: 0,
+        deudas_pendientes: [],
+      },
     };
   },
   computed: {
@@ -183,6 +272,96 @@ export default {
       };
       return classes[estado] || 'estado-pendiente';
     },
+    formatMoney(value) {
+      const amount = Number(value || 0);
+      return `${amount.toFixed(2)} EUR`;
+    },
+    formatPeriodoDeuda(periodo) {
+      if (!periodo) {
+        return 'Sin periodo';
+      }
+
+      const raw = String(periodo);
+      const periodoMes = raw.length >= 7 ? raw.slice(0, 7) : raw;
+      const [year, month] = periodoMes.split('-');
+
+      if (!year || !month) {
+        return periodoMes;
+      }
+
+      return `${month}/${year}`;
+    },
+    getUsuarioId() {
+      const authStore = useAuthStore();
+      return Number(authStore.user?.id_usuario);
+    },
+    esDeudor(deuda) {
+      return Number(deuda.id_usuario_deudor) === this.getUsuarioId();
+    },
+    manejarSesionCaducada() {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('authUser');
+      alertStore.showAlert('Tu sesion ha caducado. Inicia sesion de nuevo.', 'danger');
+      this.$router.push({ name: 'Login' });
+    },
+    async cargarResumenFinanciero() {
+      this.cargandoFinanzas = true;
+
+      try {
+        const resumenResponse = await api.getResumenPagosMensual(this.periodoActual);
+        this.resumenFinanciero = {
+          ...this.resumenFinanciero,
+          ...(resumenResponse.data || {}),
+          deudas_pendientes: resumenResponse.data?.deudas_pendientes || [],
+        };
+      } catch (error) {
+        if (error.response?.status === 401) {
+          this.manejarSesionCaducada();
+          return;
+        }
+
+        alertStore.showAlert('No se pudo cargar el resumen financiero.', 'danger');
+      } finally {
+        this.cargandoFinanzas = false;
+      }
+    },
+    async marcarComoPagado(deuda) {
+      this.actualizandoPagoId = deuda.id_pago;
+
+      try {
+        await api.marcarPagoEnviado(deuda.id_pago);
+        alertStore.showAlert('Has marcado la deuda como pagada. Pendiente de confirmacion.', 'success');
+        await this.cargarResumenFinanciero();
+      } catch (error) {
+        if (error.response?.status === 401) {
+          this.manejarSesionCaducada();
+          return;
+        }
+
+        alertStore.showAlert('No se pudo marcar la deuda como pagada.', 'danger');
+      } finally {
+        this.actualizandoPagoId = null;
+      }
+    },
+    async marcarComoRecibido(deuda) {
+      this.actualizandoPagoId = deuda.id_pago;
+
+      try {
+        await api.marcarPagoRecibido(deuda.id_pago);
+        alertStore.showAlert('Pago confirmado como recibido.', 'success');
+        await this.cargarResumenFinanciero();
+      } catch (error) {
+        if (error.response?.status === 401) {
+          this.manejarSesionCaducada();
+          return;
+        }
+
+        alertStore.showAlert('No se pudo confirmar el pago como recibido.', 'danger');
+      } finally {
+        this.actualizandoPagoId = null;
+      }
+    },
     async cargarDashboard() {
       this.cargando = true;
       this.errorCarga = '';
@@ -207,6 +386,8 @@ export default {
           api.getProductos(),
           api.getProveedores(),
         ]);
+
+        await this.cargarResumenFinanciero();
 
         const pedidos = pedidosResponse.data || [];
         const productos = productosResponse.data || [];
@@ -267,11 +448,7 @@ export default {
         this.productosPendientesEntrega = detallesNormalizados;
       } catch (error) {
         if (error.response?.status === 401) {
-          localStorage.removeItem('authToken');
-          localStorage.removeItem('userRole');
-          localStorage.removeItem('authUser');
-          alertStore.showAlert('Tu sesion ha caducado. Inicia sesion de nuevo.', 'danger');
-          this.$router.push({ name: 'Login' });
+          this.manejarSesionCaducada();
           return;
         }
 
@@ -310,11 +487,7 @@ export default {
         producto.total = Number(Number(producto.precio_unitario) * nuevaCantidad).toFixed(2);
       } catch (error) {
         if (error.response?.status === 401) {
-          localStorage.removeItem('authToken');
-          localStorage.removeItem('userRole');
-          localStorage.removeItem('authUser');
-          alertStore.showAlert('Tu sesion ha caducado. Inicia sesion de nuevo.', 'danger');
-          this.$router.push({ name: 'Login' });
+          this.manejarSesionCaducada();
           return;
         }
 
@@ -349,8 +522,68 @@ export default {
 }
 
 .cesta-mensual,
+.resumen-financiero,
 .pedidos-abiertos {
   margin-bottom: 2rem;
+}
+
+.resumen-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.resumen-card {
+  background: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.resumen-card h4 {
+  font-size: 1rem;
+  margin-bottom: 0.4rem;
+}
+
+.resumen-card .monto {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.resumen-card.deuda {
+  border-left: 5px solid #dc3545;
+}
+
+.resumen-card.cobrar {
+  border-left: 5px solid #198754;
+}
+
+.resumen-card.gasto {
+  border-left: 5px solid #fd7e14;
+}
+
+.deudas-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.deuda-card {
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  padding: 1rem;
+  background: #fff;
+}
+
+.deuda-card p {
+  margin-bottom: 0.45rem;
+}
+
+.texto-secundario {
+  color: #6c757d;
+  font-size: 0.9rem;
 }
 
 .lista-productos {

@@ -31,3 +31,6 @@ docs/
 
 # Reportes de cobertura
 backend/coverage/
+backend/coverage/clover.xml
+backend/coverage/lcov.info
+backend/coverage/clover.xml

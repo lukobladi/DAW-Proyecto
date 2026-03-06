@@ -32,6 +32,9 @@ export default {
   getUsuario(idUsuario) {
     return apiClient.get(`/usuarios/obtener/${idUsuario}`);
   },
+  getUsuarioSaldo(idUsuario) {
+    return apiClient.get(`/usuarios/obtenerSaldo/${idUsuario}`);
+  },
   actualizarUsuario(id, data) {
     return apiClient.put(`/usuarios/actualizar/${id}`, data);
   },
@@ -108,5 +111,31 @@ export default {
   },
   enviarNotificacion(data) {
     return apiClient.post('/notificaciones/enviar/', data);
+  },
+  getPagos() {
+    return apiClient.get('/pagos/obtenerTodos/');
+  },
+  getPagosPendientesDeudor(idUsuarioDeudor) {
+    return apiClient.get(`/pagos/pendientes-deudor/${idUsuarioDeudor}`);
+  },
+  getPagosPendientesCreditor(idUsuarioCreditor) {
+    return apiClient.get(`/pagos/pendientes-creditor/${idUsuarioCreditor}`);
+  },
+  getResumenPagosMensual(periodo) {
+    return apiClient.get('/pagos/resumen-mensual', {
+      params: periodo ? { periodo } : {},
+    });
+  },
+  crearPago(data) {
+    return apiClient.post('/pagos/crear/', data);
+  },
+  marcarPagoEnviado(idPago) {
+    return apiClient.patch(`/pagos/${idPago}/marcar-pagado`);
+  },
+  marcarPagoRecibido(idPago) {
+    return apiClient.patch(`/pagos/${idPago}/marcar-recibido`);
+  },
+  generarLiquidacionMensual(periodo) {
+    return apiClient.post('/pagos/generar-liquidacion-mensual', periodo ? { periodo } : {});
   },
 };

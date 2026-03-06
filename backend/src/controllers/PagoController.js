@@ -3,13 +3,30 @@ const Pago = require('../models/Pago');
 const PagoController = {
   // Crear un nuevo pago
   async crear(req, res) {
-    const { id_usuario_deudor, id_usuario_creditor, monto, estado } = req.body;
+    const {
+      id_usuario_deudor,
+      id_usuario_creditor,
+      monto,
+      estado,
+      periodo,
+      origen,
+      concepto,
+    } = req.body;
+
     try {
-      const nuevoPago = await Pago.create(id_usuario_deudor, id_usuario_creditor, monto, estado);
+      const nuevoPago = await Pago.create(
+        id_usuario_deudor,
+        id_usuario_creditor,
+        monto,
+        estado || 'pendiente',
+        periodo,
+        origen,
+        concepto
+      );
       res.status(201).json(nuevoPago);
     } catch (err) {
       console.error(err);
-      res.status(500).send('Error al crear el pago');
+      res.status(500).json({ error: 'Error al crear el pago' });
     }
   },
 
@@ -20,7 +37,7 @@ const PagoController = {
       res.json(pagos);
     } catch (err) {
       console.error(err);
-      res.status(500).send('Error al obtener los pagos');
+      res.status(500).json({ error: 'Error al obtener los pagos' });
     }
   },
 
@@ -51,7 +68,7 @@ const PagoController = {
       res.json(pagos);
     } catch (err) {
       console.error(err);
-      res.status(500).send('Error al obtener los pagos pendientes del deudor');
+      res.status(500).json({ error: 'Error al obtener los pagos pendientes del deudor' });
     }
   },
 
@@ -63,7 +80,93 @@ const PagoController = {
       res.json(pagos);
     } catch (err) {
       console.error(err);
-      res.status(500).send('Error al obtener los pagos pendientes del acreedor');
+      res.status(500).json({ error: 'Error al obtener los pagos pendientes del acreedor' });
+    }
+  },
+
+  // Resumen financiero del mes para usuario autenticado
+  async obtenerResumenMensual(req, res) {
+    const periodo = req.query.periodo;
+
+    try {
+      const resumen = await Pago.obtenerResumenMensual(req.user.id_usuario, periodo);
+      res.json(resumen);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Error al obtener el resumen mensual' });
+    }
+  },
+
+  // El deudor reporta que ha pagado (no cierra deuda)
+  async marcarPagado(req, res) {
+    const { id } = req.params;
+
+    try {
+      const pago = await Pago.findById(id);
+      if (!pago) {
+        return res.status(404).json({ error: 'Pago no encontrado' });
+      }
+
+      if (pago.estado === 'completado') {
+        return res.status(200).json(pago);
+      }
+
+      if (req.user.rol !== 'admin' && Number(pago.id_usuario_deudor) !== Number(req.user.id_usuario)) {
+        return res.status(403).json({ error: 'Solo el deudor puede marcar este pago como enviado' });
+      }
+
+      const pagoActualizado = await Pago.marcarPagadoPorDeudor(id, pago.id_usuario_deudor);
+      if (!pagoActualizado) {
+        return res.status(400).json({ error: 'No se pudo marcar el pago como enviado' });
+      }
+
+      res.json(pagoActualizado);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Error al marcar el pago como enviado' });
+    }
+  },
+
+  // El acreedor confirma recibido y cierra deuda
+  async marcarRecibido(req, res) {
+    const { id } = req.params;
+
+    try {
+      const pago = await Pago.findById(id);
+      if (!pago) {
+        return res.status(404).json({ error: 'Pago no encontrado' });
+      }
+
+      if (pago.estado === 'completado') {
+        return res.status(200).json(pago);
+      }
+
+      if (req.user.rol !== 'admin' && Number(pago.id_usuario_creditor) !== Number(req.user.id_usuario)) {
+        return res.status(403).json({ error: 'Solo el acreedor puede confirmar el pago recibido' });
+      }
+
+      const pagoActualizado = await Pago.confirmarRecibidoPorAcreedor(id, pago.id_usuario_creditor);
+      if (!pagoActualizado) {
+        return res.status(400).json({ error: 'No se pudo confirmar el pago recibido' });
+      }
+
+      res.json(pagoActualizado);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Error al confirmar el pago recibido' });
+    }
+  },
+
+  // Genera/actualiza la liquidacion mensual
+  async generarLiquidacionMensual(req, res) {
+    const periodo = req.body?.periodo || req.query?.periodo;
+
+    try {
+      const resultado = await Pago.generarLiquidacionMensual(periodo);
+      res.json(resultado);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Error al generar la liquidacion mensual' });
     }
   },
 };

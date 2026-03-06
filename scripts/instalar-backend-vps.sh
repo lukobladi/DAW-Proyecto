@@ -192,6 +192,19 @@ systemctl restart postgresql
 systemctl enable cron
 systemctl restart cron
 
+echo "==> Configurando cron de liquidacion mensual"
+cat > /usr/local/bin/ekonsumo-liquidacion-mensual <<EOF
+#!/usr/bin/env bash
+cd "$BACKEND_DIR" || exit 1
+/usr/bin/npm run liquidacion:mensual >> "$APP_DIR/logs/liquidacion-mensual.log" 2>&1
+EOF
+chmod 750 /usr/local/bin/ekonsumo-liquidacion-mensual
+chown root:"$APP_GROUP" /usr/local/bin/ekonsumo-liquidacion-mensual
+
+if ! crontab -u "$APP_USER" -l 2>/dev/null | grep -q ekonsumo-liquidacion-mensual; then
+  (crontab -u "$APP_USER" -l 2>/dev/null; echo "10 2 1 * * /usr/local/bin/ekonsumo-liquidacion-mensual") | crontab -u "$APP_USER" -
+fi
+
 echo "==> Configurando PM2 startup para $APP_USER"
 pm2 startup systemd -u "$APP_USER" --hp "/home/$APP_USER" || true
 
@@ -219,6 +232,7 @@ Siguientes pasos:
    cd $FRONTEND_DIR && npm ci && npm run build
    sudo -u $APP_USER pm2 start $BACKEND_DIR/index.js --name ekonsumo-backend --cwd $BACKEND_DIR --time
    sudo -u $APP_USER pm2 save
+   sudo -u $APP_USER npm --prefix $BACKEND_DIR run liquidacion:mensual
    systemctl reload nginx
 
 Opcional ahora (recomendado): HTTPS con Certbot

@@ -1,42 +1,166 @@
 <template>
   <div class="gestion-pagos-page">
-    <NavBar />
-    <div class="gestion-pagos-content">
-      <h2>Gestión de Pagos</h2>
-      <div class="lista-pagos">
-        <div v-for="pago in pagos" :key="pago.id" class="pago-card">
-          <h3>Pago #{{ pago.id }}</h3>
-          <p>Deudor: {{ pago.deudor }}</p>
-          <p>Acreedor: {{ pago.acreedor }}</p>
-          <p>Monto: {{ pago.monto }}€</p>
-          <p>Estado: {{ pago.estado }}</p>
-          <button @click="cambiarEstadoPago(pago.id)" class="btn btn-primary">Cambiar Estado</button>
-        </div>
+    <div class="gestion-pagos-content container">
+      <h2>Gestion de Pagos</h2>
+      <p class="texto-ayuda">
+        El deudor puede marcar un pago como enviado, pero la deuda solo se cierra cuando el acreedor
+        confirma que ha recibido el dinero.
+      </p>
+
+      <div class="filtros">
+        <label for="periodo" class="form-label">Periodo</label>
+        <input id="periodo" v-model="periodo" type="month" class="form-control" />
+        <button class="btn btn-outline-secondary" @click="cargarPagos">Actualizar</button>
+      </div>
+
+      <div v-if="cargando" class="estado">Cargando pagos...</div>
+      <div v-else-if="errorCarga" class="estado error">{{ errorCarga }}</div>
+
+      <div v-else-if="!deudasPendientes.length" class="estado">No hay pagos pendientes.</div>
+
+      <div v-else class="lista-pagos">
+        <article v-for="pago in deudasPendientes" :key="pago.id_pago" class="pago-card">
+          <h3>Pago #{{ pago.id_pago }}</h3>
+          <p v-if="esDeudor(pago)">
+            Debes <strong>{{ formatMoney(pago.monto) }}</strong> a
+            <strong>{{ pago.nombre_creditor }}</strong>
+          </p>
+          <p v-else>
+            <strong>{{ pago.nombre_deudor }}</strong> te debe
+            <strong>{{ formatMoney(pago.monto) }}</strong>
+          </p>
+          <p class="texto-secundario" v-if="pago.periodo">
+            Periodo: {{ formatPeriodoDeuda(pago.periodo) }}
+          </p>
+          <p class="texto-secundario" v-if="pago.deudor_reporta_pagado && !esDeudor(pago)">
+            El deudor ha indicado que ya pagó.
+          </p>
+
+          <button
+            v-if="esDeudor(pago)"
+            class="btn btn-outline-primary"
+            :disabled="Boolean(pago.deudor_reporta_pagado) || pagoActualizandoId === pago.id_pago"
+            @click="marcarPagado(pago)"
+          >
+            {{ pago.deudor_reporta_pagado ? 'Pendiente de confirmacion' : 'Marcar como pagado' }}
+          </button>
+
+          <button
+            v-else
+            class="btn btn-success"
+            :disabled="pagoActualizandoId === pago.id_pago"
+            @click="marcarRecibido(pago)"
+          >
+            Marcar como recibido
+          </button>
+        </article>
       </div>
     </div>
-    <Footer />
   </div>
 </template>
 
 <script>
+import api from '@/services/api';
+import { useAuthStore } from '@/store';
+import { alertStore } from '@/store/alertStore';
 
 export default {
-
   data() {
     return {
-      pagos: [
-        // Ejemplo de datos de pagos
-        { id: 1, deudor: 'Juan Pérez', acreedor: 'Ana Gómez', monto: 25.5, estado: 'Pendiente' },
-        { id: 2, deudor: 'Carlos López', acreedor: 'María Ruiz', monto: 18.7, estado: 'Completado' }
-      ]
+      cargando: false,
+      errorCarga: '',
+      pagoActualizandoId: null,
+      periodo: new Date().toISOString().slice(0, 7),
+      deudasPendientes: [],
     };
   },
+  async created() {
+    await this.cargarPagos();
+  },
   methods: {
-    cambiarEstadoPago(pagoId) {
-      // Lógica para cambiar el estado de un pago
-      console.log('Cambiando estado del pago:', pagoId);
-    }
-  }
+    formatMoney(value) {
+      return `${Number(value || 0).toFixed(2)} EUR`;
+    },
+    formatPeriodoDeuda(periodo) {
+      const raw = String(periodo || '');
+      const periodoMes = raw.length >= 7 ? raw.slice(0, 7) : raw;
+      const [year, month] = periodoMes.split('-');
+
+      if (!year || !month) {
+        return periodoMes || 'Sin periodo';
+      }
+
+      return `${month}/${year}`;
+    },
+    getUsuarioId() {
+      const authStore = useAuthStore();
+      return Number(authStore.user?.id_usuario);
+    },
+    esDeudor(pago) {
+      return Number(pago.id_usuario_deudor) === this.getUsuarioId();
+    },
+    manejarSesionCaducada() {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('authUser');
+      alertStore.showAlert('Tu sesion ha caducado. Inicia sesion de nuevo.', 'danger');
+      this.$router.push({ name: 'Login' });
+    },
+    async cargarPagos() {
+      this.cargando = true;
+      this.errorCarga = '';
+
+      try {
+        const response = await api.getResumenPagosMensual(this.periodo || undefined);
+        this.deudasPendientes = response.data?.deudas_pendientes || [];
+      } catch (error) {
+        if (error.response?.status === 401) {
+          this.manejarSesionCaducada();
+          return;
+        }
+
+        this.errorCarga = 'No se pudieron cargar los pagos pendientes.';
+      } finally {
+        this.cargando = false;
+      }
+    },
+    async marcarPagado(pago) {
+      this.pagoActualizandoId = pago.id_pago;
+
+      try {
+        await api.marcarPagoEnviado(pago.id_pago);
+        alertStore.showAlert('Has marcado el pago como enviado.', 'success');
+        await this.cargarPagos();
+      } catch (error) {
+        if (error.response?.status === 401) {
+          this.manejarSesionCaducada();
+          return;
+        }
+
+        alertStore.showAlert('No se pudo marcar el pago como enviado.', 'danger');
+      } finally {
+        this.pagoActualizandoId = null;
+      }
+    },
+    async marcarRecibido(pago) {
+      this.pagoActualizandoId = pago.id_pago;
+
+      try {
+        await api.marcarPagoRecibido(pago.id_pago);
+        alertStore.showAlert('Pago confirmado como recibido.', 'success');
+        await this.cargarPagos();
+      } catch (error) {
+        if (error.response?.status === 401) {
+          this.manejarSesionCaducada();
+          return;
+        }
+
+        alertStore.showAlert('No se pudo confirmar el pago como recibido.', 'danger');
+      } finally {
+        this.pagoActualizandoId = null;
+      }
+    },
+  },
 };
 </script>
 
@@ -52,19 +176,61 @@ export default {
   padding: 2rem;
 }
 
+.texto-ayuda {
+  color: #495057;
+  margin-bottom: 1rem;
+}
+
+.filtros {
+  display: flex;
+  align-items: end;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.filtros .form-control {
+  width: 190px;
+}
+
 .lista-pagos {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1rem;
 }
 
 .pago-card {
-  border: 1px solid #ccc;
-  padding: 1rem;
+  border: 1px solid #dee2e6;
   border-radius: 8px;
+  padding: 1rem;
+  background: #fff;
 }
 
-.btn {
-  margin-top: 1rem;
+.pago-card p {
+  margin-bottom: 0.4rem;
+}
+
+.texto-secundario {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.estado {
+  color: #495057;
+  padding: 1rem 0;
+}
+
+.estado.error {
+  color: #dc3545;
+}
+
+@media (max-width: 576px) {
+  .filtros {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filtros .form-control {
+    width: 100%;
+  }
 }
 </style>
