@@ -11,12 +11,13 @@ set -euo pipefail
 #   scripts/subir_codigo_fuente.sh eneko@ekonsumo.duckdns.org /var/www/daw-proyecto
 
 if [[ $# -lt 1 ]]; then
-  echo "Uso: $0 <usuario@host> [ruta_remota]"
+  echo "Uso: $0 <usuario@host> [solo codigo fuente: SI/NO] [ruta_remota]"
   exit 1
 fi
 
 REMOTE="$1"
-REMOTE_DIR="${2:-/var/www/daw-proyecto}"
+ONLY_CODE="$2"
+REMOTE_DIR="${3:-/var/www/daw-proyecto}"
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
@@ -48,8 +49,10 @@ EOF
   exit 1
 fi
 
-echo "==> Creando directorios remotos"
-ssh $SSH_OPTS "$REMOTE" "mkdir -p '$REMOTE_DIR/backend' '$REMOTE_DIR/frontend' '$REMOTE_DIR/docs' '$REMOTE_DIR/scripts'"
+if [[ $ONLY_CODE == "NO" ]]; then
+  echo "==> Creando directorios remotos"
+  ssh $SSH_OPTS "$REMOTE" "mkdir -p '$REMOTE_DIR/backend' '$REMOTE_DIR/frontend' '$REMOTE_DIR/docs' '$REMOTE_DIR/scripts'"
+fi
 
 echo "==> Sincronizando backend"
 rsync -az --delete -e "$RSYNC_RSH" "${EXCLUDES[@]}" \
@@ -59,23 +62,22 @@ echo "==> Sincronizando frontend"
 rsync -az --delete -e "$RSYNC_RSH" "${EXCLUDES[@]}" \
   "$ROOT_DIR/frontend/" "$REMOTE:$REMOTE_DIR/frontend/"
 
-echo "==> Sincronizando scripts y docs"
-rsync -az --delete -e "$RSYNC_RSH" "${EXCLUDES[@]}" \
-  "$ROOT_DIR/scripts/" "$REMOTE:$REMOTE_DIR/scripts/"
-rsync -az --delete -e "$RSYNC_RSH" "${EXCLUDES[@]}" \
-  "$ROOT_DIR/docs/" "$REMOTE:$REMOTE_DIR/docs/"
+if [ $ONLY_CODE == "NO" ]; then
+  echo "==> Sincronizando scripts y docs"
+  rsync -az --delete -e "$RSYNC_RSH" "${EXCLUDES[@]}" \
+    "$ROOT_DIR/scripts/" "$REMOTE:$REMOTE_DIR/scripts/"
+  rsync -az --delete -e "$RSYNC_RSH" "${EXCLUDES[@]}" \
+    "$ROOT_DIR/docs/" "$REMOTE:$REMOTE_DIR/docs/"
+fi
 
-echo "==> Ajustando permisos basicos"
-ssh $SSH_OPTS "$REMOTE" "chmod +x '$REMOTE_DIR/scripts/'*.sh || true"
+if [ $ONLY_CODE == "NO" ]; then
+  echo "==> Ajustando permisos basicos"
+  ssh $SSH_OPTS "$REMOTE" "chmod +x '$REMOTE_DIR/scripts/'*.sh || true"
+fi
 
 cat <<EOF
 
 Codigo actualizado en: $REMOTE_DIR
 
-Siguientes pasos sugeridos en el VPS:
-  cd $REMOTE_DIR/backend && npm ci --omit=dev
-  cd $REMOTE_DIR/frontend && npm ci && npm run build
-  pm2 restart ekonsumo-backend
-  sudo systemctl reload nginx
 
 EOF

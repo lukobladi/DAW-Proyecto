@@ -31,6 +31,9 @@ docs/
 
 # Reportes de cobertura
 backend/coverage/
+backend/uploads/
+
 backend/coverage/clover.xml
 backend/coverage/lcov.info
 backend/coverage/clover.xml
+backend/uploads/1772774425680.jpg
