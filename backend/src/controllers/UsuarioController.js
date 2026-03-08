@@ -35,6 +35,11 @@ const UsuarioController = {
         return res.status(401).json({ message: 'Credenciales incorrectas' });
       }
 
+      if (!user.activo) {
+        console.error('Fallo de login: Usuario desactivado'); // Log depuracion
+        return res.status(403).json({ message: 'Usuario desactivado. Contacta al administrador.' });
+      }
+
       const token = jwt.sign(
         { id_usuario: user.id_usuario, rol: user.rol },
         SECRET_KEY, // Variasble global
@@ -91,7 +96,7 @@ const UsuarioController = {
       }
       console.log('usuario ' + usuario);
 
-      const enlaceRecuperacion = `${process.env.FRONTEND_URL}/recuperar-password/${usuario.id}`;
+      const enlaceRecuperacion = `${process.env.FRONTEND_URL}/recuperar-password/${usuario.id_usuario}`;
 
       console.log('enlaceRecuperacion ' + enlaceRecuperacion);
 

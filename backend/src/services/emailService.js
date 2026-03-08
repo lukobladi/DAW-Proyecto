@@ -1,8 +1,9 @@
 const nodemailer = require('nodemailer');
+const logger = require('../config/logger');
 
 const emailService = {
   async enviarCorreo(destinatario, asunto, mensaje) {
-    console.log('enviarCorreo ');
+    logger.info(`Intentando enviar correo a: ${destinatario}, Asunto: ${asunto}`);
     try {
       // Configuracion transporte de correo
       const transporter = nodemailer.createTransport({
