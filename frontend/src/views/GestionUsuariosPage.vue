@@ -15,6 +15,7 @@
             <th>Nombre</th>
             <th>Correo</th>
             <th>Movil</th>
+            <th>Familia</th>
             <th>Rol</th>
             <th>Estado</th>
             <th>Saldo</th>
@@ -26,6 +27,7 @@
             <td>{{ usuario.nombre }}</td>
             <td>{{ usuario.correo }}</td>
             <td>{{ usuario.movil || '-' }}</td>
+            <td>{{ usuario.familia || '-' }}</td>
             <td>{{ usuario.rol }}</td>
             <td>
               <span :class="['estado-pill', usuario.activo ? 'activo' : 'inactivo']">
@@ -74,6 +76,10 @@
             <input v-model="form.movil" class="form-control" />
           </div>
           <div class="mb-2">
+            <label class="form-label">Familia</label>
+            <input v-model="form.familia" type="number" class="form-control" min="1" />
+          </div>
+          <div class="mb-2">
             <label class="form-label">Rol</label>
             <select v-model="form.rol" class="form-select" required>
               <option value="usuario">Usuario</option>
@@ -117,6 +123,7 @@ export default {
         movil: '',
         rol: 'usuario',
         password: '',
+        familia: null,
       },
     };
   },
@@ -145,6 +152,7 @@ export default {
         movil: '',
         rol: 'usuario',
         password: '',
+        familia: null,
       };
       this.mostrarModal = true;
     },
@@ -157,6 +165,7 @@ export default {
         movil: usuario.movil || '',
         rol: usuario.rol,
         password: '',
+        familia: usuario.familia || null,
       };
       this.mostrarModal = true;
     },
@@ -172,6 +181,7 @@ export default {
             correo: this.form.correo,
             movil: this.form.movil,
             rol: this.form.rol,
+            familia: this.form.familia || null,
           });
           alertStore.showAlert('Usuario actualizado correctamente.', 'success');
         } else {
@@ -181,6 +191,7 @@ export default {
             movil: this.form.movil,
             rol: this.form.rol,
             password: this.form.password,
+            familia: this.form.familia || null,
           });
           alertStore.showAlert('Usuario creado correctamente.', 'success');
         }

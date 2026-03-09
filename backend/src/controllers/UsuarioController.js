@@ -7,9 +7,9 @@ const SECRET_KEY = process.env.JWT_SECRET; // Use the environment variable for t
 const UsuarioController = {
   // Registrar un nuevo usuario
   async registrar(req, res) {
-    const { nombre, correo, password, rol, movil } = req.body;
+    const { nombre, correo, password, rol, movil, familia } = req.body;
     try {
-      const nuevoUsuario = await Usuario.create(nombre, correo, password, rol, movil);
+      const nuevoUsuario = await Usuario.create(nombre, correo, password, rol, movil, familia);
       res.status(201).json(nuevoUsuario);
     } catch (err) {
       console.error(err);
@@ -143,9 +143,9 @@ const UsuarioController = {
   // Actualizar un usuario
   async actualizar(req, res) {
     const { id } = req.params;
-    const { nombre, correo, rol, movil } = req.body; // Excluye la contraseña
+    const { nombre, correo, rol, movil, familia } = req.body; // Excluye la contraseña
     try {
-      const usuarioActualizado = await Usuario.update(id, nombre, correo, rol, movil);
+      const usuarioActualizado = await Usuario.update(id, nombre, correo, rol, movil, familia);
       if (!usuarioActualizado) {
         return res.status(404).send('Usuario no encontrado');
       }

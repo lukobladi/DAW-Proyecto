@@ -48,6 +48,9 @@ export default {
   getProductos() {
     return apiClient.get('/productos/obtenerTodos');
   },
+  getMisProductos() {
+    return apiClient.get('/productos/misProductos');
+  },
   crearProducto(formData) {
     return apiClient.post('/productos/crear', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
@@ -81,8 +84,21 @@ export default {
     return apiClient.patch(`/proveedores/cambiarEstadoActivo/${id}`, { activo });
   },
 
+  asignarUsuarioProveedor(data) {
+    return apiClient.post('/usuario-proveedor/crear', data);
+  },
+  getUsuariosProveedor(idProveedor) {
+    return apiClient.get(`/usuario-proveedor/obtenerUsuariosProveedor/${idProveedor}`);
+  },
+  eliminarUsuarioProveedor(idUsuario, idProveedor) {
+    return apiClient.delete(`/usuario-proveedor/eliminar/${idUsuario}/${idProveedor}`);
+  },
+
   getPedidos() {
     return apiClient.get('/pedidos/obtenerTodos');
+  },
+  getMisPedidos() {
+    return apiClient.get('/pedidos/misPedidos');
   },
   crearPedido(data) {
     return apiClient.post('/pedidos/crear', data);
@@ -137,5 +153,18 @@ export default {
   },
   generarLiquidacionMensual(periodo) {
     return apiClient.post('/pagos/generar-liquidacion-mensual', periodo ? { periodo } : {});
+  },
+
+  getPedidosPeriodicos() {
+    return apiClient.get('/pedido-periodico/obtenerTodos');
+  },
+  crearPedidoPeriodico(data) {
+    return apiClient.post('/pedido-periodico/crear', data);
+  },
+  actualizarPedidoPeriodico(id, data) {
+    return apiClient.patch(`/pedido-periodico/actualizar/${id}`, data);
+  },
+  eliminarPedidoPeriodico(id) {
+    return apiClient.delete(`/pedido-periodico/eliminar/${id}`);
   },
 };

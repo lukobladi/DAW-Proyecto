@@ -1,350 +1,214 @@
-#!/bin/bash
-# CONFIGURACIÓN MEJORADA PARA ARCH LINUX + VISUAL STUDIO CODE OSS
-# ==============================================
+#!/usr/bin/env bash
+set -euo pipefail
 
-echo "=== ACTUALIZANDO SISTEMA ARCH LINUX ==="
-sudo pacman -Syu --noconfirm
+# Instalación de entorno de desarrollo local (Debian/Ubuntu)
+# - Node 22 LTS
+# - PostgreSQL
+# - Git, curl, build-essential
+# - Visual Studio Code (repositorio oficial)
+# - PM2 (opcional)
+# - Estructura de proyecto: /home/<DEV_USER>/projects/<APP_DIR>
+#
+# Uso recomendado:
+#   DEV_USER=devuser \
+#   APP_DIR=daw-proyecto \
+#   PORT=3000 \
+#   DB_PASSWORD='MiPassDB' \
+#   JWT_SECRET='secretolargo' \
+#   sudo ./instalar-entorno-dev.sh
 
-# INSTALACIÓN Y CONFIGURACIÓN DEL BACKEND (Node.js + Express + PostgreSQL)
-# ==============================================
+DEV_USER="${DEV_USER:-dev}"
+APP_DIR_NAME="${APP_DIR:-daw-proyecto}"
+HOME_DIR="/home/$DEV_USER"
+PROJECTS_DIR="${PROJECTS_DIR:-$HOME_DIR/projects}"
+APP_DIR="$PROJECTS_DIR/$APP_DIR_NAME"
+BACKEND_DIR="$APP_DIR/backend"
+FRONTEND_DIR="$APP_DIR/frontend"
 
-echo "=== INSTALANDO NODE.JS Y NPM ==="
-sudo pacman -S --noconfirm nodejs npm
+PORT="${PORT:-3000}"
+DB_NAME="${DB_NAME:-ekonsumo}"
+DB_USER="${DB_USER:-ekonsumo_user}"
+DB_PASSWORD="${DB_PASSWORD:-}"
+JWT_SECRET="${JWT_SECRET:-}"
+OVERWRITE_ENV="${OVERWRITE_ENV:-0}"
 
-echo "=== INSTALANDO POSTGRESQL ==="
-sudo pacman -S --noconfirm postgresql
+if [[ "$EUID" -ne 0 ]]; then
+  echo "Ejecuta este script con sudo."
+  exit 1
+fi
 
-echo "=== CONFIGURANDO POSTGRESQL ==="
-sudo -u postgres initdb -D /var/lib/postgres/data
-sudo systemctl start postgresql
-sudo systemctl enable postgresql
+if [[ -z "$DB_PASSWORD" || -z "$JWT_SECRET" ]]; then
+  echo "ERROR: Define DB_PASSWORD y JWT_SECRET como variables de entorno."
+  exit 1
+fi
 
-# Esperar a que PostgreSQL esté listo
-sleep 5
+echo "==> Actualizando sistema"
+apt update
+apt upgrade -y
 
-echo "=== CREANDO BASE DE DATOS Y USUARIO ==="
-sudo -u postgres psql -c "CREATE DATABASE ekonsumo;"
-sudo -u postgres psql -c "CREATE USER ekonsumo_user WITH PASSWORD '1234';"
-sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ekonsumo TO ekonsumo_user;"
-sudo -u postgres psql -c "ALTER DATABASE ekonsumo OWNER TO ekonsumo_user;"
+echo "==> Instalando paquetes base"
+apt install -y curl ca-certificates gnupg lsb-release git rsync unzip build-essential \
+  software-properties-common apt-transport-https wget
 
-echo "=== INSTALANDO HERRAMIENTAS DE DESARROLLO ==="
-sudo pacman -S --noconfirm git base-devel
+echo "==> Instalando Node.js 22 LTS (si no existe o versión distinta)"
+if ! command -v node >/dev/null 2>&1 || ! node -v | grep -qE '^v22\.'; then
+  curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+  apt install -y nodejs
+fi
 
-# Instalar herramientas npm de forma más robusta
-echo "=== INSTALANDO HERRAMIENTAS NPM GLOBALES ==="
-sudo npm install -g npm@latest
-npm install -g pm2 nodemon npm-check-updates
+echo "==> Instalando PostgreSQL"
+if ! command -v psql >/dev/null 2>&1; then
+  apt install -y postgresql postgresql-contrib
+fi
 
-# Configuración específica para desarrollo en VS Code
-echo "=== CONFIGURANDO ENTORNO DE DESARROLLO ==="
-BACKEND_DIR="$HOME/Proyects/DAW-Proyecto/Backend"
-FRONTEND_DIR="$HOME/Proyects/DAW-Proyecto/frontend"
-SQL_DIR="$HOME/Proyects/DAW-Proyecto/sql"
+echo "==> Instalando Visual Studio Code"
+if ! command -v code >/dev/null 2>&1; then
+  wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor >/usr/share/keyrings/packages.microsoft.gpg
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" \
+    > /etc/apt/sources.list.d/vscode.list
+  apt update
+  apt install -y code
+fi
 
-# Crear directorios si no existen
-mkdir -p $BACKEND_DIR
-mkdir -p $FRONTEND_DIR
-mkdir -p $SQL_DIR
+echo "==> Instalando PM2 global (opcional pero útil para pruebas locales)"
+npm install -g pm2 || true
 
-# Para utilizar la versionm de Node 19
-pacman -S nvm
-nvm install 19     
-nvm use 19
+echo "==> Creando usuario de desarrollo si no existe: $DEV_USER"
+if ! id -u "$DEV_USER" >/dev/null 2>&1; then
+  useradd -m -s /bin/bash "$DEV_USER"
+  echo "Usuario $DEV_USER creado."
+fi
 
-# ==============================================
-# EJECUCIÓN DE ARCHIVOS SQL
-# ==============================================
+echo "==> Creando estructura de proyectos en $PROJECTS_DIR"
+mkdir -p "$BACKEND_DIR" "$FRONTEND_DIR"
+chown -R "$DEV_USER:$DEV_USER" "$PROJECTS_DIR"
 
-echo "=== BUSCANDO Y EJECUTANDO ARCHIVOS SQL ==="
+echo "==> Configurando PostgreSQL: creando rol y base de datos"
+sudo -u postgres psql -v db_user="$DB_USER" -v db_password="$DB_PASSWORD" -v db_name="$DB_NAME" <<'SQL'
+SELECT format('CREATE ROLE %I LOGIN PASSWORD %L', :'db_user', :'db_password')
+WHERE NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = :'db_user')\gexec
 
-# Buscar archivos SQL en el proyecto
-CREAR_TABLAS_SQL=$(find $HOME/Proyects/DAW-Proyecto/Backend/ -name "crearBaseDatos.sql" -o -name "crear_tablas.sql" -o -name "tablas.sql" | head -1)
-INSERTAR_DATOS_SQL=$(find $HOME/Proyects/DAW-Proyecto/Backend/ -name "datosPrueba.sql" -o -name "insertar_datos.sql" -o -name "datos_prueba.sql" | head -1)
+SELECT format('ALTER ROLE %I WITH LOGIN PASSWORD %L', :'db_user', :'db_password')\gexec
 
-# Función para ejecutar archivos SQL
-ejecutar_sql() {
-    local archivo_sql=$1
-    local descripcion=$2
-    
-    if [ -f "$archivo_sql" ]; then
-        echo "=== EJECUTANDO: $descripción ==="
-        echo "Archivo: $archivo_sql"
-        
-        # Copiar archivo a ubicación accesible para postgres
-        TEMP_SQL="/tmp/$(basename $archivo_sql)"
-        cp "$archivo_sql" "$TEMP_SQL"
-        sudo chown postgres:postgres "$TEMP_SQL"
-        
-        # Ejecutar como usuario postgres
-        if sudo -u postgres psql -d ekonsumo -f "$TEMP_SQL"; then
-            echo "✅ $descripción ejecutado correctamente"
-        else
-            echo "❌ Error ejecutando $descripción"
-            return 1
-        fi
-        
-        # Limpiar archivo temporal
-        rm -f "$TEMP_SQL"
-    else
-        echo "⚠️  No se encontró: $descripción"
-        echo "Buscando en: $archivo_sql"
-        
-        # Mostrar archivos SQL disponibles
-        echo "Archivos SQL disponibles:"
-        find $HOME/Proyects/DAW-Proyecto -name "*.sql" -type f | while read sql_file; do
-            echo "  - $sql_file"
-        done
-    fi
+SELECT format('CREATE DATABASE %I OWNER %I', :'db_name', :'db_user')
+WHERE NOT EXISTS (SELECT 1 FROM pg_database WHERE datname = :'db_name')\gexec
+SQL
+
+echo "==> Inicializando package.json básicos (si no existen)"
+sudo -u "$DEV_USER" bash -c "cd '$BACKEND_DIR' && if [[ ! -f package.json ]]; then npm init -y >/dev/null 2>&1; fi"
+sudo -u "$DEV_USER" bash -c "cd '$FRONTEND_DIR' && if [[ ! -f package.json ]]; then npm init -y >/dev/null 2>&1; fi"
+
+echo "==> Creando backend/.env"
+BACKEND_ENV_FILE="$BACKEND_DIR/.env"
+ensure_env_key() {
+  local file="$1"
+  local key="$2"
+  local value="$3"
+  if ! grep -q "^${key}=" "$file" 2>/dev/null; then
+    printf '%s=%s\n' "$key" "$value" >> "$file"
+  fi
 }
 
-# Ejecutar archivos SQL
-ejecutar_sql "$CREAR_TABLAS_SQL" "CrearTablas.sql"
-ejecutar_sql "$INSERTAR_DATOS_SQL" "InsertarDatosDePrueba.sql"
-
-# Verificar tablas creadas
-echo "=== VERIFICANDO TABLAS EN LA BASE DE DATOS ==="
-sudo -u postgres psql -d ekonsumo -c "
-SELECT table_name, table_type 
-FROM information_schema.tables 
-WHERE table_schema = 'public' 
-ORDER BY table_name;
-"
-
-# ==============================================
-# CONFIGURACIÓN DEL BACKEND
-# ==============================================
-
-echo "=== CONFIGURANDO BACKEND PARA DESARROLLO ==="
-cd $BACKEND_DIR
-
-# Si existe package.json, instalar dependencias de forma más robusta
-if [ -f "package.json" ]; then
-    echo "=== ACTUALIZANDO DEPENDENCIAS OBSOLETAS ==="
-    
-    # Verificar dependencias obsoletas
-    echo "🔍 Revisando dependencias obsoletas..."
-    npx npm-check-updates
-    
-    # Opcional: Actualizar automáticamente (descomenta si quieres)
-    # npx npm-check-updates -u
-    # npm install
-    
-    # Instalar dependencias limpiando cache
-    npm cache clean --force
-    npm install --legacy-peer-deps
-    
-    # Verificar vulnerabilidades
-    echo "🔒 Revisando vulnerabilidades de seguridad..."
-    npm audit --audit-level moderate
-    
-    echo "=== CREANDO ARCHIVO .env PARA DESARROLLO ==="
-    cat > $BACKEND_DIR/.env <<EOL
+if [[ ! -f "$BACKEND_ENV_FILE" || "$OVERWRITE_ENV" == "1" ]]; then
+  cat > "$BACKEND_ENV_FILE" <<EOF
+PORT=$PORT
 NODE_ENV=development
-PORT=3000
-DB_HOST=localhost
+JWT_SECRET=$JWT_SECRET
+DB_HOST=127.0.0.1
 DB_PORT=5432
-DB_NAME=ekonsumo
-DB_USER=ekonsumo_user
-DB_PASSWORD=1234
-JWT_SECRET=mi_clave_secreta_desarrollo_123
-CORS_ORIGIN=http://localhost:8080
-UPLOAD_DIR=$BACKEND_DIR/uploads
-LOG_LEVEL=debug
-EOL
-
-    echo "=== INICIANDO BACKEND EN MODO DESARROLLO ==="
-    echo "Para iniciar el backend en desarrollo:"
-    echo "cd $BACKEND_DIR && npm run dev"
-    
+DB_USER=$DB_USER
+DB_PASSWORD=$DB_PASSWORD
+DB_NAME=$DB_NAME
+EMAIL_USER=
+EMAIL_PASS=
+FRONTEND_URL=http://localhost:8080
+EOF
+  chown "$DEV_USER:$DEV_USER" "$BACKEND_ENV_FILE"
+  chmod 600 "$BACKEND_ENV_FILE"
 else
-    echo "⚠️  No se encontró package.json en $BACKEND_DIR"
-    echo "Creando estructura básica del backend..."
-    
-    # Crear package.json básico si no existe
-    cat > $BACKEND_DIR/package.json <<EOL
-{
-  "name": "ekonsumo-backend",
-  "version": "1.0.0",
-  "description": "Backend para DAW Proyecto",
-  "main": "index.js",
-  "scripts": {
-    "dev": "nodemon index.js",
-    "start": "node index.js",
-    "test": "jest",
-    "db:reset": "psql -U ekonsumo_user -d ekonsumo -f sql/reset_database.sql"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.18.0",
-    "cors": "^2.8.5",
-    "pg": "^8.11.0",
-    "dotenv": "^16.3.0",
-    "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.0.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.0"
-  },
-  "engines": {
-    "node": ">=16.0.0"
-  }
-}
-EOL
-
-    npm install vue@latest vue-router@latest vuex@latest axios@latest bootstrap@latest bootstrap-vue-3@latest @popperjs/core@latest --save
-    npm install @babel/core@latest @babel/eslint-parser@latest @vue/cli-plugin-babel@latest @vue/cli-plugin-eslint@latest @vue/cli-service@latest eslint@latest eslint-plugin-vue@latest vue-eslint-parser@latest --save-dev
-
-    cd $BACKEND_DIR && npm install
+  ensure_env_key "$BACKEND_ENV_FILE" "PORT" "$PORT"
+  ensure_env_key "$BACKEND_ENV_FILE" "NODE_ENV" "development"
+  ensure_env_key "$BACKEND_ENV_FILE" "JWT_SECRET" "$JWT_SECRET"
+  ensure_env_key "$BACKEND_ENV_FILE" "DB_HOST" "127.0.0.1"
+  ensure_env_key "$BACKEND_ENV_FILE" "DB_PORT" "5432"
+  ensure_env_key "$BACKEND_ENV_FILE" "DB_USER" "$DB_USER"
+  ensure_env_key "$BACKEND_ENV_FILE" "DB_PASSWORD" "$DB_PASSWORD"
+  ensure_env_key "$BACKEND_ENV_FILE" "DB_NAME" "$DB_NAME"
+  chown "$DEV_USER:$DEV_USER" "$BACKEND_ENV_FILE"
+  chmod 600 "$BACKEND_ENV_FILE"
 fi
 
-# ==============================================
-# CONFIGURACIÓN DEL FRONTEND
-# ==============================================
+echo "==> Añadiendo scripts npm útiles al backend (start, dev)"
+sudo -u "$DEV_USER" bash -c "cd '$BACKEND_DIR' && \
+  if ! grep -q '\"start\"' package.json 2>/dev/null; then \
+    npm pkg set scripts.start=\"node index.js\" >/dev/null 2>&1 || true; \
+  fi; \
+  npm pkg set scripts.dev=\"nodemon index.js\" >/dev/null 2>&1 || true"
 
-echo "=== CONFIGURANDO FRONTEND PARA DESARROLLO ==="
-cd $FRONTEND_DIR
-
-if [ -f "package.json" ]; then
-    echo "=== INSTALANDO DEPENDENCIAS DEL FRONTEND ==="
-    npm cache clean --force
-    npm install --legacy-peer-deps
-    
-    echo "=== CREANDO ARCHIVO .env PARA FRONTEND ==="
-    cat > $FRONTEND_DIR/.env.development <<EOL
-NODE_ENV=development
-VUE_APP_API_URL=http://localhost:3000/api
-VUE_APP_TITLE=Ekonsumo - Desarrollo
-VUE_APP_VERSION=1.0.0-dev
-EOL
-
-else
-    echo "⚠️  No se encontró package.json en $FRONTEND_DIR"
+echo "==> Creando ejemplo index.js en backend si no existe"
+if [[ ! -f "$BACKEND_DIR/index.js" ]]; then
+  cat > "$BACKEND_DIR/index.js" <<'JS'
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 3000;
+app.use(express.json());
+app.get('/api/health', (req, res) => res.json({status: 'ok'}));
+app.listen(port, () => console.log(`Backend listening on ${port}`));
+JS
+  chown "$DEV_USER:$DEV_USER" "$BACKEND_DIR/index.js"
 fi
 
-# ==============================================
-# SCRIPTS ADICIONALES DE UTILIDAD
-# ==============================================
-
-echo "=== CREANDO SCRIPTS DE ADMINISTRACIÓN ==="
-
-# Script para resetear la base de datos
-cat > $SQL_DIR/reset_database.sh <<EOL
-#!/bin/bash
-echo "=== RESETEANDO BASE DE DATOS EKONSUMO ==="
-
-# Detener servicios que usan la BD
-sudo systemctl stop postgresql 2>/dev/null || true
-sudo systemctl start postgresql
-
-# Recrear base de datos
-sudo -u postgres psql -c "DROP DATABASE IF EXISTS ekonsumo;"
-sudo -u postgres psql -c "CREATE DATABASE ekonsumo;"
-sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ekonsumo TO ekonsumo_user;"
-
-# Ejecutar scripts SQL
-if [ -f "$CREAR_TABLAS_SQL" ]; then
-    echo "Ejecutando CrearTablas.sql..."
-    sudo -u postgres psql -d ekonsumo -f "$CREAR_TABLAS_SQL"
+echo "==> Creando ejemplo Vue frontend básico (si no existe)"
+if [[ ! -f "$FRONTEND_DIR/src/main.js" ]]; then
+  sudo -u "$DEV_USER" bash -c "cd '$FRONTEND_DIR' && \
+    npm pkg set scripts.dev=\"vue-cli-service serve\" >/dev/null 2>&1 || true"
+  mkdir -p "$FRONTEND_DIR/src"
+  cat > "$FRONTEND_DIR/src/main.js" <<'JS'
+import { createApp } from 'vue';
+const App = { template: '<div><h1>Frontend</h1><p>API: <a href=\"/api/health\">/api/health</a></p></div>' };
+createApp(App).mount('#app');
+JS
+  cat > "$FRONTEND_DIR/index.html" <<HTML
+<!doctype html>
+<html>
+  <head><meta charset="utf-8"><title>Frontend</title></head>
+  <body><div id="app"></div><script type="module" src="/src/main.js"></script></body>
+</html>
+HTML
+  chown -R "$DEV_USER:$DEV_USER" "$FRONTEND_DIR"
 fi
 
-if [ -f "$INSERTAR_DATOS_SQL" ]; then
-    echo "Ejecutando InsertarDatosDePrueba.sql..."
-    sudo -u postgres psql -d ekonsumo -f "$INSERTAR_DATOS_SQL"
-fi
+echo "==> Instalando dependencias de ejemplo (puedes cambiar según tu stack)"
+sudo -u "$DEV_USER" bash -c "cd '$BACKEND_DIR' && npm install express >/dev/null 2>&1 || true"
+sudo -u "$DEV_USER" bash -c "cd '$FRONTEND_DIR' && npm install vue >/dev/null 2>&1 || true"
 
-echo "✅ Base de datos reseteda correctamente"
-EOL
+echo "==> Ajustando permisos"
+chown -R "$DEV_USER:$DEV_USER" "$PROJECTS_DIR"
 
-chmod +x $SQL_DIR/reset_database.sh
+cat <<EOF
 
-# Script para gestión de dependencias
-cat > $BACKEND_DIR/update-dependencies.sh <<EOL
-#!/bin/bash
-echo "=== ACTUALIZANDO DEPENDENCIAS ==="
+Instalación completada.
 
-# Limpiar cache
-npm cache clean --force
+Siguientes pasos sugeridos (como usuario $DEV_USER):
 
-# Verificar dependencias obsoletas
-npx npm-check-updates
+1) Backend (en otra terminal):
+   cd $BACKEND_DIR
+   npm run dev
+   # o para arrancar con PM2:
+   pm2 start index.js --name dev-backend --watch --cwd $BACKEND_DIR
 
-echo ""
-echo "Para actualizar todas las dependencias:"
-echo "npx npm-check-updates -u && npm install"
-echo ""
-echo "Para actualizar una dependencia específica:"
-echo "npm update nombre-paquete"
-echo ""
-echo "Para revisar vulnerabilidades:"
-echo "npm audit"
-echo ""
-echo "Para arreglar vulnerabilidades automáticamente:"
-echo "npm audit fix"
-EOL
+2) Frontend:
+   cd $FRONTEND_DIR
+   # si usas Vue CLI: npm install -g @vue/cli && vue create .
+   # o servir el index.html simple con un server estático:
+   npx serve -s . -l 8080
 
-chmod +x $BACKEND_DIR/update-dependencies.sh
+3) Conectar a la BD:
+   psql -h 127.0.0.1 -U $DB_USER -d $DB_NAME
 
-# ==============================================
-# VERIFICACIÓN FINAL
-# ==============================================
+Archivos creados:
+ - $BACKEND_DIR/.env
+ - $BACKEND_DIR/index.js (ejemplo)
+ - $FRONTEND_DIR/index.html, $FRONTEND_DIR/src/main.js (ejemplo)
 
-echo "=== VERIFICACIÓN FINAL ==="
-
-# Verificar servicios
-echo "1. ✅ PostgreSQL status:"
-sudo systemctl is-active postgresql
-
-echo "2. ✅ Node.js version:"
-node --version
-
-echo "3. ✅ npm version:"
-npm --version
-
-echo "4. ✅ Base de datos:"
-sudo -u postgres psql -d ekonsumo -c "
-SELECT 
-    COUNT(*) as tablas_creadas
-FROM information_schema.tables 
-WHERE table_schema = 'public';
-"
-
-echo "5. ✅ Estructura de proyecto:"
-tree $HOME/Proyects/DAW-Proyecto -L 2 2>/dev/null || find $HOME/Proyects/DAW-Proyecto -type d | head -10
-
-# ==============================================
-# INSTRUCCIONES FINALES
-# ==============================================
-
-echo ""
-echo "🎯 CONFIGURACIÓN COMPLETADA!"
-echo ""
-echo "📊 RESUMEN BASE DE DATOS:"
-sudo -u postgres psql -d ekonsumo -c "
-SELECT 
-    table_name,
-    (SELECT COUNT(*) FROM information_schema.columns WHERE table_name = t.table_name) as columnas
-FROM information_schema.tables t
-WHERE table_schema = 'public'
-ORDER BY table_name;
-"
-
-echo ""
-echo "🚀 PRÓXIMOS PASOS:"
-echo "1. Iniciar backend: cd $BACKEND_DIR && npm run dev"
-echo "2. Iniciar frontend: cd $FRONTEND_DIR && npm run serve"
-echo "3. Acceder a la app: http://localhost:8080"
-echo "4. API disponible en: http://localhost:3000/api"
-echo ""
-echo "🔧 HERRAMIENTAS DISPONIBLES:"
-echo "   - Resetear BD: $SQL_DIR/reset_database.sh"
-echo "   - Actualizar dependencias: $BACKEND_DIR/update-dependencies.sh"
-echo ""
-echo "📝 NOTAS:"
-echo "   - Las advertencias 'deprecated' son normales en desarrollo"
-echo "   - Usa 'npm audit fix' para vulnerabilidades críticas"
-echo "   - Los archivos SQL se ejecutaron automáticamente"
-echo ""
-echo "¡Listo para desarrollar! 🎉"
+EOF

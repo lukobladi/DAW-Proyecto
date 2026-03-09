@@ -63,7 +63,7 @@
             <label class="form-label">Precio</label>
             <input v-model.number="form.precio" type="number" min="0" step="0.01" class="form-control" required />
           </div>
-          <div class="mb-2">
+          <div v-if="isAdmin" class="mb-2">
             <label class="form-label">Proveedor</label>
             <select v-model.number="form.id_proveedor" class="form-select" required>
               <option disabled :value="null">Selecciona proveedor</option>
@@ -75,6 +75,14 @@
                 {{ proveedor.nombre }}
               </option>
             </select>
+          </div>
+          <div v-else class="mb-2">
+            <label class="form-label">Proveedor</label>
+            <input 
+              v-model="nombreProveedorAsignado" 
+              class="form-control" 
+              disabled 
+            />
           </div>
           <div class="mb-3">
             <label class="form-label">Imagen</label>
@@ -95,15 +103,17 @@
 <script>
 import api from '@/services/api';
 import { alertStore } from '@/store/alertStore';
+import { useAuthStore } from '@/store';
 
 function productoVacio() {
   return {
     id_producto: null,
     nombre: '',
     descripcion: '',
-    precio: 0,
+    precio: '',
     id_proveedor: null,
-    imagenFile: null,
+    imagen: null,
+    activo: true,
   };
 }
 
@@ -120,6 +130,16 @@ export default {
       guardando: false,
       form: productoVacio(),
     };
+  },
+  computed: {
+    isAdmin() {
+      const authStore = useAuthStore();
+      return authStore.user?.role === 'admin';
+    },
+    nombreProveedorAsignado() {
+      if (!this.form.id_proveedor) return 'Cargando...';
+      return this.proveedores.find(p => p.id_proveedor === this.form.id_proveedor)?.nombre || '-';
+    },
   },
   async created() {
     await this.cargarDatos();
@@ -154,21 +174,33 @@ export default {
       this.cargando = true;
       this.errorCarga = '';
       try {
-        const [productosResponse, proveedoresResponse] = await Promise.all([
-          api.getProductos(),
-          api.getProveedores(),
-        ]);
-        this.productos = productosResponse.data || [];
+        const proveedoresResponse = await api.getProveedores();
         this.proveedores = proveedoresResponse.data || [];
-      } catch {
-        this.errorCarga = 'No se pudieron cargar productos y proveedores.';
+
+        let productosResponse;
+        if (this.isAdmin) {
+          productosResponse = await api.getProductos();
+        } else {
+          productosResponse = await api.getMisProductos();
+        }
+        this.productos = productosResponse.data || [];
+      } catch (error) {
+        if (error.response?.status === 403) {
+          this.errorCarga = error.response.data.error || 'No tienes acceso a productos.';
+        } else {
+          this.errorCarga = 'No se pudieron cargar los productos.';
+        }
       } finally {
         this.cargando = false;
       }
     },
     abrirModalCrear() {
       this.modoEdicion = false;
-      this.form = productoVacio();
+      const nuevoForm = productoVacio();
+      if (!this.isAdmin && this.proveedores.length > 0) {
+        nuevoForm.id_proveedor = this.proveedores[0].id_proveedor;
+      }
+      this.form = nuevoForm;
       this.mostrarModal = true;
     },
     abrirModalEditar(producto) {

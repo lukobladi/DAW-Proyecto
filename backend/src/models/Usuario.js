@@ -8,14 +8,14 @@ const Usuario = {
   },
 
   // Crear un nuevo usuario
-  async create(nombre, correo, password, rol, movil) {
+  async create(nombre, correo, password, rol, movil, familia = null) {
     const hashedPassword = await bcrypt.hash(password, 10); // Genera el hash de la contraseña
     const query = `
-      INSERT INTO Usuario (Nombre, Correo, Pass, Rol, Movil)
-      VALUES ($1, $2, $3, $4, $5)
+      INSERT INTO Usuario (nombre, correo, pass, rol, movil, familia)
+      VALUES ($1, $2, $3, $4, $5, $6)
       RETURNING *;
     `;
-    const values = [nombre, correo, hashedPassword, rol, movil];
+    const values = [nombre, correo, hashedPassword, rol, movil, familia];
     const { rows } = await pool.query(query, values);
     return rows[0];
   },
@@ -46,7 +46,14 @@ const Usuario = {
 
   // Obtener todos los usuarios
   async findAll() {
-    const query = 'SELECT * FROM Usuario;';
+    const query = `
+      SELECT DISTINCT ON (u.ID_Usuario) u.*, 
+             p.id_proveedor as proveedor_id, 
+             p.nombre as proveedor_nombre
+      FROM Usuario u
+      LEFT JOIN Proveedor p ON u.familia = p.familia
+      ORDER BY u.ID_Usuario;
+    `;
     const { rows } = await pool.query(query);
     return rows;
   },
@@ -59,14 +66,14 @@ const Usuario = {
   },
 
   // Actualizar un usuario
-  async update(id, nombre, correo, rol, movil) {
+  async update(id, nombre, correo, rol, movil, familia = null) {
     const query = `
       UPDATE Usuario
-      SET Nombre = $2, Correo = $3, Rol = $4, Movil = $5
-      WHERE ID_Usuario = $1
+      SET nombre = $2, correo = $3, rol = $4, movil = $5, familia = $6
+      WHERE id_usuario = $1
       RETURNING *;
     `;
-    const values = [id, nombre, correo, rol, movil];
+    const values = [id, nombre, correo, rol, movil, familia];
     const { rows } = await pool.query(query, values);
     return rows.length > 0 ? rows[0] : null; // Return null if no user is updated
   },

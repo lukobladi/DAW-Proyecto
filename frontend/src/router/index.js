@@ -69,7 +69,7 @@ const routes = [
     path: '/gestion-usuarios',
     name: 'GestionUsuarios',
     component: GestionUsuariosPage,
-    meta: { requiresAuth: true }, // Ruta protegida
+    meta: { requiresAuth: true, requiresAdmin: true }, // Ruta protegida solo admin
   },
   {
     path: '/configuracion',
@@ -98,7 +98,7 @@ const routes = [
     path: '/gestion-pedidos',
     name: 'GestionPedidos',
     component: GestionPedidosPage,
-    meta: { requiresAuth: true }, // Ruta protegida
+    meta: { requiresAuth: true }, // Accesible para admins y usuarios con proveedor asignado
   },
   {
     path: '/gestion-pedidos-periodicos',
@@ -136,9 +136,14 @@ router.beforeEach((to) => {
   const authStore = useAuthStore();
   authStore.hydrateAuthState();
   const isAuthenticated = authStore.isAuthenticated;
+  const isAdmin = authStore.user?.role === 'admin';
 
   if (to.meta.requiresAuth && !isAuthenticated) {
     return { name: 'Login' };
+  }
+
+  if (to.meta.requiresAdmin && !isAdmin) {
+    return { name: 'Dashboard' };
   }
 
   if (to.name === 'Login' && isAuthenticated) {

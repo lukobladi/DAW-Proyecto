@@ -28,14 +28,14 @@
     - [X] Diseñar e implementar los modelos de datos que faltan.
     - [X] Desarrollar los endpoints restantes para el CRUD de todas las entidades.
 - [ ] **Pruebas**
-    - [ ] Incrementar la cobertura de pruebas unitarias para la lógica de negocio.
+    - [ ] Incrementar cobertura de pruebas unitarias para la lógica de negocio.
     - [ ] Añadir más pruebas de integración para los endpoints de la API.
     - [ ] Generar listado de test
-    - [ ] Inicializar @Jest @Supertest
+    - [X] Inicializar @Jest @Supertest
 
 ## Frontend
 - [ ] **Estructura y Estilo**
-    - [ ] Crear un servicio centralizado de API (con Axios) para gestionar las peticiones al backend.
+    - [X] Crear un servicio centralizado de API (con Axios) para gestionar las peticiones al backend.
     - [ ] Modularizar el store de Vuex si la complejidad de la aplicación aumenta.
     - [ ] Asegurar que el estilo y los componentes de UI sean consistentes en toda la aplicación.
     - [ ] Dashboard - Diseño
@@ -48,18 +48,18 @@
     - [X] Implementar la lógica de autenticación del cliente (login, logout, registro).
     - [X] Desarrollar las vistas y componentes para todas las funcionalidades (productos, pedidos, etc.).
     - [X] Añadir un sistema de notificaciones para feedback al usuario (ej. "Pedido creado con éxito").
-    - [ ] Dashboard - Funcionalidad 
-    - [ ] Historial - Ver detalles
-    - [ ] Soporte - Funcionalidad
-    - [ ] Gestion de usuarios - No funciona
-    - [ ] Email - ¿Cuando?¿Donde?
-    - [ ] Cesta - Funcionalidad
-    - [ ] Compras - Imagenes
+    - [X] Dashboard - Funcionalidad 
+    - [X] Historial - Ver detalles
+    - [X] Soporte - Funcionalidad
+    - [X] Gestion de usuarios - No funciona
+    - [X] Email - ¿Cuando?¿Donde?
+    - [X] Cesta - Funcionalidad
+    - [X] Compras - Imagenes
 
 - [ ] **Optimización y Pruebas**
     - [ ] Implementar carga perezosa (lazy loading) para las rutas en Vue Router.
     - [ ] Escribir pruebas unitarias para los componentes más críticos.
     - [ ] (Opcional) Configurar pruebas de extremo a extremo (E2E) con una herramienta como Cypress.
-    - [ ] Implementar Tests Jest/Vitest
+    - [X] Implementar Tests Jest/Vitest
     - [ ] Generar listado de test
     - [ ] Inicializar @Jest @Supertest

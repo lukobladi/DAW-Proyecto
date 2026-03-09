@@ -1,423 +1,171 @@
-# Script de Configuración para Windows 11 - DAW Proyecto
-# Guardar como: configurar-entorno.ps1 y ejecutar como Administrador
+<#
+Instalador entorno dev Windows (PowerShell)
+- Requisitos: Ejecutar como Administrador
+- Variables opcionales (antes de ejecutar):
+  $env:DEV_USER, $env:APP_DIR, $env:PORT, $env:DB_PASSWORD, $env:JWT_SECRET
+#>
 
-Write-Host "=== CONFIGURACIÓN PARA WINDOWS 11 - EKONSUMO PROYECTO ===" -ForegroundColor Green
-Write-Host "=== Ejecutar como Administrador ===" -ForegroundColor Yellow
-
-# Verificar que se ejecuta como administrador
-if (-NOT ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
-    Write-Host "❌ Este script requiere privilegios de administrador. Ejecuta PowerShell como Administrador." -ForegroundColor Red
-    exit 1
+# Comprobar ejecución como administrador
+If (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
+  Write-Error "Ejecuta este script como Administrador."
+  exit 1
 }
 
-# Función para verificar si un comando existe
-function Test-CommandExists {
-    param($command)
-    return (Get-Command $command -ErrorAction SilentlyContinue)
+# Variables por defecto
+$DEV_USER = $env:DEV_USER
+if ([string]::IsNullOrEmpty($DEV_USER)) { $DEV_USER = $env:USERNAME }
+$APP_DIR_NAME = if ($env:APP_DIR) { $env:APP_DIR } else { "daw-proyecto" }
+$PORT = if ($env:PORT) { $env:PORT } else { "3000" }
+$DB_NAME = if ($env:DB_NAME) { $env:DB_NAME } else { "ekonsumo" }
+$DB_USER = if ($env:DB_USER) { $env:DB_USER } else { "ekonsumo_user" }
+$DB_PASSWORD = $env:DB_PASSWORD
+$JWT_SECRET = $env:JWT_SECRET
+
+if ([string]::IsNullOrEmpty($DB_PASSWORD) -or [string]::IsNullOrEmpty($JWT_SECRET)) {
+  Write-Error "ERROR: Define DB_PASSWORD y JWT_SECRET en variables de entorno antes de ejecutar."
+  exit 1
 }
 
-# INSTALACIÓN DE SOFTWARE CON WINGET
-# ==============================================
+$USERPROFILE = [Environment]::GetFolderPath("UserProfile")
+$PROJECTS_DIR = if ($env:PROJECTS_DIR) { $env:PROJECTS_DIR } else { Join-Path $USERPROFILE "projects" }
+$APP_DIR = Join-Path $PROJECTS_DIR $APP_DIR_NAME
+$BACKEND_DIR = Join-Path $APP_DIR "backend"
+$FRONTEND_DIR = Join-Path $APP_DIR "frontend"
 
-Write-Host "`n=== INSTALANDO SOFTWARE REQUERIDO CON WINGET ===" -ForegroundColor Green
-
-# Lista de paquetes a instalar
-$packages = @(
-    "Git.Git",
-    "OpenJS.NodeJS.LTS",
-    "PostgreSQL.PostgreSQL",
-    "Microsoft.VisualStudioCode",
-    "Google.Chrome",
-    "Mozilla.Firefox"
-)
-
-foreach ($package in $packages) {
-    Write-Host "Instalando: $package" -ForegroundColor Cyan
-    winget install --id $package --silent --accept-package-agreements --accept-source-agreements
+function Install-Choco {
+  if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
+    Write-Output "==> Instalando Chocolatey"
+    Set-ExecutionPolicy Bypass -Scope Process -Force
+    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+    Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+  } else {
+    Write-Output "Chocolatey ya instalado."
+  }
 }
 
-# INSTALACIÓN DE EXTENSIONES DE VS CODE
-# ==============================================
-
-Write-Host "`n=== INSTALANDO EXTENSIONES VS CODE ===" -ForegroundColor Green
-
-$vscodeExtensions = @(
-    "ms-vscode.vscode-json",
-    "ms-vscode.PowerShell",
-    "octref.vetur",
-    "vue.volar",
-    "bradlc.vscode-tailwindcss",
-    "ms-vscode.vscode-typescript-next",
-    "esbenp.prettier-vscode",
-    "ms-vscode.vscode-eslint",
-    "eamodio.gitlens",
-    "ms-azuretools.vscode-docker",
-    "ckolkman.vscode-postgres"
-)
-
-foreach ($extension in $vscodeExtensions) {
-    Write-Host "Instalando extensión: $extension" -ForegroundColor Cyan
-    code --install-extension $extension --force
+function Choco-InstallIfMissing($pkg) {
+  if (-not (choco list --localonly | Select-String "^$pkg ")) {
+    choco install $pkg -y --no-progress
+  } else {
+    Write-Output "$pkg ya instalado."
+  }
 }
 
-# CONFIGURACIÓN DE POSTGRESQL
-# ==============================================
+Write-Output "==> Instalar/actualizar herramientas via Chocolatey"
+Install-Choco
 
-Write-Host "`n=== CONFIGURANDO POSTGRESQL ===" -ForegroundColor Green
+# Actualizar choco y paquetes básicos
+choco feature enable -n=allowGlobalConfirmation | Out-Null
+choco upgrade chocolatey -y --no-progress
 
-# Intentar detectar la instalación de PostgreSQL
-$postgresPath = Get-ChildItem "C:\Program Files\PostgreSQL" -Directory | Sort-Object Name -Descending | Select-Object -First 1
+# Instalar herramientas esenciales
+Choco-InstallIfMissing "git"
+Choco-InstallIfMissing "nodejs-lts"   # Node 22 LTS package name on choco is nodejs-lts
+Choco-InstallIfMissing "postgresql"   # instala y crea servicio; puede pedir reinicio
+Choco-InstallIfMissing "vscode"
+Choco-InstallIfMissing "wget"
 
-if ($postgresPath) {
-    $postgresBin = Join-Path $postgresPath.FullName "bin"
-    $postgresLib = Join-Path $postgresPath.FullName "lib"
-    
-    # Agregar PostgreSQL al PATH si no está
-    $envPath = [Environment]::GetEnvironmentVariable("Path", "Machine")
-    if ($envPath -notlike "*$postgresBin*") {
-        [Environment]::SetEnvironmentVariable("Path", $envPath + ";" + $postgresBin, "Machine")
-        $env:Path += ";" + $postgresBin
-    }
-    
-    Write-Host "PostgreSQL encontrado en: $($postgresPath.FullName)" -ForegroundColor Green
+# Asegurar que node/npm están en PATH en la sesión actual
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine")
+
+Write-Output "==> Instalando PM2 global (opcional)"
+try {
+  npm install -g pm2 --no-progress
+} catch {
+  Write-Warning "No se pudo instalar pm2 global. Comprueba npm/Node."
+}
+
+Write-Output "==> Creando estructura de proyectos en $APP_DIR"
+New-Item -ItemType Directory -Force -Path $BACKEND_DIR, $FRONTEND_DIR | Out-Null
+
+# Configurar PostgreSQL: inicialmente Windows installer crea usuario postgres con contraseña vacía; usar createuser/db con psql
+Write-Output "==> Configurando PostgreSQL (creando rol y base de datos)"
+$psqlPath = (Get-ChildItem 'C:\Program Files\PostgreSQL' -Directory -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1 | ForEach-Object { Join-Path $_.FullName 'bin\psql.exe' })
+if (-not $psqlPath) {
+  Write-Warning "No se encontró psql.exe automáticamente. Asegúrate de que PostgreSQL se instaló y añade a PATH."
 } else {
-    Write-Host "❌ PostgreSQL no encontrado. Por favor instálalo manualmente." -ForegroundColor Red
+  # Ejecutar comandos psql como usuario postgres; en Windows, el servicio corre bajo cuenta local; usaremos psql con trust (si no requiere contraseña)
+  & "$psqlPath" -U postgres -c "DO \$\$ BEGIN IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = '$DB_USER') THEN CREATE ROLE $DB_USER LOGIN PASSWORD '$DB_PASSWORD'; ELSE ALTER ROLE $DB_USER WITH LOGIN PASSWORD '$DB_PASSWORD'; END IF; END\$\$;" 2>$null
+  & "$psqlPath" -U postgres -c "DO \$\$ BEGIN IF NOT EXISTS (SELECT FROM pg_database WHERE datname = '$DB_NAME') THEN CREATE DATABASE $DB_NAME OWNER $DB_USER; END IF; END\$\$;" 2>$null
 }
 
-# CONFIGURACIÓN DE SERVICIOS POSTGRESQL
-# ==============================================
-
-Write-Host "`n=== INICIANDO SERVICIO POSTGRESQL ===" -ForegroundColor Green
-
-try {
-    # Intentar iniciar el servicio PostgreSQL
-    $postgresService = Get-Service -Name "postgresql*" -ErrorAction SilentlyContinue
-    if ($postgresService) {
-        Set-Service -Name $postgresService.Name -StartupType Automatic
-        Start-Service -Name $postgresService.Name
-        Write-Host "✅ Servicio PostgreSQL iniciado: $($postgresService.Name)" -ForegroundColor Green
-    } else {
-        Write-Host "⚠️  Servicio PostgreSQL no encontrado. Configuración manual requerida." -ForegroundColor Yellow
-    }
-} catch {
-    Write-Host "❌ Error configurando PostgreSQL: $_" -ForegroundColor Red
+Write-Output "==> Creando package.json si no existen"
+if (-not (Test-Path (Join-Path $BACKEND_DIR "package.json"))) {
+  npm init -y --prefix $BACKEND_DIR | Out-Null
+}
+if (-not (Test-Path (Join-Path $FRONTEND_DIR "package.json"))) {
+  npm init -y --prefix $FRONTEND_DIR | Out-Null
 }
 
-# CONFIGURACIÓN DE BASE DE DATOS
-# ==============================================
-
-Write-Host "`n=== CONFIGURANDO BASE DE DATOS EKONSUMO ===" -ForegroundColor Green
-
-# Esperar a que PostgreSQL esté listo
-Start-Sleep -Seconds 5
-
-# Script SQL para crear la base de datos
-$createDBScript = @"
-CREATE DATABASE ekonsumo;
-CREATE USER ekonsumo_user WITH PASSWORD '1234';
-GRANT ALL PRIVILEGES ON DATABASE ekonsumo TO ekonsumo_user;
-ALTER DATABASE ekonsumo OWNER TO ekonsumo_user;
-"@
-
-try {
-    # Guardar script temporalmente
-    $tempSqlFile = Join-Path $env:TEMP "create_database.sql"
-    $createDBScript | Out-File -FilePath $tempSqlFile -Encoding UTF8
-    
-    # Ejecutar con psql
-    & "psql" "-U" "postgres" "-f" $tempSqlFile
-    
-    Write-Host "✅ Base de datos 'ekonsumo' creada correctamente" -ForegroundColor Green
-    
-    # Limpiar archivo temporal
-    Remove-Item $tempSqlFile -Force
-} catch {
-    Write-Host "❌ Error creando base de datos: $_" -ForegroundColor Red
-    Write-Host "💡 Puedes crear la base de datos manualmente con:" -ForegroundColor Yellow
-    Write-Host "   psql -U postgres -c `"CREATE DATABASE ekonsumo;`""
-}
-
-# CONFIGURACIÓN DE DIRECTORIOS DEL PROYECTO
-# ==============================================
-
-Write-Host "`n=== CONFIGURANDO DIRECTORIOS DEL PROYECTO ===" -ForegroundColor Green
-
-$projectDirectories = @(
-    "$env:USERPROFILE\Proyects\DAW-Proyecto\Backend",
-    "$env:USERPROFILE\Proyects\DAW-Proyecto\frontend", 
-    "$env:USERPROFILE\Proyects\DAW-Proyecto\sql",
-    "$env:USERPROFILE\Proyects\DAW-Proyecto\.vscode"
-)
-
-foreach ($dir in $projectDirectories) {
-    if (-not (Test-Path $dir)) {
-        New-Item -ItemType Directory -Path $dir -Force | Out-Null
-        Write-Host "✅ Directorio creado: $dir" -ForegroundColor Green
-    }
-}
-
-# INSTALACIÓN DE HERRAMIENTAS NPM GLOBALES
-# ==============================================
-
-Write-Host "`n=== INSTALANDO HERRAMIENTAS NPM GLOBALES ===" -ForegroundColor Green
-
-$globalNpmPackages = @(
-    "npm-check-updates",
-    "nodemon",
-    "pm2"
-)
-
-foreach ($package in $globalNpmPackages) {
-    Write-Host "Instalando: $package" -ForegroundColor Cyan
-    npm install -g $package
-}
-
-# CONFIGURACIÓN DE ARCHIVOS DE PROYECTO
-# ==============================================
-
-Write-Host "`n=== CREANDO ARCHIVOS DE CONFIGURACIÓN ===" -ForegroundColor Green
-
-# Archivo .env para backend
-$backendEnvContent = @"
+Write-Output "==> Creando backend\.env"
+$envPath = Join-Path $BACKEND_DIR ".env"
+$envContent = @"
+PORT=$PORT
 NODE_ENV=development
-PORT=3000
-DB_HOST=localhost
+JWT_SECRET=$JWT_SECRET
+DB_HOST=127.0.0.1
 DB_PORT=5432
-DB_NAME=ekonsumo
-DB_USER=ekonsumo_user
-DB_PASSWORD=1234
-JWT_SECRET=mi_clave_secreta_desarrollo_123
-CORS_ORIGIN=http://localhost:8080
-UPLOAD_DIR=$env:USERPROFILE\Proyects\DAW-Proyecto\Backend\uploads
-LOG_LEVEL=debug
+DB_USER=$DB_USER
+DB_PASSWORD=$DB_PASSWORD
+DB_NAME=$DB_NAME
+EMAIL_USER=
+EMAIL_PASS=
+FRONTEND_URL=http://localhost:8080
 "@
+$envContent | Out-File -Encoding utf8 -FilePath $envPath -Force
 
-$backendEnvContent | Out-File -FilePath "$env:USERPROFILE\Proyects\DAW-Proyecto\Backend\.env" -Encoding UTF8
-Write-Host "✅ Archivo .env creado para backend" -ForegroundColor Green
+Write-Output "==> Añadiendo scripts npm útiles al backend"
+# npm pkg set not siempre funciona en Windows; actualizar package.json manualmente si es necesario
+$pkgJsonPath = Join-Path $BACKEND_DIR "package.json"
+$pkg = Get-Content $pkgJsonPath | Out-String | ConvertFrom-Json
+if (-not $pkg.scripts.start) { $pkg.scripts.start = "node index.js" }
+$pkg.scripts.dev = "nodemon index.js"
+$pkg | ConvertTo-Json -Depth 10 | Out-File -Encoding utf8 $pkgJsonPath
 
-# Archivo de configuración VS Code
-$vscodeSettings = @"
-{
-    "files.autoSave": "afterDelay",
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
-    },
-    "eslint.validate": [
-        "javascript",
-        "typescript",
-        "vue"
-    ],
-    "vetur.validation.template": true,
-    "vetur.format.enable": true
-}
-"@
-
-$vscodeSettings | Out-File -FilePath "$env:USERPROFILE\Proyects\DAW-Proyecto\.vscode\settings.json" -Encoding UTF8
-Write-Host "✅ Configuración VS Code creada" -ForegroundColor Green
-
-# Configuración de launch.json para debugging
-$launchConfig = @"
-{
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Debug Backend",
-            "type": "node",
-            "request": "launch",
-            "program": "`${workspaceFolder}/Backend/index.js",
-            "envFile": "`${workspaceFolder}/Backend/.env",
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "Debug Frontend",
-            "type": "chrome",
-            "request": "launch",
-            "url": "http://localhost:8080",
-            "webRoot": "`${workspaceFolder}/frontend/src"
-        }
-    ]
-}
-"@
-
-$launchConfig | Out-File -FilePath "$env:USERPROFILE\Proyects\DAW-Proyecto\.vscode\launch.json" -Encoding UTF8
-Write-Host "✅ Configuración de debugging creada" -ForegroundColor Green
-
-# SCRIPTS DE UTILIDAD PARA WINDOWS
-# ==============================================
-
-Write-Host "`n=== CREANDO SCRIPTS DE UTILIDAD ===" -ForegroundColor Green
-
-# Script para ejecutar archivos SQL
-$sqlRunnerScript = @"
-@echo off
-echo === EJECUTANDO ARCHIVOS SQL ===
-
-set PROJECT_DIR=%USERPROFILE%\Proyects\DAW-Proyecto
-set SQL_DIR=%PROJECT_DIR%\scripts
-
-echo Buscando archivos SQL...
-
-if exist "%SQL_DIR%\crearBaseDatos.sql" (
-    echo Ejecutando crearBaseDatos.sql...
-    psql -U ekonsumo_user -d ekonsumo -f "%SQL_DIR%\crearBaseDatos.sql"
-) else (
-    echo No se encontró crearBaseDatos.sql
-)
-
-if exist "%SQL_DIR%\datosPrueba.sql" (
-    echo Ejecutando datosPrueba.sql...
-    psql -U ekonsumo_user -d ekonsumo -f "%SQL_DIR%\datosPrueba.sql"
-) else (
-    echo No se encontró datosPrueba.sql
-)
-
-echo.
-echo Verificando tablas creadas...
-psql -U ekonsumo_user -d ekonsumo -c "SELECT table_name FROM information_schema.tables WHERE table_schema='public';"
-
-pause
-"@
-
-$sqlRunnerScript | Out-File -FilePath "$env:USERPROFILE\Proyects\DAW-Proyecto\scripts\ejecutar-sql.bat" -Encoding ASCII
-
-# Script para iniciar el entorno de desarrollo
-$startDevScript = @"
-@echo off
-echo === INICIANDO ENTORNO DE DESARROLLO EKONSUMO ===
-echo.
-
-echo 1. Iniciando PostgreSQL...
-net start postgresql-x64-16
-
-echo.
-echo 2. Abriendo VS Code...
-code "%USERPROFILE%\Proyects\DAW-Proyecto"
-
-echo.
-echo 3. Instrucciones:
-echo    - Backend: Abrir terminal en Backend y ejecutar: npm run dev
-echo    - Frontend: Abrir terminal en frontend y ejecutar: npm run serve
-echo    - Backend: http://localhost:3000
-echo    - Frontend: http://localhost:8080
-echo.
-
-echo Presiona cualquier tecla para abrir la carpeta del proyecto...
-pause > nul
-explorer "%USERPROFILE%\Proyects\DAW-Proyecto"
-"@
-
-$startDevScript | Out-File -FilePath "$env:USERPROFILE\Proyects\DAW-Proyecto\scripts\iniciar-desarrollo.bat" -Encoding ASCII
-
-# Script para gestión de dependencias
-$depsScript = @"
-@echo off
-echo === GESTION DE DEPENDENCIAS NPM ===
-echo.
-
-echo 1. Verificando dependencias obsoletas...
-npx npm-check-updates
-
-echo.
-echo 2. Comandos utiles:
-echo    - Actualizar todas: npx npm-check-updates -u && npm install
-echo    - Actualizar una: npm update nombre-paquete
-echo    - Ver vulnerabilidades: npm audit
-echo    - Reparar: npm audit fix
-echo.
-
-echo 3. Limpiar cache y reinstalar:
-echo    npm cache clean --force
-echo    rm -rf node_modules package-lock.json
-echo    npm install
-echo.
-
-pause
-"@
-
-$depsScript | Out-File -FilePath "$env:USERPROFILE\Proyects\DAW-Proyecto\scripts\gestionar-dependencias.bat" -Encoding ASCII
-
-Write-Host "✅ Scripts de utilidad creados" -ForegroundColor Green
-
-# VERIFICACIÓN FINAL
-# ==============================================
-
-Write-Host "`n=== VERIFICACIÓN FINAL ===" -ForegroundColor Green
-
-Write-Host "1. Node.js: " -NoNewline
-if (Test-CommandExists "node") {
-    Write-Host "✅ $(node --version)" -ForegroundColor Green
-} else {
-    Write-Host "❌ No instalado" -ForegroundColor Red
+Write-Output "==> Creando index.js de ejemplo en backend"
+$indexJsPath = Join-Path $BACKEND_DIR "index.js"
+if (-not (Test-Path $indexJsPath)) {
+  @"
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 3000;
+app.use(express.json());
+app.get('/api/health', (req, res) => res.json({status: 'ok'}));
+app.listen(port, () => console.log(`Backend listening on ${port}`));
+"@ | Out-File -Encoding utf8 $indexJsPath
 }
 
-Write-Host "2. npm: " -NoNewline
-if (Test-CommandExists "npm") {
-    Write-Host "✅ $(npm --version)" -ForegroundColor Green
-} else {
-    Write-Host "❌ No instalado" -ForegroundColor Red
+Write-Output "==> Creando frontend sencillo (index.html + src/main.js)"
+$frontendSrc = Join-Path $FRONTEND_DIR "src"
+New-Item -ItemType Directory -Force -Path $frontendSrc | Out-Null
+$mainJs = Join-Path $frontendSrc "main.js"
+if (-not (Test-Path $mainJs)) {
+  @"
+import { createApp } from 'vue';
+const App = { template: '<div><h1>Frontend</h1><p>API: <a href=\"/api/health\">/api/health</a></p></div>' };
+createApp(App).mount('#app');
+"@ | Out-File -Encoding utf8 $mainJs
+}
+$indexHtml = Join-Path $FRONTEND_DIR "index.html"
+if (-not (Test-Path $indexHtml)) {
+  @"
+<!doctype html>
+<html>
+  <head><meta charset='utf-8'><title>Frontend</title></head>
+  <body><div id='app'></div><script type='module' src='/src/main.js'></script></body>
+</html>
+"@ | Out-File -Encoding utf8 $indexHtml
 }
 
-Write-Host "3. Git: " -NoNewline
-if (Test-CommandExists "git") {
-    Write-Host "✅ $(git --version)" -ForegroundColor Green
-} else {
-    Write-Host "❌ No instalado" -ForegroundColor Red
-}
+Write-Output "==> Instalando dependencias de ejemplo"
+npm install express --prefix $BACKEND_DIR | Out-Null
+npm install vue --prefix $FRONTEND_DIR | Out-Null
 
-Write-Host "4. PostgreSQL: " -NoNewline
-if (Test-CommandExists "psql") {
-    Write-Host "✅ Instalado" -ForegroundColor Green
-} else {
-    Write-Host "❌ No instalado" -ForegroundColor Red
-}
-
-Write-Host "5. VS Code: " -NoNewline
-if (Test-CommandExists "code") {
-    Write-Host "✅ Instalado" -ForegroundColor Green
-} else {
-    Write-Host "❌ No instalado" -ForegroundColor Red
-}
-
-# INSTRUCCIONES FINALES
-# ==============================================
-
-Write-Host "`n🎯 CONFIGURACIÓN COMPLETADA!" -ForegroundColor Green
-Write-Host "=" * 50 -ForegroundColor Cyan
-
-Write-Host "`n📁 ESTRUCTURA DEL PROYECTO:" -ForegroundColor Yellow
-Write-Host "   $env:USERPROFILE\Proyects\DAW-Proyecto\" -ForegroundColor White
-Write-Host "   ├── Backend\" -ForegroundColor White
-Write-Host "   ├── frontend\" -ForegroundColor White
-Write-Host "   ├── sql\" -ForegroundColor White
-Write-Host "   └── .vscode\" -ForegroundColor White
-
-Write-Host "`n🚀 PARA COMENZAR:" -ForegroundColor Yellow
-Write-Host "   1. Ejecuta: 'iniciar-desarrollo.bat'" -ForegroundColor White
-Write-Host "   2. Coloca tus archivos SQL en la carpeta 'sql'" -ForegroundColor White
-Write-Host "   3. Ejecuta: 'ejecutar-sql.bat' para crear tablas" -ForegroundColor White
-Write-Host "   4. En VS Code:" -ForegroundColor White
-Write-Host "      - Backend: cd Backend && npm run dev" -ForegroundColor White
-Write-Host "      - Frontend: cd frontend && npm run serve" -ForegroundColor White
-
-Write-Host "`n🌐 URLs DE DESARROLLO:" -ForegroundColor Yellow
-Write-Host "   - Frontend: http://localhost:8080" -ForegroundColor White
-Write-Host "   - Backend: http://localhost:3000" -ForegroundColor White
-Write-Host "   - API Docs: http://localhost:3000/api-docs" -ForegroundColor White
-
-Write-Host "`n🔧 HERRAMIENTAS DISPONIBLES:" -ForegroundColor Yellow
-Write-Host "   - iniciar-desarrollo.bat: Inicia todo el entorno" -ForegroundColor White
-Write-Host "   - ejecutar-sql.bat: Ejecuta archivos SQL" -ForegroundColor White
-Write-Host "   - gestionar-dependencias.bat: Gestiona paquetes npm" -ForegroundColor White
-
-Write-Host "`n📝 NOTAS IMPORTANTES:" -ForegroundColor Yellow
-Write-Host "   - PostgreSQL puede requerir configuración manual de contraseña" -ForegroundColor White
-Write-Host "   - Ejecuta los scripts .bat como Administrador si hay problemas" -ForegroundColor White
-Write-Host "   - Las dependencias 'deprecated' son normales en desarrollo" -ForegroundColor White
-
-Write-Host "`n¡Listo para desarrollar en Windows 11! 🎉" -ForegroundColor Green
-
-# Abrir la carpeta del proyecto
-$projectPath = "$env:USERPROFILE\Proyects\DAW-Proyecto"
-Write-Host "`nAbriendo carpeta del proyecto: $projectPath" -ForegroundColor Cyan
-Start-Process "explorer.exe" -ArgumentList $projectPath
+Write-Output "==> Resultado y siguientes pasos"
+Write-Output "Estructura creada en: $APP_DIR"
+Write-Output "Backend .env: $envPath"
+Write-Output "Para ejecutar (como usuario normal):"
+Write-Output "  cd $BACKEND_DIR"
+Write-Output "  npm run dev   # requiere nodemon si quieres reinicio automático (npm i -g nodemon)"
+Write-Output "  o: pm2 start index.js --name dev-backend --watch --cwd $BACKEND_DIR"
+Write-Output "Frontend simple: sirve $FRONTEND_DIR con 'npx serve -s . -l 8080' o configura Vue CLI."

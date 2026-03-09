@@ -21,6 +21,14 @@
             <label for="confirmar-password">Confirmar Contraseña</label>
             <input type="password" id="confirmar-password" v-model="confirmarPassword" placeholder="Confirma tu contraseña" required>
           </div>
+          <div class="form-group">
+            <label for="movil">Móvil (opcional)</label>
+            <input type="tel" id="movil" v-model="movil" placeholder="Ingresa tu número de móvil">
+          </div>
+          <div class="form-group">
+            <label for="familia">Familia (opcional)</label>
+            <input type="number" id="familia" v-model="familia" placeholder="Número de familia" min="1">
+          </div>
           <button type="submit" class="btn btn-primary">Registrarse</button>
         </form>
         <div class="text-center mt-4">
@@ -44,6 +52,8 @@ export default {
       correo: '',
       password: '',
       confirmarPassword: '',
+      movil: '',
+      familia: null,
     };
   },
   methods: {
@@ -58,8 +68,9 @@ export default {
           nombre: this.nombre,
           correo: this.correo,
           password: this.password,
-          rol: 'usuario', // Puedes cambiar el rol según sea necesario
-          movil: '', // Si no se usa, puedes dejarlo vacío
+          rol: 'usuario',
+          movil: this.movil,
+          familia: this.familia || null,
         });
 
         alertStore.showAlert('Registro exitoso. Ahora puedes iniciar sesión.', 'success');

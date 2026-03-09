@@ -7,11 +7,16 @@ const emailService = {
     try {
       // Configuracion transporte de correo
       const transporter = nodemailer.createTransport({
-        service: 'gmail', // Cambia esto según tu proveedor de correo
+        service: 'gmail',
         auth: {
-          user: process.env.EMAIL_USER, // correo
-          pass: process.env.EMAIL_PASS, // password
-        },
+          type: 'OAuth2',
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+          clientId: process.env.OAUTH_CLIENTID,
+          clientSecret: process.env.OAUTH_CLIENT_SECRET,
+          refreshToken: process.env.OAUTH_REFRESH_TOKEN
+        }
+
       });
 
       // Configuracion correo
@@ -24,9 +29,9 @@ const emailService = {
 
       // Enviar el correo
       await transporter.sendMail(mailOptions);
-      console.log(`Correo enviado a ${destinatario}`);
+      logger.info(`Correo enviado correctamente a: ${destinatario}`);
     } catch (error) {
-      console.error('Error al enviar el correo:', error);
+      logger.error(`Error al enviar correo a ${destinatario}:`, error);
       throw new Error('No se pudo enviar el correo');
     }
   },

@@ -1,6 +1,7 @@
 const express = require('express');
 const ProductoController = require('../controllers/ProductoController');
 const authMiddleware = require('../middlewares/auth'); // Middleware de autenticación
+const adminMiddleware = require('../middlewares/admin'); // Middleware de autorización para administradores
 const upload = require('../config/multer'); // Middleware para manejar archivos
 
 const router = express.Router();
@@ -65,7 +66,25 @@ router.post('/crear', authMiddleware, upload.single('imagen'), ProductoControlle
  *       500:
  *         description: Error al obtener los productos
  */
-router.get('/obtenerTodos', authMiddleware, ProductoController.listar);
+router.get('/obtenerTodos', authMiddleware, adminMiddleware, ProductoController.listar);
+
+/**
+ * @swagger
+ * /api/productos/misProductos:
+ *   get:
+ *     summary: Obtener productos del proveedor asignado al usuario
+ *     tags: [Productos]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de productos del proveedor asignado
+ *       403:
+ *         description: No tienes ningún proveedor asignado
+ *       500:
+ *         description: Error al obtener los productos
+ */
+router.get('/misProductos', authMiddleware, ProductoController.listarMisProductos);
 
 /**
  * @swagger

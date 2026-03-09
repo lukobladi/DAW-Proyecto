@@ -6,6 +6,7 @@ const validators = {
     body('nombre').notEmpty().withMessage('El nombre es obligatorio'),
     body('correo').isEmail().withMessage('El correo no es válido'),
     body('password').isLength({ min: 6 }).withMessage('La contraseña debe tener al menos 6 caracteres'),
+    body('familia').optional().isInt({ min: 1 }).withMessage('La familia debe ser un número entero positivo'),
   ],
   // Validación para crear un pedido
   crearPedido: [

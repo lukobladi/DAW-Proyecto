@@ -2,13 +2,13 @@ const pool = require('../config/db');
 
 const Pedido = {
   // Crear un nuevo pedido
-    async create(fecha_apertura, fecha_cierre, fecha_entrega, id_usuario_encargado, id_proveedor, estado) {
+    async create(fecha_apertura, fecha_cierre, fecha_entrega, familia, id_proveedor, estado) {
       const query = `
-        INSERT INTO Pedido (Fecha_Apertura, Fecha_Cierre, Fecha_Entrega, ID_Usuario_Encargado, ID_Proveedor, Estado, Fecha_Modificacion)
+        INSERT INTO Pedido (fecha_apertura, fecha_cierre, fecha_entrega, familia, id_proveedor, estado, fecha_modificacion)
         VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP)
         RETURNING *;
       `;
-      const values = [fecha_apertura, fecha_cierre, fecha_entrega, id_usuario_encargado, id_proveedor, estado];
+      const values = [fecha_apertura, fecha_cierre, fecha_entrega, familia, id_proveedor, estado];
       const { rows } = await pool.query(query, values);
       return rows[0];
     },
@@ -22,20 +22,34 @@ const Pedido = {
 
   // Obtener un pedido por ID
   async findById(id) {
-    const query = 'SELECT * FROM Pedido WHERE ID_Pedido = $1;';
+    const query = 'SELECT * FROM Pedido WHERE id_pedido = $1;';
     const { rows } = await pool.query(query, [id]);
     return rows[0];
   },
 
+  // Obtener pedidos por proveedor
+  async findByProveedor(id_proveedor) {
+    const query = 'SELECT * FROM Pedido WHERE id_proveedor = $1;';
+    const { rows } = await pool.query(query, [id_proveedor]);
+    return rows;
+  },
+
+  // Obtener pedidos por familia
+  async findByFamilia(familia) {
+    const query = 'SELECT * FROM Pedido WHERE familia = $1;';
+    const { rows } = await pool.query(query, [familia]);
+    return rows;
+  },
+
   // Actualizar un pedido
-  async update(id, fecha_apertura, fecha_cierre, fecha_entrega, id_usuario_encargado, id_proveedor, estado) {
+  async update(id, fecha_apertura, fecha_cierre, fecha_entrega, familia, id_proveedor, estado) {
     const query = `
       UPDATE Pedido
-      SET Fecha_Apertura = $1, Fecha_Cierre = $2, Fecha_Entrega = $3, ID_Usuario_Encargado = $4, ID_Proveedor = $5, Estado = $6, Fecha_Modificacion = CURRENT_TIMESTAMP
-      WHERE ID_Pedido = $7
+      SET fecha_apertura = $1, fecha_cierre = $2, fecha_entrega = $3, familia = $4, id_proveedor = $5, estado = $6, fecha_modificacion = CURRENT_TIMESTAMP
+      WHERE id_pedido = $7
       RETURNING *;
     `;
-    const values = [fecha_apertura, fecha_cierre, fecha_entrega, id_usuario_encargado, id_proveedor, estado, id];
+    const values = [fecha_apertura, fecha_cierre, fecha_entrega, familia, id_proveedor, estado, id];
     const { rows } = await pool.query(query, values);
     return rows[0];
   },
@@ -44,8 +58,8 @@ const Pedido = {
   async changeStatus(id, estado) {
     const query = `
       UPDATE Pedido
-      SET Estado = $1, Fecha_Modificacion = CURRENT_TIMESTAMP
-      WHERE ID_Pedido = $2
+      SET estado = $1, fecha_modificacion = CURRENT_TIMESTAMP
+      WHERE id_pedido = $2
       RETURNING *;
     `;
     const values = [estado, id];
@@ -59,7 +73,7 @@ const Pedido = {
 
   // Eliminar un pedido
   async delete(id) {
-    const query = 'DELETE FROM Pedido WHERE ID_Pedido = $1;';
+    const query = 'DELETE FROM Pedido WHERE id_pedido = $1;';
     await pool.query(query, [id]);
   },
 };

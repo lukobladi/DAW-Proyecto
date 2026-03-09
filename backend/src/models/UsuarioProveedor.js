@@ -3,6 +3,11 @@ const pool = require('../config/db');
 
 class UsuarioProveedor {
   static async crear({ id_usuario, id_proveedor }) {
+    // Eliminar cualquier relación anterior del usuario (relación 1:1)
+    await pool.query('DELETE FROM Usuario_Proveedor WHERE ID_Usuario = $1', [id_usuario]);
+    // Eliminar cualquier relación anterior para este proveedor
+    await pool.query('DELETE FROM Usuario_Proveedor WHERE ID_Proveedor = $1', [id_proveedor]);
+    
     const query = `
       INSERT INTO Usuario_Proveedor (ID_Usuario, ID_Proveedor)
       VALUES ($1, $2)
@@ -30,9 +35,6 @@ class UsuarioProveedor {
     const { rows } = await pool.query(query, [id_usuario, id_proveedor]);
     return rows[0];
   }
-
-  
-  
 }
 
 module.exports = UsuarioProveedor;

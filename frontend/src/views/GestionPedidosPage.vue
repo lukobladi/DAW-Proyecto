@@ -14,7 +14,7 @@
           <tr>
             <th>ID</th>
             <th>Proveedor</th>
-            <th>Encargado</th>
+            <th>Familia</th>
             <th>Apertura</th>
             <th>Cierre</th>
             <th>Entrega</th>
@@ -26,7 +26,7 @@
           <tr v-for="pedido in pedidos" :key="pedido.id_pedido">
             <td>{{ pedido.id_pedido }}</td>
             <td>{{ nombreProveedor(pedido.id_proveedor) }}</td>
-            <td>{{ nombreUsuario(pedido.id_usuario_encargado) }}</td>
+            <td>{{ pedido.familia || '-' }}</td>
             <td>{{ formatFecha(pedido.fecha_apertura) }}</td>
             <td>{{ formatFecha(pedido.fecha_cierre) }}</td>
             <td>{{ formatFecha(pedido.fecha_entrega) }}</td>
@@ -52,7 +52,7 @@
       <div class="modal-card">
         <h4>{{ modoEdicion ? 'Editar pedido' : 'Nuevo pedido' }}</h4>
         <form @submit.prevent="guardarPedido">
-          <div class="mb-2">
+          <div v-if="isAdmin" class="mb-2">
             <label class="form-label">Proveedor</label>
             <select v-model.number="form.id_proveedor" class="form-select" required>
               <option disabled :value="null">Selecciona proveedor</option>
@@ -65,16 +65,16 @@
               </option>
             </select>
           </div>
-          <div class="mb-2">
-            <label class="form-label">Usuario encargado</label>
-            <select v-model.number="form.id_usuario_encargado" class="form-select" required>
-              <option disabled :value="null">Selecciona usuario</option>
+          <div v-if="isAdmin" class="mb-2">
+            <label class="form-label">Familia</label>
+            <select v-model.number="form.familia" class="form-select" required>
+              <option disabled :value="null">Selecciona familia</option>
               <option
-                v-for="usuario in usuarios"
-                :key="usuario.id_usuario"
-                :value="usuario.id_usuario"
+                v-for="familia in familias"
+                :key="familia"
+                :value="familia"
               >
-                {{ usuario.nombre }}
+                Familia {{ familia }}
               </option>
             </select>
           </div>
@@ -115,12 +115,13 @@
 <script>
 import api from '@/services/api';
 import { alertStore } from '@/store/alertStore';
+import { useAuthStore } from '@/store';
 
 function pedidoVacio() {
   return {
     id_pedido: null,
     id_proveedor: null,
-    id_usuario_encargado: null,
+    familia: null,
     fecha_apertura: '',
     fecha_cierre: '',
     fecha_entrega: '',
@@ -133,7 +134,7 @@ export default {
     return {
       pedidos: [],
       proveedores: [],
-      usuarios: [],
+      familias: [],
       cargando: false,
       errorCarga: '',
       accionandoId: null,
@@ -142,6 +143,12 @@ export default {
       guardando: false,
       form: pedidoVacio(),
     };
+  },
+  computed: {
+    isAdmin() {
+      const authStore = useAuthStore();
+      return authStore.user?.role === 'admin';
+    },
   },
   async created() {
     await this.cargarDatos();
@@ -164,9 +171,6 @@ export default {
     nombreProveedor(idProveedor) {
       return this.proveedores.find((item) => item.id_proveedor === idProveedor)?.nombre || '-';
     },
-    nombreUsuario(idUsuario) {
-      return this.usuarios.find((item) => item.id_usuario === idUsuario)?.nombre || '-';
-    },
     estadoClass(estado) {
       const classes = {
         pendiente: 'estado-pendiente',
@@ -181,16 +185,30 @@ export default {
       this.cargando = true;
       this.errorCarga = '';
       try {
-        const [pedidosResponse, proveedoresResponse, usuariosResponse] = await Promise.all([
-          api.getPedidos(),
+        let pedidosResponse;
+        if (this.isAdmin) {
+          pedidosResponse = await api.getPedidos();
+        } else {
+          pedidosResponse = await api.getMisPedidos();
+        }
+        const [proveedoresResponse, usuariosResponse] = await Promise.all([
           api.getProveedores(),
           api.getUsuarios(),
         ]);
         this.pedidos = pedidosResponse.data || [];
         this.proveedores = proveedoresResponse.data || [];
-        this.usuarios = usuariosResponse.data || [];
-      } catch {
-        this.errorCarga = 'No se pudieron cargar pedidos, proveedores y usuarios.';
+        const usuarios = usuariosResponse.data || [];
+        const familiasSet = new Set();
+        usuarios.forEach((u) => {
+          if (u.familia) familiasSet.add(u.familia);
+        });
+        this.familias = Array.from(familiasSet).sort((a, b) => a - b);
+      } catch (error) {
+        if (error.response?.status === 403) {
+          this.errorCarga = error.response.data.error || 'No tienes acceso a pedidos.';
+        } else {
+          this.errorCarga = 'No se pudieron cargar pedidos, proveedores y familias.';
+        }
       } finally {
         this.cargando = false;
       }
@@ -205,7 +223,7 @@ export default {
       this.form = {
         id_pedido: pedido.id_pedido,
         id_proveedor: pedido.id_proveedor,
-        id_usuario_encargado: pedido.id_usuario_encargado,
+        familia: pedido.familia,
         fecha_apertura: this.toInputDate(pedido.fecha_apertura),
         fecha_cierre: this.toInputDate(pedido.fecha_cierre),
         fecha_entrega: this.toInputDate(pedido.fecha_entrega),
@@ -221,7 +239,7 @@ export default {
       try {
         const payload = {
           id_proveedor: this.form.id_proveedor,
-          id_usuario_encargado: this.form.id_usuario_encargado,
+          familia: this.form.familia,
           fecha_apertura: this.form.fecha_apertura,
           fecha_cierre: this.form.fecha_cierre,
           fecha_entrega: this.form.fecha_entrega || null,

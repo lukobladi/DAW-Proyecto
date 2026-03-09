@@ -1,6 +1,7 @@
 const express = require('express');
 const PedidoController = require('../controllers/PedidoController');
 const authMiddleware = require('../middlewares/auth'); // Middleware de autenticación
+const adminMiddleware = require('../middlewares/admin'); // Middleware de autorización para administradores
 
 const router = express.Router();
 
@@ -61,7 +62,25 @@ router.post('/crear', authMiddleware, PedidoController.crear);
  *       500:
  *         description: Error al obtener los pedidos
  */
-router.get('/obtenerTodos', authMiddleware, PedidoController.listar);
+router.get('/obtenerTodos', authMiddleware, adminMiddleware, PedidoController.listar);
+
+/**
+ * @swagger
+ * /api/pedidos/misPedidos:
+ *   get:
+ *     summary: Obtener pedidos del proveedor asignado al usuario
+ *     tags: [Pedidos]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de pedidos del proveedor asignado
+ *       403:
+ *         description: No tienes ningún proveedor asignado
+ *       500:
+ *         description: Error al obtener los pedidos
+ */
+router.get('/misPedidos', authMiddleware, PedidoController.listarPorProveedorAsignado);
 
 /**
  * @swagger

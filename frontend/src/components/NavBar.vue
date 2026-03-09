@@ -13,12 +13,13 @@
       <router-link to="/compras" class="navbar-item">Compras</router-link>
       <router-link to="/historial" class="navbar-item">Historial</router-link>
       <router-link to="/gestion-pagos" class="navbar-item">Pagos</router-link>
-      <router-link to="/gestion-usuarios" class="navbar-item">Gestión de Usuarios</router-link>
+      <router-link v-if="isAdmin" to="/gestion-usuarios" class="navbar-item">Gestión de Usuarios</router-link>
+      <router-link to="/gestion-productos" class="navbar-item">Gestión de Productos</router-link>
+      <router-link to="/gestion-pedidos" class="navbar-item">Gestión de Pedidos</router-link>
+      <router-link v-if="isAdmin" to="/gestion-proveedores" class="navbar-item">Gestión de Proveedores</router-link>
+      <router-link v-if="isAdmin" to="/gestion-pedidos-periodicos" class="navbar-item">Pedidos Periódicos</router-link>
       <router-link to="/configuracion" class="navbar-item">Configuración</router-link>
       <router-link to="/soporte" class="navbar-item">Soporte</router-link>
-      <router-link v-if="isAdmin" to="/gestion-proveedores" class="navbar-item">Gestión de Proveedores</router-link>
-      <router-link v-if="isAdmin" to="/gestion-productos" class="navbar-item">Gestión de Productos</router-link>
-      <router-link v-if="isAdmin" to="/gestion-pedidos" class="navbar-item">Gestión de Pedidos</router-link>
       <router-link v-if="!isAuthenticated" to="/login" class="navbar-item navbar-login">
         <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
       </router-link>
@@ -31,12 +32,14 @@
 
 <script>
 import { useAuthStore } from '@/store';
+import api from '@/services/api';
 
 export default {
   name: 'NavBar',
   data() {
     return {
-      isMenuOpen: false, // Controla el estado del menú en dispositivos móviles
+      isMenuOpen: false,
+      tieneProveedorAsignado: false,
     };
   },
   computed: {
@@ -48,17 +51,44 @@ export default {
       const authStore = useAuthStore();
       return authStore.user.role === 'admin';
     },
+    isGestor() {
+      return this.tieneProveedorAsignado;
+    },
+  },
+  created() {
+    this.verificarProveedor();
+  },
+  watch: {
+    isAuthenticated(val) {
+      if (val) {
+        this.verificarProveedor();
+      }
+    },
   },
   methods: {
     toggleMenu() {
-      this.isMenuOpen = !this.isMenuOpen; // Alterna el estado del menú
+      this.isMenuOpen = !this.isMenuOpen;
+    },
+    async verificarProveedor() {
+      if (!this.isAuthenticated || this.isAdmin) {
+        this.tieneProveedorAsignado = this.isAdmin;
+        return;
+      }
+      try {
+        const authStore = useAuthStore();
+        const idUsuario = authStore.user.id_usuario;
+        const response = await api.getUsuarios();
+        const usuarios = response.data || [];
+        const usuario = usuarios.find(u => u.id_usuario === idUsuario);
+        this.tieneProveedorAsignado = usuario && usuario.familia;
+      } catch {
+        this.tieneProveedorAsignado = false;
+      }
     },
     async logout() {
       try {
         const authStore = useAuthStore();
         authStore.logout();
-
-        // Redirige al usuario a la página de inicio de sesión
         this.$router.push({ name: 'Login' }).catch((err) => {
           console.error('Error al redirigir a la página de inicio de sesión:', err);
         });

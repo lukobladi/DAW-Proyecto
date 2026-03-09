@@ -1,80 +1,277 @@
 <template>
-  <div class="gestion-pedidos-periodicos-page">
-    <NavBar />
-    <div class="gestion-pedidos-periodicos-content">
-      <h2>Gestión de Pedidos Periódicos</h2>
-      <button @click="crearPedidoPeriodico" class="btn btn-primary">Crear Pedido Periódico</button>
-      <div class="lista-pedidos-periodicos">
-        <div v-for="pedidoPeriodico in pedidosPeriodicos" :key="pedidoPeriodico.id" class="pedido-periodico-card">
-          <h3>Pedido Periódico #{{ pedidoPeriodico.id }}</h3>
-          <p>Frecuencia: {{ pedidoPeriodico.frecuencia }}</p>
-          <p>Fecha de Inicio: {{ pedidoPeriodico.fechaInicio }}</p>
-          <p>Fecha de Fin: {{ pedidoPeriodico.fechaFin }}</p>
-          <button @click="editarPedidoPeriodico(pedidoPeriodico.id)" class="btn btn-secondary">Editar</button>
-          <button @click="eliminarPedidoPeriodico(pedidoPeriodico.id)" class="btn btn-danger">Eliminar</button>
-        </div>
+  <div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="mb-0">Gestion de Pedidos Periodicos</h2>
+      <button class="btn btn-primary" @click="abrirModalCrear">Crear pedido periodico</button>
+    </div>
+
+    <div v-if="cargando" class="estado">Cargando pedidos periodicos...</div>
+    <div v-else-if="errorCarga" class="estado error">{{ errorCarga }}</div>
+
+    <div v-else-if="pedidosPeriodicos.length === 0" class="estado">No hay pedidos periodicos.</div>
+
+    <div v-else class="table-responsive">
+      <table class="table table-striped align-middle">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Proveedor</th>
+            <th>Periodicidad</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th>Activo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="pedido in pedidosPeriodicos" :key="pedido.id_pedido_periodico">
+            <td>{{ pedido.id_pedido_periodico }}</td>
+            <td>{{ nombreProveedor(pedido.id_proveedor) }}</td>
+            <td>{{ pedido.periodicidad }} dias</td>
+            <td>{{ formatFecha(pedido.fecha_inicio) }}</td>
+            <td>{{ formatFecha(pedido.fecha_fin) }}</td>
+            <td>
+              <span :class="['estado-pill', pedido.activo ? 'activo' : 'inactivo']">
+                {{ pedido.activo ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+            <td class="acciones">
+              <button class="btn btn-sm btn-success" @click="abrirModalEditar(pedido)">Editar</button>
+              <button class="btn btn-sm btn-danger" @click="eliminarPedido(pedido.id_pedido_periodico)">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div v-if="mostrarModal" class="modal-overlay" @click.self="cerrarModal">
+      <div class="modal-card">
+        <h4>{{ modoEdicion ? 'Editar pedido periodico' : 'Nuevo pedido periodico' }}</h4>
+        <form @submit.prevent="guardarPedido">
+          <div class="mb-2">
+            <label class="form-label">Proveedor</label>
+            <select v-model.number="form.id_proveedor" class="form-select" required>
+              <option disabled :value="null">Selecciona proveedor</option>
+              <option v-for="proveedor in proveedores" :key="proveedor.id_proveedor" :value="proveedor.id_proveedor">
+                {{ proveedor.nombre }}
+              </option>
+            </select>
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Periodicidad (dias)</label>
+            <input v-model.number="form.periodicidad" type="number" min="1" class="form-control" required />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Fecha Inicio</label>
+            <input v-model="form.fecha_inicio" type="date" class="form-control" required />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Fecha Fin</label>
+            <input v-model="form.fecha_fin" type="date" class="form-control" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Dia Apertura Pedido</label>
+            <input v-model.number="form.dia_apertura" type="number" min="1" max="31" class="form-control" placeholder="Dia del mes (1-31)" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Dia Cierre Pedido</label>
+            <input v-model.number="form.dia_cierre" type="number" min="1" max="31" class="form-control" placeholder="Dia del mes (1-31)" />
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Dia Entrega</label>
+            <input v-model.number="form.dia_entrega" type="number" min="1" max="31" class="form-control" placeholder="Dia del mes (1-31)" />
+          </div>
+          <div class="form-check mb-3">
+            <input id="activo" v-model="form.activo" class="form-check-input" type="checkbox" />
+            <label class="form-check-label" for="activo">Activo</label>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary" type="submit" :disabled="guardando">
+              {{ guardando ? 'Guardando...' : 'Guardar' }}
+            </button>
+            <button class="btn btn-secondary" type="button" @click="cerrarModal">Cancelar</button>
+          </div>
+        </form>
       </div>
     </div>
-    <Footer />
   </div>
 </template>
 
 <script>
+import api from '@/services/api';
+import { alertStore } from '@/store/alertStore';
+
+function pedidoVacio() {
+  return {
+    id_pedido_periodico: null,
+    id_proveedor: null,
+    periodicidad: 7,
+    fecha_inicio: '',
+    fecha_fin: '',
+    dia_apertura: null,
+    dia_cierre: null,
+    dia_entrega: null,
+    activo: true,
+  };
+}
 
 export default {
-
   data() {
     return {
-      pedidosPeriodicos: [
-        // Ejemplo de datos de pedidos periódicos
-        { id: 1, frecuencia: 'Semanal', fechaInicio: '2023-10-01', fechaFin: '2023-12-31' },
-        { id: 2, frecuencia: 'Mensual', fechaInicio: '2023-10-01', fechaFin: '2023-12-31' }
-      ]
+      pedidosPeriodicos: [],
+      proveedores: [],
+      cargando: false,
+      errorCarga: '',
+      mostrarModal: false,
+      modoEdicion: false,
+      guardando: false,
+      form: pedidoVacio(),
     };
   },
+  async created() {
+    await this.cargarDatos();
+  },
   methods: {
-    crearPedidoPeriodico() {
-      // Lógica para crear un nuevo pedido periódico
-      console.log('Creando pedido periódico...');
+    formatFecha(fecha) {
+      if (!fecha) return '-';
+      return new Date(fecha).toLocaleDateString('es-ES');
     },
-    editarPedidoPeriodico(pedidoPeriodicoId) {
-      // Lógica para editar un pedido periódico
-      console.log('Editando pedido periódico:', pedidoPeriodicoId);
+    nombreProveedor(idProveedor) {
+      return this.proveedores.find(p => p.id_proveedor === idProveedor)?.nombre || '-';
     },
-    eliminarPedidoPeriodico(pedidoPeriodicoId) {
-      // Lógica para eliminar un pedido periódico
-      console.log('Eliminando pedido periódico:', pedidoPeriodicoId);
-    }
-  }
+    async cargarDatos() {
+      this.cargando = true;
+      this.errorCarga = '';
+      try {
+        const [pedidosResponse, proveedoresResponse] = await Promise.all([
+          api.getPedidosPeriodicos(),
+          api.getProveedores(),
+        ]);
+        this.pedidosPeriodicos = pedidosResponse.data || [];
+        this.proveedores = proveedoresResponse.data || [];
+      } catch {
+        this.errorCarga = 'No se pudieron cargar los datos.';
+      } finally {
+        this.cargando = false;
+      }
+    },
+    abrirModalCrear() {
+      this.modoEdicion = false;
+      this.form = pedidoVacio();
+      this.mostrarModal = true;
+    },
+    abrirModalEditar(pedido) {
+      this.modoEdicion = true;
+      this.form = {
+        id_pedido_periodico: pedido.id_pedido_periodico,
+        id_proveedor: pedido.id_proveedor,
+        periodicidad: pedido.periodicidad,
+        fecha_inicio: pedido.fecha_inicio ? pedido.fecha_inicio.split('T')[0] : '',
+        fecha_fin: pedido.fecha_fin ? pedido.fecha_fin.split('T')[0] : '',
+        dia_apertura: pedido.dia_apertura,
+        dia_cierre: pedido.dia_cierre,
+        dia_entrega: pedido.dia_entrega,
+        activo: pedido.activo,
+      };
+      this.mostrarModal = true;
+    },
+    cerrarModal() {
+      this.mostrarModal = false;
+    },
+    async guardarPedido() {
+      this.guardando = true;
+      try {
+        const payload = {
+          id_proveedor: this.form.id_proveedor,
+          periodicidad: this.form.periodicidad,
+          fecha_inicio: this.form.fecha_inicio || null,
+          fecha_fin: this.form.fecha_fin || null,
+          dia_apertura: this.form.dia_apertura || null,
+          dia_cierre: this.form.dia_cierre || null,
+          dia_entrega: this.form.dia_entrega || null,
+          activo: Boolean(this.form.activo),
+        };
+
+        if (this.modoEdicion) {
+          await api.actualizarPedidoPeriodico(this.form.id_pedido_periodico, payload);
+          alertStore.showAlert('Pedido periodico actualizado correctamente.', 'success');
+        } else {
+          await api.crearPedidoPeriodico(payload);
+          alertStore.showAlert('Pedido periodico creado correctamente.', 'success');
+        }
+
+        await this.cargarDatos();
+        this.cerrarModal();
+      } catch {
+        alertStore.showAlert('No se pudo guardar el pedido periodico.', 'danger');
+      } finally {
+        this.guardando = false;
+      }
+    },
+    async eliminarPedido(id) {
+      if (!window.confirm('Se eliminara el pedido periodico. Quieres continuar?')) {
+        return;
+      }
+      try {
+        await api.eliminarPedidoPeriodico(id);
+        alertStore.showAlert('Pedido periodico eliminado correctamente.', 'success');
+        await this.cargarDatos();
+      } catch {
+        alertStore.showAlert('No se pudo eliminar el pedido periodico.', 'danger');
+      }
+    },
+  },
 };
 </script>
 
 <style scoped>
-.gestion-pedidos-periodicos-page {
+.estado {
+  padding: 1rem 0;
+}
+
+.estado.error {
+  color: #dc3545;
+}
+
+.acciones {
   display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+  gap: 0.4rem;
 }
 
-.gestion-pedidos-periodicos-content {
-  flex: 1;
-  padding: 2rem;
+.estado-pill {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.8rem;
 }
 
-.lista-pedidos-periodicos {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
+.estado-pill.activo {
+  background: #d1e7dd;
+  color: #0f5132;
 }
 
-.pedido-periodico-card {
-  border: 1px solid #ccc;
+.estado-pill.inactivo {
+  background: #f8d7da;
+  color: #842029;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+}
+
+.modal-card {
+  width: min(92vw, 520px);
+  max-height: 90vh;
+  overflow: auto;
+  background: #fff;
+  border-radius: 12px;
   padding: 1rem;
-  border-radius: 8px;
-}
-
-.btn {
-  margin-top: 1rem;
-  margin-right: 0.5rem;
 }
 </style>

@@ -1,11 +1,13 @@
 const Producto = require('../models/Producto');
-const upload = require('../config/multer'); // Importa Multer
+const Usuario = require('../models/Usuario');
+const Proveedor = require('../models/Proveedor');
+const upload = require('../config/multer');
 
 const ProductoController = {
   // Crear un nuevo producto con imagen
   async crear(req, res) {
     const { nombre, descripcion, precio, id_proveedor } = req.body;
-    const imagen = req.file ? `/uploads/${req.file.filename}` : null; // URL de la imagen
+    const imagen = req.file ? `/uploads/${req.file.filename}` : null;
 
     try {
       const nuevoProducto = await Producto.create(nombre, descripcion, precio, id_proveedor, imagen);
@@ -20,6 +22,30 @@ const ProductoController = {
   async listar(req, res) {
     try {
       const productos = await Producto.findAll();
+      res.json(productos);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al obtener los productos');
+    }
+  },
+
+  // Obtener productos del proveedor asignado a la familia del usuario
+  async listarMisProductos(req, res) {
+    try {
+      const id_usuario = req.user.id_usuario;
+      const usuario = await Usuario.findById(id_usuario);
+      
+      if (!usuario || !usuario.familia) {
+        return res.status(403).json({ error: 'No pertenece a ninguna familia' });
+      }
+
+      const proveedor = await Proveedor.findByFamilia(usuario.familia);
+      
+      if (!proveedor) {
+        return res.status(403).json({ error: 'Tu familia no tiene proveedor asignado. COntacte con un administrador para asignarle uno' });
+      }
+
+      const productos = await Producto.findByProveedor(proveedor.id_proveedor);
       res.json(productos);
     } catch (err) {
       console.error(err);

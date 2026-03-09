@@ -1,11 +1,13 @@
 const Pedido = require('../models/Pedido');
+const Usuario = require('../models/Usuario');
+const Proveedor = require('../models/Proveedor');
 
 const PedidoController = {
   // Crear un nuevo pedido
   async crear(req, res) {
-    const { fecha_apertura, fecha_cierre, fecha_entrega, id_usuario_encargado, id_proveedor, estado } = req.body;
+    const { fecha_apertura, fecha_cierre, fecha_entrega, familia, id_proveedor, estado } = req.body;
     try {
-      const nuevoPedido = await Pedido.create(fecha_apertura, fecha_cierre, fecha_entrega, id_usuario_encargado, id_proveedor, estado);
+      const nuevoPedido = await Pedido.create(fecha_apertura, fecha_cierre, fecha_entrega, familia, id_proveedor, estado);
       res.status(201).json(nuevoPedido);
     } catch (err) {
       console.error(err);
@@ -17,6 +19,30 @@ const PedidoController = {
   async listar(req, res) {
     try {
       const pedidos = await Pedido.findAll();
+      res.json(pedidos);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al obtener los pedidos');
+    }
+  },
+
+  // Obtener pedidos del proveedor asignado a la familia del usuario
+  async listarPorProveedorAsignado(req, res) {
+    try {
+      const id_usuario = req.user.id_usuario;
+      const usuario = await Usuario.findById(id_usuario);
+      
+      if (!usuario || !usuario.familia) {
+        return res.status(403).json({ error: 'No peretenece a ninguna familia' });
+      }
+
+      const proveedor = await Proveedor.findByFamilia(usuario.familia);
+      
+      if (!proveedor) {
+        return res.status(403).json({ error: 'TU familia no gestiona ningún proveedor' });
+      }
+
+      const pedidos = await Pedido.findByProveedor(proveedor.id_proveedor);
       res.json(pedidos);
     } catch (err) {
       console.error(err);
@@ -42,9 +68,9 @@ const PedidoController = {
   // Actualizar un pedido
   async actualizar(req, res) {
     const { id } = req.params;
-    const { fecha_apertura, fecha_cierre, fecha_entrega, id_usuario_encargado, id_proveedor, estado } = req.body;
+    const { fecha_apertura, fecha_cierre, fecha_entrega, familia, id_proveedor, estado } = req.body;
     try {
-      const pedidoActualizado = await Pedido.update(id, fecha_apertura, fecha_cierre, fecha_entrega, id_usuario_encargado, id_proveedor, estado);
+      const pedidoActualizado = await Pedido.update(id, fecha_apertura, fecha_cierre, fecha_entrega, familia, id_proveedor, estado);
       res.json(pedidoActualizado);
     } catch (err) {
       console.error(err);

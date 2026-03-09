@@ -15,6 +15,7 @@
             <th>Nombre</th>
             <th>Contacto</th>
             <th>Correo</th>
+            <th>Familia Gestora</th>
             <th>Frecuencia</th>
             <th>Estado</th>
             <th>Acciones</th>
@@ -25,6 +26,7 @@
             <td>{{ proveedor.nombre }}</td>
             <td>{{ proveedor.contacto || '-' }}</td>
             <td>{{ proveedor.correo || '-' }}</td>
+            <td>Familia {{ proveedor.familia_gestora || '-' }}</td>
             <td>{{ proveedor.frecuencia_pedido_aproximada || '-' }}</td>
             <td>
               <span :class="['estado-pill', proveedor.activo ? 'activo' : 'inactivo']">
@@ -102,6 +104,15 @@
             <input id="envioMail" v-model="form.envio_mail" class="form-check-input" type="checkbox" />
             <label class="form-check-label" for="envioMail">Aviso email</label>
           </div>
+          <div class="mb-2">
+            <label class="form-label">Familia Gestora</label>
+            <select v-model.number="form.familia" class="form-select">
+              <option :value="null">Selecciona una familia (opcional)</option>
+              <option v-for="familia in familiasDisponibles" :key="familia" :value="familia">
+                Familia {{ familia }}
+              </option>
+            </select>
+          </div>
           <div class="d-flex gap-2">
             <button class="btn btn-primary" type="submit" :disabled="guardando">
               {{ guardando ? 'Guardando...' : 'Guardar' }}
@@ -130,6 +141,7 @@ function proveedorVacio() {
     frecuencia_pedido_aproximada: 'semanal',
     envio_movil: false,
     envio_mail: true,
+    familia: null,
   };
 }
 
@@ -137,6 +149,8 @@ export default {
   data() {
     return {
       proveedores: [],
+      usuarios: [],
+      familias: [],
       cargando: false,
       errorCarga: '',
       accionandoId: null,
@@ -146,10 +160,31 @@ export default {
       form: proveedorVacio(),
     };
   },
+  computed: {
+    familiasDisponibles() {
+      return this.familias.filter(f => {
+        const proveedorAsignado = this.proveedores.find(p => p.familia_gestora === f);
+        if (!proveedorAsignado) return true;
+        if (this.modoEdicion && proveedorAsignado.id_proveedor === this.form.id_proveedor) return true;
+        return false;
+      });
+    },
+  },
   async created() {
     await this.cargarProveedores();
+    await this.cargarUsuarios();
+    this.generarFamilias();
   },
   methods: {
+    generarFamilias() {
+      const familiasSet = new Set();
+      this.usuarios.forEach(u => {
+        if (u.familia) {
+          familiasSet.add(u.familia);
+        }
+      });
+      this.familias = Array.from(familiasSet).sort((a, b) => a - b);
+    },
     async cargarProveedores() {
       this.cargando = true;
       this.errorCarga = '';
@@ -162,6 +197,15 @@ export default {
         this.cargando = false;
       }
     },
+    async cargarUsuarios() {
+      try {
+        const response = await api.getUsuarios();
+        this.usuarios = response.data || [];
+        this.generarFamilias();
+      } catch {
+        this.errorCarga = 'No se pudo cargar la lista de usuarios.';
+      }
+    },
     abrirModalCrear() {
       this.modoEdicion = false;
       this.form = proveedorVacio();
@@ -169,7 +213,10 @@ export default {
     },
     abrirModalEditar(proveedor) {
       this.modoEdicion = true;
-      this.form = { ...proveedor };
+      this.form = { 
+        ...proveedor,
+        familia: proveedor.familia_gestora || null 
+      };
       this.mostrarModal = true;
     },
     cerrarModal() {
@@ -188,6 +235,7 @@ export default {
           frecuencia_pedido_aproximada: this.form.frecuencia_pedido_aproximada,
           envio_movil: Boolean(this.form.envio_movil),
           envio_mail: Boolean(this.form.envio_mail),
+          familia: this.form.familia,
         };
 
         if (this.modoEdicion) {
@@ -267,6 +315,13 @@ export default {
 .estado-pill.inactivo {
   background: #f8d7da;
   color: #842029;
+}
+
+.proveedor-img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 4px;
 }
 
 .modal-overlay {

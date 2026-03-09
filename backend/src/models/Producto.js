@@ -27,6 +27,13 @@ const Producto = {
     return rows[0];
   },
 
+  // Obtener productos por proveedor
+  async findByProveedor(id_proveedor) {
+    const query = 'SELECT * FROM producto WHERE id_proveedor = $1;';
+    const { rows } = await pool.query(query, [id_proveedor]);
+    return rows;
+  },
+
   // Actualizar el campo activo de un producto
   async updateActivo(id_producto, activo) {
     const query = `
