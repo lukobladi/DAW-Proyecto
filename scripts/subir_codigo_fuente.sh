@@ -51,7 +51,7 @@ fi
 
 if [[ $ONLY_CODE == "NO" ]]; then
   echo "==> Creando directorios remotos"
-  ssh $SSH_OPTS "$REMOTE" "mkdir -p '$REMOTE_DIR/backend' '$REMOTE_DIR/frontend' '$REMOTE_DIR/docs' '$REMOTE_DIR/scripts'"
+  ssh $SSH_OPTS "$REMOTE" "mkdir -p '$REMOTE_DIR/backend' '$REMOTE_DIR/frontend' '$REMOTE_DIR/scripts' '$REMOTE_DIR/datos'"
 fi
 
 echo "==> Sincronizando backend"
@@ -63,11 +63,9 @@ rsync -az --delete -e "$RSYNC_RSH" "${EXCLUDES[@]}" \
   "$ROOT_DIR/frontend/" "$REMOTE:$REMOTE_DIR/frontend/"
 
 if [ $ONLY_CODE == "NO" ]; then
-  echo "==> Sincronizando scripts y docs"
+  echo "==> Sincronizando scripts y datos"
   rsync -az --delete -e "$RSYNC_RSH" "${EXCLUDES[@]}" \
-    "$ROOT_DIR/scripts/" "$REMOTE:$REMOTE_DIR/scripts/"
-  rsync -az --delete -e "$RSYNC_RSH" "${EXCLUDES[@]}" \
-    "$ROOT_DIR/docs/" "$REMOTE:$REMOTE_DIR/docs/"
+    "$ROOT_DIR/datos/" "$REMOTE:$REMOTE_DIR/datos/"
 fi
 
 if [ $ONLY_CODE == "NO" ]; then

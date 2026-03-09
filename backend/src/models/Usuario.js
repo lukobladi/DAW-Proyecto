@@ -106,6 +106,13 @@ const Usuario = {
     `;
     const { rows } = await pool.query(query, [id_usuario]); // Cambiar db.query a pool.query
     return parseFloat(rows[0].saldo) || 0; // Convertir a número
+  },
+
+  // Obtener correos de administradores
+  async findAdminEmails() {
+    const query = 'SELECT correo FROM Usuario WHERE rol = $1 AND activo = true;';
+    const { rows } = await pool.query(query, ['admin']);
+    return rows.map(row => row.correo);
   }
 };
 

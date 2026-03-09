@@ -10,6 +10,17 @@ const UsuarioController = {
     const { nombre, correo, password, rol, movil, familia } = req.body;
     try {
       const nuevoUsuario = await Usuario.create(nombre, correo, password, rol, movil, familia);
+
+      try {
+        const adminEmails = await Usuario.findAdminEmails();
+        if (adminEmails.length > 0) {
+          const mensaje = `Se ha registrado un nuevo usuario en Ekonsumo:\n\nNombre: ${nombre}\nCorreo: ${correo}\nMóvil: ${movil || 'No proporcionado'}\nFamilia: ${familia || 'No asignada'}\nRol: ${rol}\n\nPor favor, revisa el panel de administración para activar el usuario si es necesario.`;
+          await emailService.enviarCorreoMultiple(adminEmails, 'Nuevo usuario registrado en Ekonsumo', mensaje);
+        }
+      } catch (emailError) {
+        console.error('Error al enviar notificación a administradores:', emailError);
+      }
+
       res.status(201).json(nuevoUsuario);
     } catch (err) {
       console.error(err);

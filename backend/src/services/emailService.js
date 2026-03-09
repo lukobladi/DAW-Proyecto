@@ -35,6 +35,36 @@ const emailService = {
       throw new Error('No se pudo enviar el correo');
     }
   },
+
+  async enviarCorreoMultiple(destinatarios, asunto, mensaje) {
+    logger.info(`Intentando enviar correo a ${destinatarios.length} destinatarios, Asunto: ${asunto}`);
+    try {
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          type: 'OAuth2',
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+          clientId: process.env.OAUTH_CLIENTID,
+          clientSecret: process.env.OAUTH_CLIENT_SECRET,
+          refreshToken: process.env.OAUTH_REFRESH_TOKEN
+        }
+      });
+
+      const mailOptions = {
+        from: 'emartinmon6@educacion.navarra.es',
+        bcc: destinatarios,
+        subject: asunto,
+        text: mensaje,
+      };
+
+      await transporter.sendMail(mailOptions);
+      logger.info(`Correo enviado correctamente a ${destinatarios.length} destinatarios`);
+    } catch (error) {
+      logger.error(`Error al enviar correo masivo:`, error);
+      throw new Error('No se pudo enviar el correo');
+    }
+  },
 };
 
 module.exports = emailService;
