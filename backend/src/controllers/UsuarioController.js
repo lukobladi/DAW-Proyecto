@@ -1,11 +1,11 @@
 const Usuario = require('../models/Usuario');
 const emailService = require('../services/emailService');
+const logger = require('../config/logger');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const SECRET_KEY = process.env.JWT_SECRET; // Use the environment variable for the secret key
+const SECRET_KEY = process.env.JWT_SECRET;
 
 const UsuarioController = {
-  // Registrar un nuevo usuario
   async registrar(req, res) {
     const { nombre, correo, password, rol, movil, familia } = req.body;
     try {
@@ -13,22 +13,26 @@ const UsuarioController = {
 
       try {
         const adminEmails = await Usuario.findAdminEmails();
+        logger.info(`Admins encontrados para notificar: ${adminEmails.length}`);
+        
         if (adminEmails.length > 0) {
-          const mensaje = `Se ha registrado un nuevo usuario en Ekonsumo:\n\nNombre: ${nombre}\nCorreo: ${correo}\nMóvil: ${movil || 'No proporcionado'}\nFamilia: ${familia || 'No asignada'}\nRol: ${rol}\n\nPor favor, revisa el panel de administración para activar el usuario si es necesario.`;
+          const mensaje = `Se ha registrado un nuevo usuario en Ekonsumo:\n\nNombre: ${nombre}\nCorreo: ${correo}\nMovil: ${movil || 'No proporcionado'}\nFamilia: ${familia || 'No asignada'}\nRol: ${rol}\n\nPor favor, revisa el panel de administracion para activar el usuario si es necesario.`;
           await emailService.enviarCorreoMultiple(adminEmails, 'Nuevo usuario registrado en Ekonsumo', mensaje);
+          logger.info('Notificacion de registro enviada a administradores');
+        } else {
+          logger.warn('No hay administradores activos para notificar');
         }
       } catch (emailError) {
-        console.error('Error al enviar notificación a administradores:', emailError);
+        logger.error('Error al enviar notificacion a administradores:', emailError);
       }
 
       res.status(201).json(nuevoUsuario);
     } catch (err) {
-      console.error(err);
+      logger.error('Error al registrar usuario:', err);
       res.status(500).send('Error al registrar el usuario: ' + err);
     }
   },
 
-  // Autenticar un usuario (login)
   async login(req, res) {
     const { correoOMovil, password } = req.body;
 
@@ -36,28 +40,23 @@ const UsuarioController = {
       const user = await Usuario.findByEmailOrMobile(correoOMovil);
 
       if (!user) {
-        console.error('Fallo de login: Usuario no encontrado'); // Log depuracion
         return res.status(401).json({ message: 'Credenciales incorrectas' });
       }
 
       const validPassword = await bcrypt.compare(password, user.pass);
       if (!validPassword) {
-        console.error('Fallo de login: Password invalido'); // Log depuracion
         return res.status(401).json({ message: 'Credenciales incorrectas' });
       }
 
       if (!user.activo) {
-        console.error('Fallo de login: Usuario desactivado'); // Log depuracion
         return res.status(403).json({ message: 'Usuario desactivado. Contacta al administrador.' });
       }
 
       const token = jwt.sign(
         { id_usuario: user.id_usuario, rol: user.rol },
-        SECRET_KEY, // Variasble global
+        SECRET_KEY,
         { expiresIn: '1h' }
       );
-
-      console.log('Login correcto, token generado:', token); // Log depuracion
 
       res.status(200).json({
         id_usuario: user.id_usuario,
@@ -68,15 +67,14 @@ const UsuarioController = {
         token,
       });
     } catch (err) {
-      console.error('Error en el login:', err.message); // Log depuracion
-      res.status(500).json({ message: 'Error al iniciar sesión' });
+      logger.error('Error en el login:', err);
+      res.status(500).json({ message: 'Error al iniciar sesion' });
     }
   },
 
-  // Activar o desactivar usuario
   async cambiarEstadoActivo(req, res) {
     const { id } = req.params;
-    const { activo } = req.body; // booleano 
+    const { activo } = req.body;
   
     try {
       const usuarioActualizado = await Usuario.toggleActivation(id, activo);
@@ -86,7 +84,7 @@ const UsuarioController = {
       const estado = activo ? 'activado' : 'desactivado';
       res.json({ mensaje: `Usuario ${estado} correctamente`, usuario: usuarioActualizado });
     } catch (err) {
-      console.error(err);
+      logger.error('Error al cambiar estado activo:', err);
       res.status(500).send('Error al actualizar el estado del usuario');
     }
   },
@@ -95,48 +93,39 @@ const UsuarioController = {
     const { correoOMovil } = req.body;
 
     if (!correoOMovil) {
-      return res.status(400).json({ error: 'Correo o móvil es requerido' });
+      return res.status(400).json({ error: 'Correo o movil es requerido' });
     }
 
     try {
-      console.log('try');
       const usuario = await Usuario.findByEmailOrMobile(correoOMovil);
 
       if (!usuario) {
         return res.status(404).json({ error: 'Usuario no encontrado' });
       }
-      console.log('usuario ' + usuario);
 
       const enlaceRecuperacion = `${process.env.FRONTEND_URL}/recuperar-password/${usuario.id_usuario}`;
 
-      console.log('enlaceRecuperacion ' + enlaceRecuperacion);
+      const mensaje = `Hola ${usuario.nombre},\n\nHaz clic en el siguiente enlace para recuperar tu contrasena:\n\n${enlaceRecuperacion}\n\nSi no solicitaste esta accion, ignora este correo.`;
 
-      const mensaje = `Hola ${usuario.nombre},\n\nHaz clic en el siguiente enlace para recuperar tu contraseña:\n\n${enlaceRecuperacion}\n\nSi no solicitaste esta acción, ignora este correo.`;
+      await emailService.enviarCorreo(usuario.correo, 'Recuperacion de Contrasena', mensaje);
 
-      console.log('mensaje ' + mensaje);
-
-
-      await emailService.enviarCorreo(usuario.correo, 'Recuperación de Contraseña', mensaje);
-
-      res.status(200).json({ mensaje: 'Enlace de recuperación enviado correctamente' });
+      res.status(200).json({ mensaje: 'Enlace de recuperacion enviado correctamente' });
     } catch (error) {
-      console.error('Error al procesar la solicitud:', error);
+      logger.error('Error al procesar recuperacion de contrasena:', error);
       res.status(500).json({ error: 'Error al procesar la solicitud' });
     }
   },
 
-  // Obtener todos los usuarios
   async listar(req, res) {
     try {
       const usuarios = await Usuario.findAll();
       res.json(usuarios);
     } catch (err) {
-      console.error(err);
+      logger.error('Error al listar usuarios:', err);
       res.status(500).send('Error al obtener los usuarios');
     }
   },
 
-  // Obtener un usuario por ID
   async obtenerPorId(req, res) {
     const { id } = req.params;
     try {
@@ -146,15 +135,14 @@ const UsuarioController = {
       }
       res.json(usuario);
     } catch (err) {
-      console.error(err);
+      logger.error('Error al obtener usuario por ID:', err);
       res.status(500).send('Error al obtener el usuario');
     }
   },
 
-  // Actualizar un usuario
   async actualizar(req, res) {
     const { id } = req.params;
-    const { nombre, correo, rol, movil, familia } = req.body; // Excluye la contraseña
+    const { nombre, correo, rol, movil, familia } = req.body;
     try {
       const usuarioActualizado = await Usuario.update(id, nombre, correo, rol, movil, familia);
       if (!usuarioActualizado) {
@@ -162,34 +150,32 @@ const UsuarioController = {
       }
       res.json(usuarioActualizado);
     } catch (err) {
-      console.error(err);
+      logger.error('Error al actualizar usuario:', err);
       res.status(500).send('Error al actualizar el usuario');
     }
   },
 
-  // Eliminar un usuario
   async eliminar(req, res) {
     const { id } = req.params;
     try {
       await Usuario.delete(id);
       res.status(204).send();
     } catch (err) {
-      console.error(err);
+      logger.error('Error al eliminar usuario:', err);
       res.status(500).send('Error al eliminar el usuario');
     }
   },
 
-    // Calcular el saldo de un usuario
-    async calcularSaldo(req, res) {
-      const { id_usuario } = req.params;
-      try {
-        const saldo = await Usuario.calcularSaldo(id_usuario);
-        res.json({ saldo });
-      } catch (err) {
-        console.error(err);
-        res.status(500).send('Error al calcular el saldo');
-      }
-    },
+  async calcularSaldo(req, res) {
+    const { id_usuario } = req.params;
+    try {
+      const saldo = await Usuario.calcularSaldo(id_usuario);
+      res.json({ saldo });
+    } catch (err) {
+      logger.error('Error al calcular saldo:', err);
+      res.status(500).send('Error al calcular el saldo');
+    }
+  },
 
 };
 

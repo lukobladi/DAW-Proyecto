@@ -68,10 +68,6 @@ if [ $ONLY_CODE == "NO" ]; then
     "$ROOT_DIR/datos/" "$REMOTE:$REMOTE_DIR/datos/"
 fi
 
-if [ $ONLY_CODE == "NO" ]; then
-  echo "==> Ajustando permisos basicos"
-  ssh $SSH_OPTS "$REMOTE" "chmod +x '$REMOTE_DIR/scripts/'*.sh || true"
-fi
 
 cat <<EOF
 
