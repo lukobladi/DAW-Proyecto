@@ -2,43 +2,79 @@
   <div class="compras-page">
     <div class="compras-content">
       <h2>Compras</h2>
-      <div v-if="cargando" class="estado">Cargando productos...</div>
-      <div v-else-if="errorCarga" class="estado error">{{ errorCarga }}</div>
-      <div v-else-if="!productos.length" class="estado">
-        No hay productos disponibles en este momento.
-      </div>
-      <div v-else class="lista-productos">
-        <div v-for="producto in productos" :key="producto.id" class="producto-card">
-          <img
-            :src="producto.imagen"
-            alt="Imagen del producto"
-            class="producto-imagen"
-            @error="onImageError"
-          />
-          <h3>{{ producto.nombre }}</h3>
-          <p>{{ producto.descripcion }}</p>
-          <p>Precio: {{ producto.precio }}€</p>
-          <p class="meta"><strong>Productor:</strong> {{ producto.proveedor }}</p>
-          <p class="meta"><strong>Periodicidad:</strong> {{ producto.periodicidad }}</p>
-          <p>
-            <span :class="['estado-pill', producto.pedidoAbierto ? 'abierto' : 'cerrado']">
-              {{ producto.pedidoAbierto ? 'Pedido abierto' : 'Pedido cerrado' }}
-            </span>
-          </p>
+
+      <div class="filtros">
+        <label class="form-label">Filtrar por estado:</label>
+        <div class="filtro-botones">
           <button
-            @click="anadirACesta(producto)"
-            class="btn btn-primary"
-            :disabled="!producto.pedidoAbierto || anadiendoProductoId === producto.id"
+            :class="['btn', filtroEstado === 'todos' ? 'btn-primary' : 'btn-outline-secondary']"
+            @click="filtroEstado = 'todos'"
           >
-            {{
-              anadiendoProductoId === producto.id
-                ? 'Anadiendo...'
-                : producto.pedidoAbierto
-                  ? 'Anadir a la cesta'
-                  : 'No disponible'
-            }}
+            Todos
+          </button>
+          <button
+            :class="['btn', filtroEstado === 'abierto' ? 'btn-primary' : 'btn-outline-secondary']"
+            @click="filtroEstado = 'abierto'"
+          >
+            Pedido abierto
+          </button>
+          <button
+            :class="['btn', filtroEstado === 'cerrado' ? 'btn-primary' : 'btn-outline-secondary']"
+            @click="filtroEstado = 'cerrado'"
+          >
+            Pedido cerrado
+          </button>
+          <button
+            :class="['btn', filtroEstado === 'pendiente_entrega' ? 'btn-primary' : 'btn-outline-secondary']"
+            @click="filtroEstado = 'pendiente_entrega'"
+          >
+            Pendiente de entrega
           </button>
         </div>
+      </div>
+
+      <div v-if="cargando" class="estado">Cargando productos...</div>
+      <div v-else-if="errorCarga" class="estado error">{{ errorCarga }}</div>
+      <div v-else-if="!productosFiltrados.length" class="estado">
+        No hay productos disponibles con el filtro seleccionado.
+      </div>
+
+      <div v-else class="proveedores-lista">
+        <section v-for="grupo in productosAgrupados" :key="grupo.proveedor" class="proveedor-seccion">
+          <h3 class="proveedor-titulo">{{ grupo.proveedor }}</h3>
+          <p class="proveedor-meta">Periodicidad: {{ grupo.periodicidad }}</p>
+          <div class="lista-productos">
+            <div v-for="producto in grupo.productos" :key="producto.id" class="producto-card">
+              <img
+                :src="producto.imagen"
+                alt="Imagen del producto"
+                class="producto-imagen"
+                @error="onImageError"
+              />
+              <h4>{{ producto.nombre }}</h4>
+              <p>{{ producto.descripcion }}</p>
+              <p>Precio: {{ producto.precio }}€</p>
+              <p>
+                <span :class="['estado-pill', producto.pedidoAbierto ? 'abierto' : 'cerrado']">
+                  {{ producto.pedidoAbierto ? 'Pedido abierto' : 'Pedido cerrado' }}
+                </span>
+              </p>
+              <button
+                @click="anadirACesta(producto)"
+                class="btn btn-primary"
+                :disabled="!producto.pedidoAbierto || anadiendoProductoId === producto.id"
+              >
+                {{
+                  anadiendoProductoId === producto.id
+                    ? 'Anadiendo...'
+                    : producto.pedidoAbierto
+                      ? 'Anadir a la cesta'
+                      : 'No disponible'
+                }}
+              </button>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   </div>
@@ -56,7 +92,40 @@ export default {
       cargando: false,
       errorCarga: '',
       anadiendoProductoId: null,
+      filtroEstado: 'todos',
     };
+  },
+  computed: {
+    productosFiltrados() {
+      if (this.filtroEstado === 'todos') {
+        return this.productos;
+      }
+      if (this.filtroEstado === 'abierto') {
+        return this.productos.filter(p => p.pedidoAbierto);
+      }
+      if (this.filtroEstado === 'cerrado') {
+        return this.productos.filter(p => !p.pedidoAbierto);
+      }
+      if (this.filtroEstado === 'pendiente_entrega') {
+        return this.productos.filter(p => p.estadoPedido && !['repartido', 'cancelado'].includes(p.estadoPedido));
+      }
+      return this.productos;
+    },
+    productosAgrupados() {
+      const grupos = {};
+      this.productosFiltrados.forEach(producto => {
+        const proveedorKey = producto.proveedor;
+        if (!grupos[proveedorKey]) {
+          grupos[proveedorKey] = {
+            proveedor: proveedorKey,
+            periodicidad: producto.periodicidad,
+            productos: [],
+          };
+        }
+        grupos[proveedorKey].productos.push(producto);
+      });
+      return Object.values(grupos);
+    },
   },
   async created() {
     await this.cargarProductos();
@@ -116,22 +185,33 @@ export default {
           }
         });
 
+        const pedidosPorProveedor = new Map();
+        (pedidosResponse.data || []).forEach((pedido) => {
+          if (!pedidosPorProveedor.has(pedido.id_proveedor)) {
+            pedidosPorProveedor.set(pedido.id_proveedor, pedido);
+          }
+        });
+
         this.productos = (productosResponse.data || [])
           .filter((producto) => producto.activo)
-          .map((producto) => ({
-            id: producto.id_producto,
-            nombre: producto.nombre,
-            descripcion: producto.descripcion,
-            precio: Number(producto.precio),
-            imagen: this.normalizarImagen(producto.imagen),
-            proveedor:
-              proveedorPorId.get(producto.id_proveedor)?.nombre || 'Proveedor sin asignar',
-            periodicidad:
-              proveedorPorId.get(producto.id_proveedor)?.frecuencia_pedido_aproximada ||
-              'Sin periodicidad',
-            pedidoAbiertoId: pedidoAbiertoPorProveedor.get(producto.id_proveedor) || null,
-            pedidoAbierto: pedidoAbiertoPorProveedor.has(producto.id_proveedor),
-          }));
+          .map((producto) => {
+            const pedidoDelProveedor = pedidosPorProveedor.get(producto.id_proveedor);
+            return {
+              id: producto.id_producto,
+              nombre: producto.nombre,
+              descripcion: producto.descripcion,
+              precio: Number(producto.precio),
+              imagen: this.normalizarImagen(producto.imagen),
+              proveedor:
+                proveedorPorId.get(producto.id_proveedor)?.nombre || 'Proveedor sin asignar',
+              periodicidad:
+                proveedorPorId.get(producto.id_proveedor)?.frecuencia_pedido_aproximada ||
+                'Sin periodicidad',
+              pedidoAbiertoId: pedidoAbiertoPorProveedor.get(producto.id_proveedor) || null,
+              pedidoAbierto: pedidoAbiertoPorProveedor.has(producto.id_proveedor),
+              estadoPedido: pedidoDelProveedor?.estado || null,
+            };
+          });
       } catch (error) {
         if (error.response?.status === 401) {
           localStorage.removeItem('authToken');
@@ -242,6 +322,22 @@ export default {
   padding: 2rem;
 }
 
+.filtros {
+  margin-bottom: 1.5rem;
+}
+
+.filtros .form-label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.filtro-botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
 .estado {
   padding: 1rem 0;
   color: #495057;
@@ -249,6 +345,30 @@ export default {
 
 .estado.error {
   color: #dc3545;
+}
+
+.proveedores-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.proveedor-seccion {
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  padding: 1.25rem;
+  background: #fff;
+}
+
+.proveedor-titulo {
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.proveedor-meta {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
 }
 
 .lista-productos {
@@ -262,10 +382,6 @@ export default {
   padding: 1rem;
   border-radius: 8px;
   text-align: center;
-}
-
-.meta {
-  margin-bottom: 0.25rem;
 }
 
 .estado-pill {
@@ -295,5 +411,15 @@ export default {
 
 .btn {
   margin-top: 1rem;
+}
+
+@media (max-width: 576px) {
+  .filtro-botones {
+    flex-direction: column;
+  }
+
+  .filtro-botones .btn {
+    width: 100%;
+  }
 }
 </style>
