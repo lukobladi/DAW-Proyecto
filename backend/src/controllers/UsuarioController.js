@@ -1,3 +1,5 @@
+// Los controllers GEstiona logica de solicitud HTTP
+
 const Usuario = require('../models/Usuario');
 const emailService = require('../services/emailService');
 const logger = require('../config/logger');

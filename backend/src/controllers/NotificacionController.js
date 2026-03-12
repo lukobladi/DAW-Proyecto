@@ -1,9 +1,12 @@
+// Los controllers GEstiona logica de solicitud HTTP
+
 const Notificacion = require('../models/Notificacion');
 const Usuario = require('../models/Usuario');
 const emailService = require('../services/emailService');
 const logger = require('../config/logger');
 
 const NotificacionController = {
+  // Enviar notificación
   async enviar(req, res) {
     const { id_usuario, mensaje } = req.body;
     try {

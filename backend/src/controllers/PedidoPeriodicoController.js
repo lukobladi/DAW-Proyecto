@@ -1,4 +1,5 @@
-// backend/controllers/PedidoPeriodicoController.js
+// Los controllers GEstiona logica de solicitud HTTP
+
 const PedidoPeriodico = require('../models/PedidoPeriodico');
 
 const PedidoPeriodicoController = {

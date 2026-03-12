@@ -1,7 +1,9 @@
+// Los controllers GEstiona logica de solicitud HTTP
+
 const Pago = require('../models/Pago');
 
 const PagoController = {
-  // Crear un nuevo pago
+  // Crear un nuevo pago. Un usuario paga a otro
   async crear(req, res) {
     const {
       id_usuario_deudor,

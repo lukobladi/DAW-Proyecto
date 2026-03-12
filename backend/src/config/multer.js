@@ -1,5 +1,6 @@
 const multer = require('multer');
 const path = require('path');
+// Libreria para manejar datos que se suben mediante formulario en formato multipart/form-data
 
 // Configuración de Multer
 const storage = multer.diskStorage({
@@ -13,7 +14,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // Límite de 5MB
+  limits: { fileSize: 5 * 1024 * 1024 }, // Límite de fichero 5MB
   fileFilter: (req, file, cb) => {
     const filetypes = /jpeg|jpg|png|gif/;
     const mimetype = filetypes.test(file.mimetype);

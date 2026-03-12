@@ -1,3 +1,5 @@
+// Los controllers GEstiona logica de solicitud HTTP
+
 const Proveedor = require('../models/Proveedor');
 
 const ProveedorController = {

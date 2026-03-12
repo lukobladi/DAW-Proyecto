@@ -1,4 +1,5 @@
-// backend/controllers/UsuarioProveedorController.js
+// Los controllers GEstiona logica de solicitud HTTP
+
 const UsuarioProveedor = require('../models/UsuarioProveedor');
 
 class UsuarioProveedorController {

@@ -1,3 +1,5 @@
+// Los controllers GEstiona logica de solicitud HTTP
+
 const Pedido = require('../models/Pedido');
 const Usuario = require('../models/Usuario');
 const Proveedor = require('../models/Proveedor');

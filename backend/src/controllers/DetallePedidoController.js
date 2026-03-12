@@ -1,6 +1,10 @@
+// Los controllers GEstiona logica de solicitud HTTP
+
 const DetallePedido = require('../models/DetallePedido');
 const Pedido = require('../models/Pedido');
 
+// El pedido está abiero si no está en estado pendiente, 
+// la fecha de apertura ya ha pasado y la fecha de cierre todavia no ha pasado
 function pedidoEstaAbierto(pedido) {
   if (!pedido || pedido.estado !== 'pendiente') {
     return false;
