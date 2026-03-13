@@ -1,16 +1,19 @@
+// Utilidades para los tests
+// Funciones helper para configurar el entorno de pruebas
+
 const request = require('supertest');
-const pool = require('./src/config/db'); // Importa la conexión a la base de datos
+const pool = require('./src/config/db'); // Importa la conexion a la base de datos
 const app = require('../index'); // Importa la app
 const bcrypt = require('bcryptjs'); // Necesario para hashear passwords
-const jwt = require('jsonwebtoken'); // Utilizar tokens JWT
 
-let token; // Variable para almacenar el token de autenticación
+let token; // Variable para guardar el token de autenticacion
 
 /**
- * Configura un usuario administrador y obtiene un token de autenticación.
+ * Configura un usuario administrador y obtiene un token de autenticacion.
+ * Se usa para las pruebas que requieren permisos de admin.
  */
 async function getAuthToken() {
-  if (token) return token; // Si ya existe un token se reutilízalo
+  if (token) return token; // Si ya existe un token se reutiliza
 
   // Crear un usuario administrador para el login
   const hashedPassword = await bcrypt.hash('1234', 10); // Hash del password
@@ -21,22 +24,22 @@ async function getAuthToken() {
     ON CONFLICT (correo) DO NOTHING;
   `,
     [hashedPassword]
-  ); // Utilizar password hasheado
+  ); // Usar el password hasheado
 
-  // Obtener el token de autenticación
+  // Obtener el token de autenticacion
   const res = await request(app).post('/api/usuarios/login').send({
     correoOMovil: 'enekoloko7@hotmail.com',
-    password: '1234', // Loguear con contraseña texto plano
+    password: '1234', // Password en texto plano
   });
 
-  console.log('Login response:', res.body); // Comprobar respuesta
+  console.log('Respuesta de login:', res.body); // Comprobar la respuesta
 
   if (!res.body.token) {
-    console.error('Login failed:', res.body); // Comprobar si falta token
-    throw new Error('Token not generated during login');
+    console.error('Fallo el login:', res.body); // Comprobar si falta el token
+    throw new Error('No se genero el token durante el login');
   }
 
-  token = res.body.token; // Guardar el token para usarlo en los demás tests
+  token = res.body.token; // Guardar el token para usarlo en los demas tests
   return token;
 }
 

@@ -1,3 +1,6 @@
+// Tests de integracion para las rutas de usuarios
+// Prueban los endpoints de la API relacionados con usuarios
+
 require('dotenv').config({ quiet: true });
 const request = require('supertest');
 const app = require('../../index');
@@ -9,8 +12,9 @@ describe('Usuario Routes', () => {
   let adminToken;
   let testUserId;
 
+  // Datos del usuario de prueba
   const testUserData = {
-    nombre: 'Test User',
+    nombre: 'Usuario de Prueba',
     correo: 'test.user@example.com',
     password: 'password123',
     rol: 'usuario',
@@ -18,7 +22,7 @@ describe('Usuario Routes', () => {
   };
 
   beforeAll(async () => {
-    // Create a test admin user and get a token
+    // Creo un usuario administrador y obtengo su token
     const adminUser = await Usuario.create(
       'Admin',
       'admin@example.com',
@@ -27,7 +31,7 @@ describe('Usuario Routes', () => {
       '987654321'
     );
     
-    // Activate admin user
+    // Activo el usuario administrador
     await Usuario.toggleActivation(adminUser.id_usuario, true);
     
     adminToken =
@@ -37,7 +41,7 @@ describe('Usuario Routes', () => {
         process.env.JWT_SECRET
       );
 
-    // Create a test user and get a token
+    // Creo un usuario de prueba y obtengo su token
     const testUser = await Usuario.create(
       testUserData.nombre,
       testUserData.correo,
@@ -47,7 +51,7 @@ describe('Usuario Routes', () => {
     );
     testUserId = testUser.id_usuario;
     
-    // Activate test user for login test
+    // Activo el usuario de prueba para el test de login
     await Usuario.toggleActivation(testUserId, true);
     
     token =
@@ -59,16 +63,18 @@ describe('Usuario Routes', () => {
   });
 
   afterAll(async () => {
+    // Limpio los usuarios de prueba
     if (testUserId) {
       await Usuario.delete(testUserId);
     }
     await pool.query('DELETE FROM Usuario WHERE correo = $1', [
       'admin@example.com',
     ]);
-    await pool.end(); // Ensure pool is closed to prevent open handles
+    await pool.end(); // Cierro el pool para evitar handles abiertos
   });
 
-  it('should list all users (admin only)', async () => {
+  // Test: listar todos los usuarios (solo admin)
+  it('deberia listar todos los usuarios (solo admin)', async () => {
     const res = await request(app)
       .get('/api/usuarios/obtenerTodos')
       .set('Authorization', adminToken);
@@ -77,7 +83,8 @@ describe('Usuario Routes', () => {
     expect(res.body).toBeInstanceOf(Array);
   });
 
-  it('should get a user by ID', async () => {
+  // Test: obtener un usuario por ID
+  it('deberia obtener un usuario por ID', async () => {
     const res = await request(app)
       .get(`/api/usuarios/obtener/${testUserId}`)
       .set('Authorization', token);
@@ -86,9 +93,10 @@ describe('Usuario Routes', () => {
     expect(res.body).toHaveProperty('id_usuario', testUserId);
   });
 
-  it('should register a new user', async () => {
+  // Test: registrar un nuevo usuario
+  it('deberia registrar un nuevo usuario', async () => {
     const newUser = {
-      nombre: 'New User',
+      nombre: 'Nuevo Usuario',
       correo: 'new.user@example.com',
       password: 'newpassword123',
       rol: 'usuario',
@@ -102,11 +110,12 @@ describe('Usuario Routes', () => {
     expect(res.status).toBe(201);
     expect(res.body).toHaveProperty('id_usuario');
 
-    // Clean up
+    // Limpio el usuario creado
     await Usuario.delete(res.body.id_usuario);
   });
 
-  it('should log in a user', async () => {
+  // Test: hacer login con un usuario
+  it('deberia hacer login con un usuario', async () => {
     const res = await request(app)
       .post('/api/usuarios/login')
       .send({
@@ -118,7 +127,8 @@ describe('Usuario Routes', () => {
     expect(res.body).toHaveProperty('token');
   });
 
-  it('should activate a user (admin only)', async () => {
+  // Test: activar un usuario (solo admin)
+  it('deberia activar un usuario (solo admin)', async () => {
     const res = await request(app)
       .patch(`/api/usuarios/activar/${testUserId}`)
       .set('Authorization', adminToken)
@@ -128,18 +138,20 @@ describe('Usuario Routes', () => {
     expect(res.body.usuario).toHaveProperty('activo', true);
   });
 
-  it('should calculate user balance', async () => {
+  // Test: calcular el saldo de un usuario
+  it('deberia calcular el saldo de un usuario', async () => {
     const res = await request(app)
       .get(`/api/usuarios/obtener/${testUserId}`)
       .set('Authorization', token);
 
     expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty('saldo', '0.00'); // Ensure saldo is compared as a number
+    expect(res.body).toHaveProperty('saldo', '0.00'); // Compruebo que el saldo es correcto
   });
 
-  it('should delete a user (admin only)', async () => {
+  // Test: eliminar un usuario (solo admin)
+  it('deberia eliminar un usuario (solo admin)', async () => {
     const newUser = await Usuario.create(
-      'Delete Me',
+      'Usuario a Eliminar',
       'delete.me@example.com',
       'delete123',
       'usuario',

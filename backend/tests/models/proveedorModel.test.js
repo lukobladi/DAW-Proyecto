@@ -1,11 +1,14 @@
+// Tests unitarios para el modelo Proveedor
+// Prueban las operaciones CRUD y funciones adicionales del modelo
+
 const Proveedor = require('../../src/models/Proveedor');
 const pool = require('../../src/config/db');
 
-describe('Proveedor Model', () => {
+describe('Modelo Proveedor', () => {
   let proveedorId;
   const proveedorData = {
-    nombre: 'Test Proveedor',
-    contacto: 'Juan Pérez',
+    nombre: 'Proveedor de Prueba',
+    contacto: 'Juan Perez',
     telefono: '123456789',
     movil: '987654321',
     correo: 'test.proveedor@example.com',
@@ -16,6 +19,7 @@ describe('Proveedor Model', () => {
   };
 
   beforeEach(async () => {
+    // Crear un proveedor para cada prueba
     const nuevoProveedor = await Proveedor.create(
       proveedorData.nombre,
       proveedorData.contacto,
@@ -31,6 +35,7 @@ describe('Proveedor Model', () => {
   });
 
   afterEach(async () => {
+    // Limpia el proveedor despues de cada prueba
     if (proveedorId) {
       await Proveedor.delete(proveedorId);
       proveedorId = null;
@@ -38,13 +43,15 @@ describe('Proveedor Model', () => {
   });
 
   afterAll(async () => {
-    await pool.end(); // Ensure pool is closed to prevent open handles
+    // Cerrar el pool para evitar handles abiertos
+    await pool.end();
   });
 
-  it('should create a new provider', async () => {
+  // Test: crear un nuevo proveedor
+  it('deberia crear un nuevo proveedor', async () => {
     const nuevoProveedor = await Proveedor.create(
       'Nuevo Proveedor',
-      'Maria López',
+      'Maria Lopez',
       '111222333',
       '444555666',
       'nuevo.proveedor@example.com',
@@ -54,26 +61,29 @@ describe('Proveedor Model', () => {
       true
     );
     expect(nuevoProveedor).toHaveProperty('id_proveedor');
-    await Proveedor.delete(nuevoProveedor.id_proveedor); // Clean up
+    await Proveedor.delete(nuevoProveedor.id_proveedor); // Limpio el proveedor creado
   });
 
-  it('should retrieve all providers', async () => {
+  // Test: obtener todos los proveedores
+  it('deberia obtener todos los proveedores', async () => {
     const proveedores = await Proveedor.findAll();
     expect(proveedores).toBeInstanceOf(Array);
     expect(proveedores.length).toBeGreaterThan(0);
   });
 
-  it('should retrieve a provider by ID', async () => {
+  // Test: obtener un proveedor por ID
+  it('deberia obtener un proveedor por ID', async () => {
     const proveedor = await Proveedor.findById(proveedorId);
     expect(proveedor).not.toBeNull();
     expect(proveedor).toHaveProperty('id_proveedor', proveedorId);
   });
 
-  it('should update a provider', async () => {
+  // Test: actualizar un proveedor
+  it('deberia actualizar un proveedor', async () => {
     const updatedProveedor = await Proveedor.update(
       proveedorId,
       'Proveedor Actualizado',
-      'Carlos Gómez',
+      'Carlos Gomez',
       '999888777',
       '666555444',
       'actualizado.proveedor@example.com',
@@ -86,7 +96,8 @@ describe('Proveedor Model', () => {
     expect(updatedProveedor).toHaveProperty('nombre', 'Proveedor Actualizado');
   });
 
-  it('should toggle the active status of a provider', async () => {
+  // Test: cambiar el estado activo de un proveedor
+  it('deberia cambiar el estado activo de un proveedor', async () => {
     const proveedorInactivo = await Proveedor.toggleActiveStatus(
       proveedorId,
       false
@@ -100,10 +111,11 @@ describe('Proveedor Model', () => {
     expect(proveedorActivo).toHaveProperty('activo', true);
   });
 
-  it('should delete a provider', async () => {
+  // Test: eliminar un proveedor
+  it('deberia eliminar un proveedor', async () => {
     const nuevoProveedor = await Proveedor.create(
       'Proveedor a Eliminar',
-      'Luis Martínez',
+      'Luis Martinez',
       '123123123',
       '321321321',
       'eliminar.proveedor@example.com',
@@ -115,7 +127,7 @@ describe('Proveedor Model', () => {
     const deletedProveedor = await Proveedor.delete(
       nuevoProveedor.id_proveedor
     );
-    expect(deletedProveedor).toBeUndefined(); // No return value expected
+    expect(deletedProveedor).toBeUndefined(); // No se espera valor de retorno
     const proveedor = await Proveedor.findById(nuevoProveedor.id_proveedor);
     expect(proveedor).toBeUndefined();
   });

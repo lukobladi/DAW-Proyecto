@@ -1,18 +1,22 @@
+// Tests unitarios para el modelo Usuario
+// Prueban las operaciones CRUD y funciones adicionales del modelo
+
 const Usuario = require('../../src/models/Usuario');
 const pool = require('../../src/config/db');
 
-describe('Usuario Model', () => {
-  let usuarioId; // Para almacenar el ID del usuario creado
+describe('Modelo Usuario', () => {
+  let usuarioId; // Para guardar el ID del usuario creado
   const usuarioData = {
-    nombre: 'Juan Pérez',
-    correo: `juan.perez+${Date.now()}@example.com`, // Correo único para cada prueba
+    nombre: 'Juan Perez',
+    correo: `juan.perez+${Date.now()}@example.com`, // Correo unico para cada prueba
     password: '123456',
     rol: 'usuario',
     movil: '123456789',
   };
 
   beforeEach(async () => {
-    const uniqueCorreo = `test+${Date.now()}@example.com`; // Generar un correo único
+    // Genero un correo unico para cada prueba
+    const uniqueCorreo = `test+${Date.now()}@example.com`;
     const nuevoUsuario = await Usuario.create(
       usuarioData.nombre,
       uniqueCorreo,
@@ -20,18 +24,20 @@ describe('Usuario Model', () => {
       usuarioData.rol,
       usuarioData.movil
     );
-    usuarioId = nuevoUsuario.id_usuario; // Asegurar que el usuario se crea antes de cada prueba
+    usuarioId = nuevoUsuario.id_usuario; // Guardo el ID del usuario creado
   });
 
   afterEach(async () => {
+    // Limpio el usuario despues de cada prueba
     if (usuarioId) {
-      await Usuario.delete(usuarioId); // Asegurar que el usuario se elimina después de cada prueba
+      await Usuario.delete(usuarioId);
       usuarioId = null;
     }
   });
 
-  it('Debería crear un nuevo usuario', async () => {
-    const uniqueCorreo = `test+${Date.now()}@example.com`; // Generar un correo único
+  // Test: crear un nuevo usuario
+  it('Deberia crear un nuevo usuario', async () => {
+    const uniqueCorreo = `test+${Date.now()}@example.com`; // Genero un correo unico
     const nuevoUsuario = await Usuario.create(
       usuarioData.nombre,
       uniqueCorreo,
@@ -40,23 +46,26 @@ describe('Usuario Model', () => {
       usuarioData.movil
     );
     expect(nuevoUsuario).toHaveProperty('id_usuario');
-    usuarioId = nuevoUsuario.id_usuario; // Guardar el ID del usuario creado
+    usuarioId = nuevoUsuario.id_usuario; // Guardo el ID del usuario creado
   });
 
-  it('Debería obtener todos los usuarios', async () => {
+  // Test: obtener todos los usuarios
+  it('Deberia obtener todos los usuarios', async () => {
     const usuarios = await Usuario.findAll();
     expect(usuarios).toBeInstanceOf(Array);
   });
 
-  it('Debería obtener un usuario por ID', async () => {
+  // Test: obtener un usuario por ID
+  it('Deberia obtener un usuario por ID', async () => {
     const usuario = await Usuario.findById(usuarioId);
-    expect(usuario).not.toBeNull(); // Validar que el usuario existe
+    expect(usuario).not.toBeNull(); // Compruebo que el usuario existe
     if (usuario) {
       expect(usuario).toHaveProperty('id_usuario', usuarioId);
     }
   });
 
-  it('Debería actualizar un usuario', async () => {
+  // Test: actualizar un usuario
+  it('Deberia actualizar un usuario', async () => {
     const usuarioActualizado = await Usuario.update(
       usuarioId,
       'Juan Actualizado',
@@ -64,18 +73,19 @@ describe('Usuario Model', () => {
       usuarioData.rol,
       usuarioData.movil
     );
-    expect(usuarioActualizado).not.toBeNull(); // Validar que la actualización fue exitosa
+    expect(usuarioActualizado).not.toBeNull(); // Compruebo que la actualizacion fue correcta
     if (usuarioActualizado) {
       expect(usuarioActualizado).toHaveProperty('nombre', 'Juan Actualizado');
     }
   });
 
-  it('Debería eliminar un usuario', async () => {
+  // Test: eliminar un usuario
+  it('Deberia eliminar un usuario', async () => {
     const usuarioEliminado = await Usuario.delete(usuarioId);
-    expect(usuarioEliminado).not.toBeNull(); // Validar que el usuario fue eliminado
+    expect(usuarioEliminado).not.toBeNull(); // Compruebo que el usuario fue eliminado
     if (usuarioEliminado) {
       const usuario = await Usuario.findById(usuarioId);
-      expect(usuario).toBeNull(); // Validar que el usuario ya no existe
+      expect(usuario).toBeNull(); // Compruebo que el usuario ya no existe
     }
   });
 });
@@ -83,14 +93,15 @@ describe('Usuario Model', () => {
 describe('Funciones adicionales del modelo Usuario', () => {
   let usuarioId;
   const usuarioData = {
-    nombre: 'Juan Pérez',
-    correo: `juan.perez+${Math.random()}@example.com`, // Correo único para cada prueba
+    nombre: 'Juan Perez',
+    correo: `juan.perez+${Math.random()}@example.com`, // Correo unico para cada prueba
     password: '123456',
     rol: 'usuario',
     movil: '123456789',
   };
 
   beforeAll(async () => {
+    // Creo un usuario para las pruebas
     const nuevoUsuario = await Usuario.create(
       usuarioData.nombre,
       usuarioData.correo,
@@ -102,14 +113,16 @@ describe('Funciones adicionales del modelo Usuario', () => {
   });
 
   afterAll(async () => {
+    // Limpio el usuario despues de todas las pruebas
     if (usuarioId) {
       await Usuario.delete(usuarioId);
     }
   });
 
-  it('Debería verificar la contraseña correctamente', async () => {
+  // Test: verificar la contrasena correctamente
+  it('Deberia verificar la contrasena correctamente', async () => {
     const usuario = await Usuario.findById(usuarioId);
-    expect(usuario).not.toBeNull(); // Validar que el usuario existe
+    expect(usuario).not.toBeNull(); // Compruebo que el usuario existe
     if (usuario) {
       const isValid = await Usuario.verifyPassword(
         usuarioData.password,
@@ -119,7 +132,8 @@ describe('Funciones adicionales del modelo Usuario', () => {
     }
   });
 
-  it('Debería activar y desactivar un usuario', async () => {
+  // Test: activar y desactivar un usuario
+  it('Deberia activar y desactivar un usuario', async () => {
     const usuarioActivado = await Usuario.toggleActivation(usuarioId, true);
     expect(usuarioActivado).toHaveProperty('activo', true);
 
@@ -127,12 +141,14 @@ describe('Funciones adicionales del modelo Usuario', () => {
     expect(usuarioDesactivado).toHaveProperty('activo', false);
   });
 
-  it('Debería calcular el saldo de un usuario', async () => {
+  // Test: calcular el saldo de un usuario
+  it('Deberia calcular el saldo de un usuario', async () => {
     const saldo = await Usuario.calcularSaldo(usuarioId);
-    expect(saldo).toBe(0); // Asume que no hay pagos pendientes
+    expect(saldo).toBe(0); // Asumo que no hay pagos pendientes
   });
 });
 
 afterAll(async () => {
+  // Cierro el pool de conexiones al terminar todas las pruebas
   await pool.end();
 });
