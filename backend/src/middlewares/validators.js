@@ -1,32 +1,63 @@
+// Validadores para las peticiones HTTP
+
 const { body, param, query } = require('express-validator');
 
 const validators = {
-  // Validación para crear un usuario
+  // Validacion para crear un usuario
   crearUsuario: [
     body('nombre').notEmpty().withMessage('El nombre es obligatorio'),
-    body('correo').isEmail().withMessage('El correo no es válido'),
-    body('password').isLength({ min: 6 }).withMessage('La contraseña debe tener al menos 6 caracteres'),
-    body('familia').optional().isInt({ min: 1 }).withMessage('La familia debe ser un número entero positivo'),
+    body('correo').isEmail().withMessage('El correo no es valido'),
+    body('password')
+      .isLength({ min: 6 })
+      .withMessage('La contrasena debe tener al menos 6 caracteres'),
+    body('familia')
+      .optional()
+      .isInt({ min: 1 })
+      .withMessage('La familia debe ser un numero entero positivo'),
   ],
-  // Validación para crear un pedido
+  // Validacion para crear un pedido
   crearPedido: [
-    body('id_usuario_encargado').isInt().withMessage('El ID del usuario encargado debe ser un número'),
-    body('id_proveedor').isInt().withMessage('El ID del proveedor debe ser un número'),
-    body('fecha_apertura').isISO8601().withMessage('La fecha de apertura debe ser válida'),
-    body('fecha_cierre').isISO8601().withMessage('La fecha de cierre debe ser válida'),
-    body('fecha_entrega').isISO8601().withMessage('La fecha de entrega debe ser válida'),
-    body('estado').isIn(['pendiente', 'en proceso', 'entregado', 'repartido', 'cancelado']).withMessage('Estado no válido'),
+    body('id_usuario_encargado')
+      .isInt()
+      .withMessage('El ID del usuario encargado debe ser un numero'),
+    body('id_proveedor')
+      .isInt()
+      .withMessage('El ID del proveedor debe ser un numero'),
+    body('fecha_apertura')
+      .isISO8601()
+      .withMessage('La fecha de apertura debe ser valida'),
+    body('fecha_cierre')
+      .isISO8601()
+      .withMessage('La fecha de cierre debe ser valida'),
+    body('fecha_entrega')
+      .isISO8601()
+      .withMessage('La fecha de entrega debe ser valida'),
+    body('estado')
+      .isIn(['pendiente', 'en proceso', 'entregado', 'repartido', 'cancelado'])
+      .withMessage('Estado no valido'),
   ],
-  // Validación para paginación
+  // Validacion para paginacion
   paginacion: [
-    query('pagina').optional().isInt({ min: 1 }).withMessage('La página debe ser un número mayor a 0'),
-    query('limite').optional().isInt({ min: 1 }).withMessage('El límite debe ser un número mayor a 0'),
+    query('pagina')
+      .optional()
+      .isInt({ min: 1 })
+      .withMessage('La pagina debe ser un numero mayor a 0'),
+    query('limite')
+      .optional()
+      .isInt({ min: 1 })
+      .withMessage('El limite debe ser un numero mayor a 0'),
   ],
-  // Validación para crear un pago
+  // Validacion para crear un pago
   crearPago: [
-    body('id_usuario_deudor').isInt({ min: 1 }).withMessage('El ID del usuario deudor debe ser un número válido'),
-    body('id_usuario_creditor').isInt({ min: 1 }).withMessage('El ID del usuario acreedor debe ser un número válido'),
-    body('monto').isFloat({ gt: 0 }).withMessage('El monto debe ser mayor que 0'),
+    body('id_usuario_deudor')
+      .isInt({ min: 1 })
+      .withMessage('El ID del usuario deudor debe ser un numero valido'),
+    body('id_usuario_creditor')
+      .isInt({ min: 1 })
+      .withMessage('El ID del usuario acreedor debe ser un numero valido'),
+    body('monto')
+      .isFloat({ gt: 0 })
+      .withMessage('El monto debe ser mayor que 0'),
     body('estado')
       .optional()
       .isIn(['pendiente', 'completado'])

@@ -19,7 +19,7 @@ BEGIN
   ) THEN
     ALTER TABLE Pago
       ADD CONSTRAINT pago_unico_periodo_origen
-      UNIQUE (ID_Usuario_Deudor, ID_Usuario_Creditor, Periodo, Origen);
+      UNIQUE (id_usuario_Deudor, id_usuario_Creditor, Periodo, Origen);
   END IF;
 END $$;
 

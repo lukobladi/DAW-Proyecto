@@ -1084,14 +1084,14 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 - **Producto**: Almacena la información de los productos.
 - **Pedido**: Almacena la información de los pedidos.
 - **Detalle_Pedido**: Relaciona los pedidos con los productos.
-- **Usuario_Proveedor**: Relación muchos a muchos entre usuarios y proveedores.
+- **usuario_proveedor**: Relación muchos a muchos entre usuarios y proveedores.
 - **Pedido_Periodico**: Almacena la información de los pedidos periódicos.
 - **Pago**: Almacena la información de los pagos.
 - **Notificacion**: Almacena las notificaciones enviadas a los usuarios.
 
 #### Diagrama:
 ```
-[Usuario] --< [Usuario_Proveedor] >-- [Proveedor]
+[Usuario] --< [usuario_proveedor] >-- [Proveedor]
 [Proveedor] --< [Producto]
 [Usuario] --< [Pedido] >-- [Proveedor]
 [Pedido] --< [Detalle_Pedido] >-- [Producto]
@@ -1107,7 +1107,7 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 ### 1. Usuario
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
-| `ID_Usuario`     | `SERIAL`          | Clave primaria.                      |
+| `id_usuario`     | `SERIAL`          | Clave primaria.                      |
 | `Nombre`         | `VARCHAR(100)`    | Nombre del usuario.                  |
 | `Correo`         | `VARCHAR(100)`    | Correo electrónico (único).          |
 | `Contraseña`     | `VARCHAR(100)`    | Contraseña del usuario.              |
@@ -1121,7 +1121,7 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 ### 2. Proveedor
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
-| `ID_Proveedor`   | `SERIAL`          | Clave primaria.                      |
+| `id_proveedor`   | `SERIAL`          | Clave primaria.                      |
 | `Nombre`         | `VARCHAR(100)`    | Nombre del proveedor/grupo productos |
 | `Contacto`       | `VARCHAR(100)`    | Nombre de la persona de contacto.    |
 | `Telefono`       | `VARCHAR(20)`     | Teléfono del proveedor.              |
@@ -1142,7 +1142,7 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 | `Descripcion`    | `TEXT`            | Descripción del producto.            |
 | `Precio`         | `DECIMAL(10, 2)`  | Precio del producto.                 |
 | `Frecuencia_Pedido` | `VARCHAR(50)`  | Frecuencia de pedido (semanal, mensual, etc.). |
-| `ID_Proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
+| `id_proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
 
 ---
 
@@ -1150,8 +1150,8 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
 | `ID_Pedido`      | `SERIAL`          | Clave primaria.                      |
-| `ID_Usuario_Encargado` | `INT`     | Clave foránea (relación con `Usuario`). |
-| `ID_Proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
+| `id_usuario_Encargado` | `INT`     | Clave foránea (relación con `Usuario`). |
+| `id_proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
 | `Fecha_Modificacion` | `TIMESTAMP`       | Fecha y hora de modificacion del pedido. |
 | `Fecha_Apertura` | `TIMESTAMP`       | Fecha y hora de apertura del pedido. |
 | `Fecha_Cierre`   | `TIMESTAMP`       | Fecha límite para modificar el pedido. |
@@ -1168,16 +1168,16 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 | `ID_Producto`    | `INT`             | Clave foránea (relación con `Producto`). |
 | `Cantidad`       | `INT`             | Cantidad del producto.               |
 | `Precio_Total`   | `DECIMAL(10, 2)`  | Precio total del producto.           |
-| `ID_Usuario_Comprador` | `INT`     | Clave foránea (relación con `Usuario`). |
+| `id_usuario_Comprador` | `INT`     | Clave foránea (relación con `Usuario`). |
 | `Fecha_Modificacion` | `TIMESTAMP`       | Fecha y hora de modificacion del detalle. |
 
 ---
 
-### 6. Usuario_Proveedor (Relación muchos a muchos)
+### 6. usuario_proveedor (Relación muchos a muchos)
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
-| `ID_Usuario`     | `INT`             | Clave foránea (relación con `Usuario`). |
-| `ID_Proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
+| `id_usuario`     | `INT`             | Clave foránea (relación con `Usuario`). |
+| `id_proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
 
 ---
 
@@ -1185,7 +1185,7 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
 | `ID_Pedido_Periodico` | `SERIAL`    | Clave primaria.                      |
-| `ID_Proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
+| `id_proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
 | `Fecha_Inicio`   | `TIMESTAMP`       | Fecha de inicio del pedido periódico. |
 | `Fecha_Fin`      | `TIMESTAMP`       | Fecha de fin del pedido periódico.   |
 | `Activo`         | `BOOLEAN`         | Indica si el pedido está activo.     |
@@ -1200,8 +1200,8 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
 | `ID_Pago`        | `SERIAL`          | Clave primaria.                      |
-| `ID_Usuario_Deudor` | `INT`         | Clave foránea (relación con `Usuario`). |
-| `ID_Usuario_Creditor` | `INT`      | Clave foránea (relación con `Usuario`). |
+| `id_usuario_Deudor` | `INT`         | Clave foránea (relación con `Usuario`). |
+| `id_usuario_Creditor` | `INT`      | Clave foránea (relación con `Usuario`). |
 | `Monto`          | `DECIMAL(10, 2)`  | Monto del pago.                      |
 | `Fecha_Pago`     | `TIMESTAMP`       | Fecha y hora del pago.               |
 | `Estado`         | `VARCHAR(50)`     | Estado del pago (pendiente, completado). |
@@ -1212,7 +1212,7 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
 | `ID_Notificacion` | `SERIAL`         | Clave primaria.                      |
-| `ID_Usuario`     | `INT`             | Clave foránea (relación con `Usuario`). |
+| `id_usuario`     | `INT`             | Clave foránea (relación con `Usuario`). |
 | `Mensaje`        | `TEXT`            | Contenido de la notificación.        |
 | `Fecha`          | `TIMESTAMP`       | Fecha y hora de la notificación.     |
 | `Leida`          | `BOOLEAN`         | Indica si la notificación ha sido leída. |

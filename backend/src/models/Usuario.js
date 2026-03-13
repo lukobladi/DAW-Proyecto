@@ -1,15 +1,17 @@
-const bcrypt = require('bcryptjs'); // Reemplazar bcrypt con bcryptjs
+// Los models son para acceder a la base de datos
+
+const bcrypt = require('bcryptjs');
 const pool = require('../config/db');
 
 const Usuario = {
-  // Verificar contraseña
+  // Verificar contrasena
   async verifyPassword(password, hashedPassword) {
-    return bcrypt.compare(password, hashedPassword); // Compara la contraseña con el hash
+    return bcrypt.compare(password, hashedPassword);
   },
 
   // Crear un nuevo usuario
   async create(nombre, correo, password, rol, movil, familia = null) {
-    const hashedPassword = await bcrypt.hash(password, 10); // Genera el hash de la contraseña
+    const hashedPassword = await bcrypt.hash(password, 10);
     const query = `
       INSERT INTO Usuario (nombre, correo, pass, rol, movil, familia)
       VALUES ($1, $2, $3, $4, $5, $6)
@@ -20,12 +22,12 @@ const Usuario = {
     return rows[0];
   },
 
-  // Activar o desarctivar usuario
+  // Activar o desactivar usuario
   async toggleActivation(id, activo) {
     const query = `
       UPDATE Usuario
       SET Activo = $2
-      WHERE ID_Usuario = $1
+      WHERE id_usuario = $1
       RETURNING *;
     `;
     const values = [id, activo];
@@ -33,7 +35,7 @@ const Usuario = {
     return rows[0];
   },
 
-  // Obtener un usuario por correo o móvil
+  // Obtener un usuario por correo o movil
   async findByEmailOrMobile(correoOMovil) {
     const query = `
       SELECT * FROM Usuario
@@ -47,12 +49,12 @@ const Usuario = {
   // Obtener todos los usuarios
   async findAll() {
     const query = `
-      SELECT DISTINCT ON (u.ID_Usuario) u.*, 
+      SELECT DISTINCT ON (u.id_usuario) u.*, 
              p.id_proveedor as proveedor_id, 
              p.nombre as proveedor_nombre
       FROM Usuario u
       LEFT JOIN Proveedor p ON u.familia = p.familia
-      ORDER BY u.ID_Usuario;
+      ORDER BY u.id_usuario;
     `;
     const { rows } = await pool.query(query);
     return rows;
@@ -60,9 +62,9 @@ const Usuario = {
 
   // Obtener un usuario por ID
   async findById(id) {
-    const query = 'SELECT * FROM Usuario WHERE ID_Usuario = $1;';
+    const query = 'SELECT * FROM Usuario WHERE id_usuario = $1;';
     const { rows } = await pool.query(query, [id]);
-    return rows.length > 0 ? rows[0] : null; // Return null if no user is found
+    return rows.length > 0 ? rows[0] : null;
   },
 
   // Actualizar un usuario
@@ -75,16 +77,16 @@ const Usuario = {
     `;
     const values = [id, nombre, correo, rol, movil, familia];
     const { rows } = await pool.query(query, values);
-    return rows.length > 0 ? rows[0] : null; // Return null if no user is updated
+    return rows.length > 0 ? rows[0] : null;
   },
 
-  // Actualizar la contraseña de un usuario
+  // Actualizar la contrasena de un usuario
   async updatePassword(id, nuevaPassword) {
-    const hashedPassword = await bcrypt.hash(nuevaPassword, 10); // Genera el hash de la nueva contraseña
+    const hashedPassword = await bcrypt.hash(nuevaPassword, 10);
     const query = `
       UPDATE Usuario
       SET Pass = $2
-      WHERE ID_Usuario = $1
+      WHERE id_usuario = $1
       RETURNING *;
     `;
     const { rows } = await pool.query(query, [id, hashedPassword]);
@@ -93,27 +95,29 @@ const Usuario = {
 
   // Eliminar un usuario
   async delete(id) {
-    const query = 'DELETE FROM Usuario WHERE ID_Usuario = $1 RETURNING *;';
+    const query = 'DELETE FROM Usuario WHERE id_usuario = $1 RETURNING *;';
     const { rows } = await pool.query(query, [id]);
-    return rows.length > 0 ? rows[0] : null; // Return null if no user was deleted
+    return rows.length > 0 ? rows[0] : null;
   },
 
+  // Calcular el saldo que debe un usuario
   async calcularSaldo(id_usuario) {
     const query = `
       SELECT SUM(Monto) AS saldo
       FROM Pago
-      WHERE ID_Usuario_Deudor = $1 AND Estado = 'pendiente';
+      WHERE id_usuario_Deudor = $1 AND Estado = 'pendiente';
     `;
-    const { rows } = await pool.query(query, [id_usuario]); // Cambiar db.query a pool.query
-    return parseFloat(rows[0].saldo) || 0; // Convertir a número
+    const { rows } = await pool.query(query, [id_usuario]);
+    return parseFloat(rows[0].saldo) || 0;
   },
 
-  // Obtener correos de administradores
+  // Obtener los correos de los administradores
   async findAdminEmails() {
-    const query = 'SELECT correo FROM Usuario WHERE rol = $1 AND activo = true;';
+    const query =
+      'SELECT correo FROM Usuario WHERE rol = $1 AND activo = true;';
     const { rows } = await pool.query(query, ['admin']);
-    return rows.map(row => row.correo);
-  }
+    return rows.map((row) => row.correo);
+  },
 };
 
 module.exports = Usuario;

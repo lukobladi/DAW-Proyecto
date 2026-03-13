@@ -1,3 +1,6 @@
+// Configuracion del router de Vue
+// Define todas las rutas de la aplicacion y los guards de navegacion
+
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '@/store';
 import HomePage from '@/views/HomePage.vue';
@@ -19,15 +22,16 @@ import GestionPagosPage from '@/views/GestionPagosPage.vue';
 import GestionNotificacionesPage from '@/views/GestionNotificacionesPage.vue';
 import GestionSaldosPage from '@/views/GestionSaldosPage.vue';
 
+// Definicion de todas las rutas de la aplicacion
 const routes = [
   {
     path: '/',
-    name: 'Home', // Nombre de la ruta para la página de inicio
+    name: 'Home',
     component: HomePage,
   },
   {
     path: '/login',
-    name: 'Login', // Nombre de la ruta para la página de inicio de sesión
+    name: 'Login',
     component: LoginPage,
   },
   {
@@ -69,7 +73,7 @@ const routes = [
     path: '/gestion-usuarios',
     name: 'GestionUsuarios',
     component: GestionUsuariosPage,
-    meta: { requiresAuth: true, requiresAdmin: true }, // Ruta protegida solo admin
+    meta: { requiresAuth: true, requiresAdmin: true }, // Solo admin
   },
   {
     path: '/configuracion',
@@ -131,21 +135,25 @@ const router = createRouter({
   routes,
 });
 
-// Guard de navegación global
+// Guard de navegacion global
+// Comprueba si el usuario esta autenticado y tiene los permisos necesarios
 router.beforeEach((to) => {
   const authStore = useAuthStore();
   authStore.hydrateAuthState();
   const isAuthenticated = authStore.isAuthenticated;
   const isAdmin = authStore.user?.role === 'admin';
 
+  // Si la ruta requiere autenticacion y no esta logueado, redirijo a login
   if (to.meta.requiresAuth && !isAuthenticated) {
     return { name: 'Login' };
   }
 
+  // Si la ruta requiere admin y no es admin, redirijo al dashboard
   if (to.meta.requiresAdmin && !isAdmin) {
     return { name: 'Dashboard' };
   }
 
+  // Si esta logueado e intenta ir a login, redirijo al dashboard
   if (to.name === 'Login' && isAuthenticated) {
     return { name: 'Dashboard' };
   }

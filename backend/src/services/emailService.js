@@ -1,11 +1,16 @@
+// Servicio para enviar correos electronicos. nodemailer con Gmail y OAuth2
+
 const nodemailer = require('nodemailer');
 const logger = require('../config/logger');
 
 const emailService = {
+  // Enviar un correo a un solo destinatario
   async enviarCorreo(destinatario, asunto, mensaje) {
-    logger.info(`Intentando enviar correo a: ${destinatario}, Asunto: ${asunto}`);
+    logger.info(
+      `Intentando enviar correo a: ${destinatario}, Asunto: ${asunto}`
+    );
     try {
-      // Configuracion transporte de correo
+      // Configuracion del transporte de correo
       const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -14,12 +19,11 @@ const emailService = {
           pass: process.env.EMAIL_PASS,
           clientId: process.env.OAUTH_CLIENTID,
           clientSecret: process.env.OAUTH_CLIENT_SECRET,
-          refreshToken: process.env.OAUTH_REFRESH_TOKEN
-        }
-
+          refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+        },
       });
 
-      // Configuracion correo
+      // Configuracion del correo
       const mailOptions = {
         from: 'emartinmon6@educacion.navarra.es',
         to: destinatario,
@@ -36,8 +40,11 @@ const emailService = {
     }
   },
 
+  // Enviar un correo a varios destinatarios (copia oculta)
   async enviarCorreoMultiple(destinatarios, asunto, mensaje) {
-    logger.info(`Intentando enviar correo a ${destinatarios.length} destinatarios, Asunto: ${asunto}`);
+    logger.info(
+      `Intentando enviar correo a ${destinatarios.length} destinatarios, Asunto: ${asunto}`
+    );
     try {
       const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -47,8 +54,8 @@ const emailService = {
           pass: process.env.EMAIL_PASS,
           clientId: process.env.OAUTH_CLIENTID,
           clientSecret: process.env.OAUTH_CLIENT_SECRET,
-          refreshToken: process.env.OAUTH_REFRESH_TOKEN
-        }
+          refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+        },
       });
 
       const mailOptions = {
@@ -59,7 +66,9 @@ const emailService = {
       };
 
       await transporter.sendMail(mailOptions);
-      logger.info(`Correo enviado correctamente a ${destinatarios.length} destinatarios`);
+      logger.info(
+        `Correo enviado correctamente a ${destinatarios.length} destinatarios`
+      );
     } catch (error) {
       logger.error(`Error al enviar correo masivo:`, error);
       throw new Error('No se pudo enviar el correo');

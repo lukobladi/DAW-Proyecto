@@ -1,4 +1,5 @@
-// Los controllers GEstiona logica de solicitud HTTP
+// Controller para las notificaciones
+// GEstiona la logica de las peticiones HTTP relacionadas con notificaciones
 
 const Notificacion = require('../models/Notificacion');
 const Usuario = require('../models/Usuario');
@@ -6,7 +7,8 @@ const emailService = require('../services/emailService');
 const logger = require('../config/logger');
 
 const NotificacionController = {
-  // Enviar notificación
+  // Enviar una notificacion a un usuario
+  // Si es de soporte tambien manda email a los admins
   async enviar(req, res) {
     const { id_usuario, mensaje } = req.body;
     try {
@@ -24,7 +26,9 @@ const NotificacionController = {
                 'Nueva consulta de soporte - Ekonsumo',
                 mensajeCompleto
               );
-              logger.info(`Correo de soporte enviado a ${adminEmails.length} administradores`);
+              logger.info(
+                `Correo de soporte enviado a ${adminEmails.length} administradores`
+              );
             }
           }
         } catch (emailError) {
@@ -39,7 +43,7 @@ const NotificacionController = {
     }
   },
 
-  // Marcar una notificación como leída
+  // Marcar una notificacion como leida
   async marcarLeida(req, res) {
     const { id } = req.params;
     try {
@@ -47,7 +51,7 @@ const NotificacionController = {
       res.json(notificacion);
     } catch (err) {
       console.error(err);
-      res.status(500).send('Error al marcar la notificación como leída');
+      res.status(500).send('Error al marcar la notificacion como leida');
     }
   },
 };

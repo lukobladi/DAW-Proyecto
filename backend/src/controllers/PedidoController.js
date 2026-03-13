@@ -1,4 +1,5 @@
-// Los controllers GEstiona logica de solicitud HTTP
+// Controller para los pedidos
+// GEstiona la logica de las peticiones HTTP relacionadas con pedidos
 
 const Pedido = require('../models/Pedido');
 const Usuario = require('../models/Usuario');
@@ -7,9 +8,23 @@ const Proveedor = require('../models/Proveedor');
 const PedidoController = {
   // Crear un nuevo pedido
   async crear(req, res) {
-    const { fecha_apertura, fecha_cierre, fecha_entrega, familia, id_proveedor, estado } = req.body;
+    const {
+      fecha_apertura,
+      fecha_cierre,
+      fecha_entrega,
+      familia,
+      id_proveedor,
+      estado,
+    } = req.body;
     try {
-      const nuevoPedido = await Pedido.create(fecha_apertura, fecha_cierre, fecha_entrega, familia, id_proveedor, estado);
+      const nuevoPedido = await Pedido.create(
+        fecha_apertura,
+        fecha_cierre,
+        fecha_entrega,
+        familia,
+        id_proveedor,
+        estado
+      );
       res.status(201).json(nuevoPedido);
     } catch (err) {
       console.error(err);
@@ -28,20 +43,24 @@ const PedidoController = {
     }
   },
 
-  // Obtener pedidos del proveedor asignado a la familia del usuario
+  // Obtener pedidos del proveedor que gestiona la familia del usuario
   async listarPorProveedorAsignado(req, res) {
     try {
       const id_usuario = req.user.id_usuario;
       const usuario = await Usuario.findById(id_usuario);
-      
+
       if (!usuario || !usuario.familia) {
-        return res.status(403).json({ error: 'No peretenece a ninguna familia' });
+        return res
+          .status(403)
+          .json({ error: 'No perteneces a ninguna familia' });
       }
 
       const proveedor = await Proveedor.findByFamilia(usuario.familia);
-      
+
       if (!proveedor) {
-        return res.status(403).json({ error: 'TU familia no gestiona ningún proveedor' });
+        return res
+          .status(403)
+          .json({ error: 'Tu familia no gestiona ningun proveedor' });
       }
 
       const pedidos = await Pedido.findByProveedor(proveedor.id_proveedor);
@@ -70,9 +89,24 @@ const PedidoController = {
   // Actualizar un pedido
   async actualizar(req, res) {
     const { id } = req.params;
-    const { fecha_apertura, fecha_cierre, fecha_entrega, familia, id_proveedor, estado } = req.body;
+    const {
+      fecha_apertura,
+      fecha_cierre,
+      fecha_entrega,
+      familia,
+      id_proveedor,
+      estado,
+    } = req.body;
     try {
-      const pedidoActualizado = await Pedido.update(id, fecha_apertura, fecha_cierre, fecha_entrega, familia, id_proveedor, estado);
+      const pedidoActualizado = await Pedido.update(
+        id,
+        fecha_apertura,
+        fecha_cierre,
+        fecha_entrega,
+        familia,
+        id_proveedor,
+        estado
+      );
       res.json(pedidoActualizado);
     } catch (err) {
       console.error(err);
@@ -107,7 +141,7 @@ const PedidoController = {
       console.error(err);
       res.status(500).send('Error al cambiar el estado del pedido');
     }
-  }
+  },
 };
 
 module.exports = PedidoController;

@@ -1,17 +1,33 @@
+// Los models son para acceder a la base de datos
+
 const pool = require('../config/db');
 
 const Pedido = {
   // Crear un nuevo pedido
-    async create(fecha_apertura, fecha_cierre, fecha_entrega, familia, id_proveedor, estado) {
-      const query = `
+  async create(
+    fecha_apertura,
+    fecha_cierre,
+    fecha_entrega,
+    familia,
+    id_proveedor,
+    estado
+  ) {
+    const query = `
         INSERT INTO Pedido (fecha_apertura, fecha_cierre, fecha_entrega, familia, id_proveedor, estado, fecha_modificacion)
         VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP)
         RETURNING *;
       `;
-      const values = [fecha_apertura, fecha_cierre, fecha_entrega, familia, id_proveedor, estado];
-      const { rows } = await pool.query(query, values);
-      return rows[0];
-    },
+    const values = [
+      fecha_apertura,
+      fecha_cierre,
+      fecha_entrega,
+      familia,
+      id_proveedor,
+      estado,
+    ];
+    const { rows } = await pool.query(query, values);
+    return rows[0];
+  },
 
   // Obtener todos los pedidos
   async findAll() {
@@ -34,7 +50,7 @@ const Pedido = {
     return rows;
   },
 
-  // Obtener pedidos por familia
+  // Obtener pedidos por familia gestora
   async findByFamilia(familia) {
     const query = 'SELECT * FROM Pedido WHERE familia = $1;';
     const { rows } = await pool.query(query, [familia]);
@@ -42,14 +58,30 @@ const Pedido = {
   },
 
   // Actualizar un pedido
-  async update(id, fecha_apertura, fecha_cierre, fecha_entrega, familia, id_proveedor, estado) {
+  async update(
+    id,
+    fecha_apertura,
+    fecha_cierre,
+    fecha_entrega,
+    familia,
+    id_proveedor,
+    estado
+  ) {
     const query = `
       UPDATE Pedido
       SET fecha_apertura = $1, fecha_cierre = $2, fecha_entrega = $3, familia = $4, id_proveedor = $5, estado = $6, fecha_modificacion = CURRENT_TIMESTAMP
       WHERE id_pedido = $7
       RETURNING *;
     `;
-    const values = [fecha_apertura, fecha_cierre, fecha_entrega, familia, id_proveedor, estado, id];
+    const values = [
+      fecha_apertura,
+      fecha_cierre,
+      fecha_entrega,
+      familia,
+      id_proveedor,
+      estado,
+      id,
+    ];
     const { rows } = await pool.query(query, values);
     return rows[0];
   },

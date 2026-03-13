@@ -1,11 +1,11 @@
+// Rutas para gestion de usuarios. Login, registro, activacion, recuperacion de contrasena, etc
+
 const express = require('express');
 const UsuarioController = require('../controllers/UsuarioController');
-const authMiddleware = require('../middlewares/auth'); // Middleware de autenticación
-const adminMiddleware = require('../middlewares/admin'); // Middleware de autorización para administradores
-
+const authMiddleware = require('../middlewares/auth'); 
+const adminMiddleware = require('../middlewares/admin'); 
 
 const router = express.Router();
-
 
 /**
  * @swagger
@@ -38,7 +38,12 @@ const router = express.Router();
  *       500:
  *         description: Error al obtener los usuarios
  */
-router.get('/obtenerTodos', authMiddleware, adminMiddleware, UsuarioController.listar); // Solo administradores
+router.get(
+  '/obtenerTodos',
+  authMiddleware,
+  adminMiddleware,
+  UsuarioController.listar
+); // Solo administradores
 
 /**
  * @swagger
@@ -79,7 +84,6 @@ router.get('/obtenerTodos', authMiddleware, adminMiddleware, UsuarioController.l
  *         description: Error al obtener el usuario
  */
 router.get('/obtener/:id', authMiddleware, UsuarioController.obtenerPorId); // Usuarios autenticados
-
 
 /**
  * @swagger
@@ -142,7 +146,7 @@ router.post('/registrar', UsuarioController.registrar);
  * /api/usuarios/activar/{id}:
  *   patch:
  *     summary: Activar o desactivar un usuario
- *     tags: 
+ *     tags:
  *       - Usuarios
  *     security:
  *       - bearerAuth: [] # Indica que esta ruta requiere autenticación
@@ -181,14 +185,19 @@ router.post('/registrar', UsuarioController.registrar);
  *       500:
  *         description: Error al actualizar el estado del usuario
  */
-router.patch('/activar/:id', authMiddleware, adminMiddleware, UsuarioController.cambiarEstadoActivo);
+router.patch(
+  '/activar/:id',
+  authMiddleware,
+  adminMiddleware,
+  UsuarioController.cambiarEstadoActivo
+);
 
 /**
  * @swagger
  * /api/usuarios/login:
  *   post:
  *     summary: Autenticar un usuario (login)
- *     tags: 
+ *     tags:
  *       - Usuarios
  *     requestBody:
  *       required: true
@@ -237,7 +246,6 @@ router.patch('/activar/:id', authMiddleware, adminMiddleware, UsuarioController.
  *         description: Error al iniciar sesión
  */
 router.post('/login', UsuarioController.login);
-
 
 /**
  * @swagger
@@ -356,7 +364,12 @@ router.put('/actualizar/:id', authMiddleware, UsuarioController.actualizar); // 
  *       500:
  *         description: Error al eliminar el usuario
  */
-router.delete('/eliminar/:id', authMiddleware, adminMiddleware, UsuarioController.eliminar); // Solo administradores
+router.delete(
+  '/eliminar/:id',
+  authMiddleware,
+  adminMiddleware,
+  UsuarioController.eliminar
+); // Solo administradores
 
 /**
  * @swagger
@@ -388,8 +401,10 @@ router.delete('/eliminar/:id', authMiddleware, adminMiddleware, UsuarioControlle
  *       500:
  *         description: Error al calcular el saldo
  */
-router.get('/obtenerSaldo/:id_usuario', authMiddleware, UsuarioController.calcularSaldo);
-
-
+router.get(
+  '/obtenerSaldo/:id_usuario',
+  authMiddleware,
+  UsuarioController.calcularSaldo
+);
 
 module.exports = router;

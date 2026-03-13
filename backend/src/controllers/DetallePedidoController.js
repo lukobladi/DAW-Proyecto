@@ -1,17 +1,20 @@
-// Los controllers GEstiona logica de solicitud HTTP
+// Controller para los detalles de pedido
+// GEstiona la logica de las peticiones HTTP relacionadas con los detalles de cada pedido
 
 const DetallePedido = require('../models/DetallePedido');
 const Pedido = require('../models/Pedido');
 
-// El pedido está abiero si no está en estado pendiente, 
-// la fecha de apertura ya ha pasado y la fecha de cierre todavia no ha pasado
+// Funcion helper para saber si un pedido esta abierto
+// Un pedido esta abierto si esta en estado pendiente, la fecha de apertura ya paso y la de cierre todavia no
 function pedidoEstaAbierto(pedido) {
   if (!pedido || pedido.estado !== 'pendiente') {
     return false;
   }
 
   const ahora = new Date();
-  const apertura = pedido.fecha_apertura ? new Date(pedido.fecha_apertura) : null;
+  const apertura = pedido.fecha_apertura
+    ? new Date(pedido.fecha_apertura)
+    : null;
   const cierre = pedido.fecha_cierre ? new Date(pedido.fecha_cierre) : null;
 
   if (apertura && ahora < apertura) {
@@ -26,11 +29,23 @@ function pedidoEstaAbierto(pedido) {
 }
 
 const DetallePedidoController = {
-  // Crear un nuevo detalle de pedido
+  // Crear un nuevo detalle de pedido (una linea de producto en un pedido)
   async crear(req, res) {
-    const { id_pedido, id_producto, cantidad, precio_unitario, id_usuario_comprador } = req.body;
+    const {
+      id_pedido,
+      id_producto,
+      cantidad,
+      precio_unitario,
+      id_usuario_comprador,
+    } = req.body;
     try {
-      const nuevoDetalle = await DetallePedido.create(id_pedido, id_producto, cantidad, precio_unitario, id_usuario_comprador);
+      const nuevoDetalle = await DetallePedido.create(
+        id_pedido,
+        id_producto,
+        cantidad,
+        precio_unitario,
+        id_usuario_comprador
+      );
       res.status(201).json(nuevoDetalle);
     } catch (err) {
       console.error(err);
@@ -38,7 +53,7 @@ const DetallePedidoController = {
     }
   },
 
-  // Obtener todos los detalles de un pedido
+  // Obtener todos los detalles de un pedido (todas las lineas de productos)
   async listarPorPedido(req, res) {
     const { id_pedido } = req.params;
     try {
@@ -50,24 +65,39 @@ const DetallePedidoController = {
     }
   },
 
-  // Actualizar un detalle de pedido
+  // Actualizar un detalle de pedido (cantidad, etc)
+  // Solo se puede modificar si el pedido esta abierto
   async actualizar(req, res) {
     const { id } = req.params;
-    const { id_pedido, id_producto, cantidad, precio_unitario, id_usuario_comprador } = req.body;
+    const {
+      id_pedido,
+      id_producto,
+      cantidad,
+      precio_unitario,
+      id_usuario_comprador,
+    } = req.body;
 
     if (cantidad === undefined || cantidad === null || Number(cantidad) < 0) {
-      return res.status(400).json({ error: 'La cantidad debe ser un numero mayor o igual a 0' });
+      return res
+        .status(400)
+        .json({ error: 'La cantidad debe ser un numero mayor o igual a 0' });
     }
 
     try {
       const detalleActual = await DetallePedido.findById(id);
       if (!detalleActual) {
-        return res.status(404).json({ error: 'Detalle de pedido no encontrado' });
+        return res
+          .status(404)
+          .json({ error: 'Detalle de pedido no encontrado' });
       }
 
       const pedido = await Pedido.findById(detalleActual.id_pedido);
       if (!pedidoEstaAbierto(pedido)) {
-        return res.status(409).json({ error: 'Solo se puede modificar un detalle de un pedido abierto' });
+        return res
+          .status(409)
+          .json({
+            error: 'Solo se puede modificar un detalle de un pedido abierto',
+          });
       }
 
       let detalleActualizado;
@@ -97,8 +127,7 @@ const DetallePedidoController = {
     }
   },
 
-
-  // Eliminar un detalle de pedido
+  // Eliminar un detalle de pedido (quitar un producto del pedido)
   async eliminar(req, res) {
     const { id } = req.params;
     try {

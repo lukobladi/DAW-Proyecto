@@ -3,7 +3,7 @@ TRUNCATE TABLE
   Notificacion,
   Pago,
   Pedido_Periodico,
-  Usuario_Proveedor,
+  usuario_proveedor,
   Detalle_Pedido,
   Pedido,
   Producto,
@@ -26,7 +26,7 @@ VALUES
     ('Bebidas del Norte', 'Jorge Fernández', '914445556', '600333444', 'contacto@bebidasnorte.com', 'efectivo', 'trimestral', TRUE, FALSE);
 
 -- Insertar datos de prueba en la tabla Producto
-INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Imagen)
+INSERT INTO Producto (Nombre, Descripcion, Precio, id_proveedor, Imagen)
 VALUES
     ('Manzanas', 'Manzanas ecológicas', 2.50, 1, '/uploads/manzanas.webp'),
     ('Naranjas', 'Naranjas de Valencia', 1.80, 1, '/uploads/naranjas.webp'),
@@ -35,14 +35,14 @@ VALUES
     ('Vino tinto', 'Vino tinto de la Rioja', 5.00, 3, '/uploads/vino.webp');
 
 -- Insertar datos de prueba en la tabla Pedido
-INSERT INTO Pedido (ID_Usuario_Encargado, ID_Proveedor, Fecha_Apertura, Fecha_Cierre, Fecha_Entrega, Estado)
+INSERT INTO Pedido (id_usuario_Encargado, id_proveedor, Fecha_Apertura, Fecha_Cierre, Fecha_Entrega, Estado)
 VALUES
     (1, 1, '2023-10-01 08:00:00', '2023-10-01 18:00:00', '2023-10-02 12:00:00', 'entregado'),
     (2, 2, '2023-10-05 09:00:00', '2023-10-05 17:00:00', '2023-10-06 10:00:00', 'en proceso'),
     (3, 3, '2023-10-10 10:00:00', NULL, NULL, 'pendiente');
 
 -- Insertar datos de prueba en la tabla Detalle_Pedido
-INSERT INTO Detalle_Pedido (ID_Pedido, ID_Producto, Cantidad, Precio_Unitario, ID_Usuario_Comprador)
+INSERT INTO Detalle_Pedido (ID_Pedido, ID_Producto, Cantidad, Precio_Unitario, id_usuario_Comprador)
 VALUES
     (1, 1, 10, 2.50, 1),
     (1, 2, 5, 1.80, 2),
@@ -50,29 +50,29 @@ VALUES
     (3, 4, 20, 0.50, 1),
     (3, 5, 5, 5.00, 2);
 
--- Insertar datos de prueba en la tabla Usuario_Proveedor
-INSERT INTO Usuario_Proveedor (ID_Usuario, ID_Proveedor)
+-- Insertar datos de prueba en la tabla usuario_proveedor
+INSERT INTO usuario_proveedor (id_usuario, id_proveedor)
 VALUES
     (1, 1),
     (2, 2),
     (3, 3);
 
 -- Insertar datos de prueba en la tabla Pedido_Periodico
-INSERT INTO Pedido_Periodico (ID_Proveedor, Fecha_Inicio, Fecha_Fin, Activo, Periodicidad, Dia_Apertura, Dia_Cierre, Dia_Entrega)
+INSERT INTO Pedido_Periodico (id_proveedor, Fecha_Inicio, Fecha_Fin, Activo, Periodicidad, Dia_Apertura, Dia_Cierre, Dia_Entrega)
 VALUES
     (1, '2023-10-01 00:00:00', NULL, TRUE, 7, 1, 2, 3), -- Pedido semanal
     (2, '2023-10-01 00:00:00', NULL, TRUE, 30, 5, 6, 7), -- Pedido mensual
     (3, '2023-10-01 00:00:00', NULL, TRUE, 90, 10, 11, 12); -- Pedido trimestral
 
 -- Insertar datos de prueba en la tabla Pago
-INSERT INTO Pago (ID_Usuario_Deudor, ID_Usuario_Creditor, Monto, Fecha_Pago, Estado)
+INSERT INTO Pago (id_usuario_Deudor, id_usuario_Creditor, Monto, Fecha_Pago, Estado)
 VALUES
     (1, 2, 50.00, '2023-10-01 12:00:00', 'completado'),
     (2, 3, 25.00, '2023-10-05 14:00:00', 'pendiente'),
     (3, 1, 10.00, '2023-10-10 16:00:00', 'completado');
 
 -- Insertar datos de prueba en la tabla Notificacion
-INSERT INTO Notificacion (ID_Usuario, Mensaje, Fecha, Leida)
+INSERT INTO Notificacion (id_usuario, Mensaje, Fecha, Leida)
 VALUES
     (1, 'Su pedido ha sido entregado.', '2023-10-02 12:30:00', TRUE),
     (2, 'Su pedido está en proceso.', '2023-10-05 17:30:00', FALSE),

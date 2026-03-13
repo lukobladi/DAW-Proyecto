@@ -177,7 +177,7 @@ for client-side exposure, but the API URL is currently hardcoded in `api.js`).
 - Seed data: `scripts/datosPrueba.sql`
 - Reset script: `sql/reset_database.sh`
 - Tables: `Usuario`, `Proveedor`, `Producto`, `Pedido`, `Detalle_Pedido`,
-  `Usuario_Proveedor`, `Pedido_Periodico`, `Pago`, `Notificacion`
+  `usuario_proveedor`, `Pedido_Periodico`, `Pago`, `Notificacion`
 
 ## General Guidelines
 

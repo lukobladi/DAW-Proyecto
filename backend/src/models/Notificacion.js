@@ -1,9 +1,13 @@
+// Model para las notificaciones de usuarios
+// Guarda mensajes que se muestran en la app
+
 const db = require('../config/db');
 
 class Notificacion {
+  // Envia una notificacion a un usuario
   static async enviar(id_usuario, mensaje) {
     const query = `
-      INSERT INTO Notificacion (ID_Usuario, Mensaje)
+      INSERT INTO Notificacion (id_usuario, Mensaje)
       VALUES ($1, $2)
       RETURNING *;
     `;
@@ -11,6 +15,7 @@ class Notificacion {
     return rows[0];
   }
 
+  // Marca una notificacion como leida
   static async marcarLeida(id) {
     const query = `
       UPDATE Notificacion

@@ -1,3 +1,6 @@
+<!-- Barra de navegacion principal -->
+<!-- Muestra el menu segun el rol del usuario y si esta autenticado -->
+
 <template>
   <nav class="navbar">
     <div class="navbar-brand">
@@ -5,6 +8,7 @@
       <span v-if="isAuthenticated && userName" class="navbar-user">{{ userName }}</span>
     </div>
     <div class="navbar-right">
+      <!-- Badge con el numero de pedidos pendientes de entrega -->
       <router-link
         v-if="isAuthenticated && pedidosPendientesEntrega > 0"
         to="/dashboard"
@@ -14,12 +18,14 @@
         <i class="fas fa-box"></i>
         <span class="badge-count">{{ pedidosPendientesEntrega }}</span>
       </router-link>
-      <button class="navbar-burger" @click="toggleMenu" aria-label="Abrir menú">
+      <!-- Boton hamburguesa para movil -->
+      <button class="navbar-burger" @click="toggleMenu" aria-label="Abrir menu">
         <span></span>
         <span></span>
         <span></span>
       </button>
     </div>
+    <!-- Menu de navegacion -->
     <div class="navbar-menu" :class="{ 'is-active': isMenuOpen }">
       <router-link to="/dashboard" class="navbar-item" @click="closeMenu">Dashboard</router-link>
       <router-link to="/compras" class="navbar-item" @click="closeMenu">Compras</router-link>
@@ -43,6 +49,7 @@
 </template>
 
 <script>
+// Barra de navegacion que muestra el menu segun el rol del usuario
 import { useAuthStore } from '@/store';
 import api from '@/services/api';
 
@@ -77,6 +84,7 @@ export default {
   },
   watch: {
     isAuthenticated(val) {
+      // Cuando cambia el estado de autenticacion, verifico si tiene proveedor
       if (val) {
         this.verificarProveedor();
         this.cargarPedidosPendientes();
@@ -86,12 +94,15 @@ export default {
     },
   },
   methods: {
+    // Abre/cierra el menu en movil
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen;
     },
+    // Cierra el menu (al hacer click en un enlace)
     closeMenu() {
       this.isMenuOpen = false;
     },
+    // Verifica si el usuario tiene un proveedor asignado
     async verificarProveedor() {
       if (!this.isAuthenticated || this.isAdmin) {
         this.tieneProveedorAsignado = this.isAdmin;
@@ -108,6 +119,7 @@ export default {
         this.tieneProveedorAsignado = false;
       }
     },
+    // Carga el numero de pedidos pendientes de entrega para mostrar en el badge
     async cargarPedidosPendientes() {
       if (!this.isAuthenticated) {
         return;
@@ -122,10 +134,12 @@ export default {
         const [pedidosResponse] = await Promise.all([api.getPedidos()]);
         const pedidos = pedidosResponse.data || [];
 
+        // Filtro los pedidos que no estan repartidos ni cancelados
         const pedidosPendientes = pedidos.filter(
           pedido => !['repartido', 'cancelado'].includes(pedido.estado)
         );
 
+        // Cuento los productos del usuario en esos pedidos
         let totalProductos = 0;
         for (const pedido of pedidosPendientes) {
           const detallesResponse = await api.getDetallesPedidoPorPedido(pedido.id_pedido);
@@ -142,6 +156,7 @@ export default {
         this.pedidosPendientesEntrega = 0;
       }
     },
+    // Cierra la sesion del usuario
     async logout() {
       try {
         const authStore = useAuthStore();
@@ -149,10 +164,10 @@ export default {
         this.pedidosPendientesEntrega = 0;
         this.isMenuOpen = false;
         this.$router.push({ name: 'Login' }).catch((err) => {
-          console.error('Error al redirigir a la página de inicio de sesión:', err);
+          console.error('Error al redirigir a la pagina de inicio de sesion:', err);
         });
       } catch (error) {
-        console.error('Error al cerrar sesión:', error);
+        console.error('Error al cerrar sesion:', error);
       }
     },
   },

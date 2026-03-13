@@ -1,6 +1,8 @@
+// Rutas para los detalles de pedido. linea de producto dentro de un pedido
+
 const express = require('express');
 const DetallePedidoController = require('../controllers/DetallePedidoController');
-const authMiddleware = require('../middlewares/auth'); // Middleware de autenticación
+const authMiddleware = require('../middlewares/auth');
 
 const router = express.Router();
 
@@ -73,7 +75,11 @@ router.post('/crear/', authMiddleware, DetallePedidoController.crear);
  *       500:
  *         description: Error al obtener los detalles del pedido
  */
-router.get('/pedido/:id_pedido', authMiddleware, DetallePedidoController.listarPorPedido);
+router.get(
+  '/pedido/:id_pedido',
+  authMiddleware,
+  DetallePedidoController.listarPorPedido
+);
 
 /**
  * @swagger
@@ -121,7 +127,11 @@ router.get('/pedido/:id_pedido', authMiddleware, DetallePedidoController.listarP
  *       500:
  *         description: Error al actualizar el detalle de pedido
  */
-router.put('/actualizar/:id', authMiddleware, DetallePedidoController.actualizar);
+router.put(
+  '/actualizar/:id',
+  authMiddleware,
+  DetallePedidoController.actualizar
+);
 
 /**
  * @swagger
@@ -146,6 +156,10 @@ router.put('/actualizar/:id', authMiddleware, DetallePedidoController.actualizar
  *       500:
  *         description: Error al eliminar el detalle de pedido
  */
-router.delete('/eliminar/:id', authMiddleware, DetallePedidoController.eliminar);
+router.delete(
+  '/eliminar/:id',
+  authMiddleware,
+  DetallePedidoController.eliminar
+);
 
 module.exports = router;

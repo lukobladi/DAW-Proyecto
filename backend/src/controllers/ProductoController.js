@@ -12,7 +12,13 @@ const ProductoController = {
     const imagen = req.file ? `/uploads/${req.file.filename}` : null;
 
     try {
-      const nuevoProducto = await Producto.create(nombre, descripcion, precio, id_proveedor, imagen);
+      const nuevoProducto = await Producto.create(
+        nombre,
+        descripcion,
+        precio,
+        id_proveedor,
+        imagen
+      );
       res.status(201).json(nuevoProducto);
     } catch (err) {
       console.error(err);
@@ -36,15 +42,22 @@ const ProductoController = {
     try {
       const id_usuario = req.user.id_usuario;
       const usuario = await Usuario.findById(id_usuario);
-      
+
       if (!usuario || !usuario.familia) {
-        return res.status(403).json({ error: 'No pertenece a ninguna familia' });
+        return res
+          .status(403)
+          .json({ error: 'No pertenece a ninguna familia' });
       }
 
       const proveedor = await Proveedor.findByFamilia(usuario.familia);
-      
+
       if (!proveedor) {
-        return res.status(403).json({ error: 'Tu familia no tiene proveedor asignado. COntacte con un administrador para asignarle uno' });
+        return res
+          .status(403)
+          .json({
+            error:
+              'Tu familia no tiene proveedor asignado. COntacte con un administrador para asignarle uno',
+          });
       }
 
       const productos = await Producto.findByProveedor(proveedor.id_proveedor);
@@ -108,7 +121,7 @@ const ProductoController = {
   // Cambiar el estado de un producto
   async cambiarEstadoActivo(req, res) {
     const { id } = req.params;
-    const { activo } = req.body; // `activo` debe ser un booleano 
+    const { activo } = req.body; // `activo` debe ser un booleano
 
     try {
       const producto = await Producto.findById(id);
@@ -122,7 +135,7 @@ const ProductoController = {
       console.error(err);
       res.status(500).send('Error al cambiar el estado del producto');
     }
-  }
+  },
 };
 
 module.exports = ProductoController;

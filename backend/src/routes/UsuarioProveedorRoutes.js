@@ -1,6 +1,8 @@
+// Rutas para la relacion usuario-proveedor
+
 const express = require('express');
 const UsuarioProveedorController = require('../controllers/UsuarioProveedorController');
-const authMiddleware = require('../middlewares/auth'); // Middleware de autenticación
+const authMiddleware = require('../middlewares/auth'); 
 
 const router = express.Router();
 
@@ -61,7 +63,11 @@ router.post('/crear', authMiddleware, UsuarioProveedorController.crearRelacion);
  *       500:
  *         description: Error del servidor
  */
-router.get('/obtenerProveedoresUsuario/:id_usuario', authMiddleware, UsuarioProveedorController.obtenerRelacionesPorUsuario);
+router.get(
+  '/obtenerProveedoresUsuario/:id_usuario',
+  authMiddleware,
+  UsuarioProveedorController.obtenerRelacionesPorUsuario
+);
 
 /**
  * @swagger
@@ -84,7 +90,11 @@ router.get('/obtenerProveedoresUsuario/:id_usuario', authMiddleware, UsuarioProv
  *       500:
  *         description: Error del servidor
  */
-router.get('/obtenerUsuariosProveedor/:id_proveedor', authMiddleware, UsuarioProveedorController.obtenerRelacionesPorProveedor);
+router.get(
+  '/obtenerUsuariosProveedor/:id_proveedor',
+  authMiddleware,
+  UsuarioProveedorController.obtenerRelacionesPorProveedor
+);
 
 /**
  * @swagger
@@ -115,6 +125,10 @@ router.get('/obtenerUsuariosProveedor/:id_proveedor', authMiddleware, UsuarioPro
  *       500:
  *         description: Error del servidor
  */
-router.delete('/eliminar/:id_usuario/:id_proveedor', authMiddleware, UsuarioProveedorController.eliminarRelacion);
+router.delete(
+  '/eliminar/:id_usuario/:id_proveedor',
+  authMiddleware,
+  UsuarioProveedorController.eliminarRelacion
+);
 
 module.exports = router;

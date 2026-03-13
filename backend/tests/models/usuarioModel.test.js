@@ -111,7 +111,10 @@ describe('Funciones adicionales del modelo Usuario', () => {
     const usuario = await Usuario.findById(usuarioId);
     expect(usuario).not.toBeNull(); // Validar que el usuario existe
     if (usuario) {
-      const isValid = await Usuario.verifyPassword(usuarioData.password, usuario.pass);
+      const isValid = await Usuario.verifyPassword(
+        usuarioData.password,
+        usuario.pass
+      );
       expect(isValid).toBe(true);
     }
   });

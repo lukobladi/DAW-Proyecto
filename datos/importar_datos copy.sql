@@ -6,7 +6,7 @@
 -- LIMPIAR TABLAS
 -- ============================================
 
-TRUNCATE TABLE Notificacion, Pago, Pedido_Periodico, Usuario_Proveedor, Detalle_Pedido, Pedido, Producto, Proveedor, Usuario RESTART IDENTITY CASCADE;
+TRUNCATE TABLE Notificacion, Pago, Pedido_Periodico, usuario_proveedor, Detalle_Pedido, Pedido, Producto, Proveedor, Usuario RESTART IDENTITY CASCADE;
 
 -- ============================================
 -- 1. USUARIOS
@@ -135,8 +135,8 @@ INSERT INTO Proveedor (Nombre, Contacto, Telefono, Movil, Correo, Metodo_Pago, F
 -- 3. PRODUCTOS
 -- ============================================
 
--- Productos de KIKO (BARDEA) (ID_Proveedor = 1)
-INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
+-- Productos de KIKO (BARDEA) (id_proveedor = 1)
+INSERT INTO Producto (Nombre, Descripcion, Precio, id_proveedor, Activo) VALUES
 ('Bardea garrafa 5lts', '33,00€', 25, 1, TRUE),
 ('BARDEA-LATA 5 lts.', '35,00€', 3, 1, TRUE),
 ('Bardea garrafa 5lts', '33,00€', 19, 1, TRUE),
@@ -150,8 +150,8 @@ INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
 ('Almazara del Ebro 5 lts.', '37,00€', 33, 1, TRUE),
 ('Almazara del Ebro 5 lts.', '32,00€', 34, 1, TRUE);
 
--- Productos de PLÁCIDO TAINTA (Falces) (ID_Proveedor = 2)
-INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
+-- Productos de PLÁCIDO TAINTA (Falces) (id_proveedor = 2)
+INSERT INTO Producto (Nombre, Descripcion, Precio, id_proveedor, Activo) VALUES
 ('Horca 60, cabezas de ajo grande', '38,00€', 3, 2, TRUE),
 ('Horca 20, cabeza de ajo grande', '19,00€', 3, 2, TRUE),
 ('Bolsa de 10 cabezas', '8,00€', 1, 2, TRUE),
@@ -159,8 +159,8 @@ INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
 ('Horca 60, cabezas de ajo mediano', '33,00€', 1, 2, TRUE),
 ('Horca 20, cabeza de ajo grande', '18,00€', 2, 2, TRUE);
 
--- Productos de EL ALCARAVAN José Miguel Bienzobas (ID_Proveedor = 3)
-INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
+-- Productos de EL ALCARAVAN José Miguel Bienzobas (id_proveedor = 3)
+INSERT INTO Producto (Nombre, Descripcion, Precio, id_proveedor, Activo) VALUES
 ('ARROZ ECO INTEGRAL SEMILARGO 1Kg', '3,39€', 4, 3, TRUE),
 ('ARROZ ECO SEMILARGO (BLANCO) 1Kg', '3,55€', 9, 3, TRUE),
 ('ARROZ ECO SEMILARGO (BLANCO) 5Kg', '17,50€', 1, 3, TRUE),
@@ -317,14 +317,14 @@ INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
 ('HARINA ECO BLANCA TRIGO ARAGON 1Kg', '1,90€', 6, 3, TRUE),
 ('HARINA ECO BLANCA TRIGO ARAGON 5Kg', '8,00€', 1, 3, TRUE);
 
--- Productos de ESTER (ETXAURI) (ID_Proveedor = 5)
-INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
+-- Productos de ESTER (ETXAURI) (id_proveedor = 5)
+INSERT INTO Producto (Nombre, Descripcion, Precio, id_proveedor, Activo) VALUES
 ('cerezas', '4,00€', 300, 5, TRUE),
 ('cerezas', '5,00€', 220, 5, TRUE),
 ('cerezas', '5,00€', 140, 5, TRUE);
 
--- Productos de COOPERATIVA LA CASELLA (ID_Proveedor = 6)
-INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
+-- Productos de COOPERATIVA LA CASELLA (id_proveedor = 6)
+INSERT INTO Producto (Nombre, Descripcion, Precio, id_proveedor, Activo) VALUES
 ('Naranjas', 'noviembre a abril', 177, 6, TRUE),
 ('Mandarinas', 'noviembre a marzo', 187, 6, TRUE),
 ('Limones', 'noviembre a mayo', 260, 6, TRUE),
@@ -688,8 +688,8 @@ INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
 ('Boniato morado', 'PEDIR kg', 361, 6, TRUE),
 ('Patata blanca', 'PEDIR kg', 179, 6, TRUE);
 
--- Productos de CONSERVAS ARTESANAS ALLO (ID_Proveedor = 7)
-INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
+-- Productos de CONSERVAS ARTESANAS ALLO (id_proveedor = 7)
+INSERT INTO Producto (Nombre, Descripcion, Precio, id_proveedor, Activo) VALUES
 ('Esparrágo Trigero entero', '420 gr.', 250, 7, TRUE),
 ('Espárrago Triguero trozos', '420 gr.', 250, 7, TRUE),
 ('Espárrago 6-8 Frutos', '420 gr.', 250, 7, TRUE),
@@ -1027,8 +1027,8 @@ INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
 ('Alubia blanca', '660 gr.', 400, 7, TRUE),
 ('Garbanzo extra', '660 gr.', 400, 7, TRUE);
 
--- Productos de JOSEAN (GOLDARAZ) (ID_Proveedor = 8)
-INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
+-- Productos de JOSEAN (GOLDARAZ) (id_proveedor = 8)
+INSERT INTO Producto (Nombre, Descripcion, Precio, id_proveedor, Activo) VALUES
 ('1 docena', '3,60€', 22, 8, TRUE),
 ('1/2 docena', '1,80€', 7, 8, TRUE),
 ('1 docena', '3,60€', 22, 8, TRUE),
@@ -1410,8 +1410,8 @@ INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
 ('1 docena', '4,20€', 19, 8, TRUE),
 ('1/2 docena', '2,10€', 9, 8, TRUE);
 
--- Productos de MAITE (BAZTÁN) (ID_Proveedor = 9)
-INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
+-- Productos de MAITE (BAZTÁN) (id_proveedor = 9)
+INSERT INTO Producto (Nombre, Descripcion, Precio, id_proveedor, Activo) VALUES
 ('grandes', '3,00€', 500, 9, TRUE),
 ('grandes', '3,00€', 400, 9, TRUE),
 ('grandes', '3,00€', 400, 9, TRUE),
@@ -1423,8 +1423,8 @@ INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
 ('grandes', '3,00€', 100, 9, TRUE),
 ('grandes', '2,80€', 300, 9, TRUE);
 
--- Productos de JAUREGIA ESNEKIAK (ID_Proveedor = 10)
-INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
+-- Productos de JAUREGIA ESNEKIAK (id_proveedor = 10)
+INSERT INTO Producto (Nombre, Descripcion, Precio, id_proveedor, Activo) VALUES
 ('Leche pasteuri. (1 Ltr.) caducidad 5 días', '1,46€', 29, 10, TRUE),
 ('Yogurt (400 gr.)', '1,87€', 38, 10, TRUE),
 ('Consumo vidrio febrero abril', '', 277, 10, TRUE),
@@ -1820,8 +1820,8 @@ INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
 ('Leche pasteuri. (1 Ltr.) caducidad 5 días', '1,85€', 14, 10, TRUE),
 ('Yogurt (400 gr.)', '2,20€', 13, 10, TRUE);
 
--- Productos de ADANATURA (Álava) (ID_Proveedor = 11)
-INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
+-- Productos de ADANATURA (Álava) (id_proveedor = 11)
+INSERT INTO Producto (Nombre, Descripcion, Precio, id_proveedor, Activo) VALUES
 ('GARBANZO', '3,50€', 27, 11, TRUE),
 ('ALUBIA DE RIÑÓN', '6,00€', 3, 11, TRUE),
 ('ALUBIA ARROCERA', '6,00€', 10, 11, TRUE),
@@ -1873,8 +1873,8 @@ INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
 ('HARINA TRIGO VARIEDAD BON PAIN 1 KG', '2,30€', 2, 11, TRUE),
 ('HARINA TRIGO VARIEDAD FLORENCE AURORA 1 KG', '2,30€', 1, 11, TRUE);
 
--- Productos de Lur Mendi (Casa Paulina) (ID_Proveedor = 12)
-INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
+-- Productos de Lur Mendi (Casa Paulina) (id_proveedor = 12)
+INSERT INTO Producto (Nombre, Descripcion, Precio, id_proveedor, Activo) VALUES
 ('fresa', '240 gr.', 300, 12, TRUE),
 ('mora', '240 gr.', 300, 12, TRUE),
 ('grosella', '240 gr.', 300, 12, TRUE),
@@ -1899,8 +1899,8 @@ INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
 ('Sabores Urbasa: frambuesa, fresa, grosella y mora', '240 gr.', 330, 12, TRUE),
 ('100% ARANDANOS SIN AZÚCAR (solo fruta)', '240 gr.', 330, 12, TRUE);
 
--- Productos de Mielería Erlan. JOSEBA (IZURZU) (ID_Proveedor = 13)
-INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
+-- Productos de Mielería Erlan. JOSEBA (IZURZU) (id_proveedor = 13)
+INSERT INTO Producto (Nombre, Descripcion, Precio, id_proveedor, Activo) VALUES
 ('MIEL ROMERO -TOMILLO', '12,00€', 27, 13, TRUE),
 ('MIEL DEL BREZO - BOSQUE', '13,00€', 25, 13, TRUE),
 ('MIEL BOSQUE', '12,00€', 25, 13, TRUE),
@@ -1924,8 +1924,8 @@ INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
 ('TOMILLO', '15,00€', 18, 13, TRUE),
 ('ROMERO', '15,00€', 17, 13, TRUE);
 
--- Productos de MARIO (SESMA) (ID_Proveedor = 14)
-INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
+-- Productos de MARIO (SESMA) (id_proveedor = 14)
+INSERT INTO Producto (Nombre, Descripcion, Precio, id_proveedor, Activo) VALUES
 ('saco 2 kilos', '7,00€', 1400, 14, TRUE),
 ('saco 5 kilos', '6,40€', 3200, 14, TRUE),
 ('saco 15 kilos', '5,67€', 8500, 14, TRUE),
@@ -1935,8 +1935,8 @@ INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
 ('KILO de NUEZ', '', 500, 14, TRUE),
 ('KILO de NUEZ', '', 550, 14, TRUE);
 
--- Productos de PATXI (panadería Orrio) (ID_Proveedor = 15)
-INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
+-- Productos de PATXI (panadería Orrio) (id_proveedor = 15)
+INSERT INTO Producto (Nombre, Descripcion, Precio, id_proveedor, Activo) VALUES
 ('DE TRIGO MOLDE', '750 gr.', 275, 15, TRUE),
 ('DE TRIGO HOGAZA-TXIKI', '400 gr.', 171, 15, TRUE),
 ('CON SEMILLAS MOLDE', '750 gr.', 303, 15, TRUE),
@@ -3668,8 +3668,8 @@ INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
 ('GALLETAS AVENA CON CHOCO', '200 gr.', 363, 15, TRUE),
 ('GALLETAS AVENA ARÁNDANO ROJO', '200 gr.', 363, 15, TRUE);
 
--- Productos de pan de higo eco de Valdemorales (Cáceres) (ID_Proveedor = 16)
-INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
+-- Productos de pan de higo eco de Valdemorales (Cáceres) (id_proveedor = 16)
+INSERT INTO Producto (Nombre, Descripcion, Precio, id_proveedor, Activo) VALUES
 ('Higo secos extra', '300 gr.', 220, 16, TRUE),
 ('Pan de higo con almendras', '200 gr. (2 x 100)', 220, 16, TRUE),
 ('Pan de higo con  almendras y chocolate', '200 gr. (2 x 100)', 220, 16, TRUE),
@@ -3724,8 +3724,8 @@ INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
 ('Energigo con nueces', '150 gr. (3 x 50)', 250, 16, TRUE),
 ('Energigo (1 almendra+1 Chocolate+1 nuez)', '150 gr. (3 x 50)', 250, 16, TRUE);
 
--- Productos de PASTA MARTINELLI (Beriain) (ID_Proveedor = 17)
-INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
+-- Productos de PASTA MARTINELLI (Beriain) (id_proveedor = 17)
+INSERT INTO Producto (Nombre, Descripcion, Precio, id_proveedor, Activo) VALUES
 ('Fusilli sémola trigo duro integral', '450 gr.', 231, 17, TRUE),
 ('Fusilli sémola trigo duro', '450 gr.', 231, 17, TRUE),
 ('Fusilli tricolor con tomate y orégano', '400 gr.', 330, 17, TRUE),
@@ -3863,8 +3863,8 @@ INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
 ('Ditalini sémola trigo duro', '500 gr.', 286, 17, TRUE),
 ('Ditalini sémola trigo duro con espinaca y remolacha', '500 gr.', 391, 17, TRUE);
 
--- Productos de IBAN (ID_Proveedor = 18)
-INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
+-- Productos de IBAN (id_proveedor = 18)
+INSERT INTO Producto (Nombre, Descripcion, Precio, id_proveedor, Activo) VALUES
 ('BASES DE PIZZA CLÁSICA BIO (trigo con centeno integral).', '2 ud. de 230 gr.', 500, 18, TRUE),
 ('BASES DE PIZZA IN TEGLIA BIO (trigo con centeno integral)', '700 gr.', 750, 18, TRUE),
 ('BASES DE PIZZA CLÁSICA BIO (trigo con centeno integral).', '2 ud. de 230 gr.', 550, 18, TRUE),
@@ -3925,8 +3925,8 @@ INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
 ('BASES DE PIZZA CLÁSICA BIO (trigo con centeno integral).', '2 ud. de 230 gr.', 8000, 18, TRUE),
 ('BASES DE PIZZA CLÁSICA BIO (trigo con centeno integral).', '2 ud. de 230 gr.', 8000, 18, TRUE);
 
--- Productos de Massaxuxes (ID_Proveedor = 20)
-INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
+-- Productos de Massaxuxes (id_proveedor = 20)
+INSERT INTO Producto (Nombre, Descripcion, Precio, id_proveedor, Activo) VALUES
 ('JIJONA', '', 200, 20, TRUE),
 ('ALICANTE', '', 200, 20, TRUE),
 ('CHOCOLATE NEGRO CON ALMENDRAS', '', 200, 20, TRUE),
@@ -3964,8 +3964,8 @@ INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
 ('ROCAS DE ALMENDRA MARCONA Y CHOCOLATE NEGRO', '', 125, 20, TRUE),
 ('ROCAS A GRANEL', '', 1, 20, TRUE);
 
--- Productos de Julen (Gares) (ID_Proveedor = 21)
-INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
+-- Productos de Julen (Gares) (id_proveedor = 21)
+INSERT INTO Producto (Nombre, Descripcion, Precio, id_proveedor, Activo) VALUES
 ('Puerros', 'manojo', 150, 21, TRUE),
 ('Acelga', 'kg', 190, 21, TRUE),
 ('Calabaza', 'kg', 150, 21, TRUE),
@@ -4668,7 +4668,7 @@ INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES
 -- 5. PEDIDOS ABIERTOS (Actuales)
 -- ============================================
 
-INSERT INTO Pedido (ID_Proveedor, Fecha_Apertura, Fecha_Cierre, Fecha_Entrega, Estado) VALUES
+INSERT INTO Pedido (id_proveedor, Fecha_Apertura, Fecha_Cierre, Fecha_Entrega, Estado) VALUES
 (1, '2026-03-11', '2026-03-16', '2026-03-18', 'pendiente'),
 (2, '2026-03-11', '2026-03-16', '2026-03-18', 'pendiente'),
 (3, '2026-03-11', '2026-03-16', '2026-03-18', 'pendiente'),

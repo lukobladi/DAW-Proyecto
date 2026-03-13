@@ -22,7 +22,9 @@ describe('Proveedor Routes', () => {
 
   beforeAll(async () => {
     // Create an admin token for authentication
-    adminToken = 'Bearer ' + require('jsonwebtoken').sign({ rol: 'admin' }, process.env.JWT_SECRET);
+    adminToken =
+      'Bearer ' +
+      require('jsonwebtoken').sign({ rol: 'admin' }, process.env.JWT_SECRET);
 
     // Create a test provider
     const testProveedor = await Proveedor.create(

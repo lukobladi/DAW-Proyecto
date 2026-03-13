@@ -125,7 +125,7 @@ const ProveedorController = {
       console.error(err);
       res.status(500).send('Error al cambiar el estado del proveedor');
     }
-  }
+  },
 };
 
 module.exports = ProveedorController;

@@ -1,7 +1,11 @@
+// Store de autenticacion con Pinia
+// Guarda el estado del usuario logueado y el token JWT
+
 import { createPinia, defineStore } from 'pinia';
 
 const pinia = createPinia();
 
+// Extrae el payload del token JWT sin verificar la firma
 function getPayloadFromToken(token) {
   if (!token) {
     return {};
@@ -16,6 +20,7 @@ function getPayloadFromToken(token) {
   }
 }
 
+// Construye el estado inicial de autenticacion desde localStorage
 function buildInitialAuthState() {
   const token = localStorage.getItem('authToken');
   const tokenPayload = getPayloadFromToken(token);
@@ -37,6 +42,7 @@ function buildInitialAuthState() {
 export const useAuthStore = defineStore('auth', {
   state: () => buildInitialAuthState(),
   actions: {
+    // Guarda los datos del usuario logueado
     login(payload = {}) {
       const token = payload.token || null;
       const tokenPayload = getPayloadFromToken(token);
@@ -69,6 +75,7 @@ export const useAuthStore = defineStore('auth', {
       this.isAuthenticated = true;
       this.user = normalizedUser;
     },
+    // Cierra la sesion y limpia los datos
     logout() {
       this.isAuthenticated = false;
       this.user = { id_usuario: null, nombre: null, correo: null, movil: null, role: null };
@@ -76,6 +83,7 @@ export const useAuthStore = defineStore('auth', {
       localStorage.removeItem('userRole');
       localStorage.removeItem('authUser');
     },
+    // Recupera el estado de autenticacion desde localStorage
     hydrateAuthState() {
       const { isAuthenticated, user } = buildInitialAuthState();
       this.isAuthenticated = isAuthenticated;

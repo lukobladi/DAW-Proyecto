@@ -1,3 +1,5 @@
+// Los models son para acceder a la base de datos
+
 const pool = require('../config/db');
 
 const Producto = {
@@ -34,7 +36,7 @@ const Producto = {
     return rows;
   },
 
-  // Actualizar el campo activo de un producto
+  // Activar o desactivar un producto
   async updateActivo(id_producto, activo) {
     const query = `
       UPDATE producto
@@ -51,14 +53,31 @@ const Producto = {
     return this.updateActivo(id_producto, activo);
   },
 
-  async update(id_producto, nombre, descripcion, precio, id_proveedor, imagen, activo) {
+  // Actualizar un producto
+  async update(
+    id_producto,
+    nombre,
+    descripcion,
+    precio,
+    id_proveedor,
+    imagen,
+    activo
+  ) {
     const query = `
       UPDATE producto
       SET nombre = $1, descripcion = $2, precio = $3, id_proveedor = $4, imagen = COALESCE($5, imagen), activo = COALESCE($6, activo), fecha_modificacion = CURRENT_TIMESTAMP
       WHERE id_producto = $7
       RETURNING *;
     `;
-    const values = [nombre, descripcion, precio, id_proveedor, imagen, activo, id_producto];
+    const values = [
+      nombre,
+      descripcion,
+      precio,
+      id_proveedor,
+      imagen,
+      activo,
+      id_producto,
+    ];
     const { rows } = await pool.query(query, values);
     return rows[0];
   },

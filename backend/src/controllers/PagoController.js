@@ -1,9 +1,10 @@
-// Los controllers GEstiona logica de solicitud HTTP
+// Controller para los pagos entre usuarios
+// GEstiona la logica de las peticiones HTTP relacionadas con pagos
 
 const Pago = require('../models/Pago');
 
 const PagoController = {
-  // Crear un nuevo pago. Un usuario paga a otro
+  // Crear un nuevo pago - un usuario debe pagar a otro
   async crear(req, res) {
     const {
       id_usuario_deudor,
@@ -48,12 +49,12 @@ const PagoController = {
     try {
       const { id } = req.params;
       const { estado } = req.body;
-  
+
       const pago = await Pago.findById(id);
       if (!pago) {
         return res.status(404).json({ error: 'Pago no encontrado' });
       }
-  
+
       const pagoActualizado = await Pago.cambiarEstado(id, estado);
       res.status(200).json(pagoActualizado);
     } catch (err) {
@@ -70,7 +71,9 @@ const PagoController = {
       res.json(pagos);
     } catch (err) {
       console.error(err);
-      res.status(500).json({ error: 'Error al obtener los pagos pendientes del deudor' });
+      res
+        .status(500)
+        .json({ error: 'Error al obtener los pagos pendientes del deudor' });
     }
   },
 
@@ -82,7 +85,9 @@ const PagoController = {
       res.json(pagos);
     } catch (err) {
       console.error(err);
-      res.status(500).json({ error: 'Error al obtener los pagos pendientes del acreedor' });
+      res
+        .status(500)
+        .json({ error: 'Error al obtener los pagos pendientes del acreedor' });
     }
   },
 
@@ -91,7 +96,10 @@ const PagoController = {
     const periodo = req.query.periodo;
 
     try {
-      const resumen = await Pago.obtenerResumenMensual(req.user.id_usuario, periodo);
+      const resumen = await Pago.obtenerResumenMensual(
+        req.user.id_usuario,
+        periodo
+      );
       res.json(resumen);
     } catch (err) {
       console.error(err);
@@ -99,7 +107,7 @@ const PagoController = {
     }
   },
 
-  // El deudor reporta que ha pagado (no cierra deuda)
+  // El deudor marca que ya pago (no cierra la deuda, solo avisa)
   async marcarPagado(req, res) {
     const { id } = req.params;
 
@@ -113,13 +121,25 @@ const PagoController = {
         return res.status(200).json(pago);
       }
 
-      if (req.user.rol !== 'admin' && Number(pago.id_usuario_deudor) !== Number(req.user.id_usuario)) {
-        return res.status(403).json({ error: 'Solo el deudor puede marcar este pago como enviado' });
+      if (
+        req.user.rol !== 'admin' &&
+        Number(pago.id_usuario_deudor) !== Number(req.user.id_usuario)
+      ) {
+        return res
+          .status(403)
+          .json({
+            error: 'Solo el deudor puede marcar este pago como enviado',
+          });
       }
 
-      const pagoActualizado = await Pago.marcarPagadoPorDeudor(id, pago.id_usuario_deudor);
+      const pagoActualizado = await Pago.marcarPagadoPorDeudor(
+        id,
+        pago.id_usuario_deudor
+      );
       if (!pagoActualizado) {
-        return res.status(400).json({ error: 'No se pudo marcar el pago como enviado' });
+        return res
+          .status(400)
+          .json({ error: 'No se pudo marcar el pago como enviado' });
       }
 
       res.json(pagoActualizado);
@@ -129,7 +149,7 @@ const PagoController = {
     }
   },
 
-  // El acreedor confirma recibido y cierra deuda
+  // El acreedor confirma que recibio el pago y cierra la deuda
   async marcarRecibido(req, res) {
     const { id } = req.params;
 
@@ -143,13 +163,23 @@ const PagoController = {
         return res.status(200).json(pago);
       }
 
-      if (req.user.rol !== 'admin' && Number(pago.id_usuario_creditor) !== Number(req.user.id_usuario)) {
-        return res.status(403).json({ error: 'Solo el acreedor puede confirmar el pago recibido' });
+      if (
+        req.user.rol !== 'admin' &&
+        Number(pago.id_usuario_creditor) !== Number(req.user.id_usuario)
+      ) {
+        return res
+          .status(403)
+          .json({ error: 'Solo el acreedor puede confirmar el pago recibido' });
       }
 
-      const pagoActualizado = await Pago.confirmarRecibidoPorAcreedor(id, pago.id_usuario_creditor);
+      const pagoActualizado = await Pago.confirmarRecibidoPorAcreedor(
+        id,
+        pago.id_usuario_creditor
+      );
       if (!pagoActualizado) {
-        return res.status(400).json({ error: 'No se pudo confirmar el pago recibido' });
+        return res
+          .status(400)
+          .json({ error: 'No se pudo confirmar el pago recibido' });
       }
 
       res.json(pagoActualizado);
@@ -159,7 +189,7 @@ const PagoController = {
     }
   },
 
-  // Genera/actualiza la liquidacion mensual
+  // Genera o actualiza la liquidacion mensual de todos los usuarios
   async generarLiquidacionMensual(req, res) {
     const periodo = req.body?.periodo || req.query?.periodo;
 
@@ -168,7 +198,9 @@ const PagoController = {
       res.json(resultado);
     } catch (err) {
       console.error(err);
-      res.status(500).json({ error: 'Error al generar la liquidacion mensual' });
+      res
+        .status(500)
+        .json({ error: 'Error al generar la liquidacion mensual' });
     }
   },
 };

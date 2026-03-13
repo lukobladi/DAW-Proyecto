@@ -1,22 +1,25 @@
+<!-- Pie de pagina de la aplicacion -->
+<!-- Muestra informacion de contacto, enlaces y redes sociales -->
+
 <template>
   <footer class="footer">
     <div class="footer-content">
       <div class="footer-section">
         <h3>Contacto</h3>
         <p>Email: contacto@grupoconsumo.com</p>
-        <p>Teléfono: +34 123 456 789</p>
+        <p>Telefono: +34 123 456 789</p>
       </div>
       <div class="footer-section">
-        <h3>Enlaces Rápidos</h3>
+        <h3>Enlaces Rapidos</h3>
         <router-link to="/" class="footer-link">Inicio</router-link>
         <router-link to="/soporte" class="footer-link">Soporte</router-link>
-        <router-link to="/configuracion" class="footer-link">Configuración</router-link>
+        <router-link to="/configuracion" class="footer-link">Configuracion</router-link>
       </div>
       <div class="footer-section">
         <h3>Redes Sociales</h3>
-        <a href="https://facebook.com" class="footer-link" aria-label="Visítanos en Facebook">Facebook</a>
-       <a href="https://twitter.com" class="footer-link" aria-label="Síguenos en Twitter">Twitter</a>
-        <a href="https://instagram.com" class="footer-link" aria-label="Síguenos en Instagram">Instagram</a>
+        <a href="https://facebook.com" class="footer-link" aria-label="Visitamos en Facebook">Facebook</a>
+        <a href="https://twitter.com" class="footer-link" aria-label="Siguenos en Twitter">Twitter</a>
+        <a href="https://instagram.com" class="footer-link" aria-label="Siguenos en Instagram">Instagram</a>
       </div>
     </div>
     <div class="footer-bottom">
@@ -26,6 +29,7 @@
 </template>
 
 <script>
+// Pie de pagina con informacion de contacto y enlaces
 export default {
   name: 'FooterPart'
 };

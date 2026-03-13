@@ -1,7 +1,9 @@
+// Rutas para la gestion de productos
+
 const express = require('express');
 const ProductoController = require('../controllers/ProductoController');
-const authMiddleware = require('../middlewares/auth'); // Middleware de autenticación
-const adminMiddleware = require('../middlewares/admin'); // Middleware de autorización para administradores
+const authMiddleware = require('../middlewares/auth'); 
+const adminMiddleware = require('../middlewares/admin'); 
 const upload = require('../config/multer'); // Middleware para manejar archivos
 
 const router = express.Router();
@@ -50,7 +52,12 @@ const router = express.Router();
  *       500:
  *         description: Error al crear el producto
  */
-router.post('/crear', authMiddleware, upload.single('imagen'), ProductoController.crear);
+router.post(
+  '/crear',
+  authMiddleware,
+  upload.single('imagen'),
+  ProductoController.crear
+);
 
 /**
  * @swagger
@@ -66,7 +73,12 @@ router.post('/crear', authMiddleware, upload.single('imagen'), ProductoControlle
  *       500:
  *         description: Error al obtener los productos
  */
-router.get('/obtenerTodos', authMiddleware, adminMiddleware, ProductoController.listar);
+router.get(
+  '/obtenerTodos',
+  authMiddleware,
+  adminMiddleware,
+  ProductoController.listar
+);
 
 /**
  * @swagger
@@ -84,7 +96,11 @@ router.get('/obtenerTodos', authMiddleware, adminMiddleware, ProductoController.
  *       500:
  *         description: Error al obtener los productos
  */
-router.get('/misProductos', authMiddleware, ProductoController.listarMisProductos);
+router.get(
+  '/misProductos',
+  authMiddleware,
+  ProductoController.listarMisProductos
+);
 
 /**
  * @swagger
@@ -157,7 +173,12 @@ router.get('/obtener/:id', authMiddleware, ProductoController.obtenerPorId);
  *       500:
  *         description: Error al actualizar el producto
  */
-router.put('/actualizar/:id', authMiddleware, upload.single('imagen'), ProductoController.actualizar);
+router.put(
+  '/actualizar/:id',
+  authMiddleware,
+  upload.single('imagen'),
+  ProductoController.actualizar
+);
 
 /**
  * @swagger
@@ -217,6 +238,10 @@ router.delete('/eliminar/:id', authMiddleware, ProductoController.eliminar);
  *       500:
  *         description: Error al cambiar el estado activo del producto
  */
-router.patch('/cambiarEstadoActivo/:id', authMiddleware, ProductoController.cambiarEstadoActivo);
+router.patch(
+  '/cambiarEstadoActivo/:id',
+  authMiddleware,
+  ProductoController.cambiarEstadoActivo
+);
 
 module.exports = router;

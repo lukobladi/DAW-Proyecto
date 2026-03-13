@@ -38,7 +38,7 @@ DROP TABLE IF EXISTS Detalle_Pedido CASCADE;
 DROP TABLE IF EXISTS Pedido CASCADE;
 DROP TABLE IF EXISTS Producto CASCADE;
 DROP TABLE IF EXISTS Proveedor CASCADE;
-DROP TABLE IF EXISTS Usuario_Proveedor CASCADE;
+DROP TABLE IF EXISTS usuario_proveedor CASCADE;
 DROP TABLE IF EXISTS Pedido_Periodico CASCADE;
 DROP TABLE IF EXISTS Pago CASCADE;
 DROP TABLE IF EXISTS Notificacion CASCADE;
@@ -46,7 +46,7 @@ DROP TABLE IF EXISTS Usuario CASCADE;
 
 -- Crear las tablas
 CREATE TABLE Usuario (
-    ID_Usuario SERIAL PRIMARY KEY,
+    id_usuario SERIAL PRIMARY KEY,
     Nombre VARCHAR(100) NOT NULL,
     Correo VARCHAR(100) UNIQUE NOT NULL,
     Pass VARCHAR(100) NOT NULL,
@@ -54,20 +54,22 @@ CREATE TABLE Usuario (
     Rol VARCHAR(50) NOT NULL CHECK (Rol IN ('admin', 'usuario')),
     Activo BOOLEAN DEFAULT FALSE,
     Saldo DECIMAL(10, 2) DEFAULT 0,
+    Familia INTEGER,
     Fecha_Modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE Proveedor (
-    ID_Proveedor SERIAL PRIMARY KEY,
+    id_proveedor SERIAL PRIMARY KEY,
     Nombre VARCHAR(100) NOT NULL,
     Contacto VARCHAR(100),
     Telefono VARCHAR(20),
     Movil VARCHAR(20),
     Correo VARCHAR(100),
     Metodo_Pago VARCHAR(100),
-    Frecuencia_Pedido_Aproximada VARCHAR(50) CHECK (Frecuencia_Pedido_Aproximada IN ('semanal', 'mensual', 'bimestral', 'trimestral', 'semestral', 'anual')),
+    Frecuencia_Pedido_Aproximada VARCHAR(50) CHECK (Frecuencia_Pedido_Aproximada IN ('semanal', 'mensual', 'bimestral', 'trimestral', 'semestral', 'anual', 'sin determinar')),
     Envio_Movil BOOLEAN DEFAULT FALSE,
     Envio_Mail BOOLEAN DEFAULT TRUE,
+    Familia INTEGER,
     Activo BOOLEAN DEFAULT TRUE,
     Fecha_Modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -77,7 +79,7 @@ CREATE TABLE Producto (
     Nombre VARCHAR(100) NOT NULL,
     Descripcion TEXT,
     Precio DECIMAL(10, 2) NOT NULL,
-    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
+    id_proveedor INT REFERENCES Proveedor(id_proveedor) ON DELETE CASCADE,
     Fecha_Modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Activo BOOLEAN DEFAULT TRUE,
     Imagen VARCHAR(255) -- URL de la imagen
@@ -85,8 +87,8 @@ CREATE TABLE Producto (
 
 CREATE TABLE Pedido (
     ID_Pedido SERIAL PRIMARY KEY,
-    ID_Usuario_Encargado INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
-    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
+    id_usuario_Encargado INT REFERENCES Usuario(id_usuario) ON DELETE CASCADE,
+    id_proveedor INT REFERENCES Proveedor(id_proveedor) ON DELETE CASCADE,
     Fecha_Modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Fecha_Apertura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Fecha_Cierre TIMESTAMP,
@@ -100,19 +102,19 @@ CREATE TABLE Detalle_Pedido (
     ID_Producto INT REFERENCES Producto(ID_Producto) ON DELETE CASCADE,
     Cantidad INT NOT NULL,
     Precio_Unitario DECIMAL(10, 2) NOT NULL,
-    ID_Usuario_Comprador INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+    id_usuario_Comprador INT REFERENCES Usuario(id_usuario) ON DELETE CASCADE,
     Fecha_Modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE Usuario_Proveedor (
-    ID_Usuario INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
-    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
-    PRIMARY KEY (ID_Usuario, ID_Proveedor)
+CREATE TABLE usuario_proveedor (
+    id_usuario INT REFERENCES Usuario(id_usuario) ON DELETE CASCADE,
+    id_proveedor INT REFERENCES Proveedor(id_proveedor) ON DELETE CASCADE,
+    PRIMARY KEY (id_usuario, id_proveedor)
 );
 
 CREATE TABLE Pedido_Periodico (
     ID_Pedido_Periodico SERIAL PRIMARY KEY,
-    ID_Proveedor INT REFERENCES Proveedor(ID_Proveedor) ON DELETE CASCADE,
+    id_proveedor INT REFERENCES Proveedor(id_proveedor) ON DELETE CASCADE,
     Fecha_Inicio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Fecha_Fin TIMESTAMP,
     Activo BOOLEAN DEFAULT TRUE,
@@ -124,8 +126,8 @@ CREATE TABLE Pedido_Periodico (
 
 CREATE TABLE Pago (
     ID_Pago SERIAL PRIMARY KEY,
-    ID_Usuario_Deudor INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
-    ID_Usuario_Creditor INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+    id_usuario_Deudor INT REFERENCES Usuario(id_usuario) ON DELETE CASCADE,
+    id_usuario_Creditor INT REFERENCES Usuario(id_usuario) ON DELETE CASCADE,
     Monto DECIMAL(10, 2) NOT NULL,
     Fecha_Pago TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Estado VARCHAR(50) NOT NULL CHECK (Estado IN ('pendiente', 'completado')),
@@ -136,12 +138,12 @@ CREATE TABLE Pago (
     Fecha_Reporte_Deudor TIMESTAMP,
     Fecha_Confirmacion_Receptor TIMESTAMP,
     Fecha_Modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT pago_unico_periodo_origen UNIQUE (ID_Usuario_Deudor, ID_Usuario_Creditor, Periodo, Origen)
+    CONSTRAINT pago_unico_periodo_origen UNIQUE (id_usuario_Deudor, id_usuario_Creditor, Periodo, Origen)
 );
 
 CREATE TABLE Notificacion (
     ID_Notificacion SERIAL PRIMARY KEY,
-    ID_Usuario INT REFERENCES Usuario(ID_Usuario) ON DELETE CASCADE,
+    id_usuario INT REFERENCES Usuario(id_usuario) ON DELETE CASCADE,
     Mensaje TEXT NOT NULL,
     Fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Leida BOOLEAN DEFAULT FALSE

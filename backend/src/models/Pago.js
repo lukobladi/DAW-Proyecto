@@ -1,6 +1,9 @@
+// Los models son para acceder a la base de datos
+
 const db = require('../config/db');
 
 class Pago {
+  // Normalizar el periodo para las consultas
   static normalizePeriodo(periodo) {
     const periodoActual = new Date().toISOString().slice(0, 7);
 
@@ -31,6 +34,7 @@ class Pago {
     };
   }
 
+  // Crear un nuevo pago
   static async create(
     id_usuario_deudor,
     id_usuario_creditor,
@@ -42,8 +46,8 @@ class Pago {
   ) {
     const query = `
       INSERT INTO Pago (
-        ID_Usuario_Deudor,
-        ID_Usuario_Creditor,
+        id_usuario_Deudor,
+        id_usuario_Creditor,
         Monto,
         Estado,
         Periodo,
@@ -54,11 +58,20 @@ class Pago {
       VALUES ($1, $2, $3, $4, $5, $6, $7, CURRENT_TIMESTAMP)
       RETURNING *;
     `;
-    const values = [id_usuario_deudor, id_usuario_creditor, monto, estado, periodo, origen, concepto];
+    const values = [
+      id_usuario_deudor,
+      id_usuario_creditor,
+      monto,
+      estado,
+      periodo,
+      origen,
+      concepto,
+    ];
     const { rows } = await db.query(query, values);
     return rows[0];
   }
 
+  // Obtener todos los pagos
   static async findAll() {
     const query = `
       SELECT 
@@ -71,24 +84,26 @@ class Pago {
         p.Deudor_Reporta_Pagado,
         p.Fecha_Reporte_Deudor,
         p.Fecha_Confirmacion_Receptor,
-        u_deudor.ID_Usuario AS ID_Usuario_Deudor,
+        u_deudor.id_usuario AS id_usuario_Deudor,
         u_deudor.Nombre AS Nombre_Deudor,
-        u_creditor.ID_Usuario AS ID_Usuario_Creditor,
+        u_creditor.id_usuario AS id_usuario_Creditor,
         u_creditor.Nombre AS Nombre_Creditor
       FROM Pago p
-      JOIN Usuario u_deudor ON p.ID_Usuario_Deudor = u_deudor.ID_Usuario
-      JOIN Usuario u_creditor ON p.ID_Usuario_Creditor = u_creditor.ID_Usuario;
+      JOIN Usuario u_deudor ON p.id_usuario_Deudor = u_deudor.id_usuario
+      JOIN Usuario u_creditor ON p.id_usuario_Creditor = u_creditor.id_usuario;
     `;
     const { rows } = await db.query(query);
     return rows;
   }
 
+  // Obtener un pago por ID
   static async findById(id) {
     const query = 'SELECT * FROM Pago WHERE ID_Pago = $1;';
     const { rows } = await db.query(query, [id]);
     return rows[0] || null;
   }
 
+  // Cambiar el estado de un pago
   static async cambiarEstado(id, estado) {
     const query = `
       UPDATE Pago
@@ -105,6 +120,7 @@ class Pago {
     return rows[0];
   }
 
+  // Obtener pagos pendientes de un deudor
   static async findPendientesDeudor(id_usuario_deudor) {
     const query = `
       SELECT 
@@ -114,19 +130,20 @@ class Pago {
         p.Periodo,
         p.Deudor_Reporta_Pagado,
         p.Fecha_Reporte_Deudor,
-        u_deudor.ID_Usuario AS ID_Usuario_Deudor,
+        u_deudor.id_usuario AS id_usuario_Deudor,
         u_deudor.Nombre AS Nombre_Deudor,
-        u_creditor.ID_Usuario AS ID_Usuario_Creditor,
+        u_creditor.id_usuario AS id_usuario_Creditor,
         u_creditor.Nombre AS Nombre_Creditor
       FROM Pago p
-      JOIN Usuario u_deudor ON p.ID_Usuario_Deudor = u_deudor.ID_Usuario
-      JOIN Usuario u_creditor ON p.ID_Usuario_Creditor = u_creditor.ID_Usuario
-      WHERE p.ID_Usuario_Deudor = $1 AND p.Estado = 'pendiente';
+      JOIN Usuario u_deudor ON p.id_usuario_Deudor = u_deudor.id_usuario
+      JOIN Usuario u_creditor ON p.id_usuario_Creditor = u_creditor.id_usuario
+      WHERE p.id_usuario_Deudor = $1 AND p.Estado = 'pendiente';
     `;
     const { rows } = await db.query(query, [id_usuario_deudor]);
     return rows;
   }
 
+  // Obtener pagos pendientes de un acreedor
   static async findPendientesCreditor(id_usuario_creditor) {
     const query = `
       SELECT 
@@ -136,19 +153,20 @@ class Pago {
         p.Periodo,
         p.Deudor_Reporta_Pagado,
         p.Fecha_Reporte_Deudor,
-        u_deudor.ID_Usuario AS ID_Usuario_Deudor,
+        u_deudor.id_usuario AS id_usuario_Deudor,
         u_deudor.Nombre AS Nombre_Deudor,
-        u_creditor.ID_Usuario AS ID_Usuario_Creditor,
+        u_creditor.id_usuario AS id_usuario_Creditor,
         u_creditor.Nombre AS Nombre_Creditor
       FROM Pago p
-      JOIN Usuario u_deudor ON p.ID_Usuario_Deudor = u_deudor.ID_Usuario
-      JOIN Usuario u_creditor ON p.ID_Usuario_Creditor = u_creditor.ID_Usuario
-      WHERE p.ID_Usuario_Creditor = $1 AND p.Estado = 'pendiente';
+      JOIN Usuario u_deudor ON p.id_usuario_Deudor = u_deudor.id_usuario
+      JOIN Usuario u_creditor ON p.id_usuario_Creditor = u_creditor.id_usuario
+      WHERE p.id_usuario_Creditor = $1 AND p.Estado = 'pendiente';
     `;
     const { rows } = await db.query(query, [id_usuario_creditor]);
     return rows;
   }
 
+  // Marcar que el deudor ha pagado
   static async marcarPagadoPorDeudor(idPago, idUsuarioDeudor) {
     const query = `
       UPDATE Pago
@@ -156,7 +174,7 @@ class Pago {
           Fecha_Reporte_Deudor = CURRENT_TIMESTAMP,
           Fecha_Modificacion = CURRENT_TIMESTAMP
       WHERE ID_Pago = $1
-        AND ID_Usuario_Deudor = $2
+        AND id_usuario_Deudor = $2
         AND Estado = 'pendiente'
       RETURNING *;
     `;
@@ -164,6 +182,7 @@ class Pago {
     return rows[0] || null;
   }
 
+  // Confirmar que el acreedor ha recibido el pago
   static async confirmarRecibidoPorAcreedor(idPago, idUsuarioCreditor) {
     const query = `
       UPDATE Pago
@@ -171,7 +190,7 @@ class Pago {
           Fecha_Confirmacion_Receptor = CURRENT_TIMESTAMP,
           Fecha_Modificacion = CURRENT_TIMESTAMP
       WHERE ID_Pago = $1
-        AND ID_Usuario_Creditor = $2
+        AND id_usuario_Creditor = $2
         AND Estado = 'pendiente'
       RETURNING *;
     `;
@@ -179,17 +198,24 @@ class Pago {
     return rows[0] || null;
   }
 
+  // Obtener resumen mensual de pagos de un usuario
   static async obtenerResumenMensual(idUsuario, periodo) {
     const { periodoQuery, periodoDate } = this.normalizePeriodo(periodo);
 
-    const [saldoResult, gastoMesResult, pagarResult, cobrarResult, deudasResult] = await Promise.all([
-      db.query('SELECT Saldo FROM Usuario WHERE ID_Usuario = $1;', [idUsuario]),
+    const [
+      saldoResult,
+      gastoMesResult,
+      pagarResult,
+      cobrarResult,
+      deudasResult,
+    ] = await Promise.all([
+      db.query('SELECT Saldo FROM Usuario WHERE id_usuario = $1;', [idUsuario]),
       db.query(
         `
           SELECT COALESCE(SUM(d.Cantidad * d.Precio_Unitario), 0) AS total
           FROM Detalle_Pedido d
           JOIN Pedido p ON p.ID_Pedido = d.ID_Pedido
-          WHERE d.ID_Usuario_Comprador = $1
+          WHERE d.id_usuario_Comprador = $1
             AND d.Cantidad > 0
             AND p.Estado <> 'cancelado'
             AND date_trunc('month', COALESCE(p.Fecha_Cierre, p.Fecha_Apertura)) = date_trunc('month', $2::date);
@@ -200,7 +226,7 @@ class Pago {
         `
           SELECT COALESCE(SUM(Monto), 0) AS total
           FROM Pago
-          WHERE ID_Usuario_Deudor = $1
+          WHERE id_usuario_Deudor = $1
             AND Estado = 'pendiente';
         `,
         [idUsuario]
@@ -209,7 +235,7 @@ class Pago {
         `
           SELECT COALESCE(SUM(Monto), 0) AS total
           FROM Pago
-          WHERE ID_Usuario_Creditor = $1
+          WHERE id_usuario_Creditor = $1
             AND Estado = 'pendiente';
         `,
         [idUsuario]
@@ -225,15 +251,15 @@ class Pago {
             p.Deudor_Reporta_Pagado,
             p.Fecha_Reporte_Deudor,
             p.Fecha_Confirmacion_Receptor,
-            p.ID_Usuario_Deudor,
-            p.ID_Usuario_Creditor,
+            p.id_usuario_Deudor,
+            p.id_usuario_Creditor,
             u_deudor.Nombre AS Nombre_Deudor,
             u_creditor.Nombre AS Nombre_Creditor
           FROM Pago p
-          JOIN Usuario u_deudor ON p.ID_Usuario_Deudor = u_deudor.ID_Usuario
-          JOIN Usuario u_creditor ON p.ID_Usuario_Creditor = u_creditor.ID_Usuario
+          JOIN Usuario u_deudor ON p.id_usuario_Deudor = u_deudor.id_usuario
+          JOIN Usuario u_creditor ON p.id_usuario_Creditor = u_creditor.id_usuario
           WHERE p.Estado = 'pendiente'
-            AND (p.ID_Usuario_Deudor = $1 OR p.ID_Usuario_Creditor = $1)
+            AND (p.id_usuario_Deudor = $1 OR p.id_usuario_Creditor = $1)
           ORDER BY p.Periodo DESC NULLS LAST, p.ID_Pago DESC;
         `,
         [idUsuario]
@@ -250,26 +276,27 @@ class Pago {
     };
   }
 
+  // Generar la liquidacion mensual de todos los usuarios
   static async generarLiquidacionMensual(periodo) {
     const { periodoQuery, periodoDate } = this.normalizePeriodo(periodo);
 
     const query = `
       WITH resumen AS (
         SELECT
-          d.ID_Usuario_Comprador AS id_usuario_deudor,
-          p.ID_Usuario_Encargado AS id_usuario_creditor,
+          d.id_usuario_Comprador AS id_usuario_deudor,
+          p.id_usuario_Encargado AS id_usuario_creditor,
           ROUND(SUM(d.Cantidad * d.Precio_Unitario)::numeric, 2) AS monto
         FROM Detalle_Pedido d
         JOIN Pedido p ON p.ID_Pedido = d.ID_Pedido
         WHERE d.Cantidad > 0
           AND p.Estado <> 'cancelado'
-          AND d.ID_Usuario_Comprador <> p.ID_Usuario_Encargado
+          AND d.id_usuario_Comprador <> p.id_usuario_Encargado
           AND date_trunc('month', COALESCE(p.Fecha_Cierre, p.Fecha_Apertura)) = date_trunc('month', $1::date)
-        GROUP BY d.ID_Usuario_Comprador, p.ID_Usuario_Encargado
+        GROUP BY d.id_usuario_Comprador, p.id_usuario_Encargado
       )
       INSERT INTO Pago (
-        ID_Usuario_Deudor,
-        ID_Usuario_Creditor,
+        id_usuario_Deudor,
+        id_usuario_Creditor,
         Monto,
         Estado,
         Fecha_Pago,
@@ -295,7 +322,7 @@ class Pago {
         NULL,
         CURRENT_TIMESTAMP
       FROM resumen r
-      ON CONFLICT (ID_Usuario_Deudor, ID_Usuario_Creditor, Periodo, Origen)
+      ON CONFLICT (id_usuario_Deudor, id_usuario_Creditor, Periodo, Origen)
       DO UPDATE
       SET Monto = EXCLUDED.Monto,
           Estado = CASE

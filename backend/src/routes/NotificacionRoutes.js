@@ -1,6 +1,8 @@
+// Rutas para las notificaciones.Enviar y marcar como leidas
+
 const express = require('express');
 const NotificacionController = require('../controllers/NotificacionController');
-const authMiddleware = require('../middlewares/auth'); // Middleware de autenticación
+const authMiddleware = require('../middlewares/auth'); 
 
 const router = express.Router();
 
@@ -105,7 +107,10 @@ router.post('/enviar/', authMiddleware, NotificacionController.enviar);
  *       500:
  *         description: Error al marcar la notificación como leída
  */
-router.put('/marcar-leida/:id', authMiddleware, NotificacionController.marcarLeida);
+router.put(
+  '/marcar-leida/:id',
+  authMiddleware,
+  NotificacionController.marcarLeida
+);
 
 module.exports = router;
-

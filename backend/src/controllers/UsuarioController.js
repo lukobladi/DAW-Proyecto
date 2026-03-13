@@ -11,21 +11,35 @@ const UsuarioController = {
   async registrar(req, res) {
     const { nombre, correo, password, rol, movil, familia } = req.body;
     try {
-      const nuevoUsuario = await Usuario.create(nombre, correo, password, rol, movil, familia);
+      const nuevoUsuario = await Usuario.create(
+        nombre,
+        correo,
+        password,
+        rol,
+        movil,
+        familia
+      );
 
       try {
         const adminEmails = await Usuario.findAdminEmails();
         logger.info(`Admins encontrados para notificar: ${adminEmails.length}`);
-        
+
         if (adminEmails.length > 0) {
           const mensaje = `Se ha registrado un nuevo usuario en Ekonsumo:\n\nNombre: ${nombre}\nCorreo: ${correo}\nMovil: ${movil || 'No proporcionado'}\nFamilia: ${familia || 'No asignada'}\nRol: ${rol}\n\nPor favor, revisa el panel de administracion para activar el usuario si es necesario.`;
-          await emailService.enviarCorreoMultiple(adminEmails, 'Nuevo usuario registrado en Ekonsumo', mensaje);
+          await emailService.enviarCorreoMultiple(
+            adminEmails,
+            'Nuevo usuario registrado en Ekonsumo',
+            mensaje
+          );
           logger.info('Notificacion de registro enviada a administradores');
         } else {
           logger.warn('No hay administradores activos para notificar');
         }
       } catch (emailError) {
-        logger.error('Error al enviar notificacion a administradores:', emailError);
+        logger.error(
+          'Error al enviar notificacion a administradores:',
+          emailError
+        );
       }
 
       res.status(201).json(nuevoUsuario);
@@ -51,7 +65,9 @@ const UsuarioController = {
       }
 
       if (!user.activo) {
-        return res.status(403).json({ message: 'Usuario desactivado. Contacta al administrador.' });
+        return res
+          .status(403)
+          .json({ message: 'Usuario desactivado. Contacta al administrador.' });
       }
 
       const token = jwt.sign(
@@ -77,14 +93,17 @@ const UsuarioController = {
   async cambiarEstadoActivo(req, res) {
     const { id } = req.params;
     const { activo } = req.body;
-  
+
     try {
       const usuarioActualizado = await Usuario.toggleActivation(id, activo);
       if (!usuarioActualizado) {
         return res.status(404).send('Usuario no encontrado');
       }
       const estado = activo ? 'activado' : 'desactivado';
-      res.json({ mensaje: `Usuario ${estado} correctamente`, usuario: usuarioActualizado });
+      res.json({
+        mensaje: `Usuario ${estado} correctamente`,
+        usuario: usuarioActualizado,
+      });
     } catch (err) {
       logger.error('Error al cambiar estado activo:', err);
       res.status(500).send('Error al actualizar el estado del usuario');
@@ -109,9 +128,15 @@ const UsuarioController = {
 
       const mensaje = `Hola ${usuario.nombre},\n\nHaz clic en el siguiente enlace para recuperar tu contrasena:\n\n${enlaceRecuperacion}\n\nSi no solicitaste esta accion, ignora este correo.`;
 
-      await emailService.enviarCorreo(usuario.correo, 'Recuperacion de Contrasena', mensaje);
+      await emailService.enviarCorreo(
+        usuario.correo,
+        'Recuperacion de Contrasena',
+        mensaje
+      );
 
-      res.status(200).json({ mensaje: 'Enlace de recuperacion enviado correctamente' });
+      res
+        .status(200)
+        .json({ mensaje: 'Enlace de recuperacion enviado correctamente' });
     } catch (error) {
       logger.error('Error al procesar recuperacion de contrasena:', error);
       res.status(500).json({ error: 'Error al procesar la solicitud' });
@@ -146,7 +171,14 @@ const UsuarioController = {
     const { id } = req.params;
     const { nombre, correo, rol, movil, familia } = req.body;
     try {
-      const usuarioActualizado = await Usuario.update(id, nombre, correo, rol, movil, familia);
+      const usuarioActualizado = await Usuario.update(
+        id,
+        nombre,
+        correo,
+        rol,
+        movil,
+        familia
+      );
       if (!usuarioActualizado) {
         return res.status(404).send('Usuario no encontrado');
       }
@@ -178,7 +210,6 @@ const UsuarioController = {
       res.status(500).send('Error al calcular el saldo');
     }
   },
-
 };
 
 module.exports = UsuarioController;

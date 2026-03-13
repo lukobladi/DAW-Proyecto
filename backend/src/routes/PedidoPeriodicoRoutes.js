@@ -1,6 +1,8 @@
+// Rutas para los pedidos periodicos
+
 const express = require('express');
 const PedidoPeriodicoController = require('../controllers/PedidoPeriodicoController');
-const authMiddleware = require('../middlewares/auth'); // Middleware de autenticación
+const authMiddleware = require('../middlewares/auth'); 
 
 const router = express.Router();
 
@@ -58,7 +60,11 @@ const router = express.Router();
  *       500:
  *         description: Error del servidor
  */
-router.post('/crear', authMiddleware, PedidoPeriodicoController.crearPedidoPeriodico);
+router.post(
+  '/crear',
+  authMiddleware,
+  PedidoPeriodicoController.crearPedidoPeriodico
+);
 
 /**
  * @swagger
@@ -74,7 +80,11 @@ router.post('/crear', authMiddleware, PedidoPeriodicoController.crearPedidoPerio
  *       500:
  *         description: Error del servidor
  */
-router.get('/obtenerTodos', authMiddleware, PedidoPeriodicoController.obtenerPedidosPeriodicos);
+router.get(
+  '/obtenerTodos',
+  authMiddleware,
+  PedidoPeriodicoController.obtenerPedidosPeriodicos
+);
 
 /**
  * @swagger
@@ -97,7 +107,11 @@ router.get('/obtenerTodos', authMiddleware, PedidoPeriodicoController.obtenerPed
  *       500:
  *         description: Error del servidor
  */
-router.get('/obtenerTodos/usuario/:id_usuario', authMiddleware, PedidoPeriodicoController.obtenerPedidosPeriodicosPorUsuario);
+router.get(
+  '/obtenerTodos/usuario/:id_usuario',
+  authMiddleware,
+  PedidoPeriodicoController.obtenerPedidosPeriodicosPorUsuario
+);
 
 /**
  * @swagger
@@ -155,7 +169,11 @@ router.get('/obtenerTodos/usuario/:id_usuario', authMiddleware, PedidoPeriodicoC
  *       500:
  *         description: Error del servidor
  */
-router.put('/actualizar/:id', authMiddleware, PedidoPeriodicoController.actualizarPedidoPeriodico);
+router.put(
+  '/actualizar/:id',
+  authMiddleware,
+  PedidoPeriodicoController.actualizarPedidoPeriodico
+);
 
 /**
  * @swagger
@@ -180,7 +198,11 @@ router.put('/actualizar/:id', authMiddleware, PedidoPeriodicoController.actualiz
  *       500:
  *         description: Error del servidor
  */
-router.delete('/eliminar/:id', authMiddleware, PedidoPeriodicoController.eliminarPedidoPeriodico);
+router.delete(
+  '/eliminar/:id',
+  authMiddleware,
+  PedidoPeriodicoController.eliminarPedidoPeriodico
+);
 
 /**
  * @swagger
@@ -215,6 +237,10 @@ router.delete('/eliminar/:id', authMiddleware, PedidoPeriodicoController.elimina
  *       500:
  *         description: Error del servidor
  */
-router.patch('/cambiarEstadoActivo/:id', authMiddleware, PedidoPeriodicoController.cambiarEstadoActivo);
+router.patch(
+  '/cambiarEstadoActivo/:id',
+  authMiddleware,
+  PedidoPeriodicoController.cambiarEstadoActivo
+);
 
 module.exports = router;

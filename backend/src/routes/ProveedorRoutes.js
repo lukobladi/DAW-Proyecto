@@ -1,7 +1,8 @@
+// Rutas para la gestion de proveedores
 
 const express = require('express');
 const ProveedorController = require('../controllers/ProveedorController');
-const authMiddleware = require('../middlewares/auth'); // Middleware de autenticación
+const authMiddleware = require('../middlewares/auth'); 
 
 const router = express.Router();
 
@@ -121,7 +122,11 @@ router.get('/obtener/:id', authMiddleware, ProveedorController.obtenerPorId);
  *       500:
  *         description: Error al actualizar el estado del proveedor
  */
-router.patch('/cambiarEstadoActivo/:id', authMiddleware, ProveedorController.cambiarEstadoActivo);
+router.patch(
+  '/cambiarEstadoActivo/:id',
+  authMiddleware,
+  ProveedorController.cambiarEstadoActivo
+);
 
 /**
  * @swagger
@@ -191,7 +196,5 @@ router.patch('/actualizar/:id', authMiddleware, ProveedorController.actualizar);
  *         description: Error al eliminar el proveedor
  */
 router.delete('/eliminar/:id', authMiddleware, ProveedorController.eliminar);
-
-
 
 module.exports = router;

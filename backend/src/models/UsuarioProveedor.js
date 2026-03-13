@@ -1,15 +1,23 @@
-// backend/models/UsuarioProveedor.js
+// Model para la relacion usuario-proveedor
+// Cada usuario gestiona un proveedor y cada proveedor tiene un usuario gestor
+
 const pool = require('../config/db');
 
 class UsuarioProveedor {
+  // Crea la relacion usuario-proveedor (relacion 1:1)
+  // Antes de crear borra relaciones anteriores para evitar duplicados
   static async crear({ id_usuario, id_proveedor }) {
-    // Eliminar cualquier relación anterior del usuario (relación 1:1)
-    await pool.query('DELETE FROM Usuario_Proveedor WHERE ID_Usuario = $1', [id_usuario]);
-    // Eliminar cualquier relación anterior para este proveedor
-    await pool.query('DELETE FROM Usuario_Proveedor WHERE ID_Proveedor = $1', [id_proveedor]);
-    
+    // Borro relacion anterior del usuario si existe
+    await pool.query('DELETE FROM usuario_proveedor WHERE id_usuario = $1', [
+      id_usuario,
+    ]);
+    // Borro relacion anterior del proveedor si existe
+    await pool.query('DELETE FROM usuario_proveedor WHERE id_proveedor = $1', [
+      id_proveedor,
+    ]);
+
     const query = `
-      INSERT INTO Usuario_Proveedor (ID_Usuario, ID_Proveedor)
+      INSERT INTO usuario_proveedor (id_usuario, id_proveedor)
       VALUES ($1, $2)
       RETURNING *;
     `;
@@ -18,20 +26,24 @@ class UsuarioProveedor {
     return rows[0];
   }
 
+  // Obtiene todas las relaciones de un usuario
   static async obtenerPorUsuario(id_usuario) {
-    const query = 'SELECT * FROM Usuario_Proveedor WHERE ID_Usuario = $1;';
+    const query = 'SELECT * FROM usuario_proveedor WHERE id_usuario = $1;';
     const { rows } = await pool.query(query, [id_usuario]);
     return rows;
   }
 
+  // Obtiene todas las relaciones de un proveedor
   static async obtenerPorProveedor(id_proveedor) {
-    const query = 'SELECT * FROM Usuario_Proveedor WHERE ID_Proveedor = $1;';
+    const query = 'SELECT * FROM usuario_proveedor WHERE id_proveedor = $1;';
     const { rows } = await pool.query(query, [id_proveedor]);
     return rows;
   }
 
+  // Elimina una relacion usuario-proveedor
   static async eliminar({ id_usuario, id_proveedor }) {
-    const query = 'DELETE FROM Usuario_Proveedor WHERE ID_Usuario = $1 AND ID_Proveedor = $2 RETURNING *;';
+    const query =
+      'DELETE FROM usuario_proveedor WHERE id_usuario = $1 AND id_proveedor = $2 RETURNING *;';
     const { rows } = await pool.query(query, [id_usuario, id_proveedor]);
     return rows[0];
   }

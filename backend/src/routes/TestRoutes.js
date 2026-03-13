@@ -1,3 +1,6 @@
+// Rutas de prueba para verificar que la API y la base de datos funcionan
+// Solo para desarrollo y testing
+
 const express = require('express');
 const pool = require('../config/db');
 
@@ -26,7 +29,7 @@ const router = express.Router();
  */
 router.get('/', async (req, res) => {
   try {
-    // Probar la conexión a la base de datos
+    // Pruebo la conexion a la base de datos
     const dbResult = await pool.query('SELECT NOW()');
     res.status(200).json({
       message: 'API funcionando correctamente',

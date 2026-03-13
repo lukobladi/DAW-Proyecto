@@ -1,7 +1,9 @@
+// Rutas para la gestion de pedidos
+
 const express = require('express');
 const PedidoController = require('../controllers/PedidoController');
-const authMiddleware = require('../middlewares/auth'); // Middleware de autenticación
-const adminMiddleware = require('../middlewares/admin'); // Middleware de autorización para administradores
+const authMiddleware = require('../middlewares/auth'); 
+const adminMiddleware = require('../middlewares/admin'); 
 
 const router = express.Router();
 
@@ -62,7 +64,12 @@ router.post('/crear', authMiddleware, PedidoController.crear);
  *       500:
  *         description: Error al obtener los pedidos
  */
-router.get('/obtenerTodos', authMiddleware, adminMiddleware, PedidoController.listar);
+router.get(
+  '/obtenerTodos',
+  authMiddleware,
+  adminMiddleware,
+  PedidoController.listar
+);
 
 /**
  * @swagger
@@ -80,7 +87,11 @@ router.get('/obtenerTodos', authMiddleware, adminMiddleware, PedidoController.li
  *       500:
  *         description: Error al obtener los pedidos
  */
-router.get('/misPedidos', authMiddleware, PedidoController.listarPorProveedorAsignado);
+router.get(
+  '/misPedidos',
+  authMiddleware,
+  PedidoController.listarPorProveedorAsignado
+);
 
 /**
  * @swagger
@@ -213,6 +224,10 @@ router.delete('/eliminar/:id', authMiddleware, PedidoController.eliminar);
  *       500:
  *         description: Error al cambiar el estado del pedido
  */
-router.patch('/cambiarEstado/:id', authMiddleware, PedidoController.cambiarEstado);
+router.patch(
+  '/cambiarEstado/:id',
+  authMiddleware,
+  PedidoController.cambiarEstado
+);
 
 module.exports = router;

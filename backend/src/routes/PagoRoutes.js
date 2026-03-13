@@ -1,6 +1,8 @@
+// Rutas para la gestion de pagos entre usuarios
+
 const express = require('express');
 const PagoController = require('../controllers/PagoController');
-const authMiddleware = require('../middlewares/auth'); // Middleware de autenticación
+const authMiddleware = require('../middlewares/auth'); 
 const adminMiddleware = require('../middlewares/admin');
 const validators = require('../middlewares/validators');
 
@@ -47,7 +49,12 @@ const router = express.Router();
  *       500:
  *         description: Error al crear el pago
  */
-router.post('/crear/', authMiddleware, validators.crearPago, PagoController.crear);
+router.post(
+  '/crear/',
+  authMiddleware,
+  validators.crearPago,
+  PagoController.crear
+);
 
 /**
  * @swagger
@@ -87,7 +94,11 @@ router.get('/obtenerTodos/', authMiddleware, PagoController.listar);
  *       500:
  *         description: Error al obtener el resumen mensual
  */
-router.get('/resumen-mensual', authMiddleware, PagoController.obtenerResumenMensual);
+router.get(
+  '/resumen-mensual',
+  authMiddleware,
+  PagoController.obtenerResumenMensual
+);
 
 /**
  * @swagger
@@ -110,7 +121,11 @@ router.get('/resumen-mensual', authMiddleware, PagoController.obtenerResumenMens
  *       500:
  *         description: Error al obtener los pagos
  */
-router.get('/pendientes-deudor/:id_usuario_deudor', authMiddleware, PagoController.obtenerPendientesDeudor);
+router.get(
+  '/pendientes-deudor/:id_usuario_deudor',
+  authMiddleware,
+  PagoController.obtenerPendientesDeudor
+);
 
 /**
  * @swagger
@@ -133,7 +148,11 @@ router.get('/pendientes-deudor/:id_usuario_deudor', authMiddleware, PagoControll
  *       500:
  *         description: Error al obtener los pagos
  */
-router.get('/pendientes-creditor/:id_usuario_creditor', authMiddleware, PagoController.obtenerPendientesCreditor);
+router.get(
+  '/pendientes-creditor/:id_usuario_creditor',
+  authMiddleware,
+  PagoController.obtenerPendientesCreditor
+);
 
 /**
  * @swagger
@@ -181,7 +200,11 @@ router.patch('/:id/marcar-pagado', authMiddleware, PagoController.marcarPagado);
  *       404:
  *         description: Pago no encontrado
  */
-router.patch('/:id/marcar-recibido', authMiddleware, PagoController.marcarRecibido);
+router.patch(
+  '/:id/marcar-recibido',
+  authMiddleware,
+  PagoController.marcarRecibido
+);
 
 /**
  * @swagger
@@ -242,6 +265,11 @@ router.put('/cambiar-estado/:id', authMiddleware, PagoController.cambiarEstado);
  *       403:
  *         description: Acceso denegado
  */
-router.post('/generar-liquidacion-mensual', authMiddleware, adminMiddleware, PagoController.generarLiquidacionMensual);
+router.post(
+  '/generar-liquidacion-mensual',
+  authMiddleware,
+  adminMiddleware,
+  PagoController.generarLiquidacionMensual
+);
 
 module.exports = router;

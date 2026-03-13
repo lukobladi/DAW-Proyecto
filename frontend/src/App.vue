@@ -1,6 +1,9 @@
+<!-- Componente raiz de la aplicacion -->
+<!-- Muestra la barra de navegacion, las alertas globales y el pie de pagina -->
+
 <template>
   <div class="app">
-    <!-- Alerta Global con Transición -->
+    <!-- Alerta Global con Transicion -->
     <transition name="fade">
       <div v-if="alertStore.message" :class="['alert', alertClass]" role="alert">
         {{ alertStore.message }}
@@ -14,9 +17,9 @@
 </template>
 
 <script>
-
-import { computed } from 'vue'; // Importación correcta de `computed`
-import { alertStore } from './store/alertStore'; // Importación del estado global
+// Componente principal que engloba toda la aplicacion
+import { computed } from 'vue';
+import { alertStore } from './store/alertStore';
 import NavBar from './components/NavBar.vue';
 import FooterBar from './components/FooterBar.vue';
 
@@ -27,13 +30,13 @@ export default {
     FooterBar,
   },
   setup() {
-    // Computar la clase de la alerta según el tipo
+    // Calculo la clase de la alerta segun el tipo (success o danger)
     const alertClass = computed(() => {
       return alertStore.type === 'danger' ? 'alert-danger' : 'alert-success';
     });
 
     return {
-      alertStore, // Usar el estado global
+      alertStore,
       alertClass,
     };
   },

@@ -277,7 +277,7 @@ function main() {
 -- LIMPIAR TABLAS
 -- ============================================
 
-TRUNCATE TABLE Notificacion, Pago, Pedido_Periodico, Usuario_Proveedor, Detalle_Pedido, Pedido, Producto, Proveedor, Usuario RESTART IDENTITY CASCADE;
+TRUNCATE TABLE Notificacion, Pago, Pedido_Periodico, usuario_proveedor, Detalle_Pedido, Pedido, Producto, Proveedor, Usuario RESTART IDENTITY CASCADE;
 
 -- ============================================
 -- 1. USUARIOS
@@ -324,8 +324,8 @@ INSERT INTO Proveedor (Nombre, Contacto, Telefono, Movil, Correo, Metodo_Pago, F
     const p = proveedores[i];
     if (p.productos.length === 0) continue;
     
-    sql += `-- Productos de ${p.nombre} (ID_Proveedor = ${i + 1})\n`;
-    sql += `INSERT INTO Producto (Nombre, Descripcion, Precio, ID_Proveedor, Activo) VALUES\n`;
+    sql += `-- Productos de ${p.nombre} (id_proveedor = ${i + 1})\n`;
+    sql += `INSERT INTO Producto (Nombre, Descripcion, Precio, id_proveedor, Activo) VALUES\n`;
     
     const productosSQL = p.productos.map(prod => {
       return `('${prod.nombre.replace(/'/g, "''")}', '${prod.descripcion.replace(/'/g, "''")}', ${prod.precio}, ${i + 1}, TRUE)`;
@@ -344,7 +344,7 @@ INSERT INTO Proveedor (Nombre, Contacto, Telefono, Movil, Correo, Metodo_Pago, F
   const pedidosPeriodicos = proveedores.filter(p => p.esAutomatico);
   
   if (pedidosPeriodicos.length > 0) {
-    sql += `INSERT INTO Pedido_Periodico (ID_Proveedor, Periodicidad, Fecha_Inicio, Activo, Dia_Apertura, Dia_Cierre, Dia_Entrega) VALUES\n`;
+    sql += `INSERT INTO Pedido_Periodico (id_proveedor, Periodicidad, Fecha_Inicio, Activo, Dia_Apertura, Dia_Cierre, Dia_Entrega) VALUES\n`;
     
     const ppSQL = pedidosPeriodicos.map((p, idx) => {
       const proveedorId = proveedores.indexOf(p) + 1;
@@ -367,7 +367,7 @@ INSERT INTO Proveedor (Nombre, Contacto, Telefono, Movil, Correo, Metodo_Pago, F
   const pedidosAbiertos = proveedores.filter(p => p.pedidoAbierto);
   
   if (pedidosAbiertos.length > 0) {
-    sql += `INSERT INTO Pedido (ID_Proveedor, Fecha_Apertura, Fecha_Cierre, Fecha_Entrega, Estado) VALUES\n`;
+    sql += `INSERT INTO Pedido (id_proveedor, Fecha_Apertura, Fecha_Cierre, Fecha_Entrega, Estado) VALUES\n`;
     
     const paSQL = pedidosAbiertos.map((p, idx) => {
       const proveedorId = proveedores.indexOf(p) + 1;

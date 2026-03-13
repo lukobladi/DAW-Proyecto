@@ -1,3 +1,6 @@
+// Configuracion de Swagger para la documentacion de la API
+// Genera la documentacion automaticamente desde los comentarios en las rutas
+
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const path = require('path');
@@ -8,7 +11,8 @@ const swaggerOptions = {
     info: {
       title: 'API del Grupo de Consumo',
       version: '1.0.0',
-      description: 'Documentación de la API para la gestión del grupo de consumo local y ecológico',
+      description:
+        'Documentacion de la API para la gestion del grupo de consumo local y ecologico',
     },
     servers: [
       {
@@ -35,8 +39,7 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: [path.join(__dirname, 'src/routes/*.js')], 
-
+  apis: [path.join(__dirname, 'src/routes/*.js')], // Buscar y lee comentarios de las rutas
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);

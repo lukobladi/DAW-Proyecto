@@ -1,4 +1,6 @@
-// src/services/api.js
+// Servicio para hacer peticiones HTTP al backend
+// Usa Axios con un interceptor para anadir el token JWT automaticamente
+
 import axios from 'axios';
 
 const baseURL = import.meta.env.VITE_API_URL || '/api';
@@ -8,6 +10,7 @@ const apiClient = axios.create({
   withCredentials: true, // Permitir cookies y credenciales
 });
 
+// Interceptor para anadir el token JWT a todas las peticiones
 apiClient.interceptors.request.use((config) => {
   const token = localStorage.getItem('authToken');
   if (token) {
@@ -17,6 +20,7 @@ apiClient.interceptors.request.use((config) => {
 });
 
 export default {
+  // =========== USUARIOS ===========
   login(credentials) {
     return apiClient.post('/usuarios/login', credentials);
   },
@@ -45,6 +49,7 @@ export default {
     return apiClient.delete(`/usuarios/eliminar/${id}`);
   },
 
+  // =========== PRODUCTOS ===========
   getProductos() {
     return apiClient.get('/productos/obtenerTodos');
   },
@@ -68,6 +73,7 @@ export default {
     return apiClient.patch(`/productos/cambiarEstadoActivo/${id}`, { activo });
   },
 
+  // =========== PROVEEDORES ===========
   getProveedores() {
     return apiClient.get('/proveedores/obtenerTodos');
   },
@@ -84,6 +90,7 @@ export default {
     return apiClient.patch(`/proveedores/cambiarEstadoActivo/${id}`, { activo });
   },
 
+  // =========== USUARIO-PROVEEDOR ===========
   asignarUsuarioProveedor(data) {
     return apiClient.post('/usuario-proveedor/crear', data);
   },
@@ -94,6 +101,7 @@ export default {
     return apiClient.delete(`/usuario-proveedor/eliminar/${idUsuario}/${idProveedor}`);
   },
 
+  // =========== PEDIDOS ===========
   getPedidos() {
     return apiClient.get('/pedidos/obtenerTodos');
   },
@@ -113,6 +121,7 @@ export default {
     return apiClient.patch(`/pedidos/cambiarEstado/${id}`, { estado });
   },
 
+  // =========== DETALLES DE PEDIDO ===========
   getDetallesPedidoPorPedido(idPedido) {
     return apiClient.get(`/detalle-pedido/pedido/${idPedido}`);
   },
@@ -125,9 +134,13 @@ export default {
   eliminarDetallePedido(idDetalle) {
     return apiClient.delete(`/detalle-pedido/eliminar/${idDetalle}`);
   },
+
+  // =========== NOTIFICACIONES ===========
   enviarNotificacion(data) {
     return apiClient.post('/notificaciones/enviar/', data);
   },
+
+  // =========== PAGOS ===========
   getPagos() {
     return apiClient.get('/pagos/obtenerTodos/');
   },
@@ -155,6 +168,7 @@ export default {
     return apiClient.post('/pagos/generar-liquidacion-mensual', periodo ? { periodo } : {});
   },
 
+  // =========== PEDIDOS PERIODICOS ===========
   getPedidosPeriodicos() {
     return apiClient.get('/pedido-periodico/obtenerTodos');
   },

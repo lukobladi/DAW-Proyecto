@@ -10,15 +10,18 @@ let token; // Variable para almacenar el token de autenticación
  * Configura un usuario administrador y obtiene un token de autenticación.
  */
 async function getAuthToken() {
-  if (token) return token; // Si ya existe un token, reutilízalo
+  if (token) return token; // Si ya existe un token se reutilízalo
 
   // Crear un usuario administrador para el login
-  const hashedPassword = await bcrypt.hash('1234', 10); // Hash the password
-  await pool.query(`
+  const hashedPassword = await bcrypt.hash('1234', 10); // Hash del password
+  await pool.query(
+    `
     INSERT INTO usuario (nombre, correo, pass, rol, movil)
     VALUES ('Admin Test', 'enekoloko7@hotmail.com', $1, 'admin', '123456789')
     ON CONFLICT (correo) DO NOTHING;
-  `, [hashedPassword]); // Utilizar password hasheado
+  `,
+    [hashedPassword]
+  ); // Utilizar password hasheado
 
   // Obtener el token de autenticación
   const res = await request(app).post('/api/usuarios/login').send({

@@ -87,10 +87,16 @@ describe('Proveedor Model', () => {
   });
 
   it('should toggle the active status of a provider', async () => {
-    const proveedorInactivo = await Proveedor.toggleActiveStatus(proveedorId, false);
+    const proveedorInactivo = await Proveedor.toggleActiveStatus(
+      proveedorId,
+      false
+    );
     expect(proveedorInactivo).toHaveProperty('activo', false);
 
-    const proveedorActivo = await Proveedor.toggleActiveStatus(proveedorId, true);
+    const proveedorActivo = await Proveedor.toggleActiveStatus(
+      proveedorId,
+      true
+    );
     expect(proveedorActivo).toHaveProperty('activo', true);
   });
 
@@ -106,7 +112,9 @@ describe('Proveedor Model', () => {
       true,
       false
     );
-    const deletedProveedor = await Proveedor.delete(nuevoProveedor.id_proveedor);
+    const deletedProveedor = await Proveedor.delete(
+      nuevoProveedor.id_proveedor
+    );
     expect(deletedProveedor).toBeUndefined(); // No return value expected
     const proveedor = await Proveedor.findById(nuevoProveedor.id_proveedor);
     expect(proveedor).toBeUndefined();

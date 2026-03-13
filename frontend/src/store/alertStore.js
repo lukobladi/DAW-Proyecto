@@ -1,27 +1,30 @@
+// Store para mostrar alertas/notificaciones en la UI
+// Usa reactive() de Vue para simplicidad
+
 import { reactive } from 'vue';
 
 export const alertStore = reactive({
   message: '', // Mensaje de la alerta
   type: '', // Tipo de alerta: 'success' o 'danger'
-  timeoutId: null, // ID del timeout para limpiar la alerta automáticamente
+  timeoutId: null, // ID del timeout para limpiar la alerta automaticamente
 
-  // Mostrar una alerta
+  // Mostrar una alerta que desaparece despues de un tiempo
   showAlert(message, type = 'success', duration = 2000) {
     this.message = message;
     this.type = type;
 
-    // Limpiar cualquier timeout previo
+    // Limpio cualquier timeout previo
     if (this.timeoutId) {
       clearTimeout(this.timeoutId);
     }
 
-    // Configurar el timeout para borrar la alerta automáticamente
+    // Configuro el timeout para borrar la alerta automaticamente
     this.timeoutId = setTimeout(() => {
       this.clearAlert();
     }, duration);
   },
 
-  // Ocultar la alerta
+  // Ocultar la alerta manualmente
   clearAlert() {
     this.message = '';
     this.type = '';
