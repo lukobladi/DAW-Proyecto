@@ -243,7 +243,7 @@ El objetivo de este proyecto es desarrollar una aplicación web que facilite la 
 
 ### Estructura del Grupo
 
-El grupo está formado por familias que se encargan de contactar directamente con los productores. Cada usuario asume la responsabilidad de mantenerse en contacto con un proveedor específico, aunque hay algunos usuarios que no gestionan ningún proveedor. Será el usuario que gestiona ese proveedor el encargado de dar de alta, modificar y borrar productos. Será el encargado de dar de alta pedidos conjuntos estableciendo un periodo en el que los usuarios podrán añadir lineas al pedido.
+El grupo está formado por **familias** que se encargan de contactar directamente con los **productores**. Cada familia, puede estar formnada por varios usuarios o miembros de la familia. Cada familia asume la responsabilidad de mantenerse en contacto con un proveedor específico, aunque hay algunas familias que no gestionan ningún proveedor. Será la familia que gestiona ese proveedor el encargado de dar de alta, modificar y borrar productos. También será la familia la encargada de dar de alta pedidos conjuntos estableciendo un periodo en el que los usuarios del grupo de konsumo podrán añadir lineas al pedido conjunto.
 
 #### Ejemplo actual de uso para incorporar una familia:
 1. Contacta con responsable del grupo de consumo.
@@ -292,10 +292,10 @@ El grupo está formado por familias que se encargan de contactar directamente co
 8. Comprueba que el importe coincide con los pedidos.
 
 ### Pedidos 
-Los pedidos se hacen de manera conjunta entre todos los usuarios del grupo. Los pedidos los abre el usuario encargado de ese proveedor(grupo de productos). 
+Los pedidos se hacen de manera conjunta entre todos los usuarios del grupo. Los pedidos los abre la familia encargada de ese proveedor(grupo de productos). 
 
 ### Pedido abierto
-Cuando un pedido está abierto significa que el usuario encargado del proveedor ha abierto un pedido y ha establecido una fecha de apertura y una fecha de cierre. El pedido solo será editable en este periodo.
+Cuando un pedido está abierto significa que el usuario perteneciente a la familia encargada del proveedor ha abierto un pedido y ha establecido una fecha de apertura y una fecha de cierre. El pedido solo será editable en este periodo.
 
 ### Pedidos periódicos
 Hay algunos productos que se piden semanalmente de manera automática sin que tenga que intervenir el usuario hasta que quiera dejar de recibir ese pedido.
@@ -304,10 +304,10 @@ Hay algunos productos que se piden semanalmente de manera automática sin que te
 Los productos se solicitan a diferentes proveedores con distintas frecuencias: algunos se piden semanalmente, mientras que otros se solicitan cada dos, tres o seis meses.
 
 ### Entrega de Productos
-Todos los productos se entregan en un local común, donde los usuarios pueden recoger sus pedidos. Es el usuario encargado de ese proveedor el que establecerá una fecha aproximada de entrega en el momento de abrir un pedido.
+Todos los productos se entregan en un local común, donde los usuarios pueden recoger sus pedidos. Es la familia encargada de ese proveedor la que establecerá una fecha aproximada de entrega en el momento de abrir un pedido.
 
 ### Reparto de Productos
-Algunos productos se repartirán a los usuarios que los han pedido, después de que hayan sido entregados en el local.
+Algunos productos se repartirán a las familias que los han pedido, después de que hayan sido entregados en el local.
 
 ## Gestión Actual en Google Sheets
 
@@ -328,8 +328,8 @@ Se realizan cálculos complejos para gestionar la información financiera y de p
 
 La nueva aplicación web permitirá automatizar y optimizar todos estos procesos, ofreciendo una interfaz más amigable y eficiente para los usuarios. Algunas de las características clave incluirán:
 
-- **Gestión de Productos y Proveedores**: Una sección dedicada para que los usuarios gestores puedan ver y gestionar los productos y proveedores de manera más intuitiva.
-- **Sistema de Pedidos**: Un sistema que permita abrir pedidos de forma sencilla a los usuarios gestores.
+- **Gestión de Productos y Proveedores**: Una sección dedicada para que las familias gestoras puedan ver y gestionar los productos y proveedores de manera más intuitiva.
+- **Sistema de Pedidos**: Un sistema que permita abrir pedidos de forma sencilla a los usuarios pertenecientes a familias gestoras.
 - **Sistema de Compras**: Un sistema que permita añadir productos a la cesta mensual de manera intuitiva.
 - **Cálculos Automáticos**: Automatización de los cálculos de gastos y deudas, eliminando la necesidad de realizar cálculos manuales en hojas de cálculo.
 - **Interacción entre Usuarios**: Facilitar la comunicación entre usuarios y productores, mejorando la colaboración y la eficiencia del grupo.

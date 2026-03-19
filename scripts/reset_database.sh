@@ -21,4 +21,4 @@ if [ -f "" ]; then
     sudo -u postgres psql -d ekonsumo -f ""
 fi
 
-echo "✅ Base de datos reseteda correctamente"
+echo "Base de datos reseteda correctamente"
