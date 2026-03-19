@@ -1,3 +1,4 @@
+// Las rutas son el Endpoint que se exponen del backend. Por eso tienen la documentacion Swagger
 // Rutas para los detalles de pedido. linea de producto dentro de un pedido
 
 const express = require('express');

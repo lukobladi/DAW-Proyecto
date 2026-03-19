@@ -1,4 +1,4 @@
-// Servicio para enviar correos electronicos. nodemailer con Gmail y OAuth2
+// Servicio para enviar correos electronicos. Utiliza la libreria nodemailer con Gmail y OAuth2
 
 const nodemailer = require('nodemailer');
 const logger = require('../config/logger');

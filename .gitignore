@@ -23,9 +23,9 @@ yarn-error.log*
 .vscode/
 
 package-lock.json
-Backend/package-lock.json
-Backend/package-lock.json
-Backend/package-lock.json
+backend/package-lock.json
+backend/package-lock.json
+backend/package-lock.json
 
 docs/
 
@@ -36,4 +36,4 @@ backend/uploads/
 backend/coverage/clover.xml
 backend/coverage/lcov.info
 backend/coverage/clover.xml
-backend/uploads/1772774425680.jpg
+backend/uploads/

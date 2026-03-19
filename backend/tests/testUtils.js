@@ -1,4 +1,4 @@
-// Utilidades para los tests
+// Utils para los tests
 // Funciones helper para configurar el entorno de pruebas
 
 const request = require('supertest');

@@ -7,11 +7,11 @@ class UsuarioProveedor {
   // Crea la relacion usuario-proveedor (relacion 1:1)
   // Antes de crear borra relaciones anteriores para evitar duplicados
   static async crear({ id_usuario, id_proveedor }) {
-    // Borro relacion anterior del usuario si existe
+    // Borrar relacion anterior del usuario si existe
     await pool.query('DELETE FROM usuario_proveedor WHERE id_usuario = $1', [
       id_usuario,
     ]);
-    // Borro relacion anterior del proveedor si existe
+    // Borrar relacion anterior del proveedor si existe
     await pool.query('DELETE FROM usuario_proveedor WHERE id_proveedor = $1', [
       id_proveedor,
     ]);

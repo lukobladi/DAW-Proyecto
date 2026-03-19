@@ -1,4 +1,4 @@
-// Los models son para acceder a la base de datos
+// Model para acceder a los datos de Producto de la base de datos
 
 const pool = require('../config/db');
 
