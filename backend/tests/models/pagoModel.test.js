@@ -10,40 +10,26 @@ describe('Modelo Pago', () => {
   let acreedorId;
 
   // Datos del usuario deudor
-  const deudorData = {
-    nombre: 'Usuario Deudor',
-    correo: 'deudor.test.pago@test.com',
-    password: 'password123',
-    rol: 'usuario',
-    movil: '111111111',
-  };
-
-  // Datos del usuario acreedor
-  const acreedorData = {
-    nombre: 'Usuario Acreedor',
-    correo: 'acreedor.test.pago@test.com',
-    password: 'password123',
-    rol: 'usuario',
-    movil: '222222222',
-  };
+  const deudorCorreo = 'johiwa3415@soco7.com';
+  const acreedorCorreo = `acreedor.pago+${Date.now()}@soco7.com`;
 
   beforeAll(async () => {
     // Crear usuarios para las pruebas
     const deudor = await Usuario.create(
-      deudorData.nombre,
-      `deudor.pago+${Date.now()}@test.com`,
-      deudorData.password,
-      deudorData.rol,
-      deudorData.movil
+      'Usuario Deudor',
+      deudorCorreo,
+      'password123',
+      'usuario',
+      '111111111'
     );
     deudorId = deudor.id_usuario;
 
     const acreedor = await Usuario.create(
-      acreedorData.nombre,
-      `acreedor.pago+${Date.now()}@test.com`,
-      acreedorData.password,
-      acreedorData.rol,
-      acreedorData.movil
+      'Usuario Acreedor',
+      acreedorCorreo,
+      'password123',
+      'usuario',
+      '222222222'
     );
     acreedorId = acreedor.id_usuario;
   });

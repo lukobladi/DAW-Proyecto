@@ -5,49 +5,49 @@ const Usuario = require('../../src/models/Usuario');
 const pool = require('../../src/config/db');
 
 describe('Modelo Usuario', () => {
-  let usuarioId; // Para guardar el ID del usuario creado
+  let usuarioId;
+
+  // Usar correos temporales validos
+  const deudorCorreo = 'johiwa3415@soco7.com';
+  const acreedorCorreo = `acreedor.pago+${Date.now()}@soco7.com`;
+
   const usuarioData = {
     nombre: 'Juan Perez',
-    correo: `juan.perez+${Date.now()}@example.com`, // Correo unico para cada prueba
     password: '123456',
     rol: 'usuario',
     movil: '123456789',
   };
 
   beforeEach(async () => {
-    // Genero un correo unico para cada prueba
-    const uniqueCorreo = `test+${Date.now()}@example.com`;
     const nuevoUsuario = await Usuario.create(
       usuarioData.nombre,
-      uniqueCorreo,
+      `test+${Date.now()}@soco7.com`,
       usuarioData.password,
       usuarioData.rol,
       usuarioData.movil
     );
-    usuarioId = nuevoUsuario.id_usuario; // Guardo el ID del usuario creado
+    usuarioId = nuevoUsuario.id_usuario;
   });
 
   afterEach(async () => {
-    // Limpio el usuario despues de cada prueba
     if (usuarioId) {
       await Usuario.delete(usuarioId);
       usuarioId = null;
     }
   });
 
-  // Test: crear un nuevo usuario
   it('Deberia crear un nuevo usuario', async () => {
-    const uniqueCorreo = `test+${Date.now()}@example.com`; // Genero un correo unico
     const nuevoUsuario = await Usuario.create(
-      usuarioData.nombre,
-      uniqueCorreo,
-      usuarioData.password,
-      usuarioData.rol,
-      usuarioData.movil
+      'Usuario de prueba',
+      `test.crear+${Date.now()}@soco7.com`,
+      'password',
+      'usuario',
+      '987654321'
     );
     expect(nuevoUsuario).toHaveProperty('id_usuario');
-    usuarioId = nuevoUsuario.id_usuario; // Guardo el ID del usuario creado
+    await Usuario.delete(nuevoUsuario.id_usuario); 
   });
+
 
   // Test: obtener todos los usuarios
   it('Deberia obtener todos los usuarios', async () => {
@@ -66,10 +66,11 @@ describe('Modelo Usuario', () => {
 
   // Test: actualizar un usuario
   it('Deberia actualizar un usuario', async () => {
+    const usuario = await Usuario.findById(usuarioId);
     const usuarioActualizado = await Usuario.update(
       usuarioId,
       'Juan Actualizado',
-      usuarioData.correo,
+      usuario.correo,
       usuarioData.rol,
       usuarioData.movil
     );

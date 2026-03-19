@@ -1,5 +1,6 @@
 
 const pool = require('../config/db');
+const FamiliaProveedor = require('./FamiliaProveedor');
 
 const validFrecuencias = [
   'semanal',
@@ -8,10 +9,11 @@ const validFrecuencias = [
   'trimestral',
   'semestral',
   'anual',
+  'sin determinar',
 ];
 
 const Proveedor = {
-  // Crear un nuevo proveedor
+  // Crear un nuevo proveedor (sin familia)
   async create(
     nombre,
     contacto,
@@ -21,18 +23,17 @@ const Proveedor = {
     metodo_pago,
     frecuencia_pedido_aproximada,
     envio_movil,
-    envio_mail,
-    familia = null
+    envio_mail
   ) {
     if (
       !frecuencia_pedido_aproximada ||
       !validFrecuencias.includes(frecuencia_pedido_aproximada)
     ) {
-      throw new Error('Invalid frecuencia_pedido_aproximada value');
+      throw new Error('Valor de frecuencia_pedido_aproximada invalido');
     }
     const query = `
-      INSERT INTO Proveedor (Nombre, Contacto, Telefono, Movil, Correo, Metodo_Pago, Frecuencia_Pedido_Aproximada, Envio_Movil, Envio_Mail, Familia, Fecha_Modificacion)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, CURRENT_TIMESTAMP)
+      INSERT INTO proveedor (nombre, contacto, telefono, movil, correo, metodo_pago, frecuencia_pedido_aproximada, envio_movil, envio_mail, fecha_modificacion)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, CURRENT_TIMESTAMP)
       RETURNING *;
     `;
     const values = [
@@ -45,38 +46,41 @@ const Proveedor = {
       frecuencia_pedido_aproximada,
       envio_movil,
       envio_mail,
-      familia,
     ];
     const { rows } = await pool.query(query, values);
     return rows[0];
   },
 
-  // Obtener todos los proveedores
+  // Obtener todos los proveedores con su familia asignada
   async findAll() {
     const query = `
-      SELECT DISTINCT ON (p.id_proveedor) p.*
-      FROM Proveedor p
+      SELECT p.*, fp.id_familia as familia
+      FROM proveedor p
+      LEFT JOIN familia_proveedor fp ON p.id_proveedor = fp.id_proveedor
       ORDER BY p.id_proveedor;
     `;
     const { rows } = await pool.query(query);
     return rows;
   },
 
-  // Obtener un proveedor por ID
+  // Obtener un proveedor por ID con su familia
   async findById(id) {
-    const query = 'SELECT * FROM Proveedor WHERE id_proveedor = $1;';
+    const query = `
+      SELECT p.*, fp.id_familia as familia
+      FROM proveedor p
+      LEFT JOIN familia_proveedor fp ON p.id_proveedor = fp.id_proveedor
+      WHERE p.id_proveedor = $1;
+    `;
     const { rows } = await pool.query(query, [id]);
     return rows[0];
   },
 
   // Obtener proveedor por familia gestora
   async findByFamilia(familia) {
-    const query = 'SELECT * FROM Proveedor WHERE Familia = $1;';
-    const { rows } = await pool.query(query, [familia]);
-    return rows[0];
+    return FamiliaProveedor.findProveedoresByFamilia(familia);
   },
 
-  // Actualizar un proveedor
+  // Actualizar un proveedor (sin familia)
   async update(
     id,
     nombre,
@@ -87,16 +91,15 @@ const Proveedor = {
     metodo_pago,
     frecuencia_pedido_aproximada,
     envio_movil,
-    envio_mail,
-    familia = null
+    envio_mail
   ) {
     if (!validFrecuencias.includes(frecuencia_pedido_aproximada)) {
-      throw new Error('Invalid frecuencia_pedido_aproximada value');
+      throw new Error('Valor de frecuencia_pedido_aproximada invalido');
     }
     const query = `
-      UPDATE Proveedor
-      SET Nombre = $1, Contacto = $2, Telefono = $3, Movil = $4, Correo = $5, Metodo_Pago = $6, Frecuencia_Pedido_Aproximada = $7, Envio_Movil = $8, Envio_Mail = $9, Familia = $10, Fecha_Modificacion = CURRENT_TIMESTAMP
-      WHERE id_proveedor = $11
+      UPDATE proveedor
+      SET nombre = $1, contacto = $2, telefono = $3, movil = $4, correo = $5, metodo_pago = $6, frecuencia_pedido_aproximada = $7, envio_movil = $8, envio_mail = $9, fecha_modificacion = CURRENT_TIMESTAMP
+      WHERE id_proveedor = $10
       RETURNING *;
     `;
     const values = [
@@ -109,7 +112,6 @@ const Proveedor = {
       frecuencia_pedido_aproximada,
       envio_movil,
       envio_mail,
-      familia,
       id,
     ];
     const { rows } = await pool.query(query, values);
@@ -118,15 +120,15 @@ const Proveedor = {
 
   // Eliminar un proveedor
   async delete(id) {
-    const query = 'DELETE FROM Proveedor WHERE id_proveedor = $1;';
+    const query = 'DELETE FROM proveedor WHERE id_proveedor = $1;';
     await pool.query(query, [id]);
   },
 
   // Activar o desactivar un proveedor
   async toggleActiveStatus(id, isActive) {
     const query = `
-      UPDATE Proveedor
-      SET Activo = $1, Fecha_Modificacion = CURRENT_TIMESTAMP
+      UPDATE proveedor
+      SET activo = $1, fecha_modificacion = CURRENT_TIMESTAMP
       WHERE id_proveedor = $2
       RETURNING *;
     `;
@@ -137,3 +139,4 @@ const Proveedor = {
 };
 
 module.exports = Proveedor;
+

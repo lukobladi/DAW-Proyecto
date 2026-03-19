@@ -6,7 +6,11 @@
     <div class="navbar-brand">
       <router-link to="/" class="navbar-logo">Grupo de Consumo</router-link>
       <span v-if="isAuthenticated && userName" class="navbar-user">
-        {{ userName }} <span v-if="userFamily" class="user-family">(Familia {{ userFamily }})</span>
+        {{ userName }}
+        <span v-if="userFamily" class="user-family">
+          (Familia {{ userFamily }})
+          <span v-if="userProvider"> - {{ userProvider }}</span>
+        </span>
       </span>
     </div>
     <div class="navbar-right">
@@ -60,7 +64,6 @@ export default {
   data() {
     return {
       isMenuOpen: false,
-      tieneProveedorAsignado: false,
       pedidosPendientesEntrega: 0,
     };
   },
@@ -74,7 +77,8 @@ export default {
       return authStore.user?.role === 'admin';
     },
     isGestor() {
-      return this.tieneProveedorAsignado;
+      const authStore = useAuthStore();
+      return authStore.user?.role === 'gestor';
     },
     userName() {
       const authStore = useAuthStore();
@@ -84,15 +88,19 @@ export default {
       const authStore = useAuthStore();
       return authStore.user?.familia || null;
     },
+    userProvider() {
+      const authStore = useAuthStore();
+      return authStore.user?.proveedor_gestionado || null;
+    },
   },
   created() {
-    this.verificarProveedor();
+    if (this.isAuthenticated) {
+      this.cargarPedidosPendientes();
+    }
   },
   watch: {
     isAuthenticated(val) {
-      // Cuando cambia el estado de autenticacion, verifico si tiene proveedor
       if (val) {
-        this.verificarProveedor();
         this.cargarPedidosPendientes();
       } else {
         this.pedidosPendientesEntrega = 0;
@@ -107,23 +115,6 @@ export default {
     // Cierra el menu (al hacer click en un enlace)
     closeMenu() {
       this.isMenuOpen = false;
-    },
-    // Verifica si el usuario tiene un proveedor asignado
-    async verificarProveedor() {
-      if (!this.isAuthenticated || this.isAdmin) {
-        this.tieneProveedorAsignado = this.isAdmin;
-        return;
-      }
-      try {
-        const authStore = useAuthStore();
-        const idUsuario = authStore.user.id_usuario;
-        const response = await api.getUsuarios();
-        const usuarios = response.data || [];
-        const usuario = usuarios.find(u => u.id_usuario === idUsuario);
-        this.tieneProveedorAsignado = usuario && usuario.familia;
-      } catch {
-        this.tieneProveedorAsignado = false;
-      }
     },
     // Carga el numero de pedidos pendientes de entrega para mostrar en el badge
     async cargarPedidosPendientes() {

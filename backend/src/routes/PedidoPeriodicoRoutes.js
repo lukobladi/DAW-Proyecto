@@ -34,7 +34,7 @@ const router = express.Router();
  *               fecha_inicio:
  *                 type: string
  *                 format: date-time
- *                 example: "2023-10-01T00:00:00Z"
+ *                 example: "2026-03-01T00:00:00Z"
  *               fecha_fin:
  *                 type: string
  *                 format: date-time
@@ -141,7 +141,7 @@ router.get(
  *               fecha_inicio:
  *                 type: string
  *                 format: date-time
- *                 example: "2023-10-01T00:00:00Z"
+ *                 example: "2026-03-01T00:00:00Z"
  *               fecha_fin:
  *                 type: string
  *                 format: date-time

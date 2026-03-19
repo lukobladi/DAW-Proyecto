@@ -73,11 +73,11 @@ describe('Modelo DetallePedido', () => {
 
 // Crear pedido
     const pedido = await Pedido.create(
+      usuarioEncargado.id_usuario, // id_usuario_encargado
+      proveedorId,
       new Date().toISOString(),
       new Date(Date.now() + 86400000).toISOString(),
       new Date(Date.now() + 172800000).toISOString(),
-      usuarioEncargado.id_usuario, // id_usuario_encargado
-      proveedorId,
       'pendiente' // tiene que ser uno de: pendiente, en proceso, entregado, repartido, cancelado
     );
     pedidoId = pedido.id_pedido;

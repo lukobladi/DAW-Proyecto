@@ -80,15 +80,15 @@
           </div>
           <div class="mb-2">
             <label class="form-label">Fecha apertura</label>
-            <input v-model="form.fecha_apertura" type="datetime-local" class="form-control" required />
+            <input v-model="form.fecha_apertura" v-autoblur type="date" class="form-control" required />
           </div>
           <div class="mb-2">
             <label class="form-label">Fecha cierre</label>
-            <input v-model="form.fecha_cierre" type="datetime-local" class="form-control" required />
+            <input v-model="form.fecha_cierre" v-autoblur type="date" class="form-control" required />
           </div>
           <div class="mb-2">
             <label class="form-label">Fecha entrega</label>
-            <input v-model="form.fecha_entrega" type="datetime-local" class="form-control" />
+            <input v-model="form.fecha_entrega" v-autoblur type="date" class="form-control" />
           </div>
           <div class="mb-3">
             <label class="form-label">Estado</label>
@@ -158,15 +158,17 @@ export default {
       if (!fechaIso) {
         return '';
       }
-      const date = new Date(fechaIso);
-      const tzOffset = date.getTimezoneOffset() * 60000;
-      return new Date(date.getTime() - tzOffset).toISOString().slice(0, 16);
+      return new Date(fechaIso).toISOString().slice(0, 10);
     },
     formatFecha(fechaIso) {
       if (!fechaIso) {
         return '-';
       }
-      return new Date(fechaIso).toLocaleString('es-ES');
+      return new Date(fechaIso).toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      });
     },
     nombreProveedor(idProveedor) {
       return this.proveedores.find((item) => item.id_proveedor === idProveedor)?.nombre || '-';
@@ -185,24 +187,27 @@ export default {
       this.cargando = true;
       this.errorCarga = '';
       try {
-        let pedidosResponse;
+        const pedidosPromise = this.isAdmin ? api.getPedidos() : api.getMisPedidos();
+        const proveedoresPromise = api.getProveedores();
+        const promises = [pedidosPromise, proveedoresPromise];
+
         if (this.isAdmin) {
-          pedidosResponse = await api.getPedidos();
-        } else {
-          pedidosResponse = await api.getMisPedidos();
+          promises.push(api.getUsuarios());
         }
-        const [proveedoresResponse, usuariosResponse] = await Promise.all([
-          api.getProveedores(),
-          api.getUsuarios(),
-        ]);
+
+        const [pedidosResponse, proveedoresResponse, usuariosResponse] = await Promise.all(promises);
+
         this.pedidos = pedidosResponse.data || [];
         this.proveedores = proveedoresResponse.data || [];
-        const usuarios = usuariosResponse.data || [];
-        const familiasSet = new Set();
-        usuarios.forEach((u) => {
-          if (u.familia) familiasSet.add(u.familia);
-        });
-        this.familias = Array.from(familiasSet).sort((a, b) => a - b);
+
+        if (this.isAdmin && usuariosResponse) {
+          const usuarios = usuariosResponse.data || [];
+          const familiasSet = new Set();
+          usuarios.forEach((u) => {
+            if (u.familia) familiasSet.add(u.familia);
+          });
+          this.familias = Array.from(familiasSet).sort((a, b) => a - b);
+        }
       } catch (error) {
         if (error.response?.status === 403) {
           this.errorCarga = error.response.data.error || 'No tienes acceso a pedidos.';

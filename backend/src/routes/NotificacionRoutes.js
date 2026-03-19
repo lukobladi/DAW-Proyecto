@@ -54,7 +54,7 @@ const router = express.Router();
  *                 fecha:
  *                   type: string
  *                   format: date-time
- *                   example: "2023-10-01T12:00:00Z"
+ *                   example: "2026-03-01T12:00:00Z"
  *                 leida:
  *                   type: boolean
  *                   example: false
@@ -98,7 +98,7 @@ router.post('/enviar/', authMiddleware, NotificacionController.enviar);
  *                 fecha:
  *                   type: string
  *                   format: date-time
- *                   example: "2023-10-01T12:00:00Z"
+ *                   example: "2026-03-01T12:00:00Z"
  *                 leida:
  *                   type: boolean
  *                   example: true

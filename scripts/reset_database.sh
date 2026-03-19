@@ -11,14 +11,14 @@ sudo -u postgres psql -c "CREATE DATABASE ekonsumo;"
 sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ekonsumo TO ekonsumo_user;"
 
 # Ejecutar scripts SQL
-if [ -f "" ]; then
+# if [ -f "../datos/crearBaseDatos.sql" ]; then
     echo "Ejecutando CrearTablas.sql..."
-    sudo -u postgres psql -d ekonsumo -f ""
-fi
+    sudo -u postgres psql -d ekonsumo -f datos/crearBaseDatos.sql -v db_password='1234' 
+#fi
 
-if [ -f "" ]; then
+if [ -f datos/datosPrueba.sql  ]; then
     echo "Ejecutando InsertarDatosDePrueba.sql..."
-    sudo -u postgres psql -d ekonsumo -f ""
+    sudo -u postgres psql -d ekonsumo -f datos/datosPrueba.sql 
 fi
 
 echo "Base de datos reseteda correctamente"

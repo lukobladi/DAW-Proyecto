@@ -6,8 +6,8 @@ const Producto = {
   // Crear un nuevo producto
   async create(nombre, descripcion, precio, id_proveedor, imagen) {
     const query = `
-      INSERT INTO producto (nombre, descripcion, precio, id_proveedor, imagen)
-      VALUES ($1, $2, $3, $4, $5)
+      INSERT INTO producto (nombre, descripcion, precio, id_proveedor, imagen, fecha_modificacion)
+      VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)
       RETURNING *;
     `;
     const values = [nombre, descripcion, precio, id_proveedor, imagen];
@@ -17,7 +17,7 @@ const Producto = {
 
   // Obtener todos los productos
   async findAll() {
-    const query = 'SELECT * FROM producto;';
+    const query = 'SELECT * FROM producto ORDER BY id_producto;';
     const { rows } = await pool.query(query);
     return rows;
   },
@@ -47,10 +47,6 @@ const Producto = {
     const values = [activo, id_producto];
     const { rows } = await pool.query(query, values);
     return rows[0];
-  },
-
-  async updateEstado(id_producto, activo) {
-    return this.updateActivo(id_producto, activo);
   },
 
   // Actualizar un producto
@@ -84,9 +80,10 @@ const Producto = {
 
   // Eliminar un producto
   async delete(id) {
-    const query = 'DELETE FROM Producto WHERE ID_Producto = $1;';
+    const query = 'DELETE FROM producto WHERE id_producto = $1;';
     await pool.query(query, [id]);
   },
 };
 
 module.exports = Producto;
+

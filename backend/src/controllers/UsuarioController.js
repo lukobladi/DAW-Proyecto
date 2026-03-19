@@ -1,6 +1,7 @@
 // Los controllers GEstiona logica de solicitud HTTP
 
 const Usuario = require('../models/Usuario');
+const Proveedor = require('../models/Proveedor');
 const emailService = require('../services/emailService');
 const logger = require('../config/logger');
 const jwt = require('jsonwebtoken');
@@ -76,6 +77,14 @@ const UsuarioController = {
         { expiresIn: '1h' }
       );
 
+      let proveedor_gestionado = null;
+      if (user.rol === 'gestor' && user.familia) {
+        const proveedores = await Proveedor.findByFamilia(user.familia);
+        if (proveedores && proveedores.length > 0) {
+          proveedor_gestionado = proveedores[0].nombre;
+        }
+      }
+
       res.status(200).json({
         token,
         user: {
@@ -85,6 +94,7 @@ const UsuarioController = {
           rol: user.rol,
           movil: user.movil,
           familia: user.familia,
+          proveedor_gestionado,
         },
       });
     } catch (err) {

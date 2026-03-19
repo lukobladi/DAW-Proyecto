@@ -99,18 +99,6 @@ Tener instalado el siguiente software antes de empezar:
     - [**Flujo de Usuario**](#flujo-de-usuario)
       - [Pasos:](#pasos)
       - [Diagrama:](#diagrama-1)
-- [Roadmap del Proyecto](#roadmap-del-proyecto)
-  - [1. Definición de Requisitos](#1-definición-de-requisitos)
-  - [2. Planificación del Proyecto](#2-planificación-del-proyecto)
-  - [3. Diseño de la Aplicación](#3-diseño-de-la-aplicación)
-  - [4. Configuración del Entorno de Desarrollo](#4-configuración-del-entorno-de-desarrollo)
-  - [5. Desarrollo del Back-End](#5-desarrollo-del-back-end)
-  - [6. Desarrollo del Front-End](#6-desarrollo-del-front-end)
-  - [7. Pruebas](#7-pruebas)
-  - [8. Documentación](#8-documentación)
-  - [9. Despliegue](#9-despliegue)
-  - [10. Recopilación de Feedback y Mejora Continua](#10-recopilación-de-feedback-y-mejora-continua)
-  - [11. Mantenimiento](#11-mantenimiento)
     - [**Autenticación y Autorización con JWT**](#autenticación-y-autorización-con-jwt)
       - [¿Qué es JWT?](#qué-es-jwt)
       - [Flujo de Autenticación con JWT:](#flujo-de-autenticación-con-jwt)
@@ -169,7 +157,7 @@ Tener instalado el siguiente software antes de empezar:
     - [3. Producto](#3-producto)
     - [4. Pedido](#4-pedido)
     - [5. Detalle\_Pedido](#5-detalle_pedido)
-    - [6. usuario\_proveedor (Relación muchos a muchos)](#6-usuario_proveedor-relación-muchos-a-muchos)
+    - [6. familia\_proveedor (Nueva)](#6-familia_proveedor-nueva)
     - [7. Pedido\_Periodico](#7-pedido_periodico)
     - [8. Pago (Nueva)](#8-pago-nueva)
     - [9. Notificacion (Nueva)](#9-notificacion-nueva)
@@ -1046,7 +1034,7 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 - **Producto**: Almacena la información de los productos.
 - **Pedido**: Almacena la información de los pedidos.
 - **Detalle_Pedido**: Relaciona los pedidos con los productos.
-- **usuario_proveedor**: Relación muchos a muchos entre usuarios y proveedores.
+- **familia_proveedor**: Relaciona una familia con un proveedor.
 - **Pedido_Periodico**: Almacena la información de los pedidos periódicos.
 - **Pago**: Almacena la información de los pagos.
 - **Notificacion**: Almacena las notificaciones enviadas a los usuarios.
@@ -1130,16 +1118,18 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 | `ID_Producto`    | `INT`             | Clave foránea (relación con `Producto`). |
 | `Cantidad`       | `INT`             | Cantidad del producto.               |
 | `Precio_Total`   | `DECIMAL(10, 2)`  | Precio total del producto.           |
-| `id_usuario_Comprador` | `INT`     | Clave foránea (relación con `Usuario`). |
-| `Fecha_Modificacion` | `TIMESTAMP`       | Fecha y hora de modificacion del detalle. |
+| `id_usuario_Comprador` | `INT` | Clave foránea (relación con `Usuario`). |
 
 ---
 
-### 6. usuario_proveedor (Relación muchos a muchos)
-| Columna          | Tipo de Dato      | Descripción                          |
-|------------------|-------------------|--------------------------------------|
-| `id_usuario`     | `INT`             | Clave foránea (relación con `Usuario`). |
-| `id_proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
+### 6. familia_proveedor (Nueva)
+| Columna | Tipo de Dato | Descripción |
+|---|---|---|
+| `id_familia` | `INTEGER` | ID de la familia (de la tabla `Usuario`). |
+| `id_proveedor` | `INT` | Clave foránea (relación con `Proveedor`). |
+| `Fecha_Modificacion` | `TIMESTAMP`       | Fecha y hora de modificacion del detalle. |
+
+
 
 ---
 

@@ -107,16 +107,23 @@ class Pago {
   static async cambiarEstado(id, estado) {
     const query = `
       UPDATE Pago
-      SET Estado = $1,
-          Fecha_Confirmacion_Receptor = CASE
-            WHEN $1 = 'completado' THEN CURRENT_TIMESTAMP
-            ELSE Fecha_Confirmacion_Receptor
-          END,
-          Fecha_Modificacion = CURRENT_TIMESTAMP
-      WHERE ID_Pago = $2
+      SET Estado = $2
+      WHERE ID_Pago = $1
       RETURNING *;
     `;
-    const { rows } = await db.query(query, [estado, id]);
+    const { rows } = await db.query(query, [id, estado]);
+
+    if (estado === 'completado') {
+      const query2 = `
+            UPDATE Pago
+            SET Fecha_Confirmacion_Receptor = CURRENT_TIMESTAMP
+            WHERE ID_Pago = $1
+            RETURNING *;
+        `;
+      const { rows: rows2 } = await db.query(query2, [id]);
+      return rows2[0];
+    }
+
     return rows[0];
   }
 

@@ -4,6 +4,7 @@ const express = require('express');
 const PedidoController = require('../controllers/PedidoController');
 const authMiddleware = require('../middlewares/auth'); 
 const adminMiddleware = require('../middlewares/admin'); 
+const adminOrGestorMiddleware = require('../middlewares/adminOrGestor'); 
 
 const router = express.Router();
 
@@ -32,7 +33,7 @@ const router = express.Router();
  *               fecha_apertura:
  *                 type: string
  *                 format: date-time
- *                 example: "2023-10-01T12:00:00Z"
+ *                 example: "2026-03-01T12:00:00Z"
  *               id_usuario_encargado:
  *                 type: integer
  *                 example: 1
@@ -48,7 +49,11 @@ const router = express.Router();
  *       500:
  *         description: Error al crear el pedido
  */
-router.post('/crear', authMiddleware, PedidoController.crear);
+router.post(
+  '/crear',
+  [authMiddleware, adminOrGestorMiddleware],
+  PedidoController.crear
+);
 
 /**
  * @swagger
@@ -143,7 +148,7 @@ router.get('/obtener/:id', authMiddleware, PedidoController.obtenerPorId);
  *               fecha_apertura:
  *                 type: string
  *                 format: date-time
- *                 example: "2023-10-01T12:00:00Z"
+ *                 example: "2026-03-01T12:00:00Z"
  *               id_usuario_encargado:
  *                 type: integer
  *                 example: 1

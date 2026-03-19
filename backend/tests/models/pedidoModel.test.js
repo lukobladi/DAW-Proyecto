@@ -54,11 +54,11 @@ describe('Modelo Pedido', () => {
     // Crar pedido para cada prueba
     // Pedido.create(fecha_apertura, fecha_cierre, fecha_entrega, id_usuario_encargado, id_proveedor, estado)
     const pedido = await Pedido.create(
+      usuarioId, // id_usuario_encargado
+      proveedorId,
       new Date().toISOString(), // fecha_apertura
       new Date(Date.now() + 86400000).toISOString(), // fecha_cierre (1 dia despues)
       new Date(Date.now() + 172800000).toISOString(), // fecha_entrega (2 dias despues)
-      usuarioId, // id_usuario_encargado
-      proveedorId,
       'pendiente'
     );
     pedidoId = pedido.id_pedido;
@@ -86,11 +86,11 @@ describe('Modelo Pedido', () => {
   // Test: crear un nuevo pedido
   it('deberia crear un nuevo pedido', async () => {
     const nuevoPedido = await Pedido.create(
+      usuarioId,
+      proveedorId,
       new Date().toISOString(),
       new Date(Date.now() + 86400000).toISOString(),
       new Date(Date.now() + 172800000).toISOString(),
-      usuarioId,
-      proveedorId,
       'pendiente'
     );
     expect(nuevoPedido).toHaveProperty('id_pedido');
@@ -121,11 +121,11 @@ describe('Modelo Pedido', () => {
   it('deberia actualizar un pedido', async () => {
     const pedidoActualizado = await Pedido.update(
       pedidoId,
+      usuarioId,
+      proveedorId,
       new Date().toISOString(),
       new Date(Date.now() + 86400000).toISOString(),
       new Date(Date.now() + 172800000).toISOString(),
-      usuarioId,
-      proveedorId,
       'en proceso'
     );
     expect(pedidoActualizado).not.toBeNull();
@@ -134,18 +134,18 @@ describe('Modelo Pedido', () => {
 
   // Test: cambiar estado de un pedido
   it('deberia cambiar el estado de un pedido', async () => {
-    const pedidoActualizado = await Pedido.updateEstado(pedidoId, 'entregado');
+    const pedidoActualizado = await Pedido.changeStatus(pedidoId, 'entregado');
     expect(pedidoActualizado).toHaveProperty('estado', 'entregado');
   });
 
   // Test: eliminar un pedido
   it('deberia eliminar un pedido', async () => {
     const nuevoPedido = await Pedido.create(
+      usuarioId,
+      proveedorId,
       new Date().toISOString(),
       new Date(Date.now() + 86400000).toISOString(),
       new Date(Date.now() + 172800000).toISOString(),
-      usuarioId,
-      proveedorId,
       'pendiente'
     );
     

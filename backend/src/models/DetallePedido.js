@@ -12,7 +12,7 @@ const DetallePedido = {
     id_usuario_comprador
   ) {
     const query = `
-      INSERT INTO Detalle_Pedido (ID_Pedido, ID_Producto, Cantidad, Precio_Unitario, id_usuario_Comprador, Fecha_Modificacion)
+      INSERT INTO detalle_pedido (id_pedido, id_producto, cantidad, precio_unitario, id_usuario_comprador, fecha_modificacion)
       VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)
       RETURNING *;
     `;
@@ -29,14 +29,14 @@ const DetallePedido = {
 
   // Obtener todos los Detalles de un pedido
   async findByPedidoId(id_pedido) {
-    const query = 'SELECT * FROM Detalle_Pedido WHERE ID_Pedido = $1;';
+    const query = 'SELECT * FROM detalle_pedido WHERE id_pedido = $1;';
     const { rows } = await pool.query(query, [id_pedido]);
     return rows;
   },
 
   // Obtener un Detalle por ID
   async findById(id) {
-    const query = 'SELECT * FROM Detalle_Pedido WHERE ID_Detalle = $1;';
+    const query = 'SELECT * FROM detalle_pedido WHERE id_detalle = $1;';
     const { rows } = await pool.query(query, [id]);
     return rows[0];
   },
@@ -51,9 +51,9 @@ const DetallePedido = {
     id_usuario_comprador
   ) {
     const query = `
-      UPDATE Detalle_Pedido
-      SET ID_Pedido = $1, ID_Producto = $2, Cantidad = $3, Precio_Unitario = $4, id_usuario_Comprador = $5, Fecha_Modificacion = CURRENT_TIMESTAMP
-      WHERE ID_Detalle = $6
+      UPDATE detalle_pedido
+      SET id_pedido = $1, id_producto = $2, cantidad = $3, precio_unitario = $4, id_usuario_comprador = $5, fecha_modificacion = CURRENT_TIMESTAMP
+      WHERE id_detalle = $6
       RETURNING *;
     `;
     const values = [
@@ -71,9 +71,9 @@ const DetallePedido = {
   // Actualizar solo la cantidad
   async updateCantidad(id, cantidad) {
     const query = `
-      UPDATE Detalle_Pedido
-      SET Cantidad = $1, Fecha_Modificacion = CURRENT_TIMESTAMP
-      WHERE ID_Detalle = $2
+      UPDATE detalle_pedido
+      SET cantidad = $1, fecha_modificacion = CURRENT_TIMESTAMP
+      WHERE id_detalle = $2
       RETURNING *;
     `;
     const values = [cantidad, id];
@@ -84,9 +84,9 @@ const DetallePedido = {
   // Eliminar un detalle. En vez de borrar ponemos cantidad a 0 para mantener el historial
   async delete(id) {
     const query = `
-      UPDATE Detalle_Pedido
-      SET Cantidad = 0, Fecha_Modificacion = CURRENT_TIMESTAMP
-      WHERE ID_Detalle = $1
+      UPDATE detalle_pedido
+      SET cantidad = 0, fecha_modificacion = CURRENT_TIMESTAMP
+      WHERE id_detalle = $1
       RETURNING *;
     `;
     const values = [id];
@@ -96,3 +96,4 @@ const DetallePedido = {
 };
 
 module.exports = DetallePedido;
+

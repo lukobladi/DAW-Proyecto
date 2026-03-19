@@ -25,8 +25,8 @@ export default {
     return {
       notificaciones: [
         // Ejemplo de datos de notificaciones
-        { id: 1, mensaje: 'Nuevo pedido recibido', fecha: '2023-10-01', leida: false },
-        { id: 2, mensaje: 'Pago completado', fecha: '2023-10-15', leida: true }
+        { id: 1, mensaje: 'Nuevo pedido recibido', fecha: '2026-03-01', leida: false },
+        { id: 2, mensaje: 'Pago completado', fecha: '2026-03-30', leida: true }
       ]
     };
   },

@@ -12,23 +12,38 @@ const PedidoController = {
       fecha_apertura,
       fecha_cierre,
       fecha_entrega,
-      familia,
-      id_proveedor,
       estado,
     } = req.body;
+    let { id_proveedor } = req.body; // Make id_proveedor mutable
+    const id_usuario_encargado = req.user.id_usuario;
+    const user_role = req.user.rol;
+
     try {
+      if (user_role === 'gestor') {
+        const usuario = await Usuario.findById(id_usuario_encargado);
+        if (!usuario || !usuario.familia) {
+          return res.status(403).json({ error: 'No perteneces a ninguna familia' });
+        }
+        // findProveedoresByFamilia returns an array of providers
+        const proveedores = await Proveedor.findByFamilia(usuario.familia);
+        if (!proveedores || proveedores.length === 0) {
+          return res.status(403).json({ error: 'Tu familia no gestiona ningun proveedor' });
+        }
+        // Assuming a gestor's family manages only one provider
+        id_proveedor = proveedores[0].id_proveedor;
+      }
       const nuevoPedido = await Pedido.create(
+        id_usuario_encargado,
+        id_proveedor,
         fecha_apertura,
         fecha_cierre,
         fecha_entrega,
-        familia,
-        id_proveedor,
         estado
       );
       res.status(201).json(nuevoPedido);
     } catch (err) {
-      console.error(err);
-      res.status(500).send('Error al crear el pedido');
+      console.error('Error al crear el pedido:', err);
+      res.status(500).json({ message: 'Error al crear el pedido', error: err.message });
     }
   },
 
@@ -55,15 +70,16 @@ const PedidoController = {
           .json({ error: 'No perteneces a ninguna familia' });
       }
 
-      const proveedor = await Proveedor.findByFamilia(usuario.familia);
+      const proveedores = await Proveedor.findByFamilia(usuario.familia);
 
-      if (!proveedor) {
+      if (!proveedores || proveedores.length === 0) {
         return res
           .status(403)
           .json({ error: 'Tu familia no gestiona ningun proveedor' });
       }
 
-      const pedidos = await Pedido.findByProveedor(proveedor.id_proveedor);
+      // Assuming a gestor's family manages only one provider
+      const pedidos = await Pedido.findByProveedor(proveedores[0].id_proveedor);
       res.json(pedidos);
     } catch (err) {
       console.error(err);

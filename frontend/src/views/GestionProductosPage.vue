@@ -2,7 +2,7 @@
   <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h2 class="mb-0">Gestion de Productos</h2>
-      <button class="btn btn-primary" @click="abrirModalCrear">Anadir producto</button>
+      <button v-if="isAdmin || isGestor" class="btn btn-primary" @click="abrirModalCrear">Anadir producto</button>
     </div>
 
     <div v-if="cargando" class="estado">Cargando productos...</div>
@@ -27,7 +27,7 @@
             </span>
           </p>
           <div class="d-flex gap-2 flex-wrap">
-            <button class="btn btn-sm btn-success" @click="abrirModalEditar(producto)">Editar</button>
+            <button v-if="isAdmin || isGestor" class="btn btn-sm btn-success" @click="abrirModalEditar(producto)">Editar</button>
             <button
               class="btn btn-sm btn-warning"
               @click="cambiarEstado(producto)"
@@ -136,6 +136,10 @@ export default {
       const authStore = useAuthStore();
       return authStore.user?.role === 'admin';
     },
+    isGestor() {
+      const authStore = useAuthStore();
+      return authStore.user?.role === 'gestor';
+    },
     nombreProveedorAsignado() {
       if (!this.form.id_proveedor) return 'Cargando...';
       return this.proveedores.find(p => p.id_proveedor === this.form.id_proveedor)?.nombre || '-';
@@ -194,12 +198,24 @@ export default {
         this.cargando = false;
       }
     },
-    abrirModalCrear() {
+    async abrirModalCrear() {
       this.modoEdicion = false;
       const nuevoForm = productoVacio();
-      if (!this.isAdmin && this.proveedores.length > 0) {
-        nuevoForm.id_proveedor = this.proveedores[0].id_proveedor;
+      
+      if (this.isGestor) {
+        try {
+          const response = await api.getMisProductos();
+          const misProductos = response.data || [];
+          if (misProductos.length > 0) {
+            nuevoForm.id_proveedor = misProductos[0].id_proveedor;
+          }
+        } catch (error) {
+          console.error("Error fetching gestor's products:", error);
+          alertStore.showAlert('No se pudo determinar el proveedor para el gestor.', 'danger');
+          return;
+        }
       }
+      
       this.form = nuevoForm;
       this.mostrarModal = true;
     },

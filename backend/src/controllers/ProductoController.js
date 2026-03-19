@@ -8,10 +8,24 @@ const upload = require('../config/multer');
 const ProductoController = {
   // Crear un nuevo producto con imagen
   async crear(req, res) {
-    const { nombre, descripcion, precio, id_proveedor } = req.body;
+    const { nombre, descripcion, precio } = req.body;
+    let { id_proveedor } = req.body;
     const imagen = req.file ? `/uploads/${req.file.filename}` : null;
+    const user_role = req.user.rol;
+    const id_usuario_encargado = req.user.id_usuario;
 
     try {
+      if (user_role === 'gestor') {
+        const usuario = await Usuario.findById(id_usuario_encargado);
+        if (!usuario || !usuario.familia) {
+          return res.status(403).json({ error: 'No perteneces a ninguna familia' });
+        }
+        const proveedores = await Proveedor.findByFamilia(usuario.familia);
+        if (!proveedores || proveedores.length === 0) {
+          return res.status(403).json({ error: 'Tu familia no gestiona ningun proveedor' });
+        }
+        id_proveedor = proveedores[0].id_proveedor;
+      }
       const nuevoProducto = await Producto.create(
         nombre,
         descripcion,
@@ -49,9 +63,9 @@ const ProductoController = {
           .json({ error: 'No pertenece a ninguna familia' });
       }
 
-      const proveedor = await Proveedor.findByFamilia(usuario.familia);
+      const proveedores = await Proveedor.findByFamilia(usuario.familia);
 
-      if (!proveedor) {
+      if (!proveedores || proveedores.length === 0) {
         return res
           .status(403)
           .json({
@@ -60,7 +74,7 @@ const ProductoController = {
           });
       }
 
-      const productos = await Producto.findByProveedor(proveedor.id_proveedor);
+      const productos = await Producto.findByProveedor(proveedores[0].id_proveedor);
       res.json(productos);
     } catch (err) {
       console.error(err);
@@ -86,10 +100,16 @@ const ProductoController = {
   // Actualizar un producto con imagen
   async actualizar(req, res) {
     const { id } = req.params;
-    const { nombre, descripcion, precio, id_proveedor, activo } = req.body;
+    const { nombre, descripcion, precio, activo } = req.body;
+    let { id_proveedor } = req.body;
     const imagen = req.file ? `/uploads/${req.file.filename}` : null; // URL de la imagen
 
     try {
+      if (req.user.rol === 'gestor') {
+        const usuario = await Usuario.findById(req.user.id_usuario);
+        const proveedores = await Proveedor.findByFamilia(usuario.familia);
+        id_proveedor = proveedores[0].id_proveedor;
+      }
       const productoActualizado = await Producto.update(
         id,
         nombre,

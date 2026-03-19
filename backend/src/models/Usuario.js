@@ -13,8 +13,8 @@ const Usuario = {
   async create(nombre, correo, password, rol, movil, familia = null) {
     const hashedPassword = await bcrypt.hash(password, 10);
     const query = `
-      INSERT INTO Usuario (nombre, correo, pass, rol, movil, familia)
-      VALUES ($1, $2, $3, $4, $5, $6)
+      INSERT INTO usuario (nombre, correo, pass, rol, movil, familia, fecha_modificacion)
+      VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP)
       RETURNING *;
     `;
     const values = [nombre, correo, hashedPassword, rol, movil, familia];
@@ -25,8 +25,8 @@ const Usuario = {
   // Activar o desactivar usuario
   async toggleActivation(id, activo) {
     const query = `
-      UPDATE Usuario
-      SET Activo = $2
+      UPDATE usuario
+      SET activo = $2, fecha_modificacion = CURRENT_TIMESTAMP
       WHERE id_usuario = $1
       RETURNING *;
     `;
@@ -38,8 +38,8 @@ const Usuario = {
   // Obtener un usuario por correo o movil
   async findByEmailOrMobile(correoOMovil) {
     const query = `
-      SELECT * FROM Usuario
-      WHERE (Correo = $1 OR Movil = $1);
+      SELECT * FROM usuario
+      WHERE (correo = $1 OR movil = $1);
     `;
     const values = [correoOMovil];
     const { rows } = await pool.query(query, values);
@@ -48,21 +48,14 @@ const Usuario = {
 
   // Obtener todos los usuarios
   async findAll() {
-    const query = `
-      SELECT DISTINCT ON (u.id_usuario) u.*, 
-             p.id_proveedor as proveedor_id, 
-             p.nombre as proveedor_nombre
-      FROM Usuario u
-      LEFT JOIN Proveedor p ON u.familia = p.familia
-      ORDER BY u.id_usuario;
-    `;
+    const query = 'SELECT * FROM usuario ORDER BY id_usuario;';
     const { rows } = await pool.query(query);
     return rows;
   },
 
   // Obtener un usuario por ID
   async findById(id) {
-    const query = 'SELECT * FROM Usuario WHERE id_usuario = $1;';
+    const query = 'SELECT * FROM usuario WHERE id_usuario = $1;';
     const { rows } = await pool.query(query, [id]);
     return rows.length > 0 ? rows[0] : null;
   },
@@ -70,8 +63,8 @@ const Usuario = {
   // Actualizar un usuario
   async update(id, nombre, correo, rol, movil, familia = null) {
     const query = `
-      UPDATE Usuario
-      SET nombre = $2, correo = $3, rol = $4, movil = $5, familia = $6
+      UPDATE usuario
+      SET nombre = $2, correo = $3, rol = $4, movil = $5, familia = $6, fecha_modificacion = CURRENT_TIMESTAMP
       WHERE id_usuario = $1
       RETURNING *;
     `;
@@ -84,8 +77,8 @@ const Usuario = {
   async updatePassword(id, nuevaPassword) {
     const hashedPassword = await bcrypt.hash(nuevaPassword, 10);
     const query = `
-      UPDATE Usuario
-      SET Pass = $2
+      UPDATE usuario
+      SET pass = $2, fecha_modificacion = CURRENT_TIMESTAMP
       WHERE id_usuario = $1
       RETURNING *;
     `;
@@ -95,7 +88,7 @@ const Usuario = {
 
   // Eliminar un usuario
   async delete(id) {
-    const query = 'DELETE FROM Usuario WHERE id_usuario = $1 RETURNING *;';
+    const query = 'DELETE FROM usuario WHERE id_usuario = $1 RETURNING *;';
     const { rows } = await pool.query(query, [id]);
     return rows.length > 0 ? rows[0] : null;
   },
@@ -103,9 +96,9 @@ const Usuario = {
   // Calcular el saldo que debe un usuario
   async calcularSaldo(id_usuario) {
     const query = `
-      SELECT SUM(Monto) AS saldo
-      FROM Pago
-      WHERE id_usuario_Deudor = $1 AND Estado = 'pendiente';
+      SELECT SUM(monto) AS saldo
+      FROM pago
+      WHERE id_usuario_deudor = $1 AND estado = 'pendiente';
     `;
     const { rows } = await pool.query(query, [id_usuario]);
     return parseFloat(rows[0].saldo) || 0;
@@ -114,10 +107,11 @@ const Usuario = {
   // Obtener los correos de los administradores
   async findAdminEmails() {
     const query =
-      'SELECT correo FROM Usuario WHERE rol = $1 AND activo = true;';
-    const { rows } = await pool.query(query, ['admin']);
+      "SELECT correo FROM usuario WHERE rol = 'admin' AND activo = true;";
+    const { rows } = await pool.query(query);
     return rows.map((row) => row.correo);
   },
 };
 
 module.exports = Usuario;
+

@@ -52,9 +52,11 @@ const router = express.Router();
  *       500:
  *         description: Error al crear el producto
  */
+const gestorMiddleware = require('../middlewares/gestor');
+
 router.post(
   '/crear',
-  authMiddleware,
+  [authMiddleware, gestorMiddleware],
   upload.single('imagen'),
   ProductoController.crear
 );
@@ -175,35 +177,11 @@ router.get('/obtener/:id', authMiddleware, ProductoController.obtenerPorId);
  */
 router.put(
   '/actualizar/:id',
-  authMiddleware,
+  [authMiddleware, gestorMiddleware],
   upload.single('imagen'),
   ProductoController.actualizar
 );
-
-/**
- * @swagger
- * /api/productos/eliminar/{id}:
- *   delete:
- *     summary: Eliminar un producto
- *     tags: [Productos]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: ID del producto
- *     responses:
- *       204:
- *         description: Producto eliminado correctamente
- *       404:
- *         description: Producto no encontrado
- *       500:
- *         description: Error al eliminar el producto
- */
-router.delete('/eliminar/:id', authMiddleware, ProductoController.eliminar);
+router.delete('/eliminar/:id', [authMiddleware, gestorMiddleware], ProductoController.eliminar);
 
 /**
  * @swagger
