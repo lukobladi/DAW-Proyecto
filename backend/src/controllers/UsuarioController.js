@@ -77,12 +77,15 @@ const UsuarioController = {
       );
 
       res.status(200).json({
-        id_usuario: user.id_usuario,
-        nombre: user.nombre,
-        correo: user.correo,
-        rol: user.rol,
-        movil: user.movil,
         token,
+        user: {
+          id_usuario: user.id_usuario,
+          nombre: user.nombre,
+          correo: user.correo,
+          rol: user.rol,
+          movil: user.movil,
+          familia: user.familia,
+        },
       });
     } catch (err) {
       logger.error('Error en el login:', err);

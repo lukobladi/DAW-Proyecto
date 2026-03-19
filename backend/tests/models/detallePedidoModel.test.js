@@ -20,7 +20,7 @@ describe('Modelo DetallePedido', () => {
     contacto: 'Pedro Martinez',
     telefono: '555666777',
     movil: '777888999',
-    correo: 'proveedor.detalle@test.com',
+    correo: 'johiwa3415@soco7.com',
     metodo_pago: 'Efectivo',
     frecuencia_pedido_aproximada: 'semanal',
     envio_movil: true,

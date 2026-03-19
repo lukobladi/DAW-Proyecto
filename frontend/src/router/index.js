@@ -139,7 +139,7 @@ const router = createRouter({
 // Comprueba si el usuario esta autenticado y tiene los permisos necesarios
 router.beforeEach((to) => {
   const authStore = useAuthStore();
-  authStore.hydrateAuthState();
+
   const isAuthenticated = authStore.isAuthenticated;
   const isAdmin = authStore.user?.role === 'admin';
 

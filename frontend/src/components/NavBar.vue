@@ -5,7 +5,9 @@
   <nav class="navbar">
     <div class="navbar-brand">
       <router-link to="/" class="navbar-logo">Grupo de Consumo</router-link>
-      <span v-if="isAuthenticated && userName" class="navbar-user">{{ userName }}</span>
+      <span v-if="isAuthenticated && userName" class="navbar-user">
+        {{ userName }} <span v-if="userFamily" class="user-family">(Familia {{ userFamily }})</span>
+      </span>
     </div>
     <div class="navbar-right">
       <!-- Badge con el numero de pedidos pendientes de entrega -->
@@ -77,6 +79,10 @@ export default {
     userName() {
       const authStore = useAuthStore();
       return authStore.user?.nombre || '';
+    },
+    userFamily() {
+      const authStore = useAuthStore();
+      return authStore.user?.familia || null;
     },
   },
   created() {
@@ -328,7 +334,12 @@ export default {
     display: none;
   }
 
-  .navbar-right {
+.user-family {
+  color: #0d6efd;
+  font-weight: 600;
+}
+
+.navbar-right {
     flex-shrink: 0;
   }
 

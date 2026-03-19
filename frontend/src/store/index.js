@@ -34,13 +34,18 @@ function buildInitialAuthState() {
       nombre: persistedUser.nombre || null,
       correo: persistedUser.correo || null,
       movil: persistedUser.movil || null,
+      familia: persistedUser.familia || null,
       role: role || null,
     },
   };
 }
 
 export const useAuthStore = defineStore('auth', {
-  state: () => buildInitialAuthState(),
+  state: () => ({
+    ...buildInitialAuthState(),
+    stateRestored: false,
+    loading: true,
+  }),
   actions: {
     // Guarda los datos del usuario logueado
     login(payload = {}) {
@@ -59,6 +64,7 @@ export const useAuthStore = defineStore('auth', {
         nombre: user.nombre || null,
         correo: user.correo || null,
         movil: user.movil || null,
+        familia: user.familia || null,
         role: role || null,
       };
 
@@ -78,16 +84,22 @@ export const useAuthStore = defineStore('auth', {
     // Cierra la sesion y limpia los datos
     logout() {
       this.isAuthenticated = false;
-      this.user = { id_usuario: null, nombre: null, correo: null, movil: null, role: null };
+      this.user = { id_usuario: null, nombre: null, correo: null, movil: null, role: null, familia: null };
       localStorage.removeItem('authToken');
       localStorage.removeItem('userRole');
       localStorage.removeItem('authUser');
     },
     // Recupera el estado de autenticacion desde localStorage
     hydrateAuthState() {
+      this.loading = true;
       const { isAuthenticated, user } = buildInitialAuthState();
       this.isAuthenticated = isAuthenticated;
       this.user = user;
+      this.stateRestored = true;
+      this.loading = false;
+    },
+    setLoading(loading) {
+      this.loading = loading;
     },
   },
 });

@@ -54,8 +54,7 @@ const Proveedor = {
   // Obtener todos los proveedores
   async findAll() {
     const query = `
-      SELECT DISTINCT ON (p.id_proveedor) p.*, 
-             p.familia as familia_gestora
+      SELECT DISTINCT ON (p.id_proveedor) p.*
       FROM Proveedor p
       ORDER BY p.id_proveedor;
     `;

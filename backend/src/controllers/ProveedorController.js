@@ -15,7 +15,7 @@ const ProveedorController = {
       frecuencia_pedido_aproximada,
       envio_movil,
       envio_mail,
-      imagen,
+      familia,
     } = req.body;
     try {
       const nuevoProveedor = await Proveedor.create(
@@ -28,7 +28,7 @@ const ProveedorController = {
         frecuencia_pedido_aproximada,
         envio_movil,
         envio_mail,
-        imagen
+        familia
       );
       res.status(201).json(nuevoProveedor);
     } catch (err) {
@@ -76,7 +76,7 @@ const ProveedorController = {
       frecuencia_pedido_aproximada,
       envio_movil,
       envio_mail,
-      imagen,
+      familia,
     } = req.body;
     try {
       const proveedorActualizado = await Proveedor.update(
@@ -90,7 +90,7 @@ const ProveedorController = {
         frecuencia_pedido_aproximada,
         envio_movil,
         envio_mail,
-        imagen
+        familia
       );
       res.json(proveedorActualizado);
     } catch (err) {

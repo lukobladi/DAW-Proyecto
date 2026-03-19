@@ -10,15 +10,25 @@
         <button type="button" class="btn-close" aria-label="Close" @click="alertStore.clearAlert"></button>
       </div>
     </transition>
-    <NavBar />
-    <router-view />
-    <FooterBar />
+    
+    <!-- Muestra la barra de navegacion solo si el estado de autenticacion ha sido restaurado -->
+    <NavBar v-if="authStore.stateRestored" />
+    
+    <!-- Muestra un estado de carga mientras se restaura el estado de autenticacion -->
+    <div v-if="authStore.loading" class="loading-state">
+      Cargando...
+    </div>
+    
+    <!-- Muestra el contenido principal una vez que el estado ha sido restaurado -->
+    <router-view v-if="authStore.stateRestored" />
+    
+    <FooterBar v-if="authStore.stateRestored" />
   </div>
 </template>
 
 <script>
-// Componente principal que engloba toda la aplicacion
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
+import { useAuthStore } from './store';
 import { alertStore } from './store/alertStore';
 import NavBar from './components/NavBar.vue';
 import FooterBar from './components/FooterBar.vue';
@@ -30,7 +40,15 @@ export default {
     FooterBar,
   },
   setup() {
-    // Calculo la clase de la alerta segun el tipo (success o danger)
+    const authStore = useAuthStore();
+
+    // Cuando el componente se monta, restaura el estado de autenticacion
+    onMounted(() => {
+      if (!authStore.stateRestored) {
+        authStore.hydrateAuthState();
+      }
+    });
+
     const alertClass = computed(() => {
       return alertStore.type === 'danger' ? 'alert-danger' : 'alert-success';
     });
@@ -38,6 +56,7 @@ export default {
     return {
       alertStore,
       alertClass,
+      authStore,
     };
   },
 };
@@ -48,6 +67,14 @@ export default {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+}
+
+.loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1.5rem;
 }
 
 .router-view {

@@ -26,7 +26,7 @@
             <td>{{ proveedor.nombre }}</td>
             <td>{{ proveedor.contacto || '-' }}</td>
             <td>{{ proveedor.correo || '-' }}</td>
-            <td>Familia {{ proveedor.familia_gestora || '-' }}</td>
+            <td>Familia {{ proveedor.familia || '-' }}</td>
             <td>{{ proveedor.frecuencia_pedido_aproximada || '-' }}</td>
             <td>
               <span :class="['estado-pill', proveedor.activo ? 'activo' : 'inactivo']">
@@ -163,7 +163,7 @@ export default {
   computed: {
     familiasDisponibles() {
       return this.familias.filter(f => {
-        const proveedorAsignado = this.proveedores.find(p => p.familia_gestora === f);
+        const proveedorAsignado = this.proveedores.find(p => p.familia === f);
         if (!proveedorAsignado) return true;
         if (this.modoEdicion && proveedorAsignado.id_proveedor === this.form.id_proveedor) return true;
         return false;
@@ -215,7 +215,7 @@ export default {
       this.modoEdicion = true;
       this.form = { 
         ...proveedor,
-        familia: proveedor.familia_gestora || null 
+        familia: proveedor.familia || null 
       };
       this.mostrarModal = true;
     },
