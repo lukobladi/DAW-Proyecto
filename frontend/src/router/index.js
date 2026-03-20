@@ -141,7 +141,7 @@ router.beforeEach((to) => {
   const authStore = useAuthStore();
 
   const isAuthenticated = authStore.isAuthenticated;
-  const isAdmin = authStore.user?.role === 'admin';
+  const isAdmin = authStore.user?.rol === 'admin';
 
   // Si la ruta requiere autenticacion y no esta logueado, redirijo a login
   if (to.meta.requiresAuth && !isAuthenticated) {

@@ -2,7 +2,7 @@
   <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h2 class="mb-0">Gestion de Productos</h2>
-      <button v-if="isAdmin || isGestor" class="btn btn-primary" @click="abrirModalCrear">Anadir producto</button>
+      <button class="btn btn-primary" @click="abrirModalCrear">Anadir producto</button>
     </div>
 
     <div v-if="cargando" class="estado">Cargando productos...</div>
@@ -27,7 +27,7 @@
             </span>
           </p>
           <div class="d-flex gap-2 flex-wrap">
-            <button v-if="isAdmin || isGestor" class="btn btn-sm btn-success" @click="abrirModalEditar(producto)">Editar</button>
+            <button v-if="isAdminOrGestor" class="btn btn-sm btn-success" @click="abrirModalEditar(producto)">Editar</button>
             <button
               class="btn btn-sm btn-warning"
               @click="cambiarEstado(producto)"
@@ -134,11 +134,15 @@ export default {
   computed: {
     isAdmin() {
       const authStore = useAuthStore();
-      return authStore.user?.role === 'admin';
+      return authStore.user?.rol === 'admin';
     },
     isGestor() {
       const authStore = useAuthStore();
-      return authStore.user?.role === 'gestor';
+      return authStore.user?.rol === 'gestor';
+    },
+    isAdminOrGestor() {
+      const authStore = useAuthStore();
+      return authStore.user?.rol === 'admin' || authStore.user?.rol === 'gestor';
     },
     nombreProveedorAsignado() {
       if (!this.form.id_proveedor) return 'Cargando...';

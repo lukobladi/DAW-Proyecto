@@ -109,18 +109,21 @@ const PedidoController = {
       fecha_apertura,
       fecha_cierre,
       fecha_entrega,
-      familia,
       id_proveedor,
       estado,
     } = req.body;
     try {
+      const pedidoActual = await Pedido.findById(id);
+      if (!pedidoActual) {
+        return res.status(404).send('Pedido no encontrado');
+      }
       const pedidoActualizado = await Pedido.update(
         id,
+        pedidoActual.id_usuario_encargado,
+        id_proveedor,
         fecha_apertura,
         fecha_cierre,
         fecha_entrega,
-        familia,
-        id_proveedor,
         estado
       );
       res.json(pedidoActualizado);

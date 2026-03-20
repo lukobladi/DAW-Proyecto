@@ -51,7 +51,7 @@ CREATE TABLE Usuario (
     correo VARCHAR(100) UNIQUE NOT NULL,
     pass VARCHAR(100) NOT NULL,
     movil VARCHAR(20),
-    rol VARCHAR(50) NOT NULL CHECK (rol IN ('admin', 'usuario')),
+    rol VARCHAR(50) NOT NULL CHECK (rol IN ('admin', 'usuario', 'gestor')),
     activo BOOLEAN DEFAULT FALSE,
     saldo DECIMAL(10, 2) DEFAULT 0,
     familia INTEGER,

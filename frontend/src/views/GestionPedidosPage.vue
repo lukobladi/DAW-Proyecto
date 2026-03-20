@@ -26,7 +26,7 @@
           <tr v-for="pedido in pedidos" :key="pedido.id_pedido">
             <td>{{ pedido.id_pedido }}</td>
             <td>{{ nombreProveedor(pedido.id_proveedor) }}</td>
-            <td>{{ pedido.familia || '-' }}</td>
+            <td>{{ familiaPorProveedor[pedido.id_proveedor] || '-' }}</td>
             <td>{{ formatFecha(pedido.fecha_apertura) }}</td>
             <td>{{ formatFecha(pedido.fecha_cierre) }}</td>
             <td>{{ formatFecha(pedido.fecha_entrega) }}</td>
@@ -62,19 +62,6 @@
                 :value="proveedor.id_proveedor"
               >
                 {{ proveedor.nombre }}
-              </option>
-            </select>
-          </div>
-          <div v-if="isAdmin" class="mb-2">
-            <label class="form-label">Familia</label>
-            <select v-model.number="form.familia" class="form-select" required>
-              <option disabled :value="null">Selecciona familia</option>
-              <option
-                v-for="familia in familias"
-                :key="familia"
-                :value="familia"
-              >
-                Familia {{ familia }}
               </option>
             </select>
           </div>
@@ -121,7 +108,6 @@ function pedidoVacio() {
   return {
     id_pedido: null,
     id_proveedor: null,
-    familia: null,
     fecha_apertura: '',
     fecha_cierre: '',
     fecha_entrega: '',
@@ -147,7 +133,16 @@ export default {
   computed: {
     isAdmin() {
       const authStore = useAuthStore();
-      return authStore.user?.role === 'admin';
+      return authStore.user?.rol === 'admin';
+    },
+    familiaPorProveedor() {
+      const map = {};
+      this.proveedores.forEach((p) => {
+        if (p.familia) {
+          map[p.id_proveedor] = p.familia;
+        }
+      });
+      return map;
     },
   },
   async created() {
@@ -228,7 +223,6 @@ export default {
       this.form = {
         id_pedido: pedido.id_pedido,
         id_proveedor: pedido.id_proveedor,
-        familia: pedido.familia,
         fecha_apertura: this.toInputDate(pedido.fecha_apertura),
         fecha_cierre: this.toInputDate(pedido.fecha_cierre),
         fecha_entrega: this.toInputDate(pedido.fecha_entrega),
@@ -244,7 +238,6 @@ export default {
       try {
         const payload = {
           id_proveedor: this.form.id_proveedor,
-          familia: this.form.familia,
           fecha_apertura: this.form.fecha_apertura,
           fecha_cierre: this.form.fecha_cierre,
           fecha_entrega: this.form.fecha_entrega || null,

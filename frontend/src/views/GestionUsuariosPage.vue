@@ -83,6 +83,7 @@
             <label class="form-label">Rol</label>
             <select v-model="form.rol" class="form-select" required>
               <option value="usuario">Usuario</option>
+              <option value="gestor">Gestor</option>
               <option value="admin">Admin</option>
             </select>
           </div>

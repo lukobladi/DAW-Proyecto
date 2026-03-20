@@ -93,11 +93,14 @@ export default {
         authStore.login({
           token: localStorage.getItem('authToken'),
           user: {
+            ...authStore.user,
             id_usuario: usuario.id_usuario,
             nombre: usuario.nombre,
             correo: usuario.correo,
             movil: usuario.movil,
             rol: usuario.rol,
+            familia: usuario.familia ?? authStore.user?.familia,
+            proveedor_gestionado: usuario.proveedor_gestionado ?? authStore.user?.proveedor_gestionado,
           },
         });
       } catch {
@@ -120,6 +123,7 @@ export default {
         authStore.login({
           token: localStorage.getItem('authToken'),
           user: {
+            ...authStore.user,
             id_usuario: this.form.id_usuario,
             nombre: this.form.nombre,
             correo: this.form.correo,

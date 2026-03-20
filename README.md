@@ -157,7 +157,7 @@ Tener instalado el siguiente software antes de empezar:
     - [3. Producto](#3-producto)
     - [4. Pedido](#4-pedido)
     - [5. Detalle\_Pedido](#5-detalle_pedido)
-    - [6. familia\_proveedor (Nueva)](#6-familia_proveedor-nueva)
+    - [6. usuario\_proveedor (Relación muchos a muchos)](#6-usuario_proveedor-relación-muchos-a-muchos)
     - [7. Pedido\_Periodico](#7-pedido_periodico)
     - [8. Pago (Nueva)](#8-pago-nueva)
     - [9. Notificacion (Nueva)](#9-notificacion-nueva)
@@ -1034,7 +1034,7 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 - **Producto**: Almacena la información de los productos.
 - **Pedido**: Almacena la información de los pedidos.
 - **Detalle_Pedido**: Relaciona los pedidos con los productos.
-- **familia_proveedor**: Relaciona una familia con un proveedor.
+- **usuario_proveedor**: Relación muchos a muchos entre usuarios y proveedores.
 - **Pedido_Periodico**: Almacena la información de los pedidos periódicos.
 - **Pago**: Almacena la información de los pagos.
 - **Notificacion**: Almacena las notificaciones enviadas a los usuarios.
@@ -1118,18 +1118,16 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 | `ID_Producto`    | `INT`             | Clave foránea (relación con `Producto`). |
 | `Cantidad`       | `INT`             | Cantidad del producto.               |
 | `Precio_Total`   | `DECIMAL(10, 2)`  | Precio total del producto.           |
-| `id_usuario_Comprador` | `INT` | Clave foránea (relación con `Usuario`). |
+| `id_usuario_Comprador` | `INT`     | Clave foránea (relación con `Usuario`). |
+| `Fecha_Modificacion` | `TIMESTAMP`       | Fecha y hora de modificacion del detalle. |
 
 ---
 
-### 6. familia_proveedor (Nueva)
-| Columna | Tipo de Dato | Descripción |
-|---|---|---|
-| `id_familia` | `INTEGER` | ID de la familia (de la tabla `Usuario`). |
-| `id_proveedor` | `INT` | Clave foránea (relación con `Proveedor`). |
-| `Fecha_Modificacion` | `TIMESTAMP`       | Fecha y hora de modificacion del detalle. |
-
-
+### 6. usuario_proveedor (Relación muchos a muchos)
+| Columna          | Tipo de Dato      | Descripción                          |
+|------------------|-------------------|--------------------------------------|
+| `id_usuario`     | `INT`             | Clave foránea (relación con `Usuario`). |
+| `id_proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
 
 ---
 

@@ -24,7 +24,7 @@ function getPayloadFromToken(token) {
 function buildInitialAuthState() {
   const token = localStorage.getItem('authToken');
   const tokenPayload = getPayloadFromToken(token);
-  const role = localStorage.getItem('userRole') || tokenPayload.rol || tokenPayload.role || null;
+  const rol = localStorage.getItem('userRole') || tokenPayload.rol || null;
   const persistedUser = JSON.parse(localStorage.getItem('authUser') || '{}');
 
   return {
@@ -35,7 +35,8 @@ function buildInitialAuthState() {
       correo: persistedUser.correo || null,
       movil: persistedUser.movil || null,
       familia: persistedUser.familia || null,
-      role: role || null,
+      rol: rol || null,
+      proveedor_gestionado: persistedUser.proveedor_gestionado || null,
     },
   };
 }
@@ -57,23 +58,26 @@ export const useAuthStore = defineStore('auth', {
         correo: payload.correo,
         movil: payload.movil,
         rol: payload.rol,
+        familia: payload.familia,
+        proveedor_gestionado: payload.proveedor_gestionado,
       };
-      const role = user.role || user.rol || tokenPayload.rol || tokenPayload.role || null;
+      const rol = user.rol || tokenPayload.rol || null;
       const normalizedUser = {
         id_usuario: user.id_usuario || tokenPayload.id_usuario || tokenPayload.id || null,
         nombre: user.nombre || null,
         correo: user.correo || null,
         movil: user.movil || null,
         familia: user.familia || null,
-        role: role || null,
+        rol: rol || null,
+        proveedor_gestionado: user.proveedor_gestionado || null,
       };
 
       if (token) {
         localStorage.setItem('authToken', token);
       }
 
-      if (role) {
-        localStorage.setItem('userRole', role);
+      if (rol) {
+        localStorage.setItem('userRole', rol);
       }
 
       localStorage.setItem('authUser', JSON.stringify(normalizedUser));
@@ -84,7 +88,7 @@ export const useAuthStore = defineStore('auth', {
     // Cierra la sesion y limpia los datos
     logout() {
       this.isAuthenticated = false;
-      this.user = { id_usuario: null, nombre: null, correo: null, movil: null, role: null, familia: null };
+      this.user = { id_usuario: null, nombre: null, correo: null, movil: null, rol: null, familia: null, proveedor_gestionado: null };
       localStorage.removeItem('authToken');
       localStorage.removeItem('userRole');
       localStorage.removeItem('authUser');

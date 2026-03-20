@@ -46,6 +46,12 @@ export default {
       pedidosHistorial: [],
     };
   },
+  computed: {
+    isAdminOrGestor() {
+      const authStore = useAuthStore();
+      return authStore.user?.rol === 'admin' || authStore.user?.rol === 'gestor';
+    },
+  },
   async created() {
     await this.cargarHistorial();
   },
@@ -78,8 +84,9 @@ export default {
           return;
         }
 
+        const pedidosPromise = this.isAdmin ? api.getPedidos() : api.getMisPedidos();
         const [pedidosResponse, proveedoresResponse] = await Promise.all([
-          api.getPedidos(),
+          pedidosPromise,
           api.getProveedores(),
         ]);
 

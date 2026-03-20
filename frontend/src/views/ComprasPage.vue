@@ -96,6 +96,10 @@ export default {
     };
   },
   computed: {
+    isAdminOrGestor() {
+      const authStore = useAuthStore();
+      return authStore.user?.rol === 'admin' || authStore.user?.rol === 'gestor';
+    },
     productosFiltrados() {
       if (this.filtroEstado === 'todos') {
         return this.productos;
@@ -107,7 +111,7 @@ export default {
         return this.productos.filter(p => !p.pedidoAbierto);
       }
       if (this.filtroEstado === 'pendiente_entrega') {
-        return this.productos.filter(p => p.estadoPedido && !['repartido', 'cancelado'].includes(p.estadoPedido));
+        return this.productos.filter(p => p.pedidoAbierto || (p.estadoPedido && !['repartido', 'cancelado'].includes(p.estadoPedido)));
       }
       return this.productos;
     },
@@ -160,10 +164,12 @@ export default {
       this.errorCarga = '';
 
       try {
+        const productosPromise = this.isAdmin ? api.getProductos() : api.getMisProductos();
+        const pedidosPromise = this.isAdmin ? api.getPedidos() : api.getMisPedidos();
         const [productosResponse, proveedoresResponse, pedidosResponse] = await Promise.all([
-          api.getProductos(),
+          productosPromise,
           api.getProveedores(),
-          api.getPedidos(),
+          pedidosPromise,
         ]);
 
         const proveedorPorId = new Map(

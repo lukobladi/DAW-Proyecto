@@ -194,6 +194,10 @@ export default {
       const authStore = useAuthStore();
       return authStore.user?.nombre || 'usuario';
     },
+    isAdminOrGestor() {
+      const authStore = useAuthStore();
+      return authStore.user?.rol === 'admin' || authStore.user?.rol === 'gestor';
+    },
   },
   async created() {
     await this.cargarDashboard();
@@ -381,9 +385,11 @@ export default {
           });
         }
 
+        const pedidosPromise = this.isAdmin ? api.getPedidos() : api.getMisPedidos();
+        const productosPromise = this.isAdmin ? api.getProductos() : api.getMisProductos();
         const [pedidosResponse, productosResponse, proveedoresResponse] = await Promise.all([
-          api.getPedidos(),
-          api.getProductos(),
+          pedidosPromise,
+          productosPromise,
           api.getProveedores(),
         ]);
 

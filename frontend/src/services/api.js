@@ -176,7 +176,7 @@ export default {
     return apiClient.post('/pedido-periodico/crear', data);
   },
   actualizarPedidoPeriodico(id, data) {
-    return apiClient.patch(`/pedido-periodico/actualizar/${id}`, data);
+    return apiClient.put(`/pedido-periodico/actualizar/${id}`, data);
   },
   eliminarPedidoPeriodico(id) {
     return apiClient.delete(`/pedido-periodico/eliminar/${id}`);

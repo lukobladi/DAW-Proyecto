@@ -74,11 +74,15 @@ export default {
     },
     isAdmin() {
       const authStore = useAuthStore();
-      return authStore.user?.role === 'admin';
+      return authStore.user?.rol === 'admin';
     },
     isGestor() {
       const authStore = useAuthStore();
-      return authStore.user?.role === 'gestor';
+      return authStore.user?.rol === 'gestor';
+    },
+    isAdminOrGestor() {
+      const authStore = useAuthStore();
+      return authStore.user?.rol === 'admin' || authStore.user?.rol === 'gestor';
     },
     userName() {
       const authStore = useAuthStore();
@@ -128,7 +132,8 @@ export default {
           return;
         }
 
-        const [pedidosResponse] = await Promise.all([api.getPedidos()]);
+        const pedidosPromise = this.isAdmin ? api.getPedidos() : api.getMisPedidos();
+        const [pedidosResponse] = await Promise.all([pedidosPromise]);
         const pedidos = pedidosResponse.data || [];
 
         // Filtro los pedidos que no estan repartidos ni cancelados

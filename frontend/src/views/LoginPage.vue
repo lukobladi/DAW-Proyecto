@@ -57,6 +57,8 @@ export default {
             correo: response.data.correo,
             movil: response.data.movil,
             rol: response.data.rol,
+            familia: response.data.familia,
+            proveedor_gestionado: response.data.proveedor_gestionado,
           },
         });
 
