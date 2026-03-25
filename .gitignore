@@ -24,19 +24,12 @@ yarn-error.log*
 
 package-lock.json
 backend/package-lock.json
-backend/package-lock.json
-backend/package-lock.json
 
 docs/
 
 # Reportes de cobertura
 backend/coverage/
-backend/uploads/
 
-backend/coverage/clover.xml
-backend/coverage/lcov.info
-backend/coverage/clover.xml
 backend/uploads/
 
 .nvmrc
-AGENTS.md
