@@ -4,7 +4,7 @@
 # Archivos de entorno
 .env
 .env.*
-!.env.example
+!.env.ejemplo
 
 # Archivos de logs
 npm-debug.log*
