@@ -1,0 +1,86 @@
+server {
+  server_name ekonsumo.duckdns.org;
+
+  root /var/www/daw-proyecto/frontend/dist;
+  index index.html;
+
+  location / {
+    try_files $uri $uri/ /index.html;
+  }
+
+  location /api/ {
+    proxy_pass http://127.0.0.1:3000;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header Origin $http_origin;
+    
+    add_header 'Access-Control-Allow-Origin' '$http_origin' always;
+    add_header 'Access-Control-Allow-Credentials' 'true' always;
+    add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, PATCH, OPTIONS' always;
+    add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization, X-Requested-With' always;
+    add_header 'Access-Control-Max-Age' 86400 always;
+  }
+
+  # Manejo de preflight OPTIONS
+  location = /api {
+    proxy_pass http://127.0.0.1:3000;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header Origin $http_origin;
+    add_header 'Access-Control-Allow-Origin' '$http_origin' always;
+    add_header 'Access-Control-Allow-Credentials' 'true' always;
+    add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, PATCH, OPTIONS' always;
+    add_header 'Access-Control-Allow-Headers' 'Content-Type, Authorization, X-Requested-With' always;
+    add_header 'Access-Control-Max-Age' 86400 always;
+    add_header 'Content-Type' 'text/plain' always;
+    return 204;
+  }
+
+  location /uploads/ {
+    alias /var/www/daw-proyecto/backend/uploads/;
+    autoindex off;
+  }
+
+  location = /api-docs {
+    proxy_pass http://127.0.0.1:3000/api-docs;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header Origin $http_origin;
+    add_header 'Access-Control-Allow-Origin' '$http_origin' always;
+    add_header 'Access-Control-Allow-Credentials' 'true' always;
+  }
+
+  location ^~ /api-docs/ {
+    proxy_pass http://127.0.0.1:3000/api-docs/;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header Origin $http_origin;
+    add_header 'Access-Control-Allow-Origin' '$http_origin' always;
+    add_header 'Access-Control-Allow-Credentials' 'true' always;
+  }
+
+  listen 443 ssl;
+  ssl_certificate /etc/letsencrypt/live/ekonsumo.duckdns.org/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/ekonsumo.duckdns.org/privkey.pem;
+  include /etc/letsencrypt/options-ssl-nginx.conf;
+  ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+}
+
+server {
+  if ($host = ekonsumo.duckdns.org) {
+    return 301 https://$host$request_uri;
+  }
+
+  listen 80;
+  server_name ekonsumo.duckdns.org;
+  return 404;
+}

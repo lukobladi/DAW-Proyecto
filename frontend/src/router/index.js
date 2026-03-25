@@ -135,25 +135,48 @@ const router = createRouter({
   routes,
 });
 
+function isTokenExpired(token) {
+  if (!token) return true;
+  try {
+    const payloadBase64 = token.split('.')[1];
+    const payloadJson = atob(payloadBase64.replace(/-/g, '+').replace(/_/g, '/'));
+    const payload = JSON.parse(payloadJson);
+    if (!payload.exp) return false;
+    return Date.now() >= payload.exp * 1000;
+  } catch {
+    return true;
+  }
+}
+
+// Escucha eventos de sesion expirada y redirige a login
+window.addEventListener('session-expired', () => {
+  const authStore = useAuthStore();
+  authStore.logout();
+  router.push({ name: 'Login' });
+});
+
 // Guard de navegacion global
 // Comprueba si el usuario esta autenticado y tiene los permisos necesarios
 router.beforeEach((to) => {
   const authStore = useAuthStore();
+  const token = localStorage.getItem('authToken');
+  const tokenExpired = isTokenExpired(token);
+
+  if (tokenExpired && token) {
+    authStore.logout();
+  }
 
   const isAuthenticated = authStore.isAuthenticated;
   const isAdmin = authStore.user?.rol === 'admin';
 
-  // Si la ruta requiere autenticacion y no esta logueado, redirijo a login
   if (to.meta.requiresAuth && !isAuthenticated) {
     return { name: 'Login' };
   }
 
-  // Si la ruta requiere admin y no es admin, redirijo al dashboard
   if (to.meta.requiresAdmin && !isAdmin) {
     return { name: 'Dashboard' };
   }
 
-  // Si esta logueado e intenta ir a login, redirijo al dashboard
   if (to.name === 'Login' && isAuthenticated) {
     return { name: 'Dashboard' };
   }

@@ -39,3 +39,4 @@ backend/coverage/clover.xml
 backend/uploads/
 
 .nvmrc
+AGENTS.md

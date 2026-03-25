@@ -5,6 +5,19 @@ import { createPinia, defineStore } from 'pinia';
 
 const pinia = createPinia();
 
+function isTokenExpired(token) {
+  if (!token) return true;
+  try {
+    const payloadBase64 = token.split('.')[1];
+    const payloadJson = atob(payloadBase64.replace(/-/g, '+').replace(/_/g, '/'));
+    const payload = JSON.parse(payloadJson);
+    if (!payload.exp) return false;
+    return Date.now() >= payload.exp * 1000;
+  } catch {
+    return true;
+  }
+}
+
 // Extrae el payload del token JWT sin verificar la firma
 function getPayloadFromToken(token) {
   if (!token) {
@@ -23,12 +36,31 @@ function getPayloadFromToken(token) {
 // Construye el estado inicial de autenticacion desde localStorage
 function buildInitialAuthState() {
   const token = localStorage.getItem('authToken');
+  const tokenExpired = isTokenExpired(token);
   const tokenPayload = getPayloadFromToken(token);
   const rol = localStorage.getItem('userRole') || tokenPayload.rol || null;
   const persistedUser = JSON.parse(localStorage.getItem('authUser') || '{}');
 
+  if (tokenExpired && token) {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('authUser');
+    return {
+      isAuthenticated: false,
+      user: {
+        id_usuario: null,
+        nombre: null,
+        correo: null,
+        movil: null,
+        familia: null,
+        rol: null,
+        proveedor_gestionado: null,
+      },
+    };
+  }
+
   return {
-    isAuthenticated: Boolean(token),
+    isAuthenticated: Boolean(token) && !tokenExpired,
     user: {
       id_usuario: persistedUser.id_usuario || tokenPayload.id_usuario || tokenPayload.id || null,
       nombre: persistedUser.nombre || null,

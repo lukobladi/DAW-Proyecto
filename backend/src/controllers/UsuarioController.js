@@ -53,19 +53,24 @@ const UsuarioController = {
   async login(req, res) {
     const { correoOMovil, password } = req.body;
 
+    logger.info(`Intento de login para: ${correoOMovil}`);
+
     try {
       const user = await Usuario.findByEmailOrMobile(correoOMovil);
 
       if (!user) {
+        logger.warn(`Usuario no encontrado: ${correoOMovil}`);
         return res.status(401).json({ message: 'Credenciales incorrectas' });
       }
 
       const validPassword = await bcrypt.compare(password, user.pass);
       if (!validPassword) {
+        logger.warn(`Password invalido para usuario: ${correoOMovil}`);
         return res.status(401).json({ message: 'Credenciales incorrectas' });
       }
 
       if (!user.activo) {
+        logger.warn(`Usuario desactivado: ${correoOMovil}`);
         return res
           .status(403)
           .json({ message: 'Usuario desactivado. Contacta al administrador.' });
@@ -79,11 +84,17 @@ const UsuarioController = {
 
       let proveedor_gestionado = null;
       if (user.rol === 'gestor' && user.familia) {
-        const proveedores = await Proveedor.findByFamilia(user.familia);
-        if (proveedores && proveedores.length > 0) {
-          proveedor_gestionado = proveedores[0].nombre;
+        try {
+          const proveedores = await Proveedor.findByFamilia(user.familia);
+          if (proveedores && proveedores.length > 0) {
+            proveedor_gestionado = proveedores[0].nombre;
+          }
+        } catch (proveedorError) {
+          logger.error('Error al buscar proveedor gestionado:', proveedorError);
         }
       }
+
+      logger.info(`Login exitoso para usuario: ${correoOMovil}`);
 
       res.status(200).json({
         token,

@@ -16,12 +16,10 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: 'http://localhost:3000',
-        description: 'Servidor local',
-      },
-      {
-        url: 'http://ekonsumo.duckdns.org:3000',
-        description: 'Servidor remoto',
+        url: process.env.NODE_ENV === 'production' 
+          ? 'https://ekonsumo.duckdns.org'
+          : 'http://localhost:3000',
+        description: process.env.NODE_ENV === 'production' ? 'Servidor de producción' : 'Servidor de desarrollo',
       },
     ],
     components: {
@@ -49,6 +47,23 @@ if (process.env.NODE_ENV !== 'test') {
   console.log(swaggerDocs);
 }
 
+const swaggerUiOptions = {
+    explorer: true,
+    swaggerOptions: {
+      url: process.env.NODE_ENV === 'production' 
+        ? 'https://ekonsumo.duckdns.org/api-docs.json'
+        : '/api-docs.json',
+      tryItOutEnabled: true,
+    },
+  };
+
 module.exports = (app) => {
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs, swaggerUiOptions));
+
+  // Endpoint para obtener la especificación OpenAPI en JSON
+  app.get('/api-docs.json', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swaggerDocs);
+  });
+  
 };

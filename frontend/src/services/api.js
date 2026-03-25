@@ -19,6 +19,23 @@ apiClient.interceptors.request.use((config) => {
   return config;
 });
 
+// Interceptor para manejar respuestas y errores globalmente
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('authUser');
+      
+      if (window.location.pathname !== '/login' && window.location.pathname !== '/') {
+        window.dispatchEvent(new CustomEvent('session-expired'));
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default {
   // =========== USUARIOS ===========
   login(credentials) {

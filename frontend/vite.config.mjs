@@ -33,9 +33,15 @@ export default defineConfig({
     minify: 'terser',
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['vue', 'vue-router', 'pinia', 'axios'],
-          bootstrap: ['bootstrap', '@popperjs/core']
+        manualChunks: (id) => {
+          if (id.includes('node_modules')) {
+            if (id.includes('vue') || id.includes('vue-router') || id.includes('pinia') || id.includes('axios')) {
+              return 'vendor';
+            }
+            if (id.includes('bootstrap') || id.includes('@popperjs')) {
+              return 'bootstrap';
+            }
+          }
         }
       }
     }

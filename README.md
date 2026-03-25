@@ -1681,4 +1681,7 @@ El proyecto se encuentra en **desarrollo activo**.
 - [ ] Mas tests
 - [ ] Tests completos
 - [ ] Despliegue a producción
-- [ ] Documentación 
+- [ ] Documentación - README.md
+- [ ] Documentación - docs/DOCUMENTACION_COMPLETA.odt
+- [ ] Documentación - (docs/instalar_puesto_desarrollador_debian.odt)
+- [ ] Documentacion - (docs/instalar_puesto_desarrollador_windows.odt)
