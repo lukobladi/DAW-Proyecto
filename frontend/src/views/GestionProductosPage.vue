@@ -339,9 +339,11 @@ export default {
 
 .producto-imagen {
   width: 100%;
-  height: 140px;
-  object-fit: cover;
+  height: 160px;
+  object-fit: contain;
+  background-color: #f8f9fa;
   flex-shrink: 0;
+  padding: 0.5rem;
 }
 
 .producto-card h5 {

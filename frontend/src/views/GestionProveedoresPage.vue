@@ -8,54 +8,88 @@
     <div v-if="cargando" class="estado">Cargando proveedores...</div>
     <div v-else-if="errorCarga" class="estado error">{{ errorCarga }}</div>
 
-    <div v-else class="table-responsive">
-      <table class="table table-striped align-middle">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Contacto</th>
-            <th>Correo</th>
-            <th>Familia Gestora</th>
-            <th>Frecuencia</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="proveedor in proveedores" :key="proveedor.id_proveedor">
-            <td>{{ proveedor.nombre }}</td>
-            <td>{{ proveedor.contacto || '-' }}</td>
-            <td>{{ proveedor.correo || '-' }}</td>
-            <td>Familia {{ proveedor.familia || '-' }}</td>
-            <td>{{ proveedor.frecuencia_pedido_aproximada || '-' }}</td>
-            <td>
-              <span :class="['estado-pill', proveedor.activo ? 'activo' : 'inactivo']">
-                {{ proveedor.activo ? 'Activo' : 'Inactivo' }}
-              </span>
-            </td>
-            <td class="acciones">
-              <button class="btn btn-sm btn-success" @click="abrirModalEditar(proveedor)">
-                Editar
-              </button>
-              <button
-                class="btn btn-sm btn-warning"
-                @click="cambiarEstado(proveedor)"
-                :disabled="accionandoId === proveedor.id_proveedor"
-              >
-                {{ proveedor.activo ? 'Desactivar' : 'Activar' }}
-              </button>
-              <button
-                class="btn btn-sm btn-danger"
-                @click="eliminarProveedor(proveedor.id_proveedor)"
-                :disabled="accionandoId === proveedor.id_proveedor"
-              >
-                Eliminar
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <template v-else>
+      <div class="table-responsive d-none d-md-block">
+        <table class="table table-striped align-middle">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Contacto</th>
+              <th>Correo</th>
+              <th>Familia Gestora</th>
+              <th>Frecuencia</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="proveedor in proveedores" :key="proveedor.id_proveedor">
+              <td>{{ proveedor.nombre }}</td>
+              <td>{{ proveedor.contacto || '-' }}</td>
+              <td>{{ proveedor.correo || '-' }}</td>
+              <td>Familia {{ proveedor.familia || '-' }}</td>
+              <td>{{ proveedor.frecuencia_pedido_aproximada || '-' }}</td>
+              <td>
+                <span :class="['estado-pill', proveedor.activo ? 'activo' : 'inactivo']">
+                  {{ proveedor.activo ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+              <td class="acciones">
+                <button class="btn btn-sm btn-success" @click="abrirModalEditar(proveedor)">
+                  Editar
+                </button>
+                <button
+                  class="btn btn-sm btn-warning"
+                  @click="cambiarEstado(proveedor)"
+                  :disabled="accionandoId === proveedor.id_proveedor"
+                >
+                  {{ proveedor.activo ? 'Desactivar' : 'Activar' }}
+                </button>
+                <button
+                  class="btn btn-sm btn-danger"
+                  @click="eliminarProveedor(proveedor.id_proveedor)"
+                  :disabled="accionandoId === proveedor.id_proveedor"
+                >
+                  Eliminar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-md-none">
+        <div v-for="proveedor in proveedores" :key="proveedor.id_proveedor" class="proveedor-card-mobile">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <h5 class="mb-0">{{ proveedor.nombre }}</h5>
+            <span :class="['estado-pill', 'sm', proveedor.activo ? 'activo' : 'inactivo']">
+              {{ proveedor.activo ? 'Activo' : 'Inactivo' }}
+            </span>
+          </div>
+          <p class="mb-1"><strong>Contacto:</strong> {{ proveedor.contacto || '-' }}</p>
+          <p class="mb-1"><strong>Correo:</strong> {{ proveedor.correo || '-' }}</p>
+          <p class="mb-1"><strong>Familia:</strong> {{ proveedor.familia || '-' }}</p>
+          <p class="mb-1"><strong>Frecuencia:</strong> {{ proveedor.frecuencia_pedido_aproximada || '-' }}</p>
+          <div class="d-flex gap-2 flex-wrap mt-2">
+            <button class="btn btn-sm btn-success" @click="abrirModalEditar(proveedor)">Editar</button>
+            <button
+              class="btn btn-sm btn-warning"
+              @click="cambiarEstado(proveedor)"
+              :disabled="accionandoId === proveedor.id_proveedor"
+            >
+              {{ proveedor.activo ? 'Desactivar' : 'Activar' }}
+            </button>
+            <button
+              class="btn btn-sm btn-danger"
+              @click="eliminarProveedor(proveedor.id_proveedor)"
+              :disabled="accionandoId === proveedor.id_proveedor"
+            >
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </template>
 
     <div v-if="mostrarModal" class="modal-overlay" @click.self="cerrarModal">
       <div class="modal-card">
@@ -309,5 +343,25 @@ export default {
 </script>
 
 <style scoped>
-/* Los estilos de este componente usan clases globales */
+.proveedor-card-mobile {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.proveedor-card-mobile h5 {
+  color: var(--color-primary);
+}
+
+.proveedor-card-mobile p {
+  margin: 0.25rem 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+}
+
+.proveedor-card-mobile strong {
+  color: var(--color-text);
+}
 </style>

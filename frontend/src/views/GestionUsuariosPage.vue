@@ -8,56 +8,91 @@
     <div v-if="cargando" class="estado">Cargando usuarios...</div>
     <div v-else-if="errorCarga" class="estado error">{{ errorCarga }}</div>
 
-    <div v-else class="table-responsive">
-      <table class="table table-striped table-hover align-middle">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Correo</th>
-            <th>Movil</th>
-            <th>Familia</th>
-            <th>Rol</th>
-            <th>Estado</th>
-            <th>Saldo</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="usuario in usuarios" :key="usuario.id_usuario">
-            <td>{{ usuario.nombre }}</td>
-            <td>{{ usuario.correo }}</td>
-            <td>{{ usuario.movil || '-' }}</td>
-            <td>{{ usuario.familia || '-' }}</td>
-            <td>{{ usuario.rol }}</td>
-            <td>
-              <span :class="['estado-pill', usuario.activo ? 'activo' : 'inactivo']">
-                {{ usuario.activo ? 'Activo' : 'Inactivo' }}
-              </span>
-            </td>
-            <td>{{ Number(usuario.saldo || 0).toFixed(2) }} EUR</td>
-            <td class="acciones">
-              <button class="btn btn-sm btn-success" @click="abrirModalEditar(usuario)">
-                Editar
-              </button>
-              <button
-                class="btn btn-sm btn-warning"
-                @click="cambiarEstado(usuario)"
-                :disabled="accionandoId === usuario.id_usuario"
-              >
-                {{ usuario.activo ? 'Desactivar' : 'Activar' }}
-              </button>
-              <button
-                class="btn btn-sm btn-danger"
-                @click="eliminarUsuario(usuario.id_usuario)"
-                :disabled="accionandoId === usuario.id_usuario"
-              >
-                Eliminar
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <template v-else>
+      <div class="table-responsive d-none d-md-block">
+        <table class="table table-striped table-hover align-middle">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Correo</th>
+              <th>Movil</th>
+              <th>Familia</th>
+              <th>Rol</th>
+              <th>Estado</th>
+              <th>Saldo</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="usuario in usuarios" :key="usuario.id_usuario">
+              <td>{{ usuario.nombre }}</td>
+              <td>{{ usuario.correo }}</td>
+              <td>{{ usuario.movil || '-' }}</td>
+              <td>{{ usuario.familia || '-' }}</td>
+              <td>{{ usuario.rol }}</td>
+              <td>
+                <span :class="['estado-pill', usuario.activo ? 'activo' : 'inactivo']">
+                  {{ usuario.activo ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+              <td>{{ Number(usuario.saldo || 0).toFixed(2) }} EUR</td>
+              <td class="acciones">
+                <button class="btn btn-sm btn-success" @click="abrirModalEditar(usuario)">
+                  Editar
+                </button>
+                <button
+                  class="btn btn-sm btn-warning"
+                  @click="cambiarEstado(usuario)"
+                  :disabled="accionandoId === usuario.id_usuario"
+                >
+                  {{ usuario.activo ? 'Desactivar' : 'Activar' }}
+                </button>
+                <button
+                  class="btn btn-sm btn-danger"
+                  @click="eliminarUsuario(usuario.id_usuario)"
+                  :disabled="accionandoId === usuario.id_usuario"
+                >
+                  Eliminar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-md-none">
+        <div v-for="usuario in usuarios" :key="usuario.id_usuario" class="usuario-card-mobile">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <h5 class="mb-0">{{ usuario.nombre }}</h5>
+            <span :class="['estado-pill', 'sm', usuario.activo ? 'activo' : 'inactivo']">
+              {{ usuario.activo ? 'Activo' : 'Inactivo' }}
+            </span>
+          </div>
+          <p class="mb-1"><strong>Correo:</strong> {{ usuario.correo }}</p>
+          <p class="mb-1"><strong>Movil:</strong> {{ usuario.movil || '-' }}</p>
+          <p class="mb-1"><strong>Familia:</strong> {{ usuario.familia || '-' }}</p>
+          <p class="mb-1"><strong>Rol:</strong> {{ usuario.rol }}</p>
+          <p class="mb-1"><strong>Saldo:</strong> {{ Number(usuario.saldo || 0).toFixed(2) }} EUR</p>
+          <div class="d-flex gap-2 flex-wrap mt-2">
+            <button class="btn btn-sm btn-success" @click="abrirModalEditar(usuario)">Editar</button>
+            <button
+              class="btn btn-sm btn-warning"
+              @click="cambiarEstado(usuario)"
+              :disabled="accionandoId === usuario.id_usuario"
+            >
+              {{ usuario.activo ? 'Desactivar' : 'Activar' }}
+            </button>
+            <button
+              class="btn btn-sm btn-danger"
+              @click="eliminarUsuario(usuario.id_usuario)"
+              :disabled="accionandoId === usuario.id_usuario"
+            >
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </template>
 
     <div v-if="mostrarModal" class="modal-overlay" @click.self="cerrarModal">
       <div class="modal-card">
@@ -259,5 +294,27 @@ export default {
 <style scoped>
 .gestion-usuarios-page {
   animation: fadeIn 0.3s ease;
+}
+
+.usuario-card-mobile {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.usuario-card-mobile h5 {
+  color: var(--color-primary);
+}
+
+.usuario-card-mobile p {
+  margin: 0.25rem 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+}
+
+.usuario-card-mobile strong {
+  color: var(--color-text);
 }
 </style>

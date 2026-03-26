@@ -8,45 +8,71 @@
     <div v-if="cargando" class="estado">Cargando pedidos...</div>
     <div v-else-if="errorCarga" class="estado error">{{ errorCarga }}</div>
 
-    <div v-else class="table-responsive">
-      <table class="table table-striped align-middle">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Proveedor</th>
-            <th>Familia</th>
-            <th>Apertura</th>
-            <th>Cierre</th>
-            <th>Entrega</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="pedido in pedidos" :key="pedido.id_pedido">
-            <td>{{ pedido.id_pedido }}</td>
-            <td>{{ nombreProveedor(pedido.id_proveedor) }}</td>
-            <td>{{ familiaPorProveedor[pedido.id_proveedor] || '-' }}</td>
-            <td>{{ formatFecha(pedido.fecha_apertura) }}</td>
-            <td>{{ formatFecha(pedido.fecha_cierre) }}</td>
-            <td>{{ formatFecha(pedido.fecha_entrega) }}</td>
-            <td>
-              <span :class="['estado-pill', estadoClass(pedido.estado)]">{{ pedido.estado }}</span>
-            </td>
-            <td class="acciones">
-              <button class="btn btn-sm btn-success" @click="abrirModalEditar(pedido)">Editar</button>
-              <button
-                class="btn btn-sm btn-danger"
-                @click="eliminarPedido(pedido.id_pedido)"
-                :disabled="accionandoId === pedido.id_pedido"
-              >
-                Eliminar
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <template v-else>
+      <div class="table-responsive d-none d-md-block">
+        <table class="table table-striped align-middle">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Proveedor</th>
+              <th>Familia</th>
+              <th>Apertura</th>
+              <th>Cierre</th>
+              <th>Entrega</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="pedido in pedidos" :key="pedido.id_pedido">
+              <td>{{ pedido.id_pedido }}</td>
+              <td>{{ nombreProveedor(pedido.id_proveedor) }}</td>
+              <td>{{ familiaPorProveedor[pedido.id_proveedor] || '-' }}</td>
+              <td>{{ formatFecha(pedido.fecha_apertura) }}</td>
+              <td>{{ formatFecha(pedido.fecha_cierre) }}</td>
+              <td>{{ formatFecha(pedido.fecha_entrega) }}</td>
+              <td>
+                <span :class="['estado-pill', estadoClass(pedido.estado)]">{{ pedido.estado }}</span>
+              </td>
+              <td class="acciones acciones-cell">
+                <button class="btn btn-sm btn-success" @click="abrirModalEditar(pedido)">Editar</button>
+                <button
+                  class="btn btn-sm btn-danger"
+                  @click="eliminarPedido(pedido.id_pedido)"
+                  :disabled="accionandoId === pedido.id_pedido"
+                >
+                  Eliminar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-md-none">
+        <div v-for="pedido in pedidos" :key="pedido.id_pedido" class="pedido-card-mobile">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <h5 class="mb-0">Pedido #{{ pedido.id_pedido }}</h5>
+            <span :class="['estado-pill', 'sm', estadoClass(pedido.estado)]">{{ pedido.estado }}</span>
+          </div>
+          <p class="mb-1"><strong>Proveedor:</strong> {{ nombreProveedor(pedido.id_proveedor) }}</p>
+          <p class="mb-1"><strong>Familia:</strong> {{ familiaPorProveedor[pedido.id_proveedor] || '-' }}</p>
+          <p class="mb-1"><strong>Apertura:</strong> {{ formatFecha(pedido.fecha_apertura) }}</p>
+          <p class="mb-1"><strong>Cierre:</strong> {{ formatFecha(pedido.fecha_cierre) }}</p>
+          <p class="mb-1"><strong>Entrega:</strong> {{ formatFecha(pedido.fecha_entrega) }}</p>
+          <div class="d-flex gap-2 flex-nowrap mt-2">
+            <button class="btn btn-sm btn-success" @click="abrirModalEditar(pedido)">Editar</button>
+            <button
+              class="btn btn-sm btn-danger"
+              @click="eliminarPedido(pedido.id_pedido)"
+              :disabled="accionandoId === pedido.id_pedido"
+            >
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </template>
 
     <div v-if="mostrarModal" class="modal-overlay" @click.self="cerrarModal">
       <div class="modal-card">
@@ -281,8 +307,37 @@ export default {
 </script>
 
 <style scoped>
-/* Componente específico */
 .page-container {
   padding: var(--spacing-xl) var(--spacing-lg);
+}
+
+.pedido-card-mobile {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.pedido-card-mobile h5 {
+  color: var(--color-primary);
+}
+
+.pedido-card-mobile p {
+  margin: 0.25rem 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+}
+
+.pedido-card-mobile strong {
+  color: var(--color-text);
+}
+
+.acciones-cell {
+  white-space: nowrap;
+}
+
+.acciones-cell .btn {
+  white-space: nowrap;
 }
 </style>

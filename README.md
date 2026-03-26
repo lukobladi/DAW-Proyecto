@@ -146,24 +146,24 @@ npm run build:frontend     # Build de producción del frontend
 - [Flujo de Usuario para la Aplicación Web](#flujo-de-usuario-para-la-aplicación-web)
   - [1. Gestión de Productos](#1-gestión-de-productos)
   - [2. Gestión de Compras](#2-gestión-de-compras)
-  - [3. Gestión de Pedidos](#3-gestión-de-pedidos)
-  - [4. Cálculos Financieros (para administradores)](#4-cálculos-financieros-para-administradores)
-  - [5. Gestión de Usuarios (para administradores)](#5-gestión-de-usuarios-para-administradores)
-  - [6. Notificaciones y Recordatorios](#6-notificaciones-y-recordatorios)
-  - [7. Historial de Pedidos](#7-historial-de-pedidos)
-  - [8. Configuración de Cuenta](#8-configuración-de-cuenta)
-  - [9. Panel de Administración (para administradores)](#9-panel-de-administración-para-administradores)
-  - [10. Informes y Estadísticas](#10-informes-y-estadísticas)
-    - [1. **Diagrama de Flujo de Pedidos**](#1-diagrama-de-flujo-de-pedidos)
+  - [2. Gestión de Pedidos](#2-gestión-de-pedidos)
+  - [3. Cálculos Financieros (para administradores)](#3-cálculos-financieros-para-administradores)
+  - [4. Gestión de Usuarios (para administradores)](#4-gestión-de-usuarios-para-administradores)
+  - [5. Notificaciones y Recordatorios](#5-notificaciones-y-recordatorios)
+  - [6. Historial de Pedidos](#6-historial-de-pedidos)
+  - [7. Configuración de Cuenta](#7-configuración-de-cuenta)
+  - [8. Panel de Administración (para administradores)](#8-panel-de-administración-para-administradores)
+  - [9. Informes y Estadísticas](#9-informes-y-estadísticas)
+    - [4. **Diagrama de Flujo de Pedidos**](#4-diagrama-de-flujo-de-pedidos)
       - [Pasos:](#pasos-1)
       - [Diagrama:](#diagrama-2)
-    - [2. **Diagrama de Navegación**](#2-diagrama-de-navegación)
+    - [5. **Diagrama de Navegación**](#5-diagrama-de-navegación)
       - [Páginas Principales:](#páginas-principales)
       - [Diagrama:](#diagrama-3)
-    - [3. **Diagrama de Secuencia de Autenticación**](#3-diagrama-de-secuencia-de-autenticación)
+    - [6. **Diagrama de Secuencia de Autenticación**](#6-diagrama-de-secuencia-de-autenticación)
       - [Pasos:](#pasos-2)
       - [Diagrama:](#diagrama-4)
-    - [4. **Diagrama de Componentes del Frontend**](#4-diagrama-de-componentes-del-frontend)
+    - [7. **Diagrama de Componentes del Frontend**](#7-diagrama-de-componentes-del-frontend)
       - [Componentes:](#componentes-1)
       - [Diagrama:](#diagrama-5)
 - [Datos](#datos)
@@ -178,8 +178,8 @@ npm run build:frontend     # Build de producción del frontend
     - [5. Detalle\_Pedido](#5-detalle_pedido)
     - [6. familia\_proveedor (Relación muchos a muchos)](#6-familia_proveedor-relación-muchos-a-muchos)
     - [7. Pedido\_Periodico](#7-pedido_periodico)
-    - [8. Pago (Nueva)](#8-pago-nueva)
-    - [9. Notificacion (Nueva)](#9-notificacion-nueva)
+    - [8. Pago](#8-pago)
+    - [9. Notificacion](#9-notificacion)
 - [Backend API Rest Node Express](#backend-api-rest-node-express)
     - [Descripción del Backend](#descripción-del-backend)
     - [Estructura del Proyecto](#estructura-del-proyecto)
@@ -235,13 +235,8 @@ npm run build:frontend     # Build de producción del frontend
     - [Pantalla de Notificaciones](#pantalla-de-notificaciones)
   - [Componentes](#componentes-2)
     - [Componente `NavBar`](#componente-navbar)
-    - [Componente `Footer`](#componente-footer)
-    - [Componente `ProductCard`](#componente-productcard)
-    - [Componente `PedidoCard`](#componente-pedidocard)
-    - [Componente `Notification`](#componente-notification)
-    - [Componente `UserForm`](#componente-userform)
-    - [Componente `ProviderForm`](#componente-providerform)
-    - [Componente `OrderForm`](#componente-orderform)
+    - [Componente `FooterBar`](#componente-footerbar)
+    - [Nota sobre componentes UI](#nota-sobre-componentes-ui)
   - [Diseño Visual](#diseño-visual-1)
     - [Pantalla de Gestión de Proveedores](#pantalla-de-gestión-de-proveedores-1)
     - [Pantalla de Gestión de Productos](#pantalla-de-gestión-de-productos-1)
@@ -252,6 +247,23 @@ npm run build:frontend     # Build de producción del frontend
     - [Frontend (Vue.js 3 + Vite)](#frontend-vuejs-3--vite)
     - [Backend (Node.js + Express)](#backend-nodejs--express)
     - [Funcionalidades pendientes:](#funcionalidades-pendientes)
+  - [Despliegue](#despliegue)
+    - [Requisitos del Servidor](#requisitos-del-servidor)
+    - [Estructura de Directorios en Servidor](#estructura-de-directorios-en-servidor)
+    - [Despliegue del Backend](#despliegue-del-backend)
+    - [Despliegue del Frontend](#despliegue-del-frontend)
+    - [Configuración de Nginx](#configuración-de-nginx)
+  - [Estructura del Frontend](#estructura-del-frontend)
+  - [Variables de Entorno](#variables-de-entorno)
+    - [Backend (.env)](#backend-env)
+    - [Frontend (.env.development)](#frontend-envdevelopment)
+    - [Frontend (.env.production)](#frontend-envproduction)
+  - [Resolución de Problemas](#resolución-de-problemas)
+    - [Error 500 en nginx después de desplegar](#error-500-en-nginx-después-de-desplegar)
+    - [Error "rewrite or internal redirection cycle"](#error-rewrite-or-internal-redirection-cycle)
+    - [Backend no responde](#backend-no-responde)
+    - [Base de datos no conecta](#base-de-datos-no-conecta)
+    - [CORS errors](#cors-errors)
 
 ---
 
@@ -1748,3 +1760,315 @@ El proyecto se encuentra en **desarrollo activo**.
 - [ ] Documentación - docs/instalar_puesto_desarrollador_debian.odt
 - [ ] Documentación - docs/instalar_puesto_desarrollador_windows.odt
 - [ ] Despliegue a producción en VPS
+
+---
+
+## Despliegue
+
+### Requisitos del Servidor
+
+- Ubuntu/Debian (o cualquier distribución Linux con systemd)
+- Nginx como servidor web
+- Node.js 22.x (o usar nvm)
+- PostgreSQL 14+
+- PM2 o similar para gestión de procesos Node
+
+### Estructura de Directorios en Servidor
+
+```
+/var/www/daw-proyecto/
+├── backend/           # Código del API
+│   ├── src/
+│   ├── uploads/       # Imágenes de productos
+│   ├── .env          # Variables de entorno (NO subir)
+│   └── index.js
+├── frontend/         # Frontend compilado
+│   └── dist/
+└── ...
+```
+
+### Despliegue del Backend
+
+1. **Subir código (desde máquina local):**
+```bash
+rsync -avz --delete \
+  --exclude 'node_modules/' \
+  --exclude '.env' \
+  --exclude '.env.test' \
+  --exclude '*.log' \
+  --exclude 'coverage/' \
+  --exclude 'tests/' \
+  --exclude '.git/' \
+  --exclude '.vscode/' \
+  --exclude 'package-lock.json' \
+  /home/mcl/Proyects/DAW-Proyecto/backend/ \
+  ekonsumo@ekonsumo.duckdns.org:/var/www/daw-proyecto/backend/
+```
+
+1. **En el servidor, instalar dependencias:**
+```bash
+cd /var/www/daw-proyecto/backend
+npm install --production
+```
+
+1. **Crear archivo `.env` en el servidor basado en `.env.ejemplo`:**
+```bash
+# En /var/www/daw-proyecto/backend/.env
+PORT=3000
+DB_HOST=localhost
+DB_NAME=ekonsumo
+DB_USER=postgres
+DB_PASSWORD=tu_password_seguro
+JWT_SECRET=otro_token_seguro_diferente
+FRONTEND_URL=https://ekonsumo.duckdns.org
+EMAIL_USER=tu_email@gmail.com
+EMAIL_PASS=app_password
+OAUTH_CLIENT_ID=xxx
+OAUTH_CLIENT_SECRET=xxx
+OAUTH_REFRESH_TOKEN=xxx
+```
+
+1. **Iniciar con PM2:**
+```bash
+cd /var/www/daw-proyecto/backend
+pm2 start index.js --name ekonsumo-api
+pm2 save
+pm2 startup systemd  # Para iniciar automáticamente al reiniciar
+```
+
+### Despliegue del Frontend
+
+1. **Compilar localmente:**
+```bash
+npm run build --workspace=frontend
+```
+
+1. **Subir dist/ (desde la máquina local):**
+```bash
+rsync -avz --delete \
+  /home/mcl/Proyects/DAW-Proyecto/frontend/dist/ \
+  ekonsumo@ekonsumo.duckdns.org:/var/www/daw-proyecto/frontend/
+```
+
+1. **En el servidor, asignar permisos:**
+```bash
+sudo chown -R ekonsumo:ekonsumo /var/www/daw-proyecto/frontend/
+sudo chmod -R 755 /var/www/daw-proyecto/frontend/
+```
+
+### Configuración de Nginx
+
+Ubicación: `/etc/nginx/sites-available/ekonsumo`
+
+```nginx
+server {
+    server_name ekonsumo.duckdns.org;
+
+    root /var/www/daw-proyecto/frontend/dist;
+    index index.html;
+
+    # SPA routing - Vue Router usa history mode
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # API backend
+    location /api/ {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Swagger docs
+    location /api-docs {
+        proxy_pass http://127.0.0.1:3000/api-docs;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+    }
+
+    # Imágenes de productos
+    location /uploads/ {
+        alias /var/www/daw-proyecto/backend/uploads/;
+        autoindex off;
+    }
+
+    listen 443 ssl;
+    ssl_certificate /etc/letsencrypt/live/ekonsumo.duckdns.org/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/ekonsumo.duckdns.org/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+}
+
+server {
+    if ($host = ekonsumo.duckdns.org) {
+        return 301 https://$host$request_uri;
+    }
+    listen 80;
+    server_name ekonsumo.duckdns.org;
+    return 404;
+}
+```
+
+Activar configuración:
+```bash
+sudo ln -sf /etc/nginx/sites-available/ekonsumo /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+---
+
+## Estructura del Frontend
+
+```
+frontend/
+├── src/
+│   ├── assets/
+│   │   └── styles/          # CSS unificado
+│   │       ├── variables.css  # Variables CSS (colores, spacing)
+│   │       ├── components.css # Estilos de componentes
+│   │       └── global.css    # Estilos globales
+│   ├── components/
+│   │   ├── NavBar.vue      # Barra de navegación
+│   │   └── FooterBar.vue   # Pie de página
+│   ├── services/
+│   │   └── api.js          # Cliente Axios con interceptors
+│   ├── store/
+│   │   ├── index.js        # Pinia store (auth)
+│   │   ├── alertStore.js   # Store de alertas
+│   │   └── index.test.js
+│   ├── router/
+│   │   └── index.js        # Configuración de rutas
+│   ├── views/              # Páginas de la aplicación
+│   │   ├── HomePage.vue
+│   │   ├── LoginPage.vue
+│   │   ├── RegistrarPage.vue
+│   │   ├── RecuperarPasswordPage.vue
+│   │   ├── DashboardPage.vue
+│   │   ├── ComprasPage.vue
+│   │   ├── HistorialPage.vue
+│   │   ├── DetallesPedidoPage.vue
+│   │   ├── ConfiguracionPage.vue
+│   │   ├── SoportePage.vue
+│   │   ├── GestionUsuariosPage.vue
+│   │   ├── GestionProveedoresPage.vue
+│   │   ├── GestionProductosPage.vue
+│   │   ├── GestionPedidosPage.vue
+│   │   ├── GestionPedidosPeriodicosPage.vue
+│   │   ├── GestionPagosPage.vue
+│   │   ├── GestionNotificacionesPage.vue
+│   │   └── GestionSaldosPage.vue
+│   ├── App.vue
+│   └── main.js
+├── public/
+├── dist/                   # Build de producción
+├── .env.development        # Variables desarrollo
+├── .env.production         # Variables producción
+├── vite.config.mjs
+└── package.json
+```
+
+---
+
+## Variables de Entorno
+
+### Backend (.env)
+
+| Variable | Descripción | Ejemplo |
+|----------|-------------|---------|
+| `PORT` | Puerto del servidor | `3000` |
+| `DB_HOST` | Host de PostgreSQL | `localhost` |
+| `DB_NAME` | Nombre de la base de datos | `ekonsumo` |
+| `DB_USER` | Usuario de PostgreSQL | `postgres` |
+| `DB_PASSWORD` | Contraseña de PostgreSQL | `password` |
+| `JWT_SECRET` | Clave secreta para JWT | `token-muy-secreto` |
+| `FRONTEND_URL` | URL del frontend | `https://ekonsumo.duckdns.org` |
+| `EMAIL_USER` | Email para envío (Gmail) | `correo@gmail.com` |
+| `EMAIL_PASS` | Password de aplicación Gmail | `xxxx xxxx xxxx xxxx` |
+| `OAUTH_CLIENT_ID` | Client ID OAuth2 Google | `xxx.apps.googleusercontent.com` |
+| `OAUTH_CLIENT_SECRET` | Client Secret OAuth2 | `GOCSPX-xxx` |
+| `OAUTH_REFRESH_TOKEN` | Refresh Token OAuth2 | `1//xxx` |
+
+### Frontend (.env.development)
+
+| Variable | Descripción | Ejemplo |
+|----------|-------------|---------|
+| `VITE_API_URL` | URL del API (desarrollo) | `http://localhost:3000/api` |
+
+### Frontend (.env.production)
+
+| Variable | Descripción | Ejemplo |
+|----------|-------------|---------|
+| `VITE_API_URL` | URL del API (producción) | `/api` |
+
+---
+
+## Resolución de Problemas
+
+### Error 500 en nginx después de desplegar
+
+1. **Verificar que los archivos existen:**
+```bash
+ls -la /var/www/daw-proyecto/frontend/dist/
+ls -la /var/www/daw-proyecto/frontend/dist/assets/
+```
+
+2. **Verificar permisos:**
+```bash
+sudo chown -R www-data:www-data /var/www/daw-proyecto/frontend/
+```
+
+3. **Ver logs de error nginx:**
+```bash
+sudo tail -20 /var/log/nginx/error.log
+```
+
+4. **Recargar nginx:**
+```bash
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+### Error "rewrite or internal redirection cycle"
+
+- La configuración nginx está mal
+- Verificar que `try_files $uri $uri/ /index.html;` está presente
+- Ejecutar `sudo nginx -t` para verificar sintaxis
+
+### Backend no responde
+
+1. **Verificar que Node está corriendo:**
+```bash
+pm2 status
+pm2 logs ekonsumo-api
+```
+
+2. **Verificar puerto:**
+```bash
+sudo netstat -tlnp | grep 3000
+```
+
+3. **Reiniciar:**
+```bash
+pm2 restart ekonsumo-api
+```
+
+### Base de datos no conecta
+
+1. **Verificar credenciales** en `.env`
+2. **Verificar PostgreSQL** está corriendo:
+```bash
+sudo systemctl status postgresql
+```
+3. **Probar conexión:**
+```bash
+psql -h localhost -U postgres -d ekonsumo
+```
+
+### CORS errors
+
+- Verificar que `FRONTEND_URL` en backend coincide con la URL real del frontend
+- Verificar headers CORS en nginx para `/api/`

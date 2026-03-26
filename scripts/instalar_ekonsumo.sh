@@ -9,10 +9,10 @@ set -euo pipefail
 #   DB_PASSWORD='O&5Y9X}R9f2v' \
 #   JWT_SECRET='bFUeXtDBV6lV6n3sLTJ3aWsgP5H1Wtyr1LkQYoAVTVU' \
 #   EMAIL_USER='emartinmon6@educacion.navarra.es' EMAIL_PASS='3n3sh.fp' \
-#   scripts/instalar-backend-vps.sh
+#   scripts/instalar_ekonsumo.sh
 #
 # Opcional DuckDNS:
-#   DUCKDNS_DOMAIN=ekonsumo DUCKDNS_TOKEN=5cee5aa6-77fa-4e3d-b1f1-ec3afea1c773 scripts/instalar-backend-vps.sh
+#   DUCKDNS_DOMAIN=ekonsumo DUCKDNS_TOKEN=5cee5aa6-77fa-4e3d-b1f1-ec3afea1c773 scripts/instalar_ekonsumo.sh
 
 if [[ "${EUID}" -ne 0 ]]; then
   echo "Este script debe ejecutarse como root (o con sudo)."
