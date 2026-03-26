@@ -13,7 +13,8 @@
     "test:watch": "vitest",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix",
     "clean": "rm -rf dist node_modules",
-    "reinstall": "npm run clean && npm install"
+    "reinstall": "npm run clean && npm install",
+    "kill":"pkill -f \"vite\" "
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",

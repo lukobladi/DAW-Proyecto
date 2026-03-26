@@ -1,61 +1,102 @@
-<!-- Barra de navegacion principal -->
-<!-- Muestra el menu segun el rol del usuario y si esta autenticado -->
-
 <template>
   <nav class="navbar">
-    <div class="navbar-brand">
-      <router-link to="/" class="navbar-logo">Grupo de Consumo</router-link>
-      <span v-if="isAuthenticated && userName" class="navbar-user">
-        {{ userName }}
-        <span v-if="userFamily" class="user-family">
-          (Familia {{ userFamily }})
-          <span v-if="userProvider"> - {{ userProvider }}</span>
+    <div class="navbar-container">
+      <router-link to="/" class="navbar-brand">
+        <span class="navbar-logo">
+          <i class="fas fa-leaf"></i>
+          Ekonsumo
         </span>
-      </span>
-    </div>
-    <div class="navbar-right">
-      <!-- Badge con el numero de pedidos pendientes de entrega -->
-      <router-link
-        v-if="isAuthenticated && pedidosPendientesEntrega > 0"
-        to="/dashboard"
-        class="navbar-badge"
-        title="Pedidos pendientes de entrega"
-      >
-        <i class="fas fa-box"></i>
-        <span class="badge-count">{{ pedidosPendientesEntrega }}</span>
       </router-link>
-      <!-- Boton hamburguesa para movil -->
-      <button class="navbar-burger" @click="toggleMenu" aria-label="Abrir menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-    </div>
-    <!-- Menu de navegacion -->
-    <div class="navbar-menu" :class="{ 'is-active': isMenuOpen }">
-      <router-link to="/dashboard" class="navbar-item" @click="closeMenu">Dashboard</router-link>
-      <router-link to="/compras" class="navbar-item" @click="closeMenu">Compras</router-link>
-      <router-link to="/historial" class="navbar-item" @click="closeMenu">Historial</router-link>
-      <router-link to="/gestion-pagos" class="navbar-item" @click="closeMenu">Pagos</router-link>
-      <router-link v-if="isAdmin" to="/gestion-usuarios" class="navbar-item" @click="closeMenu">Gestion de Usuarios</router-link>
-      <router-link to="/gestion-productos" class="navbar-item" @click="closeMenu">Gestion de Productos</router-link>
-      <router-link to="/gestion-pedidos" class="navbar-item" @click="closeMenu">Gestion de Pedidos</router-link>
-      <router-link v-if="isAdmin" to="/gestion-proveedores" class="navbar-item" @click="closeMenu">Gestion de Proveedores</router-link>
-      <router-link v-if="isAdmin" to="/gestion-pedidos-periodicos" class="navbar-item" @click="closeMenu">Pedidos Periodicos</router-link>
-      <router-link to="/configuracion" class="navbar-item" @click="closeMenu">Configuracion</router-link>
-      <router-link to="/soporte" class="navbar-item" @click="closeMenu">Soporte</router-link>
-      <router-link v-if="!isAuthenticated" to="/login" class="navbar-item navbar-login" @click="closeMenu">
-        <i class="fas fa-sign-in-alt"></i> Iniciar Sesion
-      </router-link>
-      <a v-if="isAuthenticated" @click="logout" class="navbar-item navbar-logout">
-        <i class="fas fa-sign-out-alt"></i> Cerrar Sesion
-      </a>
+
+      <div class="navbar-user-info" v-if="isAuthenticated && userName">
+        <div class="user-avatar">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="user-details">
+          <span class="user-name">{{ userName }}</span>
+          <span v-if="userFamily" class="user-meta">
+            Familia {{ userFamily }}
+            <span v-if="userProvider" class="user-provider">· {{ userProvider }}</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="navbar-menu" :class="{ 'is-active': isMenuOpen }">
+        <router-link to="/dashboard" class="navbar-item" @click="closeMenu">
+          <i class="fas fa-th-large"></i>
+          <span class="item-text">Dashboard</span>
+        </router-link>
+        <router-link to="/compras" class="navbar-item" @click="closeMenu">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="item-text">Compras</span>
+        </router-link>
+        <router-link to="/historial" class="navbar-item" @click="closeMenu">
+          <i class="fas fa-history"></i>
+          <span class="item-text">Historial</span>
+        </router-link>
+        <router-link to="/gestion-pagos" class="navbar-item" @click="closeMenu">
+          <i class="fas fa-wallet"></i>
+          <span class="item-text">Pagos</span>
+        </router-link>
+        <router-link v-if="isAdminOrGestor" to="/gestion-productos" class="navbar-item" @click="closeMenu">
+          <i class="fas fa-box-open"></i>
+          <span class="item-text">Productos</span>
+        </router-link>
+        <router-link v-if="isAdminOrGestor" to="/gestion-pedidos" class="navbar-item" @click="closeMenu">
+          <i class="fas fa-clipboard-list"></i>
+          <span class="item-text">Pedidos</span>
+        </router-link>
+        <router-link v-if="isAdmin" to="/gestion-usuarios" class="navbar-item" @click="closeMenu">
+          <i class="fas fa-users"></i>
+          <span class="item-text">Usuarios</span>
+        </router-link>
+        <router-link v-if="isAdmin" to="/gestion-proveedores" class="navbar-item" @click="closeMenu">
+          <i class="fas fa-truck"></i>
+          <span class="item-text">Proveedores</span>
+        </router-link>
+        <router-link v-if="isAdmin" to="/gestion-pedidos-periodicos" class="navbar-item" @click="closeMenu">
+          <i class="fas fa-calendar-alt"></i>
+          <span class="item-text">Periódicos</span>
+        </router-link>
+        <router-link to="/configuracion" class="navbar-item" @click="closeMenu">
+          <i class="fas fa-cog"></i>
+          <span class="item-text">Config</span>
+        </router-link>
+        <router-link to="/soporte" class="navbar-item" @click="closeMenu">
+          <i class="fas fa-question-circle"></i>
+          <span class="item-text">Ayuda</span>
+        </router-link>
+      </div>
+
+      <div class="navbar-right">
+        <router-link
+          v-if="isAuthenticated && pedidosPendientesEntrega > 0"
+          to="/dashboard"
+          class="navbar-badge"
+          title="Productos pendientes de entrega"
+        >
+          <i class="fas fa-shopping-basket"></i>
+          <span class="badge-count">{{ pedidosPendientesEntrega }}</span>
+        </router-link>
+
+        <router-link v-if="!isAuthenticated" to="/login" class="navbar-auth navbar-login" @click="closeMenu">
+          <i class="fas fa-sign-in-alt"></i>
+        </router-link>
+        <a v-else @click="logout" class="navbar-auth navbar-logout">
+          <i class="fas fa-sign-out-alt"></i>
+        </a>
+
+        <button class="navbar-burger" @click="toggleMenu" :class="{ 'is-active': isMenuOpen }" aria-label="Abrir menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
     </div>
   </nav>
 </template>
 
 <script>
-// Barra de navegacion que muestra el menu segun el rol del usuario
 import { useAuthStore } from '@/store';
 import api from '@/services/api';
 
@@ -112,36 +153,27 @@ export default {
     },
   },
   methods: {
-    // Abre/cierra el menu en movil
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen;
     },
-    // Cierra el menu (al hacer click en un enlace)
     closeMenu() {
       this.isMenuOpen = false;
     },
-    // Carga el numero de pedidos pendientes de entrega para mostrar en el badge
     async cargarPedidosPendientes() {
-      if (!this.isAuthenticated) {
-        return;
-      }
+      if (!this.isAuthenticated) return;
       try {
         const authStore = useAuthStore();
         const userId = Number(authStore.user?.id_usuario);
-        if (!userId) {
-          return;
-        }
+        if (!userId) return;
 
         const pedidosPromise = this.isAdmin ? api.getPedidos() : api.getMisPedidos();
         const [pedidosResponse] = await Promise.all([pedidosPromise]);
         const pedidos = pedidosResponse.data || [];
 
-        // Filtro los pedidos que no estan repartidos ni cancelados
         const pedidosPendientes = pedidos.filter(
           pedido => !['repartido', 'cancelado'].includes(pedido.estado)
         );
 
-        // Cuento los productos del usuario en esos pedidos
         let totalProductos = 0;
         for (const pedido of pedidosPendientes) {
           const detallesResponse = await api.getDetallesPedidoPorPedido(pedido.id_pedido);
@@ -158,7 +190,6 @@ export default {
         this.pedidosPendientesEntrega = 0;
       }
     },
-    // Cierra la sesion del usuario
     async logout() {
       try {
         const authStore = useAuthStore();
@@ -180,120 +211,200 @@ export default {
 .navbar {
   background-color: #FFFFFF;
   font-family: 'Open Sans', sans-serif;
-  font-size: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  border-bottom: 1px solid #e9ecef;
+  font-size: 14px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   position: relative;
   z-index: 1000;
 }
 
-.navbar-brand {
+.navbar-container {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  padding: 0.6rem 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: 1.5rem;
+}
+
+.navbar-brand {
+  text-decoration: none;
+  flex-shrink: 0;
 }
 
 .navbar-logo {
-  color: #333333;
-  font-weight: bold;
-  text-decoration: none;
-  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #4CAF50;
+  font-weight: 700;
+  font-size: 1.3rem;
 }
 
-.navbar-user {
-  color: #6c757d;
+.navbar-logo i {
+  font-size: 1.1rem;
+}
+
+.navbar-user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.8rem;
+  background-color: #f8f9fa;
+  border-radius: 50px;
+  flex-shrink: 0;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  background-color: #4CAF50;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.85rem;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.user-name {
+  font-weight: 600;
+  color: #333333;
   font-size: 0.9rem;
+}
+
+.user-meta {
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+.user-provider {
+  color: #4CAF50;
   font-weight: 500;
+}
+
+.navbar-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.navbar-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #555555;
+  text-decoration: none;
+  padding: 0.5rem 0.7rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.navbar-item i {
+  font-size: 0.85rem;
+  color: #888888;
+  width: 16px;
+  text-align: center;
+  transition: color 0.2s ease;
+}
+
+.navbar-item:hover {
+  background-color: #f0f7f0;
+  color: #4CAF50;
+}
+
+.navbar-item:hover i {
+  color: #4CAF50;
+}
+
+.navbar-item.router-link-active {
+  background-color: #e8f5e9;
+  color: #4CAF50;
+  font-weight: 600;
+}
+
+.navbar-item.router-link-active i {
+  color: #4CAF50;
 }
 
 .navbar-right {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
 .navbar-badge {
   display: flex;
   align-items: center;
   gap: 0.35rem;
-  padding: 0.4rem 0.6rem;
-  background-color: #fff3cd;
-  border-radius: 20px;
-  color: #664d03;
+  padding: 0.4rem 0.7rem;
+  background: linear-gradient(135deg, #4CAF50, #66BB6A);
+  border-radius: 50px;
+  color: white;
   text-decoration: none;
-  font-size: 0.9rem;
-  transition: background-color 0.2s ease;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(76, 175, 80, 0.3);
 }
 
 .navbar-badge:hover {
-  background-color: #ffe69c;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(76, 175, 80, 0.4);
+  background: linear-gradient(135deg, #43A047, #4CAF50);
+}
+
+.navbar-badge i {
+  font-size: 0.8rem;
 }
 
 .badge-count {
-  background-color: #dc3545;
-  color: #fff;
+  background-color: rgba(255, 255, 255, 0.25);
+  padding: 0.05rem 0.4rem;
+  border-radius: 10px;
   font-size: 0.75rem;
   font-weight: 700;
-  padding: 0.15rem 0.4rem;
-  border-radius: 10px;
-  min-width: 18px;
-  text-align: center;
 }
 
-.navbar-menu {
+.navbar-auth {
   display: flex;
-  flex-wrap: wrap;
-  transition: max-height 0.3s ease;
-}
-
-.navbar-menu.is-active {
-  max-height: 1000px;
-}
-
-.navbar-item {
-  color: #333333;
-  margin: 0 0.5rem;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
   text-decoration: none;
-  padding: 0.5rem 1rem;
-  transition: background-color 0.3s ease;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.navbar-item:hover {
-  background-color: #e9ecef;
-  border-radius: 5px;
+  transition: all 0.2s ease;
 }
 
 .navbar-login {
-  font-weight: bold;
   color: #FF9800;
-}
-
-.navbar-login i {
-  margin-right: 0.5rem;
+  background-color: #fff3e0;
 }
 
 .navbar-login:hover {
   background-color: #FFE0B2;
-  border-radius: 5px;
+  color: #E68900;
 }
 
 .navbar-logout {
-  font-weight: bold;
   color: #DC3545;
-}
-
-.navbar-logout i {
-  margin-right: 0.5rem;
+  background-color: #fce4e4;
 }
 
 .navbar-logout:hover {
-  background-color: #F8D7DA;
-  border-radius: 5px;
+  background-color: #f8d7da;
+  color: #c82333;
 }
 
 .navbar-burger {
@@ -301,7 +412,7 @@ export default {
   flex-direction: column;
   justify-content: space-around;
   width: 30px;
-  height: 25px;
+  height: 24px;
   background: none;
   border: none;
   cursor: pointer;
@@ -311,64 +422,87 @@ export default {
 .navbar-burger span {
   display: block;
   width: 100%;
-  height: 3px;
-  background-color: #333333;
+  height: 2.5px;
+  background-color: #555555;
   border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.navbar-burger.is-active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.navbar-burger.is-active span:nth-child(2) {
+  opacity: 0;
+}
+
+.navbar-burger.is-active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+@media (max-width: 1200px) {
+  .item-text {
+    display: none;
+  }
+  
+  .navbar-item i {
+    width: auto;
+  }
+}
+
+@media (max-width: 992px) {
+  .navbar-user-info {
+    display: none;
+  }
 }
 
 @media (max-width: 768px) {
-  .navbar {
+  .navbar-container {
+    padding: 0.6rem 1rem;
     flex-wrap: wrap;
+    gap: 0.5rem;
   }
 
-  .navbar-brand {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .navbar-user {
-    display: none;
-  }
-
-.user-family {
-  color: #0d6efd;
-  font-weight: 600;
-}
-
-.navbar-right {
-    flex-shrink: 0;
-  }
-
-  .navbar-menu {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-height: 0;
-    overflow: hidden;
-    padding: 0;
-    margin-top: 0;
-  }
-
-  .navbar-menu.is-active {
-    max-height: 1000px;
-    padding-top: 0.5rem;
-    margin-top: 0.5rem;
-    border-top: 1px solid #e9ecef;
-  }
-
-  .navbar-item {
-    width: 100%;
-    margin: 0;
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid #f8f9fa;
-  }
-
-  .navbar-item:last-child {
-    border-bottom: none;
+  .navbar-logo {
+    font-size: 1.1rem;
   }
 
   .navbar-burger {
     display: flex;
+  }
+
+  .navbar-menu {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    padding: 0.5rem 0;
+    border-top: 1px solid #e9ecef;
+    margin-top: 0.5rem;
+    gap: 0;
+  }
+
+  .navbar-menu.is-active {
+    display: flex;
+  }
+
+  .navbar-item {
+    width: 100%;
+    padding: 0.75rem 0.5rem;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.95rem;
+  }
+
+  .navbar-item i {
+    width: 20px;
+    text-align: center;
+  }
+
+  .item-text {
+    display: inline;
+  }
+
+  .navbar-right {
+    gap: 0.5rem;
   }
 }
 </style>
