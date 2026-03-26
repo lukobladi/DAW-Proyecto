@@ -65,19 +65,23 @@
         <form @submit.prevent="guardarUsuario">
           <div class="mb-2">
             <label class="form-label">Nombre</label>
-            <input v-model="form.nombre" class="form-control" required />
+            <input v-model="form.nombre" class="form-control" required :class="{ 'is-invalid': errors.nombre }" />
+            <span v-if="errors.nombre" class="error-text">{{ errors.nombre }}</span>
           </div>
           <div class="mb-2">
             <label class="form-label">Correo</label>
-            <input v-model="form.correo" type="email" class="form-control" required />
+            <input v-model="form.correo" type="email" class="form-control" required :class="{ 'is-invalid': errors.correo }" />
+            <span v-if="errors.correo" class="error-text">{{ errors.correo }}</span>
           </div>
           <div class="mb-2">
             <label class="form-label">Movil</label>
-            <input v-model="form.movil" class="form-control" />
+            <input v-model="form.movil" class="form-control" :class="{ 'is-invalid': errors.movil }" />
+            <span v-if="errors.movil" class="error-text">{{ errors.movil }}</span>
           </div>
           <div class="mb-2">
             <label class="form-label">Familia</label>
-            <input v-model="form.familia" type="number" class="form-control" min="1" />
+            <input v-model="form.familia" type="number" class="form-control" min="1" :class="{ 'is-invalid': errors.familia }" />
+            <span v-if="errors.familia" class="error-text">{{ errors.familia }}</span>
           </div>
           <div class="mb-2">
             <label class="form-label">Rol</label>
@@ -89,7 +93,8 @@
           </div>
           <div v-if="!modoEdicion" class="mb-3">
             <label class="form-label">Contrasena inicial</label>
-            <input v-model="form.password" type="password" class="form-control" required />
+            <input v-model="form.password" type="password" class="form-control" required :class="{ 'is-invalid': errors.password }" />
+            <span v-if="errors.password" class="error-text">{{ errors.password }}</span>
           </div>
           <div class="d-flex gap-2">
             <button class="btn btn-primary" type="submit" :disabled="guardando">
@@ -126,6 +131,7 @@ export default {
         password: '',
         familia: null,
       },
+      errors: {},
     };
   },
   async created() {
@@ -146,6 +152,7 @@ export default {
     },
     abrirModalCrear() {
       this.modoEdicion = false;
+      this.errors = {};
       this.form = {
         id_usuario: null,
         nombre: '',
@@ -159,6 +166,7 @@ export default {
     },
     abrirModalEditar(usuario) {
       this.modoEdicion = true;
+      this.errors = {};
       this.form = {
         id_usuario: usuario.id_usuario,
         nombre: usuario.nombre,
@@ -174,6 +182,7 @@ export default {
       this.mostrarModal = false;
     },
     async guardarUsuario() {
+      this.errors = {};
       this.guardando = true;
       try {
         if (this.modoEdicion) {
@@ -198,8 +207,20 @@ export default {
         }
         await this.cargarUsuarios();
         this.cerrarModal();
-      } catch {
-        alertStore.showAlert('No se pudo guardar el usuario.', 'danger');
+      } catch (error) {
+        if (error.response?.status === 400 && error.response?.data?.errors) {
+          error.response.data.errors.forEach(msg => {
+            const msgLower = msg.toLowerCase();
+            if (msgLower.includes('nombre')) this.errors.nombre = msg;
+            else if (msgLower.includes('correo')) this.errors.correo = msg;
+            else if (msgLower.includes('móvil') || msgLower.includes('movil')) this.errors.movil = msg;
+            else if (msgLower.includes('familia')) this.errors.familia = msg;
+            else if (msgLower.includes('contraseña')) this.errors.password = msg;
+            else alertStore.showAlert(msg, 'danger');
+          });
+        } else {
+          alertStore.showAlert('No se pudo guardar el usuario.', 'danger');
+        }
       } finally {
         this.guardando = false;
       }
@@ -237,24 +258,27 @@ export default {
 
 <style scoped>
 .estado {
-  padding: 1rem 0;
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--color-text-muted);
 }
 
 .estado.error {
-  color: #dc3545;
+  color: var(--color-danger);
 }
 
 .acciones {
   display: flex;
-  gap: 0.4rem;
+  gap: 0.5rem;
 }
 
 .estado-pill {
   display: inline-block;
-  padding: 0.15rem 0.6rem;
+  padding: 0.25rem 0.75rem;
   border-radius: 999px;
   font-weight: 600;
   font-size: 0.8rem;
+  letter-spacing: 0.025em;
 }
 
 .estado-pill.activo {
@@ -270,17 +294,77 @@ export default {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1050;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .modal-card {
   width: min(92vw, 520px);
+  max-height: 90vh;
+  overflow-y: auto;
   background: #fff;
-  border-radius: 12px;
-  padding: 1rem;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-lg);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-card h4 {
+  margin-bottom: 1.25rem;
+  color: var(--color-text);
+  font-size: 1.25rem;
+}
+
+.error-text {
+  color: var(--color-danger);
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  display: block;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.is-invalid {
+  border-color: var(--color-danger) !important;
+}
+
+.table {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.gestion-usuarios-page {
+  animation: fadeIn 0.3s ease;
 }
 </style>

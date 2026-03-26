@@ -4,6 +4,8 @@ const express = require('express');
 const UsuarioController = require('../controllers/UsuarioController');
 const authMiddleware = require('../middlewares/auth'); 
 const adminMiddleware = require('../middlewares/admin'); 
+const validators = require('../middlewares/validators');
+const validar = require('../middlewares/validar');
 
 const router = express.Router();
 
@@ -139,7 +141,7 @@ router.get('/obtener/:id', authMiddleware, UsuarioController.obtenerPorId); // U
  *       500:
  *         description: Error al registrar el usuario
  */
-router.post('/registrar', UsuarioController.registrar);
+router.post('/registrar', validators.crearUsuario, validar, UsuarioController.registrar);
 
 /**
  * @swagger
@@ -189,6 +191,8 @@ router.patch(
   '/activar/:id',
   authMiddleware,
   adminMiddleware,
+  validators.cambiarEstadoUsuario,
+  validar,
   UsuarioController.cambiarEstadoActivo
 );
 
@@ -245,7 +249,7 @@ router.patch(
  *       500:
  *         description: Error al iniciar sesión
  */
-router.post('/login', UsuarioController.login);
+router.post('/login', validators.login, validar, UsuarioController.login);
 
 /**
  * @swagger
@@ -279,7 +283,7 @@ router.post('/login', UsuarioController.login);
  *       500:
  *         description: Error al procesar la solicitud
  */
-router.post('/recuperar-password', UsuarioController.recuperarPassword);
+router.post('/recuperar-password', validators.recuperarPassword, validar, UsuarioController.recuperarPassword);
 
 /**
  * @swagger
@@ -341,7 +345,7 @@ router.post('/recuperar-password', UsuarioController.recuperarPassword);
  *       500:
  *         description: Error al actualizar el usuario
  */
-router.put('/actualizar/:id', authMiddleware, UsuarioController.actualizar); // Usuarios autenticados
+router.put('/actualizar/:id', authMiddleware, validators.actualizarUsuario, validar, UsuarioController.actualizar);
 
 /**
  * @swagger

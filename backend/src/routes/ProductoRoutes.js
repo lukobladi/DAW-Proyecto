@@ -5,6 +5,8 @@ const ProductoController = require('../controllers/ProductoController');
 const authMiddleware = require('../middlewares/auth'); 
 const adminMiddleware = require('../middlewares/admin'); 
 const upload = require('../config/multer'); // Middleware para manejar archivos
+const validators = require('../middlewares/validators');
+const validar = require('../middlewares/validar');
 
 const router = express.Router();
 
@@ -58,6 +60,8 @@ router.post(
   '/crear',
   [authMiddleware, gestorMiddleware],
   upload.single('imagen'),
+  validators.crearProducto,
+  validar,
   ProductoController.crear
 );
 
@@ -127,7 +131,7 @@ router.get(
  *       500:
  *         description: Error al obtener el producto
  */
-router.get('/obtener/:id', authMiddleware, ProductoController.obtenerPorId);
+router.get('/obtener/:id', authMiddleware, validators.idParam, validar, ProductoController.obtenerPorId);
 
 /**
  * @swagger
@@ -179,9 +183,11 @@ router.put(
   '/actualizar/:id',
   [authMiddleware, gestorMiddleware],
   upload.single('imagen'),
+  validators.actualizarProducto,
+  validar,
   ProductoController.actualizar
 );
-router.delete('/eliminar/:id', [authMiddleware, gestorMiddleware], ProductoController.eliminar);
+router.delete('/eliminar/:id', [authMiddleware, gestorMiddleware], validators.idParam, validar, ProductoController.eliminar);
 
 /**
  * @swagger

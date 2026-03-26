@@ -2,7 +2,9 @@
 
 const express = require('express');
 const ProveedorController = require('../controllers/ProveedorController');
-const authMiddleware = require('../middlewares/auth'); 
+const authMiddleware = require('../middlewares/auth');
+const validators = require('../middlewares/validators');
+const validar = require('../middlewares/validar');
 
 const router = express.Router();
 
@@ -46,7 +48,7 @@ const router = express.Router();
  *       500:
  *         description: Error al crear el proveedor
  */
-router.post('/crear', authMiddleware, ProveedorController.crear);
+router.post('/crear', authMiddleware, validators.crearProveedor, validar, ProveedorController.crear);
 
 /**
  * @swagger
@@ -87,7 +89,7 @@ router.get('/obtenerTodos', authMiddleware, ProveedorController.listar);
  *       500:
  *         description: Error al obtener el proveedor
  */
-router.get('/obtener/:id', authMiddleware, ProveedorController.obtenerPorId);
+router.get('/obtener/:id', authMiddleware, validators.idParam, validar, ProveedorController.obtenerPorId);
 
 /**
  * @swagger
@@ -170,7 +172,7 @@ router.patch(
  *       500:
  *         description: Error al actualizar el proveedor
  */
-router.patch('/actualizar/:id', authMiddleware, ProveedorController.actualizar);
+router.patch('/actualizar/:id', authMiddleware, validators.actualizarProveedor, validar, ProveedorController.actualizar);
 
 /**
  * @swagger
@@ -195,6 +197,6 @@ router.patch('/actualizar/:id', authMiddleware, ProveedorController.actualizar);
  *       500:
  *         description: Error al eliminar el proveedor
  */
-router.delete('/eliminar/:id', authMiddleware, ProveedorController.eliminar);
+router.delete('/eliminar/:id', authMiddleware, validators.idParam, validar, ProveedorController.eliminar);
 
 module.exports = router;

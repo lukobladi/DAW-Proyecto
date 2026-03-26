@@ -53,19 +53,22 @@
         <form @submit.prevent="guardarProducto">
           <div class="mb-2">
             <label class="form-label">Nombre</label>
-            <input v-model="form.nombre" class="form-control" required />
+            <input v-model="form.nombre" class="form-control" required :class="{ 'is-invalid': errors.nombre }" />
+            <span v-if="errors.nombre" class="error-text">{{ errors.nombre }}</span>
           </div>
           <div class="mb-2">
             <label class="form-label">Descripcion</label>
-            <textarea v-model="form.descripcion" class="form-control" rows="3" required />
+            <textarea v-model="form.descripcion" class="form-control" rows="3" required :class="{ 'is-invalid': errors.descripcion }" />
+            <span v-if="errors.descripcion" class="error-text">{{ errors.descripcion }}</span>
           </div>
           <div class="mb-2">
             <label class="form-label">Precio</label>
-            <input v-model.number="form.precio" type="number" min="0" step="0.01" class="form-control" required />
+            <input v-model.number="form.precio" type="number" min="0" step="0.01" class="form-control" required :class="{ 'is-invalid': errors.precio }" />
+            <span v-if="errors.precio" class="error-text">{{ errors.precio }}</span>
           </div>
           <div v-if="isAdmin" class="mb-2">
             <label class="form-label">Proveedor</label>
-            <select v-model.number="form.id_proveedor" class="form-select" required>
+            <select v-model.number="form.id_proveedor" class="form-select" required :class="{ 'is-invalid': errors.id_proveedor }">
               <option disabled :value="null">Selecciona proveedor</option>
               <option
                 v-for="proveedor in proveedores"
@@ -75,6 +78,7 @@
                 {{ proveedor.nombre }}
               </option>
             </select>
+            <span v-if="errors.id_proveedor" class="error-text">{{ errors.id_proveedor }}</span>
           </div>
           <div v-else class="mb-2">
             <label class="form-label">Proveedor</label>
@@ -129,6 +133,7 @@ export default {
       modoEdicion: false,
       guardando: false,
       form: productoVacio(),
+      errors: {},
     };
   },
   computed: {
@@ -204,6 +209,7 @@ export default {
     },
     async abrirModalCrear() {
       this.modoEdicion = false;
+      this.errors = {};
       const nuevoForm = productoVacio();
       
       if (this.isGestor) {
@@ -225,6 +231,7 @@ export default {
     },
     abrirModalEditar(producto) {
       this.modoEdicion = true;
+      this.errors = {};
       this.form = {
         id_producto: producto.id_producto,
         nombre: producto.nombre,
@@ -242,6 +249,7 @@ export default {
       this.form.imagenFile = event.target.files?.[0] || null;
     },
     async guardarProducto() {
+      this.errors = {};
       this.guardando = true;
       try {
         const formData = new FormData();
@@ -263,8 +271,19 @@ export default {
 
         await this.cargarDatos();
         this.cerrarModal();
-      } catch {
-        alertStore.showAlert('No se pudo guardar el producto.', 'danger');
+      } catch (error) {
+        if (error.response?.status === 400 && error.response?.data?.errors) {
+          error.response.data.errors.forEach(msg => {
+            const msgLower = msg.toLowerCase();
+            if (msgLower.includes('nombre')) this.errors.nombre = msg;
+            else if (msgLower.includes('descripcion')) this.errors.descripcion = msg;
+            else if (msgLower.includes('precio')) this.errors.precio = msg;
+            else if (msgLower.includes('proveedor')) this.errors.id_proveedor = msg;
+            else alertStore.showAlert(msg, 'danger');
+          });
+        } else {
+          alertStore.showAlert('No se pudo guardar el producto.', 'danger');
+        }
       } finally {
         this.guardando = false;
       }
@@ -302,34 +321,66 @@ export default {
 
 <style scoped>
 .estado {
-  padding: 1rem 0;
+  padding: 2rem;
+  text-align: center;
+  color: var(--color-text-muted);
+  background: #fff;
+  border-radius: var(--radius-lg);
 }
 
 .estado.error {
-  color: #dc3545;
+  color: var(--color-danger);
 }
 
 .producto-card {
-  border: 1px solid #dee2e6;
-  border-radius: 10px;
-  padding: 0.9rem;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: var(--radius-lg);
+  padding: 0;
   background: #fff;
+  overflow: hidden;
+  transition: all var(--transition-normal);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.producto-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
 }
 
 .producto-imagen {
   width: 100%;
   height: 180px;
   object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 0.8rem;
+  background: #f5f5f5;
+}
+
+.producto-card h5 {
+  padding: 1rem 1rem 0.25rem;
+  margin: 0;
+  color: var(--color-text);
+  font-size: 1.1rem;
+}
+
+.producto-card p {
+  padding: 0 1rem;
+  margin: 0.25rem 0;
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+}
+
+.producto-card .btn {
+  margin: 0.75rem;
 }
 
 .estado-pill {
   display: inline-block;
-  padding: 0.15rem 0.6rem;
+  padding: 0.25rem 0.75rem;
   border-radius: 999px;
   font-weight: 600;
   font-size: 0.8rem;
+  letter-spacing: 0.025em;
 }
 
 .estado-pill.activo {
@@ -345,17 +396,67 @@ export default {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1050;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .modal-card {
   width: min(92vw, 560px);
+  max-height: 90vh;
+  overflow-y: auto;
   background: #fff;
-  border-radius: 12px;
-  padding: 1rem;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-lg);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-card h4 {
+  margin-bottom: 1.25rem;
+  color: var(--color-text);
+}
+
+.error-text {
+  color: var(--color-danger);
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  display: block;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.is-invalid {
+  border-color: var(--color-danger) !important;
 }
 </style>

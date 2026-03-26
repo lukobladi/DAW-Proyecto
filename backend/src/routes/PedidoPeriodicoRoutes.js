@@ -2,7 +2,9 @@
 
 const express = require('express');
 const PedidoPeriodicoController = require('../controllers/PedidoPeriodicoController');
-const authMiddleware = require('../middlewares/auth'); 
+const authMiddleware = require('../middlewares/auth');
+const validators = require('../middlewares/validators');
+const validar = require('../middlewares/validar');
 
 const router = express.Router();
 
@@ -63,6 +65,8 @@ const router = express.Router();
 router.post(
   '/crear',
   authMiddleware,
+  validators.crearPedidoPeriodico,
+  validar,
   PedidoPeriodicoController.crearPedidoPeriodico
 );
 
@@ -172,6 +176,8 @@ router.get(
 router.put(
   '/actualizar/:id',
   authMiddleware,
+  validators.actualizarPedidoPeriodico,
+  validar,
   PedidoPeriodicoController.actualizarPedidoPeriodico
 );
 
@@ -201,6 +207,8 @@ router.put(
 router.delete(
   '/eliminar/:id',
   authMiddleware,
+  validators.idParam,
+  validar,
   PedidoPeriodicoController.eliminarPedidoPeriodico
 );
 

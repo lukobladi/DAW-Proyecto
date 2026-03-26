@@ -3,6 +3,8 @@ const router = express.Router();
 const FamiliaProveedorController = require('../controllers/FamiliaProveedorController');
 const auth = require('../middlewares/auth');
 const admin = require('../middlewares/admin');
+const validators = require('../middlewares/validators');
+const validar = require('../middlewares/validar');
 
 /**
  * @swagger
@@ -54,7 +56,7 @@ router.get('/', [auth, admin], FamiliaProveedorController.listar);
  *       500:
  *         description: Error al crear la asignación
  */
-router.post('/asignar', [auth, admin], FamiliaProveedorController.asignar);
+router.post('/asignar', [auth, admin], validators.asignarFamiliaProveedor, validar, FamiliaProveedorController.asignar);
 
 /**
  * @swagger
@@ -83,6 +85,6 @@ router.post('/asignar', [auth, admin], FamiliaProveedorController.asignar);
  *       500:
  *         description: Error al eliminar la asignación
  */
-router.post('/desasignar', [auth, admin], FamiliaProveedorController.desasignar);
+router.post('/desasignar', [auth, admin], validators.asignarFamiliaProveedor, validar, FamiliaProveedorController.desasignar);
 
 module.exports = router;

@@ -4,6 +4,8 @@
 const express = require('express');
 const DetallePedidoController = require('../controllers/DetallePedidoController');
 const authMiddleware = require('../middlewares/auth');
+const validators = require('../middlewares/validators');
+const validar = require('../middlewares/validar');
 
 const router = express.Router();
 
@@ -51,7 +53,7 @@ const router = express.Router();
  *       500:
  *         description: Error al crear el detalle de pedido
  */
-router.post('/crear/', authMiddleware, DetallePedidoController.crear);
+router.post('/crear/', authMiddleware, validators.crearDetallePedido, validar, DetallePedidoController.crear);
 
 /**
  * @swagger
@@ -79,6 +81,8 @@ router.post('/crear/', authMiddleware, DetallePedidoController.crear);
 router.get(
   '/pedido/:id_pedido',
   authMiddleware,
+  validators.idParamPedido,
+  validar,
   DetallePedidoController.listarPorPedido
 );
 
@@ -131,6 +135,8 @@ router.get(
 router.put(
   '/actualizar/:id',
   authMiddleware,
+  validators.idParam,
+  validar,
   DetallePedidoController.actualizar
 );
 
@@ -160,6 +166,8 @@ router.put(
 router.delete(
   '/eliminar/:id',
   authMiddleware,
+  validators.idParam,
+  validar,
   DetallePedidoController.eliminar
 );
 

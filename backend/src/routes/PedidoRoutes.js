@@ -4,7 +4,9 @@ const express = require('express');
 const PedidoController = require('../controllers/PedidoController');
 const authMiddleware = require('../middlewares/auth'); 
 const adminMiddleware = require('../middlewares/admin'); 
-const adminOrGestorMiddleware = require('../middlewares/adminOrGestor'); 
+const adminOrGestorMiddleware = require('../middlewares/adminOrGestor');
+const validators = require('../middlewares/validators');
+const validar = require('../middlewares/validar');
 
 const router = express.Router();
 
@@ -52,6 +54,8 @@ const router = express.Router();
 router.post(
   '/crear',
   [authMiddleware, adminOrGestorMiddleware],
+  validators.crearPedido,
+  validar,
   PedidoController.crear
 );
 
@@ -121,7 +125,7 @@ router.get(
  *       500:
  *         description: Error al obtener el pedido
  */
-router.get('/obtener/:id', authMiddleware, PedidoController.obtenerPorId);
+router.get('/obtener/:id', authMiddleware, validators.idParamPedido, validar, PedidoController.obtenerPorId);
 
 /**
  * @swagger
@@ -166,7 +170,7 @@ router.get('/obtener/:id', authMiddleware, PedidoController.obtenerPorId);
  *       500:
  *         description: Error al actualizar el pedido
  */
-router.put('/actualizar/:id', authMiddleware, PedidoController.actualizar);
+router.put('/actualizar/:id', authMiddleware, validators.actualizarPedido, validar, PedidoController.actualizar);
 
 /**
  * @swagger
@@ -191,7 +195,7 @@ router.put('/actualizar/:id', authMiddleware, PedidoController.actualizar);
  *       500:
  *         description: Error al eliminar el pedido
  */
-router.delete('/eliminar/:id', authMiddleware, PedidoController.eliminar);
+router.delete('/eliminar/:id', authMiddleware, validators.idParamPedido, validar, PedidoController.eliminar);
 
 /**
  * @swagger
@@ -232,6 +236,8 @@ router.delete('/eliminar/:id', authMiddleware, PedidoController.eliminar);
 router.patch(
   '/cambiarEstado/:id',
   authMiddleware,
+  validators.cambiarEstadoPedido,
+  validar,
   PedidoController.cambiarEstado
 );
 

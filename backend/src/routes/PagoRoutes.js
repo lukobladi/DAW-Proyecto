@@ -5,6 +5,7 @@ const PagoController = require('../controllers/PagoController');
 const authMiddleware = require('../middlewares/auth'); 
 const adminMiddleware = require('../middlewares/admin');
 const validators = require('../middlewares/validators');
+const validar = require('../middlewares/validar');
 
 const router = express.Router();
 
@@ -53,6 +54,7 @@ router.post(
   '/crear/',
   authMiddleware,
   validators.crearPago,
+  validar,
   PagoController.crear
 );
 
@@ -176,7 +178,7 @@ router.get(
  *       404:
  *         description: Pago no encontrado
  */
-router.patch('/:id/marcar-pagado', authMiddleware, PagoController.marcarPagado);
+router.patch('/:id/marcar-pagado', authMiddleware, validators.idParam, validar, PagoController.marcarPagado);
 
 /**
  * @swagger
@@ -203,6 +205,8 @@ router.patch('/:id/marcar-pagado', authMiddleware, PagoController.marcarPagado);
 router.patch(
   '/:id/marcar-recibido',
   authMiddleware,
+  validators.idParam,
+  validar,
   PagoController.marcarRecibido
 );
 
@@ -239,7 +243,7 @@ router.patch(
  *       500:
  *         description: Error al cambiar el estado del pago
  */
-router.put('/cambiar-estado/:id', authMiddleware, PagoController.cambiarEstado);
+router.put('/cambiar-estado/:id', authMiddleware, validators.marcarPago, validar, PagoController.cambiarEstado);
 
 /**
  * @swagger

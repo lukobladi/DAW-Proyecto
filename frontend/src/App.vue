@@ -16,7 +16,8 @@
     
     <!-- Muestra un estado de carga mientras se restaura el estado de autenticacion -->
     <div v-if="authStore.loading" class="loading-state">
-      Cargando...
+      <div class="spinner"></div>
+      <span>Cargando...</span>
     </div>
     
     <!-- Muestra el contenido principal una vez que el estado ha sido restaurado -->
@@ -71,45 +72,90 @@ export default {
 
 .loading-state {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
+  color: var(--color-text-light);
+  gap: 1rem;
+}
+
+.loading-state .spinner {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 .router-view {
   flex: 1;
 }
 
-/* Estilo para la transición de la alerta */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
 .alert {
   position: fixed;
   top: 20px;
   right: 20px;
-  z-index: 1050;
-  padding: 1rem;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 300px;
+  z-index: 1060;
+  padding: 1rem 2.5rem 1rem 1rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  max-width: 380px;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.alert-success {
+  background-color: #d1e7dd;
+  color: #0f5132;
+  border-left: 4px solid var(--color-success);
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #842029;
+  border-left: 4px solid var(--color-danger);
 }
 
 .alert .btn-close {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
   background: none;
   border: none;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   cursor: pointer;
+  opacity: 0.6;
+  transition: opacity var(--transition-fast);
+}
+
+.alert .btn-close:hover {
+  opacity: 1;
+}
+
+@media (max-width: 480px) {
+  .alert {
+    left: 12px;
+    right: 12px;
+    top: 12px;
+    max-width: none;
+  }
 }
 </style>

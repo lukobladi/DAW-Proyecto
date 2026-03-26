@@ -14,7 +14,9 @@
               class="form-control"
               placeholder="Ingresa tu correo o móvil"
               required
+              :class="{ 'input-error': error }"
             />
+            <span v-if="error" class="error-message">{{ error }}</span>
           </div>
           <button type="submit" class="btn btn-primary mt-3">Enviar Solicitud</button>
         </form>
@@ -33,21 +35,25 @@ import { alertStore } from '@/store/alertStore';
 export default {
   data() {
     return {
-      correoOMovil: '', // Puede ser correo o móvil
-      errorMessage: '', // Mensaje de error
-      successMessage: '', // Mensaje de éxito
+      correoOMovil: '',
+      error: '',
     };
   },
   methods: {
     async recoverPassword() {
+      this.error = '';
       try {
         await api.recoverPassword({ correoOMovil: this.correoOMovil });
         alertStore.showAlert('Se ha enviado un enlace de recuperación a tu correo o móvil.', 'success');
-        this.correoOMovil = ''; // Limpia el campo del formulario
+        this.correoOMovil = '';
       } catch (error) {
         console.error('Error al recuperar contraseña:', error);
-        const errorMessage = error.response?.data?.error || 'Ocurrió un error inesperado. Inténtalo más tarde.';
-        alertStore.showAlert(errorMessage, 'danger');
+        if (error.response?.status === 400 && error.response?.data?.errors?.length) {
+          this.error = error.response.data.errors[0];
+        } else {
+          const errorMessage = error.response?.data?.error || 'Ocurrió un error inesperado. Inténtalo más tarde.';
+          alertStore.showAlert(errorMessage, 'danger');
+        }
       }
     },
   },
@@ -114,6 +120,17 @@ input {
 input:focus {
   border-color: #4CAF50; /* Verde primario */
   outline: none;
+}
+
+.input-error {
+  border-color: #dc3545 !important;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
 }
 
 /* Botón */
