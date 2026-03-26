@@ -1,27 +1,78 @@
 <template>
   <div class="recover-password-page">
     <div class="auth-card">
-      <h2 class="auth-title">Recuperar Contraseña</h2>
-      <form @submit.prevent="recoverPassword" class="auth-form">
-        <div class="mb-3">
-          <label for="correoOMovil" class="form-label">Correo Electrónico o Móvil</label>
-          <input
-            type="text"
-            id="correoOMovil"
-            v-model="correoOMovil"
-            class="form-control"
-            placeholder="Ingresa tu correo o móvil"
-            required
-            :class="{ 'is-invalid': error }"
-          />
-          <div v-if="error" class="error-text">{{ error }}</div>
+      <template v-if="token">
+        <h2 class="auth-title">Nueva Contraseña</h2>
+        <p class="auth-subtitle">Ingresa tu nueva contraseña</p>
+        <form @submit.prevent="resetPassword" class="auth-form">
+          <div class="mb-3">
+            <label for="password" class="form-label">Nueva Contraseña</label>
+            <input
+              type="password"
+              id="password"
+              v-model="password"
+              class="form-control"
+              placeholder="Mínimo 6 caracteres"
+              required
+              minlength="6"
+              :class="{ 'is-invalid': error }"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="confirmarPassword" class="form-label">Confirmar Contraseña</label>
+            <input
+              type="password"
+              id="confirmarPassword"
+              v-model="confirmarPassword"
+              class="form-control"
+              placeholder="Repite la contraseña"
+              required
+              :class="{ 'is-invalid': error }"
+            />
+            <div v-if="error" class="error-text">{{ error }}</div>
+          </div>
+          <button type="submit" class="btn btn-primary w-100" :disabled="guardando">
+            {{ guardando ? 'Guardando...' : 'Cambiar Contraseña' }}
+          </button>
+        </form>
+      </template>
+
+      <template v-else-if="!token && !enviado">
+        <h2 class="auth-title">Recuperar Contraseña</h2>
+        <p class="auth-subtitle">Ingresa tu correo electrónico o móvil</p>
+        <form @submit.prevent="recoverPassword" class="auth-form">
+          <div class="mb-3">
+            <label for="correoOMovil" class="form-label">Correo Electrónico o Móvil</label>
+            <input
+              type="text"
+              id="correoOMovil"
+              v-model="correoOMovil"
+              class="form-control"
+              placeholder="Ingresa tu correo o móvil"
+              required
+              :class="{ 'is-invalid': error }"
+            />
+            <div v-if="error" class="error-text">{{ error }}</div>
+          </div>
+          <button type="submit" class="btn btn-primary w-100" :disabled="guardando">
+            {{ guardando ? 'Enviando...' : 'Enviar Solicitud' }}
+          </button>
+        </form>
+      </template>
+
+      <template v-else>
+        <div class="success-message">
+          <i class="fas fa-check-circle success-icon"></i>
+          <h2 class="auth-title">Correo Enviado</h2>
+          <p class="auth-subtitle">Revisa tu bandeja de entrada y sigue las instrucciones.</p>
+          <router-link to="/login" class="btn btn-primary w-100">Volver al Login</router-link>
         </div>
-        <button type="submit" class="btn btn-primary w-100">Enviar Solicitud</button>
-      </form>
-      <div class="auth-divider">
+      </template>
+
+      <div v-if="!token || enviado" class="auth-divider">
         <span>¿Ya recuerdas tu contraseña?</span>
       </div>
-      <router-link to="/login" class="btn btn-secondary w-100">Iniciar Sesión</router-link>
+      <router-link v-if="!token || enviado" to="/login" class="btn btn-secondary w-100">Iniciar Sesión</router-link>
     </div>
   </div>
 </template>
@@ -31,27 +82,71 @@ import api from '@/services/api';
 import { alertStore } from '@/store/alertStore';
 
 export default {
+  props: {
+    token: {
+      type: String,
+      default: null,
+    },
+  },
   data() {
     return {
       correoOMovil: '',
+      password: '',
+      confirmarPassword: '',
       error: '',
+      guardando: false,
+      enviado: false,
     };
   },
   methods: {
     async recoverPassword() {
       this.error = '';
+      this.guardando = true;
       try {
         await api.recoverPassword({ correoOMovil: this.correoOMovil });
-        alertStore.showAlert('Se ha enviado un enlace de recuperación a tu correo o móvil.', 'success');
-        this.correoOMovil = '';
+        this.enviado = true;
       } catch (error) {
         console.error('Error al recuperar contraseña:', error);
-        if (error.response?.status === 400 && error.response?.data?.errors?.length) {
+        if (error.response?.status === 404) {
+          this.error = error.response.data.error;
+        } else if (error.response?.status === 400 && error.response?.data?.errors?.length) {
           this.error = error.response.data.errors[0];
         } else {
           const errorMessage = error.response?.data?.error || 'Ocurrió un error inesperado. Inténtalo más tarde.';
           alertStore.showAlert(errorMessage, 'danger');
         }
+      } finally {
+        this.guardando = false;
+      }
+    },
+    async resetPassword() {
+      this.error = '';
+
+      if (this.password !== this.confirmarPassword) {
+        this.error = 'Las contraseñas no coinciden';
+        return;
+      }
+
+      if (this.password.length < 6) {
+        this.error = 'La contraseña debe tener al menos 6 caracteres';
+        return;
+      }
+
+      this.guardando = true;
+      try {
+        await api.resetPassword({ token: this.token, password: this.password });
+        alertStore.showAlert('Contraseña cambiada correctamente. Ya puedes iniciar sesión.', 'success');
+        this.$router.push({ name: 'Login' });
+      } catch (error) {
+        console.error('Error al resetear contraseña:', error);
+        if (error.response?.status === 401 || error.response?.status === 404) {
+          this.error = error.response.data.error;
+        } else {
+          const errorMessage = error.response?.data?.error || 'Ocurrió un error inesperado. Inténtalo más tarde.';
+          alertStore.showAlert(errorMessage, 'danger');
+        }
+      } finally {
+        this.guardando = false;
       }
     },
   },
@@ -80,8 +175,15 @@ export default {
 .auth-title {
   color: var(--color-primary);
   text-align: center;
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-sm);
   font-size: var(--font-size-2xl);
+}
+
+.auth-subtitle {
+  text-align: center;
+  color: var(--color-text-light);
+  margin-bottom: var(--spacing-lg);
+  font-size: var(--font-size-sm);
 }
 
 .auth-form {
@@ -94,5 +196,15 @@ export default {
   color: var(--color-text-muted);
   font-size: var(--font-size-sm);
 }
-</style>
 
+.success-message {
+  text-align: center;
+  padding: var(--spacing-lg) 0;
+}
+
+.success-icon {
+  font-size: 4rem;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-lg);
+}
+</style>

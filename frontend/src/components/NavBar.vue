@@ -21,7 +21,7 @@
         </div>
       </div>
 
-      <div class="navbar-menu" :class="{ 'is-active': isMenuOpen }">
+      <div v-if="isAuthenticated" class="navbar-menu" :class="{ 'is-active': isMenuOpen }">
         <router-link to="/dashboard" class="navbar-item" @click="closeMenu">
           <i class="fas fa-th-large"></i>
           <span class="item-text">Dashboard</span>
@@ -67,6 +67,12 @@
           <span class="item-text">Ayuda</span>
         </router-link>
       </div>
+      <div v-else class="navbar-menu-guest">
+        <router-link to="/soporte" class="navbar-item navbar-item-guest" @click="closeMenu">
+          <i class="fas fa-question-circle"></i>
+          <span class="item-text">Ayuda</span>
+        </router-link>
+      </div>
 
       <div class="navbar-right">
         <router-link
@@ -79,10 +85,7 @@
           <span class="badge-count">{{ pedidosPendientesEntrega }}</span>
         </router-link>
 
-        <router-link v-if="!isAuthenticated" to="/login" class="navbar-auth navbar-login" @click="closeMenu">
-          <i class="fas fa-sign-in-alt"></i>
-        </router-link>
-        <a v-else @click="logout" class="navbar-auth navbar-logout">
+        <a v-if="isAuthenticated" @click="logout" class="navbar-auth navbar-logout">
           <i class="fas fa-sign-out-alt"></i>
         </a>
 
@@ -293,6 +296,31 @@ export default {
   align-items: center;
   gap: 0.25rem;
   flex: 1;
+}
+
+.navbar-menu-guest {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.navbar-item-guest {
+  background-color: var(--color-secondary-bg);
+  color: var(--color-secondary);
+  font-weight: 500;
+}
+
+.navbar-item-guest:hover {
+  background-color: var(--color-secondary-light);
+  color: var(--color-secondary-dark);
+}
+
+.navbar-item-guest i {
+  color: var(--color-secondary);
+}
+
+.navbar-item-guest:hover i {
+  color: var(--color-secondary-dark);
 }
 
 .navbar-item {

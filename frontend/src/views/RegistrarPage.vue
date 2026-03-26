@@ -1,7 +1,7 @@
 <template>
   <div class="registrar-page">
     <div class="auth-card">
-      <h2 class="auth-title">Registrarse</h2>
+      <h2 class="auth-title">Registrar usuario</h2>
       <form @submit.prevent="registrar" class="auth-form">
         <div class="mb-3">
           <label for="nombre" class="form-label">Nombre</label>

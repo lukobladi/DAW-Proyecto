@@ -148,9 +148,15 @@ const UsuarioController = {
         return res.status(404).json({ error: 'Usuario no encontrado' });
       }
 
-      const enlaceRecuperacion = `${process.env.FRONTEND_URL}/recuperar-password/${usuario.id_usuario}`;
+      const token = jwt.sign(
+        { id_usuario: usuario.id_usuario, correo: usuario.correo },
+        SECRET_KEY,
+        { expiresIn: '1h' }
+      );
 
-      const mensaje = `Hola ${usuario.nombre},\n\nHaz clic en el siguiente enlace para recuperar tu contrasena:\n\n${enlaceRecuperacion}\n\nSi no solicitaste esta accion, ignora este correo.`;
+      const enlaceRecuperacion = `${process.env.FRONTEND_URL}/recuperar-password/${token}`;
+
+      const mensaje = `Hola ${usuario.nombre},\n\nHaz clic en el siguiente enlace para recuperar tu contrasena:\n\n${enlaceRecuperacion}\n\nEste enlace expira en 1 hora. Si no solicitaste esta accion, ignora este correo.`;
 
       await emailService.enviarCorreo(
         usuario.correo,
@@ -163,6 +169,53 @@ const UsuarioController = {
         .json({ mensaje: 'Enlace de recuperacion enviado correctamente' });
     } catch (error) {
       logger.error('Error al procesar recuperacion de contrasena:', error);
+      res.status(500).json({ error: 'Error al procesar la solicitud' });
+    }
+  },
+
+  async resetPassword(req, res) {
+    const { token, password } = req.body;
+
+    if (!token || !password) {
+      return res.status(400).json({ error: 'Token y nueva contrasena son requeridos' });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({ error: 'La contrasena debe tener al menos 6 caracteres' });
+    }
+
+    try {
+      const decoded = jwt.verify(token, SECRET_KEY);
+
+      const usuario = await Usuario.findById(decoded.id_usuario);
+
+      if (!usuario) {
+        return res.status(404).json({ error: 'Usuario no encontrado' });
+      }
+
+      if (usuario.correo !== decoded.correo) {
+        return res.status(401).json({ error: 'Token invalido' });
+      }
+
+      await Usuario.updatePassword(usuario.id_usuario, password);
+
+      const mensaje = `Hola ${usuario.nombre},\n\nTu contrasena ha sido cambiada exitosamente.\n\nSi no fuiste tu, contacta con el administrador inmediatamente.`;
+
+      await emailService.enviarCorreo(
+        usuario.correo,
+        'Contrasena cambiada - Ekonsumo',
+        mensaje
+      );
+
+      res.status(200).json({ mensaje: 'Contrasena cambiada correctamente' });
+    } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        return res.status(401).json({ error: 'El enlace ha expirado. Solicita uno nuevo.' });
+      }
+      if (error.name === 'JsonWebTokenError') {
+        return res.status(401).json({ error: 'Token invalido' });
+      }
+      logger.error('Error al resetear contrasena:', error);
       res.status(500).json({ error: 'Error al procesar la solicitud' });
     }
   },

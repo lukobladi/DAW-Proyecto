@@ -285,6 +285,8 @@ router.post('/login', validators.login, validar, UsuarioController.login);
  */
 router.post('/recuperar-password', validators.recuperarPassword, validar, UsuarioController.recuperarPassword);
 
+router.post('/reset-password', UsuarioController.resetPassword);
+
 /**
  * @swagger
  * /api/usuarios/actualizar/{id}:

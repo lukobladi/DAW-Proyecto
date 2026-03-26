@@ -376,15 +376,47 @@ export default {
 
 .producto-card {
   border: 1px solid var(--color-border);
-  padding: var(--spacing-md);
   border-radius: var(--radius-md);
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--color-bg);
 }
 
 .producto-imagen {
-  max-width: 100%;
-  height: auto;
-  border-radius: var(--radius-md);
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.producto-card h4,
+.producto-card p,
+.producto-card button {
+  padding: 0 var(--spacing-md);
+}
+
+.producto-card h4 {
+  margin-top: var(--spacing-md);
+  margin-bottom: var(--spacing-xs);
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+}
+
+.producto-card p {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+}
+
+.producto-card p:last-of-type {
+  margin-bottom: var(--spacing-md);
+}
+
+.producto-card button {
+  margin-top: auto;
+  width: calc(100% - var(--spacing-md) * 2);
   margin-bottom: var(--spacing-md);
 }
 

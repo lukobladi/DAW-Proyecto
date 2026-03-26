@@ -44,6 +44,9 @@ export default {
   recoverPassword(data) {
     return apiClient.post('/usuarios/recuperar-password', data);
   },
+  resetPassword(data) {
+    return apiClient.post('/usuarios/reset-password', data);
+  },
   registrar(data) {
     return apiClient.post('/usuarios/registrar', data);
   },

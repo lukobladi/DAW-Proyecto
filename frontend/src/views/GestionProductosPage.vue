@@ -321,7 +321,7 @@ export default {
 
 <style scoped>
 .producto-card {
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: 0;
   background: var(--color-bg);
@@ -339,15 +339,15 @@ export default {
 
 .producto-imagen {
   width: 100%;
-  height: 180px;
+  height: 140px;
   object-fit: cover;
-  background: var(--color-bg-secondary);
+  flex-shrink: 0;
 }
 
 .producto-card h5 {
   padding: var(--spacing-md) var(--spacing-md) 0.25rem;
   margin: 0;
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-base);
 }
 
 .producto-card p {
@@ -357,7 +357,12 @@ export default {
   font-size: var(--font-size-sm);
 }
 
-.producto-card .btn {
-  margin: var(--spacing-md);
+.producto-card p:last-of-type {
+  margin-bottom: var(--spacing-sm);
+}
+
+.producto-card .d-flex {
+  margin-top: auto;
+  padding: 0 var(--spacing-md) var(--spacing-md);
 }
 </style>
