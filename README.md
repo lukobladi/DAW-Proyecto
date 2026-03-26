@@ -146,24 +146,24 @@ npm run build:frontend     # Build de producción del frontend
 - [Flujo de Usuario para la Aplicación Web](#flujo-de-usuario-para-la-aplicación-web)
   - [1. Gestión de Productos](#1-gestión-de-productos)
   - [2. Gestión de Compras](#2-gestión-de-compras)
-  - [2. Gestión de Pedidos](#2-gestión-de-pedidos)
-  - [3. Cálculos Financieros (para administradores)](#3-cálculos-financieros-para-administradores)
-  - [4. Gestión de Usuarios (para administradores)](#4-gestión-de-usuarios-para-administradores)
-  - [5. Notificaciones y Recordatorios](#5-notificaciones-y-recordatorios)
-  - [6. Historial de Pedidos](#6-historial-de-pedidos)
-  - [7. Configuración de Cuenta](#7-configuración-de-cuenta)
-  - [8. Panel de Administración (para administradores)](#8-panel-de-administración-para-administradores)
-  - [9. Informes y Estadísticas](#9-informes-y-estadísticas)
-    - [4. **Diagrama de Flujo de Pedidos**](#4-diagrama-de-flujo-de-pedidos)
+  - [3. Gestión de Pedidos](#3-gestión-de-pedidos)
+  - [4. Cálculos Financieros (para administradores)](#4-cálculos-financieros-para-administradores)
+  - [5. Gestión de Usuarios (para administradores)](#5-gestión-de-usuarios-para-administradores)
+  - [6. Notificaciones y Recordatorios](#6-notificaciones-y-recordatorios)
+  - [7. Historial de Pedidos](#7-historial-de-pedidos)
+  - [8. Configuración de Cuenta](#8-configuración-de-cuenta)
+  - [9. Panel de Administración (para administradores)](#9-panel-de-administración-para-administradores)
+  - [10. Informes y Estadísticas](#10-informes-y-estadísticas)
+    - [1. **Diagrama de Flujo de Pedidos**](#1-diagrama-de-flujo-de-pedidos)
       - [Pasos:](#pasos-1)
       - [Diagrama:](#diagrama-2)
-    - [5. **Diagrama de Navegación**](#5-diagrama-de-navegación)
+    - [2. **Diagrama de Navegación**](#2-diagrama-de-navegación)
       - [Páginas Principales:](#páginas-principales)
       - [Diagrama:](#diagrama-3)
-    - [6. **Diagrama de Secuencia de Autenticación**](#6-diagrama-de-secuencia-de-autenticación)
+    - [3. **Diagrama de Secuencia de Autenticación**](#3-diagrama-de-secuencia-de-autenticación)
       - [Pasos:](#pasos-2)
       - [Diagrama:](#diagrama-4)
-    - [7. **Diagrama de Componentes del Frontend**](#7-diagrama-de-componentes-del-frontend)
+    - [4. **Diagrama de Componentes del Frontend**](#4-diagrama-de-componentes-del-frontend)
       - [Componentes:](#componentes-1)
       - [Diagrama:](#diagrama-5)
 - [Datos](#datos)
@@ -176,7 +176,7 @@ npm run build:frontend     # Build de producción del frontend
     - [3. Producto](#3-producto)
     - [4. Pedido](#4-pedido)
     - [5. Detalle\_Pedido](#5-detalle_pedido)
-    - [6. usuario\_proveedor (Relación muchos a muchos)](#6-usuario_proveedor-relación-muchos-a-muchos)
+    - [6. familia\_proveedor (Relación muchos a muchos)](#6-familia_proveedor-relación-muchos-a-muchos)
     - [7. Pedido\_Periodico](#7-pedido_periodico)
     - [8. Pago (Nueva)](#8-pago-nueva)
     - [9. Notificacion (Nueva)](#9-notificacion-nueva)
@@ -1057,14 +1057,14 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 - **Producto**: Almacena la información de los productos.
 - **Pedido**: Almacena la información de los pedidos.
 - **Detalle_Pedido**: Relaciona los pedidos con los productos.
-- **usuario_proveedor**: Relación muchos a muchos entre usuarios y proveedores.
+- **familia_proveedor**: Relación muchos a muchos entre familias y proveedores.
 - **Pedido_Periodico**: Almacena la información de los pedidos periódicos.
 - **Pago**: Almacena la información de los pagos.
 - **Notificacion**: Almacena las notificaciones enviadas a los usuarios.
 
 #### Diagrama:
 ```
-[Usuario] --< [usuario_proveedor] >-- [Proveedor]
+[Familia] --< [familia_proveedor] >-- [Proveedor]
 [Proveedor] --< [Producto]
 [Usuario] --< [Pedido] >-- [Proveedor]
 [Pedido] --< [Detalle_Pedido] >-- [Producto]
@@ -1081,13 +1081,14 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
 | `id_usuario`     | `SERIAL`          | Clave primaria.                      |
-| `Nombre`         | `VARCHAR(100)`    | Nombre del usuario.                  |
-| `Correo`         | `VARCHAR(100)`    | Correo electrónico (único).          |
-| `Contraseña`     | `VARCHAR(100)`    | Contraseña del usuario.              |
-| `Movil`          | `VARCHAR(20)`     | Teléfono móvil del usuario.          |
-| `Rol`            | `VARCHAR(50)`     | Rol del usuario (admin, gestor, usuario). |
-| `Activo`         | `BOOLEAN`         | Indica si el usuario está activo.    |
-| `Saldo`          | `DECIMAL(10, 2)`  | Saldo actual del usuario.            |
+| `nombre`         | `VARCHAR(100)`    | Nombre del usuario.                  |
+| `correo`         | `VARCHAR(100)`    | Correo electrónico (único).          |
+| `pass`           | `VARCHAR(100)`    | Contraseña hasheada del usuario.     |
+| `rol`            | `VARCHAR(50)`     | Rol del usuario (admin, gestor, usuario). |
+| `movil`          | `VARCHAR(20)`     | Teléfono móvil del usuario.          |
+| `familia`        | `INTEGER`        | ID de la familia a la que pertenece. |
+| `activo`         | `BOOLEAN`        | Indica si el usuario está activo.    |
+| `fecha_modificacion` | `TIMESTAMP`   | Fecha de última modificación.        |
 
 ---
 
@@ -1095,61 +1096,65 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
 | `id_proveedor`   | `SERIAL`          | Clave primaria.                      |
-| `Nombre`         | `VARCHAR(100)`    | Nombre del proveedor/grupo productos |
-| `Contacto`       | `VARCHAR(100)`    | Nombre de la persona de contacto.    |
-| `Telefono`       | `VARCHAR(20)`     | Teléfono del proveedor.              |
-| `Movil`          | `VARCHAR(20)`     | Teléfono móvil del proveedor.        |
-| `Correo`         | `VARCHAR(100)`    | Correo electrónico del proveedor.    |
-| `Metodo_Pago`    | `VARCHAR(300)`    | Como se paga al proveedor            |
-| `Envio_Movil`    | `BOOLEAN`         | Avisar mediante SMS o WhatsApp.      |
-| `Envio_Mail`     | `BOOLEAN`         | Avisar mediante correo electrónico.  |
+| `nombre`         | `VARCHAR(100)`    | Nombre del proveedor/grupo productos |
+| `contacto`       | `VARCHAR(100)`    | Nombre de la persona de contacto.    |
+| `telefono`       | `VARCHAR(20)`     | Teléfono del proveedor.              |
+| `movil`          | `VARCHAR(20)`     | Teléfono móvil del proveedor.        |
+| `correo`         | `VARCHAR(100)`    | Correo electrónico del proveedor.    |
+| `metodo_pago`    | `VARCHAR(300)`   | Método de pago al proveedor.         |
+| `frecuencia_pedido_aproximada` | `VARCHAR(50)` | Frecuencia aproximada de pedidos (semanal, mensual, etc.). |
+| `envio_movil`    | `BOOLEAN`         | Avisar mediante SMS o WhatsApp.      |
+| `envio_mail`     | `BOOLEAN`         | Avisar mediante correo electrónico.  |
+| `activo`         | `BOOLEAN`        | Indica si el proveedor está activo.  |
+| `fecha_modificacion` | `TIMESTAMP`   | Fecha de última modificación.        |
 
 ---
 
 ### 3. Producto
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
-| `ID_Producto`    | `SERIAL`          | Clave primaria.                      |
-| `Nombre`         | `VARCHAR(100)`    | Nombre del producto.                 |
-| `Imagen`         | `VARCHAR(100)`    | URL relativa de imagen del producto. |
-| `Descripcion`    | `TEXT`            | Descripción del producto.            |
-| `Precio`         | `DECIMAL(10, 2)`  | Precio del producto.                 |
-| `Frecuencia_Pedido` | `VARCHAR(50)`  | Frecuencia de pedido (semanal, mensual, etc.). |
+| `id_producto`    | `SERIAL`          | Clave primaria.                      |
+| `nombre`         | `VARCHAR(100)`    | Nombre del producto.                 |
+| `imagen`         | `VARCHAR(100)`    | URL relativa de imagen del producto. |
+| `descripcion`    | `TEXT`            | Descripción del producto.            |
+| `precio`         | `DECIMAL(10, 2)`  | Precio unitario del producto.        |
 | `id_proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
+| `activo`         | `BOOLEAN`        | Indica si el producto está activo.   |
+| `fecha_modificacion` | `TIMESTAMP`   | Fecha de última modificación.        |
 
 ---
 
 ### 4. Pedido
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
-| `ID_Pedido`      | `SERIAL`          | Clave primaria.                      |
-| `id_usuario_Encargado` | `INT`     | Clave foránea (relación con `Usuario`). |
+| `id_pedido`      | `SERIAL`          | Clave primaria.                      |
+| `id_usuario_encargado` | `INT`     | Clave foránea (relación con `Usuario`). |
 | `id_proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
-| `Fecha_Modificacion` | `TIMESTAMP`       | Fecha y hora de modificacion del pedido. |
-| `Fecha_Apertura` | `TIMESTAMP`       | Fecha y hora de apertura del pedido. |
-| `Fecha_Cierre`   | `TIMESTAMP`       | Fecha límite para modificar el pedido. |
-| `Fecha_Entrega`  | `TIMESTAMP`       | Fecha y hora de entrega.             |
-| `Estado`         | `VARCHAR(50)`     | Estado del pedido (pendiente, en proceso, entregado, repartido, cancelado). |
+| `fecha_apertura` | `TIMESTAMP`       | Fecha y hora de apertura del pedido. |
+| `fecha_cierre`   | `TIMESTAMP`       | Fecha límite para modificar el pedido. |
+| `fecha_entrega`  | `TIMESTAMP`       | Fecha y hora de entrega.             |
+| `estado`         | `VARCHAR(50)`     | Estado del pedido (pendiente, en proceso, entregado, repartido, cancelado). |
+| `fecha_modificacion` | `TIMESTAMP`   | Fecha de última modificación.        |
 
 ---
 
 ### 5. Detalle_Pedido
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
-| `ID_Detalle`     | `SERIAL`          | Clave primaria.                      |
-| `ID_Pedido`      | `INT`             | Clave foránea (relación con `Pedido`). |
-| `ID_Producto`    | `INT`             | Clave foránea (relación con `Producto`). |
-| `Cantidad`       | `INT`             | Cantidad del producto.               |
-| `Precio_Total`   | `DECIMAL(10, 2)`  | Precio total del producto.           |
-| `id_usuario_Comprador` | `INT`     | Clave foránea (relación con `Usuario`). |
-| `Fecha_Modificacion` | `TIMESTAMP`       | Fecha y hora de modificacion del detalle. |
+| `id_detalle`     | `SERIAL`          | Clave primaria.                      |
+| `id_pedido`      | `INT`             | Clave foránea (relación con `Pedido`). |
+| `id_producto`    | `INT`             | Clave foránea (relación con `Producto`). |
+| `cantidad`       | `INT`             | Cantidad del producto.               |
+| `precio_unitario` | `DECIMAL(10, 2)` | Precio unitario del producto.        |
+| `id_usuario_comprador` | `INT`      | Clave foránea (relación con `Usuario`). |
+| `fecha_modificacion` | `TIMESTAMP`  | Fecha de última modificación.        |
 
 ---
 
-### 6. usuario_proveedor (Relación muchos a muchos)
+### 6. familia_proveedor (Relación muchos a muchos)
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
-| `id_usuario`     | `INT`             | Clave foránea (relación con `Usuario`). |
+| `id_familia`     | `INT`             | Clave foránea (relación con `Usuario.familia`). |
 | `id_proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
 
 ---
@@ -1157,38 +1162,41 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 ### 7. Pedido_Periodico
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
-| `ID_Pedido_Periodico` | `SERIAL`    | Clave primaria.                      |
+| `id_pedido_periodico` | `SERIAL`    | Clave primaria.                      |
 | `id_proveedor`   | `INT`             | Clave foránea (relación con `Proveedor`). |
-| `Fecha_Inicio`   | `TIMESTAMP`       | Fecha de inicio del pedido periódico. |
-| `Fecha_Fin`      | `TIMESTAMP`       | Fecha de fin del pedido periódico.   |
-| `Activo`         | `BOOLEAN`         | Indica si el pedido está activo.     |
-| `Periodicidad`   | `INT`             | Días entre pedidos.                  |
-| `Dia_Apertura`   | `INT`             | Día de la semana en que se abre el pedido. |
-| `Dia_Cierre`     | `INT`             | Día de la semana en que se cierra el pedido. |
-| `Dia_Entrega`    | `INT`             | Día aproximado de entrega.           |
+| `fecha_inicio`   | `TIMESTAMP`       | Fecha de inicio del pedido periódico. |
+| `fecha_fin`      | `TIMESTAMP`       | Fecha de fin del pedido periódico.   |
+| `activo`         | `BOOLEAN`         | Indica si el pedido está activo.     |
+| `periodicidad`   | `INT`             | Días entre pedidos.                  |
+| `dia_apertura`   | `INT`             | Día de la semana en que se abre el pedido. |
+| `dia_cierre`     | `INT`             | Día de la semana en que se cierra el pedido. |
+| `dia_entrega`    | `INT`             | Día aproximado de entrega.           |
 
 ---
 
-### 8. Pago (Nueva)
+### 8. Pago
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
-| `ID_Pago`        | `SERIAL`          | Clave primaria.                      |
-| `id_usuario_Deudor` | `INT`         | Clave foránea (relación con `Usuario`). |
-| `id_usuario_Creditor` | `INT`      | Clave foránea (relación con `Usuario`). |
-| `Monto`          | `DECIMAL(10, 2)`  | Monto del pago.                      |
-| `Fecha_Pago`     | `TIMESTAMP`       | Fecha y hora del pago.               |
-| `Estado`         | `VARCHAR(50)`     | Estado del pago (pendiente, completado). |
+| `id_pago`        | `SERIAL`          | Clave primaria.                      |
+| `id_usuario_deudor` | `INT`         | Clave foránea (relación con `Usuario`). |
+| `id_usuario_creditor` | `INT`       | Clave foránea (relación con `Usuario`). |
+| `monto`          | `DECIMAL(10, 2)`  | Monto del pago.                      |
+| `estado`         | `VARCHAR(50)`     | Estado del pago (pendiente, completado). |
+| `periodo`        | `VARCHAR(7)`      | Periodo del pago (YYYY-MM).         |
+| `origen`         | `VARCHAR(50)`     | Origen del pago (manual, liquidacion). |
+| `concepto`       | `TEXT`            | Concepto o descripción del pago.     |
+| `fecha_modificacion` | `TIMESTAMP`   | Fecha de última modificación.        |
 
 ---
 
-### 9. Notificacion (Nueva)
+### 9. Notificacion
 | Columna          | Tipo de Dato      | Descripción                          |
 |------------------|-------------------|--------------------------------------|
-| `ID_Notificacion` | `SERIAL`         | Clave primaria.                      |
+| `id_notificacion` | `SERIAL`         | Clave primaria.                      |
 | `id_usuario`     | `INT`             | Clave foránea (relación con `Usuario`). |
-| `Mensaje`        | `TEXT`            | Contenido de la notificación.        |
-| `Fecha`          | `TIMESTAMP`       | Fecha y hora de la notificación.     |
-| `Leida`          | `BOOLEAN`         | Indica si la notificación ha sido leída. |
+| `mensaje`        | `TEXT`            | Contenido de la notificación.        |
+| `fecha`          | `TIMESTAMP`       | Fecha y hora de la notificación.     |
+| `leida`          | `BOOLEAN`         | Indica si la notificación ha sido leída. |
 
 ---
 
@@ -1637,57 +1645,29 @@ Inicio del servidor Express, configuración de CORS, rutas y middleware.
 
 ### Componente `NavBar`
 - **Descripción**: Barra de navegación principal de la aplicación.
+- **Archivo**: `frontend/src/components/NavBar.vue`
 - **Elementos Clave**:
-  - Enlaces a las secciones principales: Dashboard, Compras, Historial, Configuración, etc.
-  - Botones de "Iniciar Sesión" y "Cerrar Sesión".
-  - Visibilidad condicional de enlaces según el rol del usuario (admin o usuario regular).
+  - Logo Ekonsumo con enlace a inicio.
+  - Menú horizontal con enlaces según estado de autenticación.
+  - Información del usuario (nombre, familia, proveedor gestiona).
+  - Botón "Ayuda" / "Cerrar Sesión".
+  - Contador de pedidos pendientes.
+  - Menú hamburguesa en móviles.
 
-### Componente `Footer`
+### Componente `FooterBar`
 - **Descripción**: Pie de página de la aplicación.
+- **Archivo**: `frontend/src/components/FooterBar.vue`
 - **Elementos Clave**:
-  - Enlaces a redes sociales.
-  - Información de contacto del grupo.
-  - Aviso legal y política de privacidad.
+  - Logo y nombre de la aplicación.
+  - Enlaces a páginas principales.
+  - Año de copyright.
 
-### Componente `ProductCard`
-- **Descripción**: Tarjeta para mostrar información de un producto.
-- **Elementos Clave**:
-  - Imagen del producto.
-  - Nombre y descripción.
-  - Precio.
-  - Botón "Añadir al Pedido".
-
-### Componente `PedidoCard`
-- **Descripción**: Tarjeta para mostrar información de un pedido.
-- **Elementos Clave**:
-  - Fecha de apertura y cierre.
-  - Estado del pedido.
-  - Botón "Ver Detalles".
-
-### Componente `Notification`
-- **Descripción**: Componente para mostrar notificaciones al usuario.
-- **Elementos Clave**:
-  - Mensaje de la notificación.
-  - Fecha de la notificación.
-  - Botón "Marcar como Leída".
-
-### Componente `UserForm`
-- **Descripción**: Formulario para añadir o editar usuarios.
-- **Elementos Clave**:
-  - Campos para nombre, correo, móvil, rol, y proveedores asignados.
-  - Botón "Guardar Cambios".
-
-### Componente `ProviderForm`
-- **Descripción**: Formulario para añadir o editar proveedores.
-- **Elementos Clave**:
-  - Campos para nombre, contacto, teléfono, correo, y método de pago.
-  - Botón "Guardar Cambios".
-
-### Componente `OrderForm`
-- **Descripción**: Formulario para abrir o editar pedidos.
-- **Elementos Clave**:
-  - Campos para fecha de apertura, fecha de cierre, fecha de entrega, y periodicidad.
-  - Botón "Guardar Cambios".
+### Nota sobre componentes UI
+Los siguientes componentes documentados en versiones anteriores están **integrados directamente en las páginas** como secciones o modales:
+- `ProductCard` - Tarjetas de producto integradas en `ComprasPage.vue` y `GestionProductosPage.vue`
+- `PedidoCard` - Tarjetas de pedido integradas en `GestionPedidosPage.vue`
+- `Notification` - Lista de notificaciones integrada en `GestionNotificacionesPage.vue`
+- `UserForm`, `ProviderForm`, `OrderForm` - Formularios en modales de sus respective páginas de gestión
 
 ---
 
@@ -1745,11 +1725,11 @@ El proyecto se encuentra en **desarrollo activo**.
 
 ### Frontend (Vue.js 3 + Vite)
 - [x] SPA con Vue Router
-- [x] Pinia para estado global
-- [x] Axios para peticiones HTTP
-- [x] Páginas: Home, Login, Registro, Dashboard, Compras, Historial
-- [x] Gestión: Usuarios, Proveedores, Productos, Pedidos, Pagos
-- [x] Diseño unificado con CSS variables
+- [x] Pinia stores: `authStore` (autenticación), `alertStore` (alertas UI)
+- [x] Axios para peticiones HTTP con interceptores
+- [x] Páginas: Home, Login, Registro, Dashboard, Compras, Historial, Configuracion, Soporte
+- [x] Gestión: Usuarios, Proveedores, Productos, Pedidos, Pagos, Notificaciones, Pedidos Periódicos, Saldos
+- [x] Diseño unificado con CSS variables (`variables.css`, `components.css`, `global.css`)
 
 ### Backend (Node.js + Express)
 - [x] API REST con Express 5.x
