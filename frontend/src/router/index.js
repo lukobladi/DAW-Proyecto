@@ -40,8 +40,8 @@ const routes = [
     component: RecuperarPasswordPage,
   },
   {
-    path: '/reset-password/:token',
-    name: 'ResetPassword',
+    path: '/recuperar-password/:token',
+    name: 'RecuperarPasswordToken',
     component: RecuperarPasswordPage,
     props: true,
   },

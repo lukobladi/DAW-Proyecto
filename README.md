@@ -9,7 +9,7 @@
 
 Tener instalado el siguiente software antes de empezar:
 
-- [Node.js](https://nodejs.org/)
+- [Node.js](https://nodejs.org/) v22.12.0 (ver `.nvmrc`)
 - [npm](https://www.npmjs.com/) (normalmente se instala con Node.js)
 - [PostgreSQL](https://www.postgresql.org/)
 
@@ -21,15 +21,8 @@ Tener instalado el siguiente software antes de empezar:
     cd DAW-Proyecto
     ```
 
-2.  **Instala las dependencias del Backend:**
+2.  **Instala todas las dependencias (proyecto monorepo con workspaces):**
     ```bash
-    cd Backend
-    npm install
-    ```
-
-3.  **Instala las dependencias del Frontend:**
-    ```bash
-    cd ../frontend
     npm install
     ```
 
@@ -39,26 +32,51 @@ Tener instalado el siguiente software antes de empezar:
     - Crea una base de datos en PostgreSQL para el proyecto.
     - Puedes usar un cliente como `psql` o una herramienta gráfica como pgAdmin.
 
-2.  **Variables de Entorno:**
-    - Ve al directorio `Backend`.
-    - Crea una copia del archivo `.env.example` y renómbrala a `.env`.
-    - Abre el archivo `.env` y configura las variables de la base de datos (`DB_USER`, `DB_PASSWORD`, `DB_NAME`) y el `JWT_SECRET`.
+2.  **Variables de Entorno Backend:**
+    - Ve al directorio `backend`.
+    - Crea una copia del archivo `.env.ejemplo` y renómbrala a `.env`.
+    - Abre el archivo `.env` y configura las variables:
+      - `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` - Conexión a PostgreSQL
+      - `JWT_SECRET` - Clave secreta para tokens JWT
+      - `PORT` - Puerto del servidor (por defecto 3000)
+      - `FRONTEND_URL` - URL del frontend (ej: http://localhost:8080)
+      - Variables de email (EMAIL_USER, EMAIL_PASS, OAUTH_*)
+
+3.  **Variables de Entorno Frontend:**
+    - Ve al directorio `frontend`.
+    - Crea un archivo `.env.development` con:
+      - `VITE_API_URL=http://localhost:3000`
 
 ### Ejecución
 
 1.  **Inicia el servidor del Backend:**
     ```bash
-    cd Backend
-    npm start
+    npm run start:backend
+    # O desde el directorio backend:
+    cd backend && npm start
     ```
-    El servidor se ejecutará en `http://localhost:3000` (o el puerto que hayas definido en `.env`).
+    El servidor se ejecutará en `http://localhost:3000`.
 
-2.  **Inicia el servidor del Frontend:**
+2.  **Inicia el servidor del Frontend (en otra terminal):**
     ```bash
-    cd frontend
-    npm run serve
+    npm run start:frontend
+    # O desde el directorio frontend:
+    cd frontend && npm run dev
     ```
     La aplicación frontend estará disponible en `http://localhost:8080`.
+
+### Comandos Disponibles
+
+```bash
+# Desde la raíz del proyecto:
+npm run start:backend      # Iniciar backend
+npm run start:frontend     # Iniciar frontend
+npm run test:backend       # Tests del backend (Jest)
+npm run test:frontend      # Tests del frontend (Vitest)
+npm run lint:backend       # Lint del backend
+npm run lint:frontend      # Lint del frontend
+npm run build:frontend     # Build de producción del frontend
+```
 
 ---
 
@@ -71,6 +89,7 @@ Tener instalado el siguiente software antes de empezar:
     - [Instalación](#instalación)
     - [Configuración](#configuración)
     - [Ejecución](#ejecución)
+    - [Comandos Disponibles](#comandos-disponibles)
   - [Tabla de Contenidos](#tabla-de-contenidos)
 - [Descripción del Proyecto](#descripción-del-proyecto)
   - [Contexto Actual](#contexto-actual)
@@ -169,10 +188,9 @@ Tener instalado el siguiente software antes de empezar:
     - [2. **Modelos (`src/models/`)**](#2-modelos-srcmodels)
     - [3. **Rutas (`src/routes/`)**](#3-rutas-srcroutes)
     - [4. **Configuración (`src/config/`)**](#4-configuración-srcconfig)
-    - [5. **Middleware (`src/middleware/`)**](#5-middleware-srcmiddleware)
-    - [6. **Utilidades (`src/utils/`)**](#6-utilidades-srcutils)
-    - [7. **Punto de Entrada (`src/server.js`)**](#7-punto-de-entrada-srcserverjs)
-    - [8. **Configuración Principal (`src/app.js`)**](#8-configuración-principal-srcappjs)
+    - [5. **Middleware (`src/middlewares/`)**](#5-middleware-srcmiddlewares)
+    - [6. **Servicios (`src/services/`)**](#6-servicios-srcservices)
+    - [7. **Punto de Entrada (`index.js`)**](#7-punto-de-entrada-indexjs)
   - [Requisitos del Backend](#requisitos-del-backend)
     - [1. **Autenticación y Autorización**](#1-autenticación-y-autorización)
     - [2. **Gestión de Productos**](#2-gestión-de-productos)
@@ -187,7 +205,10 @@ Tener instalado el siguiente software antes de empezar:
     - [3. **Productos**](#3-productos)
     - [4. **Proveedores**](#4-proveedores)
     - [5. **Pedidos**](#5-pedidos)
-    - [6. **Notificaciones**](#6-notificaciones-1)
+    - [6. **Detalle Pedido**](#6-detalle-pedido)
+    - [7. **Pagos**](#7-pagos)
+    - [8. **Pedido Periódico**](#8-pedido-periódico)
+    - [9. **Notificaciones**](#9-notificaciones)
   - [Diseño Visual](#diseño-visual)
     - [1. Guía de Estilo](#1-guía-de-estilo)
       - [Paleta de Colores](#paleta-de-colores)
@@ -228,6 +249,8 @@ Tener instalado el siguiente software antes de empezar:
     - [Pantalla de Notificaciones](#pantalla-de-notificaciones-1)
   - [Estado del Proyecto](#estado-del-proyecto)
     - [Funcionalidades implementadas:](#funcionalidades-implementadas)
+    - [Frontend (Vue.js 3 + Vite)](#frontend-vuejs-3--vite)
+    - [Backend (Node.js + Express)](#backend-nodejs--express)
     - [Funcionalidades pendientes:](#funcionalidades-pendientes)
 
 ---
@@ -1183,42 +1206,55 @@ El backend está estructurado de la siguiente manera:
 backend/
 ├── src/
 │   ├── controllers/        # Controladores para manejar las solicitudes
-│   │   ├── authController.js # Controlador de autenticación
-│   │   ├── userController.js # Controlador de usuarios
-│   │   ├── productController.js # Controlador de productos
-│   │   ├── providerController.js # Controlador de proveedores
-│   │   ├── orderController.js # Controlador de pedidos
-│   │   └── notificationController.js # Controlador de notificaciones
+│   │   ├── UsuarioController.js
+│   │   ├── ProductoController.js
+│   │   ├── ProveedorController.js
+│   │   ├── PedidoController.js
+│   │   ├── DetallePedidoController.js
+│   │   ├── PagoController.js
+│   │   ├── PedidoPeriodicoController.js
+│   │   ├── NotificacionController.js
+│   │   └── FamiliaProveedorController.js
 │   ├── models/             # Modelos de datos
-│   │   ├── userModel.js    # Modelo de usuario
-│   │   ├── productModel.js # Modelo de producto
-│   │   ├── providerModel.js # Modelo de proveedor
-│   │   ├── orderModel.js   # Modelo de pedido
-│   │   └── notificationModel.js # Modelo de notificación
+│   │   ├── Usuario.js
+│   │   ├── Producto.js
+│   │   ├── Proveedor.js
+│   │   ├── Pedido.js
+│   │   ├── DetallePedido.js
+│   │   ├── Pago.js
+│   │   ├── PedidoPeriodico.js
+│   │   ├── Notificacion.js
+│   │   └── FamiliaProveedor.js
 │   ├── routes/             # Rutas de la API
-│   │   ├── authRoutes.js   # Rutas de autenticación
-│   │   ├── userRoutes.js   # Rutas de usuarios
-│   │   ├── productRoutes.js # Rutas de productos
-│   │   ├── providerRoutes.js # Rutas de proveedores
-│   │   ├── orderRoutes.js  # Rutas de pedidos
-│   │   └── notificationRoutes.js # Rutas de notificaciones
+│   │   ├── index.js        # Aggregación de rutas
+│   │   ├── UsuarioRoutes.js
+│   │   ├── ProductoRoutes.js
+│   │   ├── ProveedorRoutes.js
+│   │   ├── PedidoRoutes.js
+│   │   ├── DetallePedidoRoutes.js
+│   │   ├── PagoRoutes.js
+│   │   ├── PedidoPeriodicoRoutes.js
+│   │   ├── NotificacionRoutes.js
+│   │   └── FamiliaProveedorRoutes.js
+│   ├── middlewares/         # Middleware para la aplicación
+│   │   ├── auth.js         # Middleware de autenticación JWT
+│   │   ├── admin.js        # Middleware para verificar rol admin
+│   │   ├── gestor.js       # Middleware para verificar rol gestor
+│   │   ├── adminOrGestor.js # Middleware combinado
+│   │   ├── validators.js   # Validadores con express-validator
+│   │   └── validar.js      # Manejo de errores de validación
+│   ├── services/           # Servicios externos
+│   │   └── emailService.js # Envío de correos con nodemailer
 │   ├── config/             # Configuración de la aplicación
-│   │   ├── dbConfig.js     # Configuración de la base de datos
-│   │   ├── serverConfig.js # Configuración del servidor
-│   │   └── swaggerConfig.js # Configuración de Swagger
-│   ├── middleware/         # Middleware para la aplicación
-│   │   ├── authMiddleware.js # Middleware de autenticación
-│   │   ├── errorMiddleware.js # Middleware de manejo de errores
-│   │   └── validationMiddleware.js # Middleware de validación
-│   ├── utils/              # Utilidades y funciones auxiliares
-│   │   ├── jwtUtils.js     # Utilidades para manejar JWT
-│   │   ├── emailUtils.js   # Utilidades para enviar correos electrónicos
-│   │   └── smsUtils.js     # Utilidades para enviar SMS
-│   ├── app.js              # Configuración principal de la aplicación
-│   └── server.js           # Punto de entrada del servidor
-├── package.json            # Dependencias y scripts del proyecto
-├── .env                    # Variables de entorno
-└── swagger.yaml            # Documentación de la API con Swagger
+│   │   ├── db.js          # Configuración de PostgreSQL
+│   │   ├── logger.js      # Winston logger
+│   │   └── multer.js      # Subida de archivos
+│   ├── app.js              # Configuración principal de Express
+│   └── server.js           # Punto de entrada (desuso, index.js es el actual)
+├── tests/                  # Tests Jest
+├── index.js                # Punto de entrada principal
+├── package.json
+└── .env
 ```
 
 ---
@@ -1226,48 +1262,56 @@ backend/
 ## Descripción de los Archivos
 
 ### 1. **Controladores (`src/controllers/`)**
-- **`authController.js`**: Maneja la autenticación de usuarios (registro, inicio de sesión, recuperación de contraseña).
-- **`userController.js`**: Maneja las operaciones relacionadas con los usuarios (crear, editar, eliminar).
-- **`productController.js`**: Maneja las operaciones relacionadas con los productos (crear, editar, eliminar).
-- **`providerController.js`**: Maneja las operaciones relacionadas con los proveedores (crear, editar, eliminar).
-- **`orderController.js`**: Maneja las operaciones relacionadas con los pedidos (crear, editar, eliminar).
-- **`notificationController.js`**: Maneja las operaciones relacionadas con las notificaciones (crear, editar, eliminar).
+- **`UsuarioController.js`**: Registro, login, perfil, recuperación de contraseña.
+- **`ProductoController.js`**: CRUD de productos con gestión de imágenes.
+- **`ProveedorController.js`**: CRUD de proveedores.
+- **`PedidoController.js`**: Gestión de pedidos abiertos.
+- **`DetallePedidoController.js`**: Líneas de pedido (productos añadidos).
+- **`PagoController.js`**: Gestión de pagos y liquidaciones.
+- **`PedidoPeriodicoController.js`**: Pedidos recurrentes automáticos.
+- **`NotificacionController.js`**: Envío de notificaciones.
+- **`FamiliaProveedorController.js`**: Relación familias-proveedores.
 
 ### 2. **Modelos (`src/models/`)**
-- **`userModel.js`**: Define el esquema y las operaciones para la tabla de usuarios.
-- **`productModel.js`**: Define el esquema y las operaciones para la tabla de productos.
-- **`providerModel.js`**: Define el esquema y las operaciones para la tabla de proveedores.
-- **`orderModel.js`**: Define el esquema y las operaciones para la tabla de pedidos.
-- **`notificationModel.js`**: Define el esquema y las operaciones para la tabla de notificaciones.
+- **`Usuario.js`**: Esquema y operaciones para la tabla usuarios.
+- **`Producto.js`**: Esquema y operaciones para la tabla productos.
+- **`Proveedor.js`**: Esquema y operaciones para la tabla proveedores.
+- **`Pedido.js`**: Esquema y operaciones para la tabla pedidos.
+- **`DetallePedido.js`**: Esquema y operaciones para detalles de pedido.
+- **`Pago.js`**: Esquema y operaciones para la tabla pagos.
+- **`PedidoPeriodico.js`**: Esquema y operaciones para pedidos periódicos.
+- **`Notificacion.js`**: Esquema y operaciones para notificaciones.
+- **`FamiliaProveedor.js`**: Esquema y operaciones para relación familias-proveedores.
 
 ### 3. **Rutas (`src/routes/`)**
-- **`authRoutes.js`**: Define las rutas de autenticación (registro, inicio de sesión, recuperación de contraseña).
-- **`userRoutes.js`**: Define las rutas para las operaciones de usuarios.
-- **`productRoutes.js`**: Define las rutas para las operaciones de productos.
-- **`providerRoutes.js`**: Define las rutas para las operaciones de proveedores.
-- **`orderRoutes.js`**: Define las rutas para las operaciones de pedidos.
-- **`notificationRoutes.js`**: Define las rutas para las operaciones de notificaciones.
+- **`index.js`**: Agrega todas las rutas bajo `/api`
+- **`UsuarioRoutes.js`**: Rutas de autenticación y usuarios.
+- **`ProductoRoutes.js`**: Rutas de productos.
+- **`ProveedorRoutes.js`**: Rutas de proveedores.
+- **`PedidoRoutes.js`**: Rutas de pedidos.
+- **`DetallePedidoRoutes.js`**: Rutas de detalles de pedido.
+- **`PagoRoutes.js`**: Rutas de pagos.
+- **`PedidoPeriodicoRoutes.js`**: Rutas de pedidos periódicos.
+- **`NotificacionRoutes.js`**: Rutas de notificaciones.
 
 ### 4. **Configuración (`src/config/`)**
-- **`dbConfig.js`**: Configura la conexión a la base de datos PostgreSQL.
-- **`serverConfig.js`**: Configura el servidor Express.
-- **`swaggerConfig.js`**: Configura Swagger para la documentación de la API.
+- **`db.js`**: Configura la conexión a PostgreSQL usando `pg`.
+- **`logger.js`**: Configura Winston para logging.
+- **`multer.js`**: Configura Multer para subida de archivos.
 
-### 5. **Middleware (`src/middleware/`)**
-- **`authMiddleware.js`**: Middleware para verificar la autenticación de usuarios.
-- **`errorMiddleware.js`**: Middleware para manejar errores en la aplicación.
-- **`validationMiddleware.js`**: Middleware para validar los datos de las solicitudes.
+### 5. **Middleware (`src/middlewares/`)**
+- **`auth.js`**: Verifica token JWT y extrae usuario.
+- **`admin.js`**: Verifica que el usuario tenga rol admin.
+- **`gestor.js`**: Verifica que el usuario tenga rol gestor.
+- **`adminOrGestor.js`**: Verifica admin o gestor.
+- **`validators.js`**: Validadores para todas las entidades.
+- **`validar.js`**: Maneja errores de validación.
 
-### 6. **Utilidades (`src/utils/`)**
-- **`jwtUtils.js`**: Funciones auxiliares para manejar JWT (generar, verificar).
-- **`emailUtils.js`**: Funciones auxiliares para enviar correos electrónicos.
-- **`smsUtils.js`**: Funciones auxiliares para enviar SMS.
+### 6. **Servicios (`src/services/`)**
+- **`emailService.js`**: Envío de emails con Nodemailer + Gmail OAuth2.
 
-### 7. **Punto de Entrada (`src/server.js`)**
-Configura y arranca el servidor Express.
-
-### 8. **Configuración Principal (`src/app.js`)**
-Configura la aplicación Express, incluyendo las rutas, middleware y conexión a la base de datos.
+### 7. **Punto de Entrada (`index.js`)**
+Inicio del servidor Express, configuración de CORS, rutas y middleware.
 
 ---
 
@@ -1302,43 +1346,61 @@ Configura la aplicación Express, incluyendo las rutas, middleware y conexión a
 ## Ejemplo de Rutas de la API
 
 ### 1. **Autenticación**
-- **POST `/api/auth/register`**: Registro de nuevos usuarios.
-- **POST `/api/auth/login`**: Inicio de sesión de usuarios.
-- **POST `/api/auth/recover`**: Recuperación de contraseña.
+- **POST `/api/usuarios/registrar`**: Registro de nuevos usuarios.
+- **POST `/api/usuarios/login`**: Inicio de sesión de usuarios.
+- **POST `/api/usuarios/recuperar-password`**: Solicitar recuperación de contraseña.
+- **POST `/api/usuarios/reset-password`**: Restablecer contraseña con token.
 
 ### 2. **Usuarios**
-- **GET `/api/users`**: Obtener la lista de usuarios.
-- **GET `/api/users/:id`**: Obtener la información de un usuario específico.
-- **PUT `/api/users/:id`**: Actualizar la información de un usuario.
-- **DELETE `/api/users/:id`**: Eliminar un usuario.
+- **GET `/api/usuarios/obtenerTodos`**: Obtener la lista de usuarios.
+- **GET `/api/usuarios/obtener/:id`**: Obtener la información de un usuario específico.
+- **PUT `/api/usuarios/actualizar/:id`**: Actualizar la información de un usuario.
+- **PATCH `/api/usuarios/activar/:id`**: Activar/desactivar un usuario.
+- **DELETE `/api/usuarios/eliminar/:id`**: Eliminar un usuario.
 
 ### 3. **Productos**
-- **GET `/api/products`**: Obtener la lista de productos.
-- **GET `/api/products/:id`**: Obtener la información de un producto específico.
-- **POST `/api/products`**: Añadir un nuevo producto.
-- **PUT `/api/products/:id`**: Actualizar la información de un producto.
-- **DELETE `/api/products/:id`**: Eliminar un producto.
+- **GET `/api/productos/obtenerTodos`**: Obtener la lista de productos.
+- **GET `/api/productos/misProductos`**: Obtener productos del proveedor gestionado.
+- **POST `/api/productos/crear`**: Crear un nuevo producto (con imagen).
+- **PUT `/api/productos/actualizar/:id`**: Actualizar un producto (con imagen).
+- **DELETE `/api/productos/eliminar/:id`**: Eliminar un producto.
+- **PATCH `/api/productos/cambiarEstadoActivo/:id`**: Activar/desactivar producto.
 
 ### 4. **Proveedores**
-- **GET `/api/providers`**: Obtener la lista de proveedores.
-- **GET `/api/providers/:id`**: Obtener la información de un proveedor específico.
-- **POST `/api/providers`**: Añadir un nuevo proveedor.
-- **PUT `/api/providers/:id`**: Actualizar la información de un proveedor.
-- **DELETE `/api/providers/:id`**: Eliminar un proveedor.
+- **GET `/api/proveedores/obtenerTodos`**: Obtener la lista de proveedores.
+- **POST `/api/proveedores/crear`**: Crear un nuevo proveedor.
+- **PATCH `/api/proveedores/actualizar/:id`**: Actualizar un proveedor.
+- **DELETE `/api/proveedores/eliminar/:id`**: Eliminar un proveedor.
+- **PATCH `/api/proveedores/cambiarEstadoActivo/:id`**: Activar/desactivar proveedor.
 
 ### 5. **Pedidos**
-- **GET `/api/orders`**: Obtener la lista de pedidos.
-- **GET `/api/orders/:id`**: Obtener la información de un pedido específico.
-- **POST `/api/orders`**: Crear un nuevo pedido.
-- **PUT `/api/orders/:id`**: Actualizar la información de un pedido.
-- **DELETE `/api/orders/:id`**: Eliminar un pedido.
+- **GET `/api/pedidos/obtenerTodos`**: Obtener todos los pedidos (admin).
+- **GET `/api/pedidos/misPedidos`**: Obtener pedidos del usuario.
+- **POST `/api/pedidos/crear`**: Crear un nuevo pedido.
+- **PUT `/api/pedidos/actualizar/:id`**: Actualizar un pedido.
+- **DELETE `/api/pedidos/eliminar/:id`**: Eliminar un pedido.
+- **PATCH `/api/pedidos/cambiarEstado/:id`**: Cambiar estado del pedido.
 
-### 6. **Notificaciones**
-- **GET `/api/notifications`**: Obtener la lista de notificaciones.
-- **GET `/api/notifications/:id`**: Obtener la información de una notificación específica.
-- **POST `/api/notifications`**: Crear una nueva notificación.
-- **PUT `/api/notifications/:id`**: Actualizar la información de una notificación.
-- **DELETE `/api/notifications/:id`**: Eliminar una notificación.
+### 6. **Detalle Pedido**
+- **GET `/api/detalle-pedido/pedido/:idPedido`**: Obtener detalles de un pedido.
+- **POST `/api/detalle-pedido/crear/`**: Crear detalle de pedido.
+- **PUT `/api/detalle-pedido/actualizar/:idDetalle`**: Actualizar detalle.
+- **DELETE `/api/detalle-pedido/eliminar/:idDetalle`**: Eliminar detalle.
+
+### 7. **Pagos**
+- **GET `/api/pagos/obtenerTodos/`**: Obtener todos los pagos.
+- **GET `/api/pagos/resumen-mensual`**: Obtener resumen mensual de pagos.
+- **PATCH `/api/pagos/:id/marcar-pagado`**: Marcar como pagado (enviado).
+- **PATCH `/api/pagos/:id/marcar-recibido`**: Marcar como recibido.
+
+### 8. **Pedido Periódico**
+- **GET `/api/pedido-periodico/obtenerTodos`**: Obtener pedidos periódicos.
+- **POST `/api/pedido-periodico/crear`**: Crear pedido periódico.
+- **PUT `/api/pedido-periodico/actualizar/:id`**: Actualizar pedido periódico.
+- **DELETE `/api/pedido-periodico/eliminar/:id`**: Eliminar pedido periódico.
+
+### 9. **Notificaciones**
+- **POST `/api/notificaciones/enviar/`**: Enviar una notificación.
 
 ---
 
@@ -1663,25 +1725,46 @@ El proyecto se encuentra en **desarrollo activo**.
 
 ### Funcionalidades implementadas:
 
-- [x] Autenticación JWT
+- [x] Autenticación JWT con login por correo/móvil
 - [x] Registro de usuarios
-- [x] Recuperación de contraseña
+- [x] Recuperación de contraseña por email con tokens JWT
 - [x] Gestión de usuarios (admin)
 - [x] Gestión de proveedores
-- [x] Gestión de productos (con imágenes) 
+- [x] Gestión de productos (con imágenes via Multer)
 - [x] Sistema de pedidos (abierto/cerrado)
 - [x] Pedidos periódicos
-- [x] Gestión de pagos
-- [x] Sistema de liquidaciones mensuales
-- [x] Notificaciones
-- [x] Sistema de familias
-- [x] Notificación a administradores por nuevo registro
+- [x] Gestión de pagos y liquidaciones mensuales
+- [x] Sistema de familias (agrupación de usuarios)
+- [x] Notificaciones por email a administradores
+- [x] Dashboard con estado de pedidos pendientes
+- [x] Diseño responsivo con CSS unificado (variables, componentes, global)
+- [x] Navbar rediseñada con logo personalizado
+- [x] Tests con Jest (backend) y Vitest (frontend)
+- [x] Linting con ESLint y Prettier
+- [x] API documentada con Swagger
+
+### Frontend (Vue.js 3 + Vite)
+- [x] SPA con Vue Router
+- [x] Pinia para estado global
+- [x] Axios para peticiones HTTP
+- [x] Páginas: Home, Login, Registro, Dashboard, Compras, Historial
+- [x] Gestión: Usuarios, Proveedores, Productos, Pedidos, Pagos
+- [x] Diseño unificado con CSS variables
+
+### Backend (Node.js + Express)
+- [x] API REST con Express 5.x
+- [x] PostgreSQL con biblioteca `pg`
+- [x] JWT para autenticación
+- [x] Middlewares de autorización (admin, gestor, adminOrGestor)
+- [x] Validación con express-validator
+- [x] Subida de imágenes con Multer
+- [x] Envío de emails con Nodemailer + OAuth2
+- [x] Logger con Winston
 
 ### Funcionalidades pendientes:
-- [ ] Mas tests
-- [ ] Tests completos
-- [ ] Despliegue a producción
-- [ ] Documentación - README.md
+- [ ] Tests unitarios más exhaustivos
+- [ ] Tests de integración
 - [ ] Documentación - docs/DOCUMENTACION_COMPLETA.odt
-- [ ] Documentación - (docs/instalar_puesto_desarrollador_debian.odt)
-- [ ] Documentacion - (docs/instalar_puesto_desarrollador_windows.odt)
+- [ ] Documentación - docs/instalar_puesto_desarrollador_debian.odt
+- [ ] Documentación - docs/instalar_puesto_desarrollador_windows.odt
+- [ ] Despliegue a producción en VPS

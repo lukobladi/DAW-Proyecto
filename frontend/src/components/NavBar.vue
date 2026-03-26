@@ -2,10 +2,8 @@
   <nav class="navbar">
     <div class="navbar-container">
       <router-link to="/" class="navbar-brand">
-        <span class="navbar-logo">
-          <i class="fas fa-leaf"></i>
-          Ekonsumo
-        </span>
+        <img src="@/assets/cestakonsumo.png" alt="Ekonsumo" class="navbar-logo-img">
+        <span class="navbar-logo-text">Ekonsumo</span>
       </router-link>
 
       <div class="navbar-user-info" v-if="isAuthenticated && userName">
@@ -234,17 +232,15 @@ export default {
   flex-shrink: 0;
 }
 
-.navbar-logo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.navbar-logo-img {
+  height: 36px;
+  width: auto;
+}
+
+.navbar-logo-text {
   color: #4CAF50;
   font-weight: 700;
   font-size: 1.3rem;
-}
-
-.navbar-logo i {
-  font-size: 1.1rem;
 }
 
 .navbar-user-info {
