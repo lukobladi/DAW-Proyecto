@@ -320,23 +320,11 @@ export default {
 </script>
 
 <style scoped>
-.estado {
-  padding: 2rem;
-  text-align: center;
-  color: var(--color-text-muted);
-  background: #fff;
-  border-radius: var(--radius-lg);
-}
-
-.estado.error {
-  color: var(--color-danger);
-}
-
 .producto-card {
   border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: var(--radius-lg);
   padding: 0;
-  background: #fff;
+  background: var(--color-bg);
   overflow: hidden;
   transition: all var(--transition-normal);
   height: 100%;
@@ -353,110 +341,23 @@ export default {
   width: 100%;
   height: 180px;
   object-fit: cover;
-  background: #f5f5f5;
+  background: var(--color-bg-secondary);
 }
 
 .producto-card h5 {
-  padding: 1rem 1rem 0.25rem;
+  padding: var(--spacing-md) var(--spacing-md) 0.25rem;
   margin: 0;
-  color: var(--color-text);
-  font-size: 1.1rem;
+  font-size: var(--font-size-lg);
 }
 
 .producto-card p {
-  padding: 0 1rem;
+  padding: 0 var(--spacing-md);
   margin: 0.25rem 0;
   color: var(--color-text-light);
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
 }
 
 .producto-card .btn {
-  margin: 0.75rem;
-}
-
-.estado-pill {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: 0.8rem;
-  letter-spacing: 0.025em;
-}
-
-.estado-pill.activo {
-  background: #d1e7dd;
-  color: #0f5132;
-}
-
-.estado-pill.inactivo {
-  background: #f8d7da;
-  color: #842029;
-}
-
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(2px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1050;
-  animation: fadeIn 0.2s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.modal-card {
-  width: min(92vw, 560px);
-  max-height: 90vh;
-  overflow-y: auto;
-  background: #fff;
-  border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  box-shadow: var(--shadow-lg);
-  animation: slideUp 0.3s ease;
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.modal-card h4 {
-  margin-bottom: 1.25rem;
-  color: var(--color-text);
-}
-
-.error-text {
-  color: var(--color-danger);
-  font-size: 0.85rem;
-  margin-top: 0.25rem;
-  display: block;
-  animation: slideDown 0.2s ease;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.is-invalid {
-  border-color: var(--color-danger) !important;
+  margin: var(--spacing-md);
 }
 </style>

@@ -225,53 +225,5 @@ export default {
 </script>
 
 <style scoped>
-.estado {
-  padding: 1rem 0;
-}
-
-.estado.error {
-  color: #dc3545;
-}
-
-.acciones {
-  display: flex;
-  gap: 0.4rem;
-}
-
-.estado-pill {
-  display: inline-block;
-  padding: 0.15rem 0.6rem;
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: 0.8rem;
-}
-
-.estado-pill.activo {
-  background: #d1e7dd;
-  color: #0f5132;
-}
-
-.estado-pill.inactivo {
-  background: #f8d7da;
-  color: #842029;
-}
-
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1050;
-}
-
-.modal-card {
-  width: min(92vw, 520px);
-  max-height: 90vh;
-  overflow: auto;
-  background: #fff;
-  border-radius: 12px;
-  padding: 1rem;
-}
+/* Usa clases globales */
 </style>

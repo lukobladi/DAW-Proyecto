@@ -889,18 +889,13 @@ export default {
 </script>
 
 <style scoped>
-.card {
-  border: 1px solid #dee2e6;
-  border-radius: 10px;
-}
-
 .accordion-button:not(.collapsed) {
-  background-color: #e7f1ff;
-  color: #0d6efd;
+  background-color: var(--color-primary-bg);
+  color: var(--color-primary);
 }
 
 .nav-tabs .nav-link {
-  color: #495057;
+  color: var(--color-text-light);
 }
 
 .nav-tabs .nav-link.active {
@@ -908,11 +903,11 @@ export default {
 }
 
 .nav-pills .nav-link {
-  color: #495057;
+  color: var(--color-text-light);
 }
 
 .nav-pills .nav-link.active {
-  background-color: #0d6efd;
+  background-color: var(--color-primary);
   color: #fff;
 }
 </style>

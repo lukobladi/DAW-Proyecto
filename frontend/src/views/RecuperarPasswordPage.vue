@@ -1,29 +1,27 @@
 <template>
   <div class="recover-password-page">
-    <div class="recover-container">
-      <div class="recover-form">
-        <h2>Recuperar Contraseña</h2>
-
-        <form @submit.prevent="recoverPassword">
-          <div class="form-group">
-            <label for="correoOMovil">Correo Electrónico o Móvil</label>
-            <input
-              type="text"
-              id="correoOMovil"
-              v-model="correoOMovil"
-              class="form-control"
-              placeholder="Ingresa tu correo o móvil"
-              required
-              :class="{ 'input-error': error }"
-            />
-            <span v-if="error" class="error-message">{{ error }}</span>
-          </div>
-          <button type="submit" class="btn btn-primary mt-3">Enviar Solicitud</button>
-        </form>
-        <p class="back-to-login mt-3">
-          ¿Ya recuerdas tu contraseña? <router-link to="/login">Inicia sesión aquí</router-link>
-        </p>
+    <div class="auth-card">
+      <h2 class="auth-title">Recuperar Contraseña</h2>
+      <form @submit.prevent="recoverPassword" class="auth-form">
+        <div class="mb-3">
+          <label for="correoOMovil" class="form-label">Correo Electrónico o Móvil</label>
+          <input
+            type="text"
+            id="correoOMovil"
+            v-model="correoOMovil"
+            class="form-control"
+            placeholder="Ingresa tu correo o móvil"
+            required
+            :class="{ 'is-invalid': error }"
+          />
+          <div v-if="error" class="error-text">{{ error }}</div>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Enviar Solicitud</button>
+      </form>
+      <div class="auth-divider">
+        <span>¿Ya recuerdas tu contraseña?</span>
       </div>
+      <router-link to="/login" class="btn btn-secondary w-100">Iniciar Sesión</router-link>
     </div>
   </div>
 </template>
@@ -61,111 +59,40 @@ export default {
 </script>
 
 <style scoped>
-/* Estilo general de la página */
 .recover-password-page {
-        display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 2rem; /* Espaciado alrededor de la página */
-    background: #f9f9f9; /* Color de fondo claro */
-    background-size: cover;
-    color: #333333;
-    }
-  
-  /* Contenedor del formulario */
-  .recover-container {
-    width: 100%;
-    max-width: 400px; /* Limita el ancho máximo */
-    padding: 2rem;
-    background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semitransparente */
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: auto; 
-    }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: var(--spacing-xl);
+  background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+}
 
-/* Formulario */
-.recover-form {
+.auth-card {
   width: 100%;
+  max-width: 420px;
+  padding: var(--spacing-2xl);
+  background: var(--color-bg);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.auth-title {
+  color: var(--color-primary);
   text-align: center;
+  margin-bottom: var(--spacing-xl);
+  font-size: var(--font-size-2xl);
 }
 
-.recover-form h2 {
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
-  color: #4CAF50; /* Verde primario */
+.auth-form {
+  margin-bottom: var(--spacing-lg);
 }
 
-.form-group {
-  margin-bottom: 1.5rem;
-  text-align: left;
-}
-
-label {
-  display: block;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-  color: #333333;
-}
-
-input {
-  width: 100%;
-  padding: 0.75rem;
-  font-size: 1rem;
-  border: 1px solid #e0e0e0;
-  border-radius: 5px;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: border-color 0.3s ease;
-}
-
-input:focus {
-  border-color: #4CAF50; /* Verde primario */
-  outline: none;
-}
-
-.input-error {
-  border-color: #dc3545 !important;
-}
-
-.error-message {
-  color: #dc3545;
-  font-size: 0.875rem;
-  margin-top: 0.25rem;
-  display: block;
-}
-
-/* Botón */
-.btn {
-  width: 100%;
-  padding: 0.75rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.btn-primary {
-  background-color: #FF9800; /* Naranja */
-  color: white;
-}
-
-.btn-primary:hover {
-  background-color: #E68900; /* Naranja más oscuro */
-}
-
-/* Enlace para volver al login */
-.back-to-login {
-  margin-top: 1rem;
-  font-size: 0.9rem;
-}
-
-.back-to-login a {
-  color: #007BFF; /* Azul para enlaces */
-  text-decoration: none;
-}
-
-.back-to-login a:hover {
-  text-decoration: underline;
+.auth-divider {
+  text-align: center;
+  margin: var(--spacing-lg) 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
 }
 </style>
 

@@ -173,19 +173,19 @@ export default {
 
 .gestion-pagos-content {
   flex: 1;
-  padding: 2rem;
+  padding: var(--spacing-xl);
 }
 
 .texto-ayuda {
-  color: #495057;
-  margin-bottom: 1rem;
+  color: var(--color-text-light);
+  margin-bottom: var(--spacing-md);
 }
 
 .filtros {
   display: flex;
   align-items: end;
-  gap: 0.75rem;
-  margin-bottom: 1.25rem;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
 }
 
 .filtros .form-control {
@@ -195,32 +195,23 @@ export default {
 .lista-pagos {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1rem;
+  gap: var(--spacing-md);
 }
 
 .pago-card {
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  padding: 1rem;
-  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  background: var(--color-bg);
 }
 
 .pago-card p {
-  margin-bottom: 0.4rem;
+  margin-bottom: var(--spacing-xs);
 }
 
 .texto-secundario {
-  color: #6c757d;
-  font-size: 0.9rem;
-}
-
-.estado {
-  color: #495057;
-  padding: 1rem 0;
-}
-
-.estado.error {
-  color: #dc3545;
+  color: var(--color-text-light);
+  font-size: var(--font-size-sm);
 }
 
 @media (max-width: 576px) {

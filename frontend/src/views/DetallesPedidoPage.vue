@@ -163,76 +163,38 @@ export default {
 
 .detalles-pedido-content {
   flex: 1;
-  padding: 2rem;
+  padding: var(--spacing-xl);
 }
 
 .info-pedido {
-  background: #f8f9fa;
-  padding: 1rem;
-  border-radius: 8px;
+  background: var(--color-bg-secondary);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
 }
 
 .info-pedido p {
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--spacing-xs);
 }
 
 .lista-productos {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
+  gap: var(--spacing-md);
 }
 
 .producto-card {
-  border: 1px solid #ccc;
-  padding: 1rem;
-  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
   text-align: center;
-  background: #fff;
+  background: var(--color-bg);
 }
 
 .producto-imagen {
   max-width: 100%;
   height: 120px;
   object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-}
-
-.estado {
-  padding: 1rem 0;
-  color: #495057;
-}
-
-.estado.error {
-  color: #dc3545;
-}
-
-.estado-pill {
-  display: inline-block;
-  padding: 0.15rem 0.6rem;
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: 0.85rem;
-}
-
-.estado-pendiente {
-  color: #664d03;
-  background-color: #fff3cd;
-}
-
-.estado-proceso {
-  color: #055160;
-  background-color: #cff4fc;
-}
-
-.estado-entregado,
-.estado-repartido {
-  color: #0f5132;
-  background-color: #d1e7dd;
-}
-
-.estado-cancelado {
-  color: #842029;
-  background-color: #f8d7da;
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-md);
 }
 </style>

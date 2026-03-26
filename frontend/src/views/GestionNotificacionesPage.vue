@@ -48,22 +48,18 @@ export default {
 
 .gestion-notificaciones-content {
   flex: 1;
-  padding: 2rem;
+  padding: var(--spacing-xl);
 }
 
 .lista-notificaciones {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
+  gap: var(--spacing-md);
 }
 
 .notificacion-card {
-  border: 1px solid #ccc;
-  padding: 1rem;
-  border-radius: 8px;
-}
-
-.btn {
-  margin-top: 1rem;
+  border: 1px solid var(--color-border);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-page">
-    <div class="dashboard-content container">
+    <div class="page-content">
       <h2>Hola, {{ usuarioNombre }}!</h2>
 
       <section class="resumen-financiero">
@@ -522,175 +522,113 @@ export default {
   min-height: 100vh;
 }
 
-.dashboard-content {
-  flex: 1;
-  padding: 2rem;
-}
-
 .cesta-mensual,
 .resumen-financiero,
 .pedidos-abiertos {
-  margin-bottom: 2rem;
+  margin-bottom: var(--spacing-xl);
 }
 
 .resumen-cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
 }
 
 .resumen-card {
-  background: #ffffff;
-  border: 1px solid #dee2e6;
-  border-radius: 10px;
-  padding: 1rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
 }
 
 .resumen-card h4 {
-  font-size: 1rem;
-  margin-bottom: 0.4rem;
+  font-size: var(--font-size-base);
+  margin-bottom: var(--spacing-xs);
 }
 
 .resumen-card .monto {
-  font-size: 1.1rem;
+  font-size: var(--font-size-lg);
   font-weight: 700;
   margin: 0;
 }
 
-.resumen-card.deuda {
-  border-left: 5px solid #dc3545;
-}
-
-.resumen-card.cobrar {
-  border-left: 5px solid #198754;
-}
-
-.resumen-card.gasto {
-  border-left: 5px solid #fd7e14;
-}
+.resumen-card.deuda { border-left: 4px solid var(--color-danger); }
+.resumen-card.cobrar { border-left: 4px solid var(--color-success); }
+.resumen-card.gasto { border-left: 4px solid var(--color-secondary); }
 
 .deudas-lista {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1rem;
+  gap: var(--spacing-md);
 }
 
 .deuda-card {
-  border: 1px solid #ced4da;
-  border-radius: 8px;
-  padding: 1rem;
-  background: #fff;
-}
-
-.deuda-card p {
-  margin-bottom: 0.45rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  background: var(--color-bg);
 }
 
 .texto-secundario {
-  color: #6c757d;
-  font-size: 0.9rem;
+  color: var(--color-text-light);
+  font-size: var(--font-size-sm);
 }
 
 .lista-productos {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
+  gap: var(--spacing-md);
 }
 
 .producto-card {
-  border: 1px solid #ccc;
-  padding: 1rem;
-  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
   text-align: center;
 }
 
 .lista-pedidos {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1rem;
+  gap: var(--spacing-md);
 }
 
 .pedido-card {
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  padding: 1rem;
-  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  background: var(--color-bg);
 }
 
 .producto-imagen {
   max-width: 100%;
   height: auto;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-}
-
-.estado {
-  padding: 1rem 0;
-  color: #495057;
-}
-
-.estado.error {
-  color: #dc3545;
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-md);
 }
 
 .cantidad-control {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
 }
 
 .btn-unidad {
-  border: 1px solid #ced4da;
-  background: #fff;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
   width: 28px;
   height: 28px;
   border-radius: 50%;
   line-height: 1;
+  cursor: pointer;
 }
 
 .aviso-edicion {
-  color: #842029;
-  font-size: 0.85rem;
-  margin-bottom: 0.5rem;
-}
-
-.estado-pill {
-  display: inline-block;
-  font-size: 0.8rem;
-  font-weight: 700;
-  padding: 0.2rem 0.65rem;
-  border-radius: 999px;
-}
-
-.estado-pendiente {
-  color: #664d03;
-  background-color: #fff3cd;
-}
-
-.estado-proceso {
-  color: #055160;
-  background-color: #cff4fc;
-}
-
-.estado-entregado {
-  color: #0f5132;
-  background-color: #d1e7dd;
-}
-
-.estado-repartido {
-  color: #0f5132;
-  background-color: #d1e7dd;
-}
-
-.estado-cancelado {
-  color: #842029;
-  background-color: #f8d7da;
-}
-
-.btn {
-  margin-top: 1rem;
+  color: var(--color-danger);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-sm);
 }
 </style>

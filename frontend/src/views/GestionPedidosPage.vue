@@ -281,62 +281,8 @@ export default {
 </script>
 
 <style scoped>
-.estado {
-  padding: 1rem 0;
-}
-
-.estado.error {
-  color: #dc3545;
-}
-
-.acciones {
-  display: flex;
-  gap: 0.4rem;
-}
-
-.estado-pill {
-  display: inline-block;
-  padding: 0.15rem 0.6rem;
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: 0.8rem;
-}
-
-.estado-pendiente {
-  color: #664d03;
-  background-color: #fff3cd;
-}
-
-.estado-proceso {
-  color: #055160;
-  background-color: #cff4fc;
-}
-
-.estado-entregado,
-.estado-repartido {
-  color: #0f5132;
-  background-color: #d1e7dd;
-}
-
-.estado-cancelado {
-  color: #842029;
-  background-color: #f8d7da;
-}
-
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1050;
-}
-
-.modal-card {
-  width: min(92vw, 560px);
-  background: #fff;
-  border-radius: 12px;
-  padding: 1rem;
+/* Componente específico */
+.page-container {
+  padding: var(--spacing-xl) var(--spacing-lg);
 }
 </style>

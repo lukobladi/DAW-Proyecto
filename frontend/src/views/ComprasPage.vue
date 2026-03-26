@@ -325,98 +325,67 @@ export default {
 
 .compras-content {
   flex: 1;
-  padding: 2rem;
+  padding: var(--spacing-xl);
 }
 
 .filtros {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--spacing-lg);
 }
 
 .filtros .form-label {
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--spacing-xs);
   display: block;
 }
 
 .filtro-botones {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.estado {
-  padding: 1rem 0;
-  color: #495057;
-}
-
-.estado.error {
-  color: #dc3545;
+  gap: var(--spacing-sm);
 }
 
 .proveedores-lista {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: var(--spacing-xl);
 }
 
 .proveedor-seccion {
-  border: 1px solid #dee2e6;
-  border-radius: 10px;
-  padding: 1.25rem;
-  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  background: var(--color-bg);
 }
 
 .proveedor-titulo {
-  font-size: 1.25rem;
-  margin-bottom: 0.25rem;
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-xs);
 }
 
 .proveedor-meta {
-  color: #6c757d;
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
+  color: var(--color-text-light);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-md);
 }
 
 .lista-productos {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
+  gap: var(--spacing-md);
 }
 
 .producto-card {
-  border: 1px solid #ccc;
-  padding: 1rem;
-  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
   text-align: center;
-}
-
-.estado-pill {
-  display: inline-block;
-  font-size: 0.8rem;
-  font-weight: 600;
-  padding: 0.2rem 0.65rem;
-  border-radius: 999px;
-}
-
-.estado-pill.abierto {
-  color: #0f5132;
-  background-color: #d1e7dd;
-}
-
-.estado-pill.cerrado {
-  color: #842029;
-  background-color: #f8d7da;
 }
 
 .producto-imagen {
   max-width: 100%;
   height: auto;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-}
-
-.btn {
-  margin-top: 1rem;
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-md);
 }
 
 @media (max-width: 576px) {

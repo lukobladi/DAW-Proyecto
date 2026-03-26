@@ -1,22 +1,37 @@
 <template>
   <div class="home-page">
-    <div class="grupo-section">
-      <h1>Bienvenido al Grupo de Consumo</h1>
-      <p>Compra productos locales y ecológicos de manera colaborativa.</p>
-      <div class="buttons">
-        <button v-if="!isAuthenticated" @click="goToLogin" class="btn btn-primary">Iniciar Sesión</button>
-        <button v-if="!isAuthenticated" @click="goToRegistrar" class="btn btn-secondary">Registrarse</button>
+    <div class="hero-section">
+      <div class="hero-content">
+        <h1>Bienvenido al Grupo de Consumo</h1>
+        <p>Compra productos locales y ecológicos de manera colaborativa.</p>
+        <div class="buttons">
+          <button v-if="!isAuthenticated" @click="goToLogin" class="btn btn-secondary">Iniciar Sesión</button>
+          <button v-if="!isAuthenticated" @click="goToRegistrar" class="btn btn-primary">Registrarse</button>
+        </div>
       </div>
     </div>
-    <div class="mensaje-section">
-      <h2>¿Por qué unirte a nosotros?</h2>
-      <ul>
-        <li>Apoya a productores locales.</li>
-        <li>Accede a productos frescos y ecológicos.</li>
-        <li>Forma parte de una comunidad colaborativa.</li>
-      </ul>
+    <div class="features-section">
+      <div class="page-content">
+        <h2>¿Por qué unirte a nosotros?</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <i class="fas fa-store"></i>
+            <h3>Productores locales</h3>
+            <p>Apoya a productores locales de tu zona.</p>
+          </div>
+          <div class="feature-card">
+            <i class="fas fa-leaf"></i>
+            <h3>Productos ecológicos</h3>
+            <p>Accede a productos frescos y ecológicos.</p>
+          </div>
+          <div class="feature-card">
+            <i class="fas fa-users"></i>
+            <h3>Comunidad</h3>
+            <p>Forma parte de una comunidad colaborativa.</p>
+          </div>
+        </div>
+      </div>
     </div>
-    <Footer />
   </div>
 </template>
 
@@ -32,10 +47,10 @@ export default {
   },
   methods: {
     goToLogin() {
-      this.$router.push({ name: 'Login' }); // Redirige a la página de inicio de sesión
+      this.$router.push({ name: 'Login' });
     },
     goToRegistrar() {
-      this.$router.push({ name: 'Registrar' }); // Redirige a la página de registro
+      this.$router.push({ name: 'Registrar' });
     },
   },
 };
@@ -48,79 +63,96 @@ export default {
   min-height: 100vh;
 }
 
-.grupo-section {
+.hero-section {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 2rem;
-  background: url('../assets/cestaesparza.png') no-repeat center center;
+  padding: var(--spacing-2xl);
+  background-color: #4CAF50;
+  background-image: url('../assets/cestaesparza.png');
+  background-repeat: no-repeat;
+  background-position: center center;
   background-size: cover;
   color: white;
+  min-height: 50vh;
+  position: relative;
 }
 
-.grupo-section h1 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+.hero-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.85) 0%, rgba(102, 187, 106, 0.75) 100%);
 }
 
-.grupo-section p {
-  font-size: 1.2rem;
-  margin-bottom: 1.5rem;
+.hero-content {
+  max-width: 600px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-section h1 {
+  font-size: var(--font-size-3xl);
+  margin-bottom: var(--spacing-md);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-section p {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-lg);
+  opacity: 0.95;
 }
 
 .buttons {
-  margin-top: 1rem;
+  margin-top: var(--spacing-md);
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.btn {
-  margin: 0 0.5rem;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+.features-section {
+  padding: var(--spacing-xl) 0;
 }
 
-.btn-primary {
-  background-color: #FF9800;
-  color: white;
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
 }
 
-.btn-primary:hover {
-  background-color: #E68900;
-}
-
-.btn-secondary {
-  background-color: #4CAF50;
-  color: white;
-}
-
-.btn-secondary:hover {
-  background-color: #3E8E41;
-}
-
-.mensaje-section {
+.feature-card {
   text-align: center;
-  padding: 2rem;
-  background-color: #f9f9f9;
+  padding: var(--spacing-xl);
+  background: var(--color-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
 }
 
-.mensaje-section h2 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
 }
 
-.mensaje-section ul {
-  list-style: none;
-  padding: 0;
+.feature-card i {
+  font-size: 3rem;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-md);
 }
 
-.mensaje-section li {
-  font-size: 1.2rem;
-  margin: 0.5rem 0;
+.feature-card h3 {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text);
+}
+
+.feature-card p {
+  color: var(--color-text-light);
+  margin: 0;
 }
 </style>

@@ -1,43 +1,39 @@
 <template>
   <div class="registrar-page">
-    <NavBar />
-    <div class="registrar-container">
-      <div class="registrar-form">
-        <h2>Registrarse</h2>
-        <form @submit.prevent="registrar">
-          <div class="form-group">
-            <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" v-model="nombre" placeholder="Ingresa tu nombre" required>
-          </div>
-          <div class="form-group">
-            <label for="correo">Correo Electrónico</label>
-            <input type="email" id="correo" v-model="correo" placeholder="Ingresa tu correo" required>
-          </div>
-          <div class="form-group">
-            <label for="password">Contraseña</label>
-            <input type="password" id="password" v-model="password" placeholder="Ingresa tu contraseña" required>
-          </div>
-          <div class="form-group">
-            <label for="confirmar-password">Confirmar Contraseña</label>
-            <input type="password" id="confirmar-password" v-model="confirmarPassword" placeholder="Confirma tu contraseña" required>
-          </div>
-          <div class="form-group">
-            <label for="movil">Móvil (opcional)</label>
-            <input type="tel" id="movil" v-model="movil" placeholder="Ingresa tu número de móvil">
-          </div>
-          <div class="form-group">
-            <label for="familia">Familia (opcional)</label>
-            <input type="number" id="familia" v-model="familia" placeholder="Número de familia" min="1">
-          </div>
-          <button type="submit" class="btn btn-primary">Registrarse</button>
-        </form>
-        <div class="text-center mt-4">
-          <p>¿Ya tienes una cuenta?</p>
-          <router-link to="/login" class="btn btn-secondary w-100">Iniciar Sesión</router-link>
+    <div class="auth-card">
+      <h2 class="auth-title">Registrarse</h2>
+      <form @submit.prevent="registrar" class="auth-form">
+        <div class="mb-3">
+          <label for="nombre" class="form-label">Nombre</label>
+          <input type="text" id="nombre" v-model="nombre" class="form-control" placeholder="Ingresa tu nombre" required>
         </div>
+        <div class="mb-3">
+          <label for="correo" class="form-label">Correo Electrónico</label>
+          <input type="email" id="correo" v-model="correo" class="form-control" placeholder="Ingresa tu correo" required>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Contraseña</label>
+          <input type="password" id="password" v-model="password" class="form-control" placeholder="Ingresa tu contraseña" required>
+        </div>
+        <div class="mb-3">
+          <label for="confirmar-password" class="form-label">Confirmar Contraseña</label>
+          <input type="password" id="confirmar-password" v-model="confirmarPassword" class="form-control" placeholder="Confirma tu contraseña" required>
+        </div>
+        <div class="mb-3">
+          <label for="movil" class="form-label">Móvil (opcional)</label>
+          <input type="tel" id="movil" v-model="movil" class="form-control" placeholder="Ingresa tu número de móvil">
+        </div>
+        <div class="mb-3">
+          <label for="familia" class="form-label">Familia (opcional)</label>
+          <input type="number" id="familia" v-model="familia" class="form-control" placeholder="Número de familia" min="1">
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Registrarse</button>
+      </form>
+      <div class="auth-divider">
+        <span>¿Ya tienes una cuenta?</span>
       </div>
+      <router-link to="/login" class="btn btn-secondary w-100">Iniciar Sesión</router-link>
     </div>
-    <Footer />
   </div>
 </template>
 
@@ -86,84 +82,39 @@ export default {
 </script>
 
 <style scoped>
-/* Estilo general de la página */
 .registrar-page {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
-  background: #f9f9f9;
-  background-size: cover;
-  color: #333333;
+  min-height: 100vh;
+  padding: var(--spacing-xl);
+  background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
 }
 
-/* Contenedor del formulario */
-.registrar-container {
+.auth-card {
   width: 100%;
-  max-width: 400px;
-  padding: 2rem;
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin: auto;
+  max-width: 420px;
+  padding: var(--spacing-2xl);
+  background: var(--color-bg);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
 }
 
-/* Formulario */
-.registrar-form {
-  width: 100%;
+.auth-title {
+  color: var(--color-primary);
   text-align: center;
+  margin-bottom: var(--spacing-xl);
+  font-size: var(--font-size-2xl);
 }
 
-.registrar-form h2 {
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
-  color: #4CAF50; /* Verde primario */
+.auth-form {
+  margin-bottom: var(--spacing-lg);
 }
 
-.form-group {
-  margin-bottom: 1.5rem;
-  text-align: left;
-}
-
-label {
-  display: block;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-  color: #333333;
-}
-
-input {
-  width: 100%;
-  padding: 0.75rem;
-  font-size: 1rem;
-  border: 1px solid #e0e0e0;
-  border-radius: 5px;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: border-color 0.3s ease;
-}
-
-input:focus {
-  border-color: #4CAF50; /* Verde primario */
-  outline: none;
-}
-
-/* Botón */
-.btn {
-  width: 100%;
-  padding: 0.75rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.btn-primary {
-  background-color: #FF9800; /* Naranja */
-  color: white;
-}
-
-.btn-primary:hover {
-  background-color: #E68900; /* Naranja más oscuro */
+.auth-divider {
+  text-align: center;
+  margin: var(--spacing-lg) 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
 }
 </style>

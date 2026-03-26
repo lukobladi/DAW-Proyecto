@@ -144,11 +144,5 @@ export default {
 </script>
 
 <style scoped>
-.estado {
-  padding: 1rem 0;
-}
-
-.estado.error {
-  color: #dc3545;
-}
+/* Usa clases globales */
 </style>

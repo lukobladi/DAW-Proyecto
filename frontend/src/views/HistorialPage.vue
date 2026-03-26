@@ -150,47 +150,10 @@ export default {
 </script>
 
 <style scoped>
-.estado {
-  padding: 1rem 0;
-}
-
-.estado.error {
-  color: #dc3545;
-}
-
 .pedido-card {
-  border: 1px solid #dee2e6;
-  border-radius: 10px;
-  padding: 1rem;
-  background: #fff;
-}
-
-.estado-pill {
-  display: inline-block;
-  padding: 0.15rem 0.6rem;
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: 0.8rem;
-}
-
-.estado-pendiente {
-  color: #664d03;
-  background-color: #fff3cd;
-}
-
-.estado-proceso {
-  color: #055160;
-  background-color: #cff4fc;
-}
-
-.estado-entregado,
-.estado-repartido {
-  color: #0f5132;
-  background-color: #d1e7dd;
-}
-
-.estado-cancelado {
-  color: #842029;
-  background-color: #f8d7da;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  background: var(--color-bg);
 }
 </style>
