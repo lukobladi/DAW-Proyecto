@@ -548,12 +548,57 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiY29ycmVvIjoiam9obkBleGFtcGxlLmN
 ---
 
 ### **Rutas Protegidas**
-Las siguientes rutas están protegidas y requieren un token JWT válido para acceder:
-- **GET `/api/usuarios/perfil`**: Obtiene el perfil del usuario autenticado.
-- **POST `/api/pedidos`**: Crea un nuevo pedido.
-- **PUT `/api/productos/:id`**: Actualiza un producto existente.
-- **DELETE `/api/usuarios/:id`**: Elimina un usuario (solo para administradores).
-
+Se van a proteger todas las rutas a excepción de aquellas en las que el usuario no ha podido obtener el token.
+Las rutas que no están protegidas:
+    • Prueba la conexión con la API y la base de datos. 
+    • Registra un nuevo usuario. 
+    • Autentica un usuario (login). 
+    •  Envía un enlace para recuperar la contraseña. 
+Las siguientes rutas están protegidas y requieren un token JWT válido para acceder. Además, como en el token tenemos el rol del usuario logueado, hay endpoints que solo son accesibles para administradores:
+    • Obtiene todos los usuarios (solo administradores). 
+    • Obtiene un usuario por su ID. 
+    • Activa o desactiva un usuario (solo administradores). 
+    • Actualiza un usuario. 
+    • Elimina un usuario (solo administradores). 
+    • Obtiene el saldo de un usuario. 
+    • Crea un nuevo producto. 
+    • Obtiene todos los productos. 
+    • Obtiene un producto por su ID. 
+    • Actualiza un producto. 
+    • Elimina un producto. 
+    • Cambia el estado activo de un producto. 
+    • Crea un nuevo proveedor. 
+    • Obtiene todos los proveedores. 
+    • Obtiene un proveedor por su ID. 
+    • Cambia el estado activo de un proveedor. 
+    • Crea un nuevo pedido. 
+    • Obtiene todos los pedidos. 
+    • Obtiene un pedido por su ID. 
+    • Actualiza un pedido. 
+    • Elimina un pedido. 
+    • Cambia el estado de un pedido. 
+    • Cambia el estado activo de un pedido. 
+    • Crea un nuevo detalle de pedido. 
+    • Obtiene todos los detalles de un pedido. 
+    • Actualiza un detalle de pedido. 
+    • Elimina un detalle de pedido. 
+    • Crea una nueva relación entre usuario y proveedor. 
+    • Obtiene todas las relaciones de un usuario. 
+    • Obtiene todas las relaciones de un proveedor. 
+    • Elimina una relación entre usuario y proveedor. 
+    • Crea un nuevo pedido periódico. 
+    • Obtiene todos los pedidos periódicos. 
+    • Obtiene los pedidos periódicos de un usuario. 
+    • Actualiza un pedido periódico. 
+    • Elimina un pedido periódico. 
+    • Cambia el estado activo de un pedido periódico. 
+    • Crea un nuevo pago. 
+    • Obtiene todos los pagos. 
+    • Obtiene los pagos pendientes de un usuario deudor. 
+    • Obtiene los pagos pendientes de un usuario acreedor. 
+    • Cambia el estado de un pago. 
+    • Envía una notificación. 
+    • Marca una notificación como leída. 
 ---
 
 ### **Errores Comunes con JWT**

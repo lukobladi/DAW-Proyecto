@@ -307,37 +307,8 @@ export default {
 </script>
 
 <style scoped>
+/* Componente específico */
 .page-container {
   padding: var(--spacing-xl) var(--spacing-lg);
-}
-
-.pedido-card-mobile {
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-md);
-  margin-bottom: var(--spacing-md);
-}
-
-.pedido-card-mobile h5 {
-  color: var(--color-primary);
-}
-
-.pedido-card-mobile p {
-  margin: 0.25rem 0;
-  font-size: var(--font-size-sm);
-  color: var(--color-text-light);
-}
-
-.pedido-card-mobile strong {
-  color: var(--color-text);
-}
-
-.acciones-cell {
-  white-space: nowrap;
-}
-
-.acciones-cell .btn {
-  white-space: nowrap;
 }
 </style>

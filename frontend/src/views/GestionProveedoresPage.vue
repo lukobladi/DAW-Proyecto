@@ -343,25 +343,5 @@ export default {
 </script>
 
 <style scoped>
-.proveedor-card-mobile {
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-md);
-  margin-bottom: var(--spacing-md);
-}
-
-.proveedor-card-mobile h5 {
-  color: var(--color-primary);
-}
-
-.proveedor-card-mobile p {
-  margin: 0.25rem 0;
-  font-size: var(--font-size-sm);
-  color: var(--color-text-light);
-}
-
-.proveedor-card-mobile strong {
-  color: var(--color-text);
-}
+/* Los estilos de este componente usan clases globales */
 </style>
