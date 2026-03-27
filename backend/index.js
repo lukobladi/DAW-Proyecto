@@ -39,13 +39,16 @@ app.use(express.json());
 
 // Rate limiting (ANTES de las rutas)
 const rateLimit = require('express-rate-limit');
-if (process.env.NODE_ENV !== 'test') {
+const RATE_LIMIT_MAX = parseInt(process.env.RATE_LIMIT_MAX || '100', 10);
+if (process.env.NODE_ENV !== 'test' && RATE_LIMIT_MAX > 0) {
   app.use(
     '/api/',
     rateLimit({
       windowMs: 15 * 60 * 1000,
-      max: 100,
+      max: RATE_LIMIT_MAX,
       validate: { xForwardedForHeader: false },
+      standardHeaders: true,
+      legacyHeaders: false,
     })
   );
 }
