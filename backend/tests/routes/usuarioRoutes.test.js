@@ -98,7 +98,7 @@ describe('Usuario Routes', () => {
     const newUser = {
       nombre: 'Nuevo Usuario',
       correo: 'new.user@example.com',
-      password: 'newpassword123',
+      password: 'Newpassword123',
       rol: 'usuario',
       movil: '987654321',
     };
