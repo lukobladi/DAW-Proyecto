@@ -57,7 +57,6 @@ describe('Pedido Routes', () => {
       const idUsuario = usuariosRes.body[0].id_usuario;
 
       const newPedido = {
-        id_usuario_encargado: idUsuario,
         id_proveedor: idProveedor,
         fecha_apertura: '2026-05-01',
         fecha_cierre: '2026-05-07',

@@ -46,10 +46,6 @@ const validators = {
       .matches(/^[0-9]{9,15}$/)
       .withMessage('El móvil debe ser un número válido')
       .trim(),
-    body('familia')
-      .optional({ nullable: true })
-      .isInt({ min: 1 })
-      .withMessage('La familia debe ser un número entero positivo'),
   ],
 
   // Validación para actualizar usuario
@@ -75,10 +71,6 @@ const validators = {
       .matches(/^[0-9]{9,15}$/)
       .withMessage('El móvil debe ser un número válido')
       .trim(),
-    body('familia')
-      .optional({ nullable: true })
-      .isInt({ min: 1 })
-      .withMessage('La familia debe ser un número entero positivo'),
   ],
 
   // Validación para crear producto
@@ -248,11 +240,6 @@ const validators = {
 
   // Validación para crear pedido
   crearPedido: [
-    body('id_usuario_encargado')
-      .notEmpty()
-      .withMessage('El usuario encargado es obligatorio')
-      .isInt({ min: 1 })
-      .withMessage('El ID del usuario encargado debe ser un número entero positivo'),
     body('id_proveedor')
       .notEmpty()
       .withMessage('El proveedor es obligatorio')
@@ -287,10 +274,6 @@ const validators = {
 
   // Validación para actualizar pedido
   actualizarPedido: [
-    body('id_usuario_encargado')
-      .optional()
-      .isInt({ min: 1 })
-      .withMessage('El ID del usuario encargado debe ser un número entero positivo'),
     body('id_proveedor')
       .optional()
       .isInt({ min: 1 })
@@ -451,13 +434,13 @@ const validators = {
       .withMessage('El campo activo debe ser true o false'),
   ],
 
-  // Validación para asignar familia a proveedor
-  asignarFamiliaProveedor: [
-    body('id_familia')
+  // Validación para asignar usuario a proveedor
+  asignarUsuarioProveedor: [
+    body('id_usuario')
       .notEmpty()
-      .withMessage('La familia es obligatoria')
+      .withMessage('El usuario es obligatorio')
       .isInt({ min: 1 })
-      .withMessage('El ID de la familia debe ser un número entero positivo'),
+      .withMessage('El ID del usuario debe ser un número entero positivo'),
     body('id_proveedor')
       .notEmpty()
       .withMessage('El proveedor es obligatorio')

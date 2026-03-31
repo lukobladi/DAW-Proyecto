@@ -18,7 +18,7 @@ const upload = multer({
   storage,
   limits: { fileSize: 5 * 1024 * 1024 }, // Limite de 5MB por archivo
   fileFilter: (req, file, cb) => {
-    const filetypes = /jpeg|jpg|png|gif/;
+    const filetypes = /jpeg|jpg|png|gif|webp/;
     const mimetype = filetypes.test(file.mimetype);
     const extname = filetypes.test(
       path.extname(file.originalname).toLowerCase()
@@ -29,7 +29,7 @@ const upload = multer({
     }
     cb(
       new Error(
-        'Error: Solo se permiten archivos de imagen (jpeg, jpg, png, gif)'
+        'Error: Solo se permiten archivos de imagen (jpeg, jpg, png, gif, webp)'
       )
     );
   },

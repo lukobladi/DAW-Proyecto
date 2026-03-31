@@ -216,7 +216,7 @@ class Pago {
       cobrarResult,
       deudasResult,
     ] = await Promise.all([
-      db.query('SELECT Saldo FROM Usuario WHERE id_usuario = $1;', [idUsuario]),
+      db.query('SELECT saldo FROM Usuario WHERE id_usuario = $1;', [idUsuario]),
       db.query(
         `
           SELECT COALESCE(SUM(d.Cantidad * d.Precio_Unitario), 0) AS total

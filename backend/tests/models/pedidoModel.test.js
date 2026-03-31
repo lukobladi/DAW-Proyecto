@@ -51,14 +51,11 @@ describe('Modelo Pedido', () => {
   });
 
   beforeEach(async () => {
-    // Crar pedido para cada prueba
-    // Pedido.create(fecha_apertura, fecha_cierre, fecha_entrega, id_usuario_encargado, id_proveedor, estado)
     const pedido = await Pedido.create(
-      usuarioId, // id_usuario_encargado
       proveedorId,
-      new Date().toISOString(), // fecha_apertura
-      new Date(Date.now() + 86400000).toISOString(), // fecha_cierre (1 dia despues)
-      new Date(Date.now() + 172800000).toISOString(), // fecha_entrega (2 dias despues)
+      new Date().toISOString(),
+      new Date(Date.now() + 86400000).toISOString(),
+      new Date(Date.now() + 172800000).toISOString(),
       'pendiente'
     );
     pedidoId = pedido.id_pedido;

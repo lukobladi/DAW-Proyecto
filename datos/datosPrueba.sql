@@ -1,29 +1,31 @@
 -- Datos de prueba para Ekonsumo
 -- Uso: psql -U postgres -d ekonsumo -f datos/datosPrueba.sql
--- Contraseña de todos los usuarios: Ekonsumo123
+-- Contraseña de todos los usuarios: 1234
 
 -- Limpiar datos para permitir re-ejecucion del script
 TRUNCATE TABLE
   notificacion,
   pago,
   pedido_periodico,
-  familia_proveedor,
   detalle_pedido,
   pedido,
   producto,
   proveedor,
+  usuario_proveedor,
   usuario
 RESTART IDENTITY CASCADE;
 
--- Insertar datos de prueba en la tabla usuario (NO MODIFICAR)
-INSERT INTO usuario (nombre, correo, pass, movil, rol, activo, saldo, familia)
+-- Insertar usuarios
+INSERT INTO usuario (nombre, correo, pass, movil, rol, activo, saldo)
 VALUES
-    ('Admin', 'admin@admin.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '111111111', 'admin', TRUE, 100.00, 1),
-    ('Pareja de Admin', 'pareja_de_admin@pareja_de_admin.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '444444444', 'usuario', TRUE, 100.00, 1),
-    ('Gestor', 'gestor@gestor.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '222222222', 'gestor', TRUE, 100.00, 2),
-    ('Pareja de Gestor', 'pareja_de_gestor@gestor.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '555555555', 'usuario', TRUE, 100.00, 2),
-    ('Usuario', 'usuario@usuario.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '333333333', 'usuario', TRUE, 100.00, 3),
-    ('Pareja de Usuario', 'pareja_de_usuario@usuario.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '666666666', 'usuario', TRUE, 100.00, 3);
+    ('Admin', 'admin@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '111111111', 'admin', TRUE, 100.00),
+    ('Usuario1', 'usuario1@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '444444444', 'usuario', TRUE, -80.00),
+    ('Gestor1', 'gestor1@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '222222222', 'gestor', TRUE, 90.00),
+    ('Gestor2', 'gestor2@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '777777777', 'gestor', TRUE, 90.00),
+    ('Gestor3', 'gestor3@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '888888888', 'gestor', TRUE, 90.00),
+    ('Usuario2', 'usuario2@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '555555555', 'usuario', TRUE, -40.00),
+    ('Usuario3', 'usuario3@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '333333333', 'usuario', TRUE, -30.00),
+    ('Usuario4', 'usuario4@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '666666666', 'usuario', TRUE, -20.00);
 
 -- Insertar proveedores
 INSERT INTO proveedor (nombre, contacto, telefono, movil, correo, metodo_pago, frecuencia_pedido_aproximada, envio_movil, envio_mail, activo)
@@ -37,22 +39,21 @@ VALUES
     ('Legumbres Teresa', 'Isabel Moro', '948789012', '622678901', 'isabel@legumbredisateresa.com', 'efectivo', 'mensual', TRUE, TRUE, TRUE),
     ('Productos Temporada', 'Roberto Gil', '948890123', '622789012', 'roberto@temporada.com', 'transferencia', 'mensual', TRUE, TRUE, FALSE);
 
--- Asignar familias a proveedores (cada proveedor es gestionado por una familia)
-INSERT INTO familia_proveedor (id_familia, id_proveedor)
+-- Asignar gestores a proveedores
+INSERT INTO usuario_proveedor (id_usuario, id_proveedor)
 VALUES
-    (1, 1),   -- Familia 1 gestiona Frutas
-    (1, 4),   -- Familia 1 gestiona Huevos
-    (1, 7),   -- Familia 1 gestiona Legumbres
-    (2, 2),   -- Familia 2 gestiona Carnes
-    (2, 5),   -- Familia 2 gestiona Lácteos
-    (3, 3),   -- Familia 3 gestiona Panadería
-    (3, 6),   -- Familia 3 gestiona Vinos
-    (3, 8);   -- Familia 3 gestiona Temporada
+    (1, 1),
+    (1, 2),
+    (3, 3),
+    (4, 4),
+    (4, 5),
+    (4, 6),
+    (5, 7),
+    (5, 8);
 
 -- Insertar productos
 INSERT INTO producto (nombre, descripcion, precio, id_proveedor, activo, imagen)
 VALUES
-    -- Frutas (proveedor 1)
     ('Manzanas Royal Gala', 'Manzanas ecológicas de temporada', 2.80, 1, TRUE, '/uploads/manzana-royal.webp'),
     ('Naranjas Valencia', 'Naranjas dulces', 2.20, 1, TRUE, '/uploads/naranja.webp'),
     ('Plátanos Canarias', 'Plátanos maduros', 1.90, 1, TRUE, '/uploads/platano.webp'),
@@ -61,75 +62,54 @@ VALUES
     ('Espinacas frescas', 'Espinacas de temporada', 1.80, 1, TRUE, '/uploads/espinaca.webp'),
     ('Cebollas', 'Cebollas blancas', 1.10, 1, TRUE, '/uploads/cebolla.webp'),
     ('Ajos', 'Ajos blancos', 2.50, 1, TRUE, '/uploads/ajo.webp'),
-
-    -- Carnes (proveedor 2)
     ('Filete de Ternera', 'Filete ternera gallega', 14.50, 2, TRUE, '/uploads/filete.webp'),
     ('Costilla Cerdo', 'Costilla cerdo ibérico', 8.90, 2, TRUE, '/uploads/costilla.webp'),
     ('Pollo de Caserio', 'Pollo campero entero', 7.50, 2, TRUE, '/uploads/pollo.webp'),
     ('Chuletón', 'Chuletón de vaca (por kg)', 22.00, 2, TRUE, '/uploads/chuleton.webp'),
     ('Picadillo Ternera', 'Picadillo mixto', 9.80, 2, TRUE, '/uploads/picadillo.webp'),
-
-    -- Panadería (proveedor 3)
     ('Pan de Hogaza', 'Pan de pueblo artesanal', 2.80, 3, TRUE, '/uploads/hogaza.webp'),
     ('Pan de Centeno', 'Pan integral', 3.20, 3, TRUE, '/uploads/centeno.webp'),
     ('Bollos preñaos', 'Bollos con chorizo', 1.50, 3, TRUE, '/uploads/bollo.webp'),
     ('Magdalenas', 'Magdalenas caseras (docena)', 3.50, 3, TRUE, '/uploads/magdalena.webp'),
-
-    -- Huevos (proveedor 4)
     ('Huevos camperos', 'Huevos gallinas felices (docena)', 4.50, 4, TRUE, '/uploads/huevo-campero.webp'),
     ('Huevos ecológicos', 'Huevos ecológicos (6 uds)', 3.80, 4, TRUE, '/uploads/huevo-ecologico.webp'),
-
-    -- Lácteos (proveedor 5)
     ('Yogur natural', 'Yogur sin azúcar (4 uds)', 3.20, 5, TRUE, '/uploads/yogur.webp'),
     ('Queso semicurado', 'Queso vaca (por kg)', 12.50, 5, TRUE, '/uploads/queso.webp'),
     ('Leche fresca', 'Leche vaca (1L)', 1.40, 5, TRUE, '/uploads/leche.webp'),
     ('Mantequilla', 'Mantequilla artesanal (250g)', 4.20, 5, TRUE, '/uploads/mantequilla.webp'),
-
-    -- Vinos (proveedor 6)
     ('Vino Tinto Roble', 'Vino tinto roble (botella)', 6.50, 6, TRUE, '/uploads/vino-tinto.webp'),
     ('Vino Blanco Verdejo', 'Vino blanco fresco (botella)', 5.80, 6, TRUE, '/uploads/vino-blanco.webp'),
     ('Vino Rosado', 'Vino rosado Navarra (botella)', 5.20, 6, TRUE, '/uploads/vino-rosado.webp'),
     ('Cava Brut', 'Cava brut nature (botella)', 8.90, 6, TRUE, '/uploads/cava.webp'),
-
-    -- Legumbres (proveedor 7)
     ('Lentejas Pardinas', 'Lentejas 1kg', 2.80, 7, TRUE, '/uploads/lenteja.webp'),
     ('Garbanzos', 'Garbanzos Fuentesaúco 1kg', 3.20, 7, TRUE, '/uploads/garbanzo.webp'),
     ('Alubias Rojas', 'Alubias Navarra 1kg', 3.50, 7, TRUE, '/uploads/alubia.webp'),
     ('Arroz Bomba', 'Arroz Calasparra 1kg', 3.80, 7, TRUE, '/uploads/arroz.webp'),
-
-    -- Temporada (proveedor 8)
     ('Fresas', 'Fresas de temporada', 4.50, 8, TRUE, '/uploads/fresa.webp'),
     ('Cerezas', 'Cerezas de Montoro', 6.90, 8, TRUE, '/uploads/cereza.webp'),
     ('Nísperos', 'Nísperos Callosa', 4.20, 8, TRUE, '/uploads/nispero.webp');
 
--- Pedidos históricos (creados por admin o gestores de las familias correspondientes)
-INSERT INTO pedido (id_usuario_encargado, id_proveedor, fecha_apertura, fecha_cierre, fecha_entrega, estado, fecha_modificacion)
+-- Pedidos históricos
+INSERT INTO pedido (id_proveedor, fecha_apertura, fecha_cierre, fecha_entrega, estado, fecha_modificacion)
 VALUES
-    -- Pedidos frutas (proveedor 1) - creados por admin (familia 1)
-    (1, 1, CURRENT_TIMESTAMP - INTERVAL '21 days', CURRENT_TIMESTAMP - INTERVAL '16 days', CURRENT_TIMESTAMP - INTERVAL '14 days', 'repartido', CURRENT_TIMESTAMP - INTERVAL '14 days'),
-    (1, 1, CURRENT_TIMESTAMP - INTERVAL '14 days', CURRENT_TIMESTAMP - INTERVAL '9 days', CURRENT_TIMESTAMP - INTERVAL '7 days', 'repartido', CURRENT_TIMESTAMP - INTERVAL '7 days'),
-    (1, 1, CURRENT_TIMESTAMP - INTERVAL '7 days', CURRENT_TIMESTAMP - INTERVAL '2 days', CURRENT_DATE, 'repartido', CURRENT_TIMESTAMP - INTERVAL '1 day'),
+    (1, CURRENT_TIMESTAMP - INTERVAL '21 days', CURRENT_TIMESTAMP - INTERVAL '16 days', CURRENT_TIMESTAMP - INTERVAL '14 days', 'repartido', CURRENT_TIMESTAMP - INTERVAL '14 days'),
+    (1, CURRENT_TIMESTAMP - INTERVAL '14 days', CURRENT_TIMESTAMP - INTERVAL '9 days', CURRENT_TIMESTAMP - INTERVAL '7 days', 'repartido', CURRENT_TIMESTAMP - INTERVAL '7 days'),
+    (1, CURRENT_TIMESTAMP - INTERVAL '7 days', CURRENT_TIMESTAMP - INTERVAL '2 days', CURRENT_DATE, 'repartido', CURRENT_TIMESTAMP - INTERVAL '1 day'),
+    (4, CURRENT_TIMESTAMP - INTERVAL '21 days', CURRENT_TIMESTAMP - INTERVAL '18 days', CURRENT_TIMESTAMP - INTERVAL '15 days', 'repartido', CURRENT_TIMESTAMP - INTERVAL '15 days'),
+    (4, CURRENT_TIMESTAMP - INTERVAL '7 days', CURRENT_TIMESTAMP - INTERVAL '4 days', CURRENT_TIMESTAMP - INTERVAL '2 days', 'repartido', CURRENT_TIMESTAMP - INTERVAL '2 days'),
+    (2, CURRENT_TIMESTAMP - INTERVAL '21 days', CURRENT_TIMESTAMP - INTERVAL '17 days', CURRENT_TIMESTAMP - INTERVAL '14 days', 'repartido', CURRENT_TIMESTAMP - INTERVAL '14 days'),
+    (2, CURRENT_TIMESTAMP - INTERVAL '7 days', CURRENT_TIMESTAMP - INTERVAL '3 days', CURRENT_TIMESTAMP - INTERVAL '1 day', 'repartido', CURRENT_TIMESTAMP - INTERVAL '1 day'),
+    (3, CURRENT_TIMESTAMP - INTERVAL '14 days', CURRENT_TIMESTAMP - INTERVAL '12 days', CURRENT_TIMESTAMP - INTERVAL '10 days', 'repartido', CURRENT_TIMESTAMP - INTERVAL '10 days'),
+    (3, CURRENT_TIMESTAMP - INTERVAL '7 days', CURRENT_TIMESTAMP - INTERVAL '5 days', CURRENT_TIMESTAMP - INTERVAL '3 days', 'repartido', CURRENT_TIMESTAMP - INTERVAL '3 days');
 
-    -- Pedidos huevos (proveedor 4) - familia 1 también gestiona
-    (1, 4, CURRENT_TIMESTAMP - INTERVAL '21 days', CURRENT_TIMESTAMP - INTERVAL '18 days', CURRENT_TIMESTAMP - INTERVAL '15 days', 'repartido', CURRENT_TIMESTAMP - INTERVAL '15 days'),
-    (1, 4, CURRENT_TIMESTAMP - INTERVAL '7 days', CURRENT_TIMESTAMP - INTERVAL '4 days', CURRENT_TIMESTAMP - INTERVAL '2 days', 'repartido', CURRENT_TIMESTAMP - INTERVAL '2 days'),
-
-    -- Pedidos carnes (proveedor 2) - Ana (familia 2) es gestora
-    (2, 2, CURRENT_TIMESTAMP - INTERVAL '21 days', CURRENT_TIMESTAMP - INTERVAL '17 days', CURRENT_TIMESTAMP - INTERVAL '14 days', 'repartido', CURRENT_TIMESTAMP - INTERVAL '14 days'),
-    (2, 2, CURRENT_TIMESTAMP - INTERVAL '7 days', CURRENT_TIMESTAMP - INTERVAL '3 days', CURRENT_TIMESTAMP - INTERVAL '1 day', 'repartido', CURRENT_TIMESTAMP - INTERVAL '1 day'),
-
-    -- Pedidos panadería (proveedor 3) - Luis (familia 3) es gestor
-    (3, 3, CURRENT_TIMESTAMP - INTERVAL '14 days', CURRENT_TIMESTAMP - INTERVAL '12 days', CURRENT_TIMESTAMP - INTERVAL '10 days', 'repartido', CURRENT_TIMESTAMP - INTERVAL '10 days'),
-    (3, 3, CURRENT_TIMESTAMP - INTERVAL '7 days', CURRENT_TIMESTAMP - INTERVAL '5 days', CURRENT_TIMESTAMP - INTERVAL '3 days', 'repartido', CURRENT_TIMESTAMP - INTERVAL '3 days');
-
--- Pedidos actualmente abiertos
-INSERT INTO pedido (id_usuario_encargado, id_proveedor, fecha_apertura, fecha_cierre, fecha_entrega, estado, fecha_modificacion)
+-- Pedidos abiertos
+INSERT INTO pedido (id_proveedor, fecha_apertura, fecha_cierre, fecha_entrega, estado, fecha_modificacion)
 VALUES
-    (1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '5 days', CURRENT_TIMESTAMP + INTERVAL '7 days', 'pendiente', CURRENT_TIMESTAMP),
-    (1, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '3 days', CURRENT_TIMESTAMP + INTERVAL '5 days', 'pendiente', CURRENT_TIMESTAMP),
-    (2, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '4 days', CURRENT_TIMESTAMP + INTERVAL '6 days', 'pendiente', CURRENT_TIMESTAMP),
-    (3, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '2 days', CURRENT_TIMESTAMP + INTERVAL '4 days', 'pendiente', CURRENT_TIMESTAMP),
-    (3, 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '5 days', CURRENT_TIMESTAMP + INTERVAL '7 days', 'pendiente', CURRENT_TIMESTAMP);
+    (1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '5 days', CURRENT_TIMESTAMP + INTERVAL '7 days', 'pendiente', CURRENT_TIMESTAMP),
+    (4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '3 days', CURRENT_TIMESTAMP + INTERVAL '5 days', 'pendiente', CURRENT_TIMESTAMP),
+    (2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '4 days', CURRENT_TIMESTAMP + INTERVAL '6 days', 'pendiente', CURRENT_TIMESTAMP),
+    (3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '2 days', CURRENT_TIMESTAMP + INTERVAL '4 days', 'pendiente', CURRENT_TIMESTAMP),
+    (6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '5 days', CURRENT_TIMESTAMP + INTERVAL '7 days', 'pendiente', CURRENT_TIMESTAMP);
 
 -- Detalles de pedidos (productos elegidos por usuarios en cada pedido)
 INSERT INTO detalle_pedido (id_pedido, id_producto, cantidad, precio_unitario, id_usuario_comprador, fecha_modificacion)

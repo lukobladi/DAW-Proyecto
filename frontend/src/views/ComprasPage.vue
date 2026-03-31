@@ -62,12 +62,12 @@
               <button
                 @click="anadirACesta(producto)"
                 class="btn btn-primary"
-                :disabled="!producto.pedidoAbierto || anadiendoProductoId === producto.id"
+                :disabled="!productoDisponible(producto) || anadiendoProductoId === producto.id"
               >
                 {{
                   anadiendoProductoId === producto.id
                     ? 'Anadiendo...'
-                    : producto.pedidoAbierto
+                    : productoDisponible(producto)
                       ? 'Anadir a la cesta'
                       : 'No disponible'
                 }}
@@ -164,12 +164,10 @@ export default {
       this.errorCarga = '';
 
       try {
-        const productosPromise = this.isAdmin ? api.getProductos() : api.getMisProductos();
-        const pedidosPromise = this.isAdmin ? api.getPedidos() : api.getMisPedidos();
         const [productosResponse, proveedoresResponse, pedidosResponse] = await Promise.all([
-          productosPromise,
+          api.getProductos(),
           api.getProveedores(),
-          pedidosPromise,
+          api.getPedidos(),
         ]);
 
         const proveedorPorId = new Map(
@@ -251,9 +249,18 @@ export default {
 
       return true;
     },
-    anadirACesta(producto) {
+    productoDisponible(producto) {
       if (!producto.pedidoAbierto) {
-        alertStore.showAlert('Este producto no se puede pedir porque no hay pedido abierto.', 'danger');
+        return false;
+      }
+      if (this.filtroEstado === 'pendiente_entrega') {
+        return false;
+      }
+      return true;
+    },
+    anadirACesta(producto) {
+      if (!this.productoDisponible(producto)) {
+        alertStore.showAlert('Este producto no se puede pedir.', 'danger');
         return;
       }
 

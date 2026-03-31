@@ -16,13 +16,9 @@ const ProductoController = {
 
     try {
       if (user_role === 'gestor') {
-        const usuario = await Usuario.findById(id_usuario_encargado);
-        if (!usuario || !usuario.familia) {
-          return res.status(403).json({ error: 'No perteneces a ninguna familia' });
-        }
-        const proveedores = await Proveedor.findByFamilia(usuario.familia);
+        const proveedores = await Proveedor.findByUsuario(id_usuario_encargado);
         if (!proveedores || proveedores.length === 0) {
-          return res.status(403).json({ error: 'Tu familia no gestiona ningun proveedor' });
+          return res.status(403).json({ error: 'No tienes proveedores asignados' });
         }
         id_proveedor = proveedores[0].id_proveedor;
       }
@@ -55,22 +51,15 @@ const ProductoController = {
   async listarMisProductos(req, res) {
     try {
       const id_usuario = req.user.id_usuario;
-      const usuario = await Usuario.findById(id_usuario);
 
-      if (!usuario || !usuario.familia) {
-        return res
-          .status(403)
-          .json({ error: 'No pertenece a ninguna familia' });
-      }
-
-      const proveedores = await Proveedor.findByFamilia(usuario.familia);
+      const proveedores = await Proveedor.findByUsuario(id_usuario);
 
       if (!proveedores || proveedores.length === 0) {
         return res
           .status(403)
           .json({
             error:
-              'Tu familia no tiene proveedor asignado. COntacte con un administrador para asignarle uno',
+              'No tienes proveedores asignados. Contacta con un administrador',
           });
       }
 
@@ -106,8 +95,7 @@ const ProductoController = {
 
     try {
       if (req.user.rol === 'gestor') {
-        const usuario = await Usuario.findById(req.user.id_usuario);
-        const proveedores = await Proveedor.findByFamilia(usuario.familia);
+        const proveedores = await Proveedor.findByUsuario(req.user.id_usuario);
         id_proveedor = proveedores[0].id_proveedor;
       }
       const productoActualizado = await Producto.update(

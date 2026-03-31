@@ -29,22 +29,19 @@ const router = express.Router();
  *       required: true
  *       content:
  *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               fecha_apertura:
- *                 type: string
- *                 format: date-time
- *                 example: "2026-03-01T12:00:00Z"
- *               id_usuario_encargado:
- *                 type: integer
- *                 example: 1
- *               id_proveedor:
- *                 type: integer
- *                 example: 2
- *               estado:
- *                 type: string
- *                 example: "pendiente"
+  *           schema:
+  *             type: object
+  *             properties:
+  *               fecha_apertura:
+  *                 type: string
+  *                 format: date-time
+  *                 example: "2026-03-01T12:00:00Z"
+  *               id_proveedor:
+  *                 type: integer
+  *                 example: 2
+  *               estado:
+  *                 type: string
+  *                 example: "pendiente"
  *     responses:
  *       201:
  *         description: Pedido creado correctamente
@@ -76,7 +73,6 @@ router.post(
 router.get(
   '/obtenerTodos',
   authMiddleware,
-  adminMiddleware,
   PedidoController.listar
 );
 
@@ -145,31 +141,28 @@ router.get('/obtener/:id', authMiddleware, validators.idParamPedido, validar, Pe
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               fecha_apertura:
- *                 type: string
- *                 format: date-time
- *                 example: "2026-03-01T12:00:00Z"
- *               id_usuario_encargado:
- *                 type: integer
- *                 example: 1
- *               id_proveedor:
- *                 type: integer
- *                 example: 2
- *               estado:
- *                 type: string
- *                 example: "en proceso"
- *     responses:
- *       200:
- *         description: Pedido actualizado correctamente
- *       404:
- *         description: Pedido no encontrado
- *       500:
- *         description: Error al actualizar el pedido
- */
+  *         application/json:
+  *           schema:
+  *             type: object
+  *             properties:
+  *               fecha_apertura:
+  *                 type: string
+  *                 format: date-time
+  *                 example: "2026-03-01T12:00:00Z"
+  *               id_proveedor:
+  *                 type: integer
+  *                 example: 2
+  *               estado:
+  *                 type: string
+  *                 example: "en proceso"
+  *     responses:
+  *       200:
+  *         description: Pedido actualizado correctamente
+  *       404:
+  *         description: Pedido no encontrado
+  *       500:
+  *         description: Error al actualizar el pedido
+  */
 router.put('/actualizar/:id', authMiddleware, validators.actualizarPedido, validar, PedidoController.actualizar);
 
 /**

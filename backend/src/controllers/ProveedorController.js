@@ -1,10 +1,9 @@
 // Los controllers GEstiona logica de solicitud HTTP
 
 const Proveedor = require('../models/Proveedor');
-const FamiliaProveedor = require('../models/FamiliaProveedor');
+const UsuarioProveedor = require('../models/UsuarioProveedor');
 
 const ProveedorController = {
-  // Crear un nuevo proveedor y asignarle una familia si se proporciona
   async crear(req, res) {
     const {
       nombre,
@@ -16,10 +15,8 @@ const ProveedorController = {
       frecuencia_pedido_aproximada,
       envio_movil,
       envio_mail,
-      familia, // Puede ser null
     } = req.body;
     try {
-      // 1. Crear el proveedor
       const nuevoProveedor = await Proveedor.create(
         nombre,
         contacto,
@@ -31,21 +28,13 @@ const ProveedorController = {
         envio_movil,
         envio_mail
       );
-
-      // 2. Si se proporciono una familia, asignarla
-      if (familia !== null && familia > 0) {
-        await FamiliaProveedor.asignar(familia, nuevoProveedor.id_proveedor);
-      }
-      
-      const proveedorConFamilia = await Proveedor.findById(nuevoProveedor.id_proveedor);
-      res.status(201).json(proveedorConFamilia);
+      res.status(201).json(nuevoProveedor);
     } catch (err) {
       console.error(err);
       res.status(500).send(`Error al crear el proveedor: ${err.message}`);
     }
   },
 
-  // Obtener todos los proveedores
   async listar(req, res) {
     try {
       const proveedores = await Proveedor.findAll();
@@ -56,7 +45,6 @@ const ProveedorController = {
     }
   },
 
-  // Obtener un proveedor por ID
   async obtenerPorId(req, res) {
     const { id } = req.params;
     try {
@@ -71,7 +59,6 @@ const ProveedorController = {
     }
   },
 
-  // Actualizar un proveedor y su asignacion de familia
   async actualizar(req, res) {
     const { id } = req.params;
     const {
@@ -84,10 +71,8 @@ const ProveedorController = {
       frecuencia_pedido_aproximada,
       envio_movil,
       envio_mail,
-      familia,
     } = req.body;
     try {
-      // 1. Actualizar los datos del proveedor
       const proveedorActualizado = await Proveedor.update(
         id,
         nombre,
@@ -100,21 +85,7 @@ const ProveedorController = {
         envio_movil,
         envio_mail
       );
-
-      // 2. Gestionar la asignacion de familia
-      // Primero, desasignamos todas las familias para este proveedor
-      const familiasActuales = await FamiliaProveedor.findFamiliasByProveedor(id);
-      for (const fam of familiasActuales) {
-        await FamiliaProveedor.desasignar(fam, id);
-      }
-      
-      // Si se proporciona una nueva familia, la asignamos
-      if (familia !== null && familia > 0) {
-        await FamiliaProveedor.asignar(familia, id);
-      }
-
-      const proveedorConFamilia = await Proveedor.findById(id);
-      res.json(proveedorConFamilia);
+      res.json(proveedorActualizado);
     } catch (err) {
       console.error(err);
       res.status(500).send(`Error al actualizar el proveedor: ${err.message}`);

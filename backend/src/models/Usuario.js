@@ -9,15 +9,14 @@ const Usuario = {
     return bcrypt.compare(password, hashedPassword);
   },
 
-  // Crear un nuevo usuario
-  async create(nombre, correo, password, rol, movil, familia = null) {
+  async create(nombre, correo, password, rol, movil) {
     const hashedPassword = await bcrypt.hash(password, 10);
     const query = `
-      INSERT INTO usuario (nombre, correo, pass, rol, movil, familia, fecha_modificacion)
-      VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP)
+      INSERT INTO usuario (nombre, correo, pass, rol, movil, fecha_modificacion)
+      VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)
       RETURNING *;
     `;
-    const values = [nombre, correo, hashedPassword, rol, movil, familia];
+    const values = [nombre, correo, hashedPassword, rol, movil];
     const { rows } = await pool.query(query, values);
     return rows[0];
   },
@@ -60,15 +59,14 @@ const Usuario = {
     return rows.length > 0 ? rows[0] : null;
   },
 
-  // Actualizar un usuario
-  async update(id, nombre, correo, rol, movil, familia = null) {
+  async update(id, nombre, correo, rol, movil) {
     const query = `
       UPDATE usuario
-      SET nombre = $2, correo = $3, rol = $4, movil = $5, familia = $6, fecha_modificacion = CURRENT_TIMESTAMP
+      SET nombre = $2, correo = $3, rol = $4, movil = $5, fecha_modificacion = CURRENT_TIMESTAMP
       WHERE id_usuario = $1
       RETURNING *;
     `;
-    const values = [id, nombre, correo, rol, movil, familia];
+    const values = [id, nombre, correo, rol, movil];
     const { rows } = await pool.query(query, values);
     return rows.length > 0 ? rows[0] : null;
   },

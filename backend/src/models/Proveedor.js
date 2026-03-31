@@ -1,6 +1,6 @@
 
 const pool = require('../config/db');
-const FamiliaProveedor = require('./FamiliaProveedor');
+const UsuarioProveedor = require('./UsuarioProveedor');
 
 const validFrecuencias = [
   'semanal',
@@ -13,7 +13,6 @@ const validFrecuencias = [
 ];
 
 const Proveedor = {
-  // Crear un nuevo proveedor (sin familia)
   async create(
     nombre,
     contacto,
@@ -51,33 +50,20 @@ const Proveedor = {
     return rows[0];
   },
 
-  // Obtener todos los proveedores con su familia asignada
   async findAll() {
-    const query = `
-      SELECT p.*, fp.id_familia as familia
-      FROM proveedor p
-      LEFT JOIN familia_proveedor fp ON p.id_proveedor = fp.id_proveedor
-      ORDER BY p.id_proveedor;
-    `;
+    const query = 'SELECT * FROM proveedor ORDER BY id_proveedor;';
     const { rows } = await pool.query(query);
     return rows;
   },
 
-  // Obtener un proveedor por ID con su familia
   async findById(id) {
-    const query = `
-      SELECT p.*, fp.id_familia as familia
-      FROM proveedor p
-      LEFT JOIN familia_proveedor fp ON p.id_proveedor = fp.id_proveedor
-      WHERE p.id_proveedor = $1;
-    `;
+    const query = 'SELECT * FROM proveedor WHERE id_proveedor = $1;';
     const { rows } = await pool.query(query, [id]);
     return rows[0];
   },
 
-  // Obtener proveedor por familia gestora
-  async findByFamilia(familia) {
-    return FamiliaProveedor.findProveedoresByFamilia(familia);
+  async findByUsuario(id_usuario) {
+    return UsuarioProveedor.findProveedoresByUsuario(id_usuario);
   },
 
   // Actualizar un proveedor (sin familia)

@@ -6,7 +6,6 @@ const Usuario = require('../models/Usuario');
 const Proveedor = require('../models/Proveedor');
 
 const PedidoController = {
-  // Crear un nuevo pedido
   async crear(req, res) {
     const {
       fecha_apertura,
@@ -14,26 +13,18 @@ const PedidoController = {
       fecha_entrega,
       estado,
     } = req.body;
-    let { id_proveedor } = req.body; // Make id_proveedor mutable
-    const id_usuario_encargado = req.user.id_usuario;
+    let { id_proveedor } = req.body;
     const user_role = req.user.rol;
 
     try {
       if (user_role === 'gestor') {
-        const usuario = await Usuario.findById(id_usuario_encargado);
-        if (!usuario || !usuario.familia) {
-          return res.status(403).json({ error: 'No perteneces a ninguna familia' });
-        }
-        // findProveedoresByFamilia returns an array of providers
-        const proveedores = await Proveedor.findByFamilia(usuario.familia);
+        const proveedores = await Proveedor.findByUsuario(req.user.id_usuario);
         if (!proveedores || proveedores.length === 0) {
-          return res.status(403).json({ error: 'Tu familia no gestiona ningun proveedor' });
+          return res.status(403).json({ error: 'No tienes proveedores asignados' });
         }
-        // Assuming a gestor's family manages only one provider
         id_proveedor = proveedores[0].id_proveedor;
       }
       const nuevoPedido = await Pedido.create(
-        id_usuario_encargado,
         id_proveedor,
         fecha_apertura,
         fecha_cierre,
@@ -62,23 +53,15 @@ const PedidoController = {
   async listarPorProveedorAsignado(req, res) {
     try {
       const id_usuario = req.user.id_usuario;
-      const usuario = await Usuario.findById(id_usuario);
 
-      if (!usuario || !usuario.familia) {
-        return res
-          .status(403)
-          .json({ error: 'No perteneces a ninguna familia' });
-      }
-
-      const proveedores = await Proveedor.findByFamilia(usuario.familia);
+      const proveedores = await Proveedor.findByUsuario(id_usuario);
 
       if (!proveedores || proveedores.length === 0) {
         return res
           .status(403)
-          .json({ error: 'Tu familia no gestiona ningun proveedor' });
+          .json({ error: 'No tienes proveedores asignados' });
       }
 
-      // Assuming a gestor's family manages only one provider
       const pedidos = await Pedido.findByProveedor(proveedores[0].id_proveedor);
       res.json(pedidos);
     } catch (err) {
@@ -119,7 +102,6 @@ const PedidoController = {
       }
       const pedidoActualizado = await Pedido.update(
         id,
-        pedidoActual.id_usuario_encargado,
         id_proveedor,
         fecha_apertura,
         fecha_cierre,

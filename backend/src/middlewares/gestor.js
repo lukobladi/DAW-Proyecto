@@ -1,31 +1,24 @@
-const Usuario = require('../models/Usuario');
 const Producto = require('../models/Producto');
 const Proveedor = require('../models/Proveedor');
 
-// Middleware para verificar si el usuario es admin o gestor de un proveedor
 const gestor = async (req, res, next) => {
   try {
-    const usuario = await Usuario.findById(req.user.id_usuario);
-
-    // Si es admin, tiene acceso total
-    if (usuario.rol === 'admin') {
+    if (req.user.rol === 'admin') {
       return next();
     }
 
-    if (usuario.rol === 'gestor') {
-      if (!usuario.familia) {
+    if (req.user.rol === 'gestor') {
+      const proveedores = await Proveedor.findByUsuario(req.user.id_usuario);
+      if (!proveedores || proveedores.length === 0) {
         return res
           .status(403)
-          .json({ error: 'No tienes una familia asignada.' });
+          .json({ error: 'No tienes proveedores asignados.' });
       }
 
-      // Para crear un nuevo producto, solo verificamos si el usuario es un gestor con una familia.
-      // El controlador se encargara de asignar el proveedor correcto.
       if (req.method === 'POST') {
         return next();
       }
 
-      // Para actualizar/eliminar productos existentes, verificamos la propiedad.
       const { id } = req.params;
       if (id) {
         const producto = await Producto.findById(id);
@@ -33,9 +26,7 @@ const gestor = async (req, res, next) => {
           return res.status(404).json({ error: 'Producto no encontrado.' });
         }
 
-        const proveedores = await Proveedor.findByFamilia(usuario.familia);
         if (
-          proveedores &&
           proveedores.some((p) => p.id_proveedor === producto.id_proveedor)
         ) {
           return next();

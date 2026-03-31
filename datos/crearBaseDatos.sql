@@ -38,7 +38,7 @@ DROP TABLE IF EXISTS Detalle_Pedido CASCADE;
 DROP TABLE IF EXISTS Pedido CASCADE;
 DROP TABLE IF EXISTS Producto CASCADE;
 DROP TABLE IF EXISTS Proveedor CASCADE;
-DROP TABLE IF EXISTS familia_proveedor CASCADE;
+DROP TABLE IF EXISTS usuario_proveedor CASCADE;
 DROP TABLE IF EXISTS Pedido_Periodico CASCADE;
 DROP TABLE IF EXISTS Pago CASCADE;
 DROP TABLE IF EXISTS Notificacion CASCADE;
@@ -54,7 +54,6 @@ CREATE TABLE Usuario (
     rol VARCHAR(50) NOT NULL CHECK (rol IN ('admin', 'usuario', 'gestor')),
     activo BOOLEAN DEFAULT FALSE,
     saldo DECIMAL(10, 2) DEFAULT 0,
-    familia INTEGER,
     fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -86,7 +85,6 @@ CREATE TABLE Producto (
 
 CREATE TABLE Pedido (
     id_pedido SERIAL PRIMARY KEY,
-    id_usuario_encargado INT REFERENCES Usuario(id_usuario) ON DELETE CASCADE,
     id_proveedor INT REFERENCES Proveedor(id_proveedor) ON DELETE CASCADE,
     fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     fecha_apertura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -105,10 +103,10 @@ CREATE TABLE Detalle_Pedido (
     fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE familia_proveedor (
-    id_familia INTEGER NOT NULL,
+CREATE TABLE Usuario_Proveedor (
+    id_usuario INT REFERENCES Usuario(id_usuario) ON DELETE CASCADE NOT NULL,
     id_proveedor INT REFERENCES Proveedor(id_proveedor) ON DELETE CASCADE,
-    PRIMARY KEY (id_familia, id_proveedor)
+    PRIMARY KEY (id_usuario, id_proveedor)
 );
 
 CREATE TABLE Pedido_Periodico (

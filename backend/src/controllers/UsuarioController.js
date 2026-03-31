@@ -10,15 +10,14 @@ const SECRET_KEY = process.env.JWT_SECRET;
 
 const UsuarioController = {
   async registrar(req, res) {
-    const { nombre, correo, password, rol, movil, familia } = req.body;
+    const { nombre, correo, password, rol, movil } = req.body;
     try {
       const nuevoUsuario = await Usuario.create(
         nombre,
         correo,
         password,
         rol,
-        movil,
-        familia
+        movil
       );
 
       try {
@@ -26,7 +25,7 @@ const UsuarioController = {
         logger.info(`Admins encontrados para notificar: ${adminEmails.length}`);
 
         if (adminEmails.length > 0) {
-          const mensaje = `Se ha registrado un nuevo usuario en Ekonsumo:\n\nNombre: ${nombre}\nCorreo: ${correo}\nMovil: ${movil || 'No proporcionado'}\nFamilia: ${familia || 'No asignada'}\nRol: ${rol}\n\nPor favor, revisa el panel de administracion para activar el usuario si es necesario.`;
+          const mensaje = `Se ha registrado un nuevo usuario en Ekonsumo:\n\nNombre: ${nombre}\nCorreo: ${correo}\nMovil: ${movil || 'No proporcionado'}\nRol: ${rol}\n\nPor favor, revisa el panel de administracion para activar el usuario si es necesario.`;
           await emailService.enviarCorreoMultiple(
             adminEmails,
             'Nuevo usuario registrado en Ekonsumo',
@@ -83,9 +82,9 @@ const UsuarioController = {
       );
 
       let proveedor_gestionado = null;
-      if (user.rol === 'gestor' && user.familia) {
+      if (user.rol === 'gestor') {
         try {
-          const proveedores = await Proveedor.findByFamilia(user.familia);
+          const proveedores = await Proveedor.findByUsuario(user.id_usuario);
           if (proveedores && proveedores.length > 0) {
             proveedor_gestionado = proveedores[0].nombre;
           }
@@ -104,7 +103,6 @@ const UsuarioController = {
           correo: user.correo,
           rol: user.rol,
           movil: user.movil,
-          familia: user.familia,
           proveedor_gestionado,
         },
       });
@@ -246,15 +244,14 @@ const UsuarioController = {
 
   async actualizar(req, res) {
     const { id } = req.params;
-    const { nombre, correo, rol, movil, familia } = req.body;
+    const { nombre, correo, rol, movil } = req.body;
     try {
       const usuarioActualizado = await Usuario.update(
         id,
         nombre,
         correo,
         rol,
-        movil,
-        familia
+        movil
       );
       if (!usuarioActualizado) {
         return res.status(404).send('Usuario no encontrado');

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const FamiliaProveedorController = require('../controllers/FamiliaProveedorController');
+const UsuarioProveedorController = require('../controllers/UsuarioProveedorController');
 const auth = require('../middlewares/auth');
 const admin = require('../middlewares/admin');
 const validators = require('../middlewares/validators');
@@ -9,16 +9,16 @@ const validar = require('../middlewares/validar');
 /**
  * @swagger
  * tags:
- *   name: Familia-Proveedor
- *   description: Endpoints para gestionar la asignación de familias a proveedores
+ *   name: Usuario-Proveedor
+ *   description: Endpoints para gestionar la asignación de usuarios a proveedores
  */
 
 /**
  * @swagger
- * /api/familia-proveedor:
+ * /api/usuario-proveedor:
  *   get:
- *     summary: Obtener todas las asignaciones de familias a proveedores
- *     tags: [Familia-Proveedor]
+ *     summary: Obtener todas las asignaciones de usuarios a proveedores
+ *     tags: [Usuario-Proveedor]
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -27,14 +27,14 @@ const validar = require('../middlewares/validar');
  *       500:
  *         description: Error al obtener las asignaciones
  */
-router.get('/', [auth, admin], FamiliaProveedorController.listar);
+router.get('/', [auth, admin], UsuarioProveedorController.listar);
 
 /**
  * @swagger
- * /api/familia-proveedor/asignar:
+ * /api/usuario-proveedor/asignar:
  *   post:
- *     summary: Asignar una familia a un proveedor
- *     tags: [Familia-Proveedor]
+ *     summary: Asignar un usuario a un proveedor
+ *     tags: [Usuario-Proveedor]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -44,7 +44,7 @@ router.get('/', [auth, admin], FamiliaProveedorController.listar);
  *           schema:
  *             type: object
  *             properties:
- *               id_familia:
+ *               id_usuario:
  *                 type: integer
  *                 example: 1
  *               id_proveedor:
@@ -56,14 +56,14 @@ router.get('/', [auth, admin], FamiliaProveedorController.listar);
  *       500:
  *         description: Error al crear la asignación
  */
-router.post('/asignar', [auth, admin], validators.asignarFamiliaProveedor, validar, FamiliaProveedorController.asignar);
+router.post('/asignar', [auth, admin], validators.asignarUsuarioProveedor, validar, UsuarioProveedorController.asignar);
 
 /**
  * @swagger
- * /api/familia-proveedor/desasignar:
+ * /api/usuario-proveedor/desasignar:
  *   post:
- *     summary: Desasignar una familia de un proveedor
- *     tags: [Familia-Proveedor]
+ *     summary: Desasignar un usuario de un proveedor
+ *     tags: [Usuario-Proveedor]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -73,7 +73,7 @@ router.post('/asignar', [auth, admin], validators.asignarFamiliaProveedor, valid
  *           schema:
  *             type: object
  *             properties:
- *               id_familia:
+ *               id_usuario:
  *                 type: integer
  *                 example: 1
  *               id_proveedor:
@@ -85,6 +85,6 @@ router.post('/asignar', [auth, admin], validators.asignarFamiliaProveedor, valid
  *       500:
  *         description: Error al eliminar la asignación
  */
-router.post('/desasignar', [auth, admin], validators.asignarFamiliaProveedor, validar, FamiliaProveedorController.desasignar);
+router.post('/desasignar', [auth, admin], validators.asignarUsuarioProveedor, validar, UsuarioProveedorController.desasignar);
 
 module.exports = router;
