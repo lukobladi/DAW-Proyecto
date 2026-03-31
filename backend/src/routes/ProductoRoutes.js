@@ -82,7 +82,6 @@ router.post(
 router.get(
   '/obtenerTodos',
   authMiddleware,
-  adminMiddleware,
   ProductoController.listar
 );
 

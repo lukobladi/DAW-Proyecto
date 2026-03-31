@@ -42,7 +42,15 @@
       <div v-else class="proveedores-lista">
         <section v-for="grupo in productosAgrupados" :key="grupo.proveedor" class="proveedor-seccion">
           <h3 class="proveedor-titulo">{{ grupo.proveedor }}</h3>
-          <p class="proveedor-meta">Periodicidad: {{ grupo.periodicidad }}</p>
+          <p class="proveedor-meta">
+            <span v-if="grupo.fechaApertura" class="fecha-apertura">
+              Abre: {{ formatoFechaLocal(grupo.fechaApertura) }}
+            </span>
+            <span v-if="grupo.fechaCierre" class="fecha-cierre">
+              Cierra: {{ formatoFechaLocal(grupo.fechaCierre) }}
+            </span>
+            <span class="periodicidad">Periodicidad: {{ grupo.periodicidad }}</span>
+          </p>
           <div class="lista-productos">
             <div v-for="producto in grupo.productos" :key="producto.id" class="producto-card">
               <img
@@ -123,6 +131,8 @@ export default {
           grupos[proveedorKey] = {
             proveedor: proveedorKey,
             periodicidad: producto.periodicidad,
+            fechaApertura: producto.fechaApertura,
+            fechaCierre: producto.fechaCierre,
             productos: [],
           };
         }
@@ -214,6 +224,8 @@ export default {
               pedidoAbiertoId: pedidoAbiertoPorProveedor.get(producto.id_proveedor) || null,
               pedidoAbierto: pedidoAbiertoPorProveedor.has(producto.id_proveedor),
               estadoPedido: pedidoDelProveedor?.estado || null,
+              fechaApertura: pedidoDelProveedor?.fecha_apertura || null,
+              fechaCierre: pedidoDelProveedor?.fecha_cierre || null,
             };
           });
       } catch (error) {
@@ -248,6 +260,11 @@ export default {
       }
 
       return true;
+    },
+    formatoFechaLocal(fecha) {
+      if (!fecha) return '';
+      const d = new Date(fecha);
+      return d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
     },
     productoDisponible(producto) {
       if (!producto.pedidoAbierto) {
@@ -372,6 +389,22 @@ export default {
   color: var(--color-text-light);
   font-size: var(--font-size-sm);
   margin-bottom: var(--spacing-md);
+}
+
+.proveedor-meta .fecha-apertura {
+  color: #28a745;
+  font-weight: bold;
+  margin-right: 12px;
+}
+
+.proveedor-meta .fecha-cierre {
+  color: #dc3545;
+  font-weight: bold;
+  margin-right: 12px;
+}
+
+.proveedor-meta .periodicidad {
+  color: var(--color-text-light);
 }
 
 .lista-productos {
