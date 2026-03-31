@@ -1,7 +1,7 @@
 <template>
   <div class="gestion-saldos-page">
     <NavBar />
-    <div class="gestion-saldos-content">
+    <div class="page-content">
       <h2>Gestión de Saldos</h2>
       <div class="lista-saldos">
         <div v-for="usuario in usuarios" :key="usuario.id" class="saldo-card">
@@ -42,11 +42,6 @@ export default {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-}
-
-.gestion-saldos-content {
-  flex: 1;
-  padding: var(--spacing-xl);
 }
 
 .lista-saldos {

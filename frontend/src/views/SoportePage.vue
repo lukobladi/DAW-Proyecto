@@ -1,5 +1,5 @@
 <template>
-  <div class="container py-4">
+  <div class="page-content container">
     <h2 class="mb-4">Soporte y Ayuda</h2>
 
     <ul class="nav nav-tabs mb-4" role="tablist">

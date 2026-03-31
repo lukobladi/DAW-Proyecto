@@ -1,5 +1,5 @@
 <template>
-  <div class="container py-4">
+  <div class="page-content container">
     <h2 class="mb-3">Configuracion de Cuenta</h2>
 
     <div v-if="cargando" class="estado">Cargando datos de cuenta...</div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="container py-4">
+  <div class="page-content container">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h2 class="mb-0">Gestion de Pedidos Periodicos</h2>
       <button class="btn btn-primary" @click="abrirModalCrear">Crear pedido periodico</button>

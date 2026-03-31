@@ -1,8 +1,8 @@
 <template>
-  <div class="container py-4">
+  <div class="page-content container">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h2 class="mb-0">Historial de Pedidos</h2>
-      <button class="btn btn-outline-primary" @click="cargarHistorial" :disabled="cargando">
+      <button class="btn btn-primary" @click="cargarHistorial" :disabled="cargando">
         {{ cargando ? 'Actualizando...' : 'Actualizar' }}
       </button>
     </div>
@@ -25,7 +25,7 @@
           <p class="mb-1"><strong>Unidades:</strong> {{ pedido.unidades_total }}</p>
           <p class="mb-1"><strong>Importe:</strong> {{ pedido.importe_total }} EUR</p>
           <p class="mb-3"><strong>Entrega:</strong> {{ formatFecha(pedido.fecha_entrega) }}</p>
-          <button class="btn btn-primary btn-sm" @click="verDetalles(pedido.id_pedido)">
+          <button class="btn btn-outline-primary btn-sm" @click="verDetalles(pedido.id_pedido)">
             Ver detalles
           </button>
         </div>

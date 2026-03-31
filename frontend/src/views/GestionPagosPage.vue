@@ -1,6 +1,6 @@
 <template>
   <div class="gestion-pagos-page">
-    <div class="gestion-pagos-content container">
+    <div class="page-content container">
       <h2>Gestion de Pagos</h2>
       <p class="texto-ayuda">
         El deudor puede marcar un pago como enviado, pero la deuda solo se cierra cuando el acreedor
@@ -10,7 +10,7 @@
       <div class="filtros">
         <label for="periodo" class="form-label">Periodo</label>
         <input id="periodo" v-model="periodo" type="month" class="form-control" />
-        <button class="btn btn-outline-secondary" @click="cargarPagos">Actualizar</button>
+        <button class="btn btn-primary" @click="cargarPagos">Actualizar</button>
       </div>
 
       <div v-if="cargando" class="estado">Cargando pagos...</div>
@@ -171,14 +171,13 @@ export default {
   min-height: 100vh;
 }
 
-.gestion-pagos-content {
-  flex: 1;
-  padding: var(--spacing-xl);
-}
-
 .texto-ayuda {
   color: var(--color-text-light);
   margin-bottom: var(--spacing-md);
+    background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-sm);
 }
 
 .filtros {

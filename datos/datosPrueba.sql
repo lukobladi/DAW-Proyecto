@@ -18,22 +18,24 @@ RESTART IDENTITY CASCADE;
 -- Insertar datos de prueba en la tabla usuario (NO MODIFICAR)
 INSERT INTO usuario (nombre, correo, pass, movil, rol, activo, saldo, familia)
 VALUES
-    ('Eneko', 'enekoloko7@hotmail.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '622019870', 'admin', TRUE, 100.00, 1),
-    ('Ana Gómez', 'ana.gomez@example.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '600654321', 'gestor', TRUE, 50.00, 2),
-    ('Luis Martínez', 'luis.martinez@example.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '600987654', 'gestor', TRUE, 75.00, 3),
-    ('María López', 'maria.lopez@example.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '600112233', 'usuario', FALSE, 0.00, 1);
+    ('Admin', 'admin@admin.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '111111111', 'admin', TRUE, 100.00, 1),
+    ('Pareja de Admin', 'pareja_de_admin@pareja_de_admin.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '444444444', 'usuario', TRUE, 100.00, 1),
+    ('Gestor', 'gestor@gestor.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '222222222', 'gestor', TRUE, 100.00, 2),
+    ('Pareja de Gestor', 'pareja_de_gestor@gestor.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '555555555', 'usuario', TRUE, 100.00, 2),
+    ('Usuario', 'usuario@usuario.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '333333333', 'usuario', TRUE, 100.00, 3),
+    ('Pareja de Usuario', 'pareja_de_usuario@usuario.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '666666666', 'usuario', TRUE, 100.00, 3);
 
 -- Insertar proveedores
 INSERT INTO proveedor (nombre, contacto, telefono, movil, correo, metodo_pago, frecuencia_pedido_aproximada, envio_movil, envio_mail, activo)
 VALUES
     ('Frutas y Verduras El Campico', 'Carlos Ruiz', '948123456', '622019870', 'carlos@elcampico.com', 'transferencia', 'semanal', TRUE, TRUE, TRUE),
-    ('Carnes José María', 'Marta Sánchez', '948234567', '622123456', 'marta@carnesjosemaría.com', 'efectivo', 'quincenal', FALSE, TRUE, TRUE),
+    ('Carnes José María', 'Marta Sánchez', '948234567', '622123456', 'marta@carnesjosemaría.com', 'efectivo', 'mensual', FALSE, TRUE, TRUE),
     ('Panadería San Andrés', 'Ana García', '948345678', '622234567', 'ana@sanandres.com', 'tarjeta', 'semanal', TRUE, TRUE, TRUE),
     ('Huevos de Casa Eusebio', 'Pablo Fernández', '948456789', '622345678', 'pablo@huevoseusebio.com', 'efectivo', 'semanal', TRUE, FALSE, TRUE),
     ('Lácteos del Norte', 'Laura Rodríguez', '948567890', '622456789', 'laura@lacteosdelnorte.com', 'transferencia', 'mensual', FALSE, TRUE, TRUE),
     ('Vinos La Rivera', 'Javier López', '948678901', '622567890', 'javier@lavineradelarivera.com', 'transferencia', 'mensual', FALSE, TRUE, TRUE),
     ('Legumbres Teresa', 'Isabel Moro', '948789012', '622678901', 'isabel@legumbredisateresa.com', 'efectivo', 'mensual', TRUE, TRUE, TRUE),
-    ('Productos Temporada', 'Roberto Gil', '948890123', '622789012', 'roberto@temporada.com', 'transferencia', 'quincenal', TRUE, TRUE, FALSE);
+    ('Productos Temporada', 'Roberto Gil', '948890123', '622789012', 'roberto@temporada.com', 'transferencia', 'mensual', TRUE, TRUE, FALSE);
 
 -- Asignar familias a proveedores (cada proveedor es gestionado por una familia)
 INSERT INTO familia_proveedor (id_familia, id_proveedor)
@@ -190,15 +192,15 @@ VALUES
 INSERT INTO pago (id_usuario_deudor, id_usuario_creditor, monto, fecha_pago, estado, periodo, origen, concepto, deudor_reporta_pagado, fecha_reporte_deudor, fecha_confirmacion_receptor, fecha_modificacion)
 VALUES
     -- Pagos febrero completados
-    (1, 2, 28.50, CURRENT_TIMESTAMP - INTERVAL '15 days', 'completado', '2026-02', 'liquidacion', 'Liquidación febrero - Carnes', TRUE, CURRENT_TIMESTAMP - INTERVAL '16 days', CURRENT_TIMESTAMP - INTERVAL '15 days', CURRENT_TIMESTAMP - INTERVAL '15 days'),
-    (3, 2, 22.40, CURRENT_TIMESTAMP - INTERVAL '15 days', 'completado', '2026-02', 'liquidacion', 'Liquidación febrero - Carnes', TRUE, CURRENT_TIMESTAMP - INTERVAL '16 days', CURRENT_TIMESTAMP - INTERVAL '15 days', CURRENT_TIMESTAMP - INTERVAL '15 days'),
+    (1, 2, 28.50, CURRENT_TIMESTAMP - INTERVAL '15 days', 'completado', '2026-02-01', 'liquidacion', 'Liquidación febrero - Carnes', TRUE, CURRENT_TIMESTAMP - INTERVAL '16 days', CURRENT_TIMESTAMP - INTERVAL '15 days', CURRENT_TIMESTAMP - INTERVAL '15 days'),
+    (3, 2, 22.40, CURRENT_TIMESTAMP - INTERVAL '15 days', 'completado', '2026-02-01', 'liquidacion', 'Liquidación febrero - Carnes', TRUE, CURRENT_TIMESTAMP - INTERVAL '16 days', CURRENT_TIMESTAMP - INTERVAL '15 days', CURRENT_TIMESTAMP - INTERVAL '15 days'),
     -- Pagos pendientes marzo
-    (2, 1, 15.80, NULL, 'pendiente', '2026-03', 'liquidacion', 'Liquidación marzo - Frutas', FALSE, NULL, NULL, CURRENT_TIMESTAMP),
-    (3, 1, 12.40, NULL, 'pendiente', '2026-03', 'liquidacion', 'Liquidación marzo - Frutas', FALSE, NULL, NULL, CURRENT_TIMESTAMP),
-    (1, 2, 22.50, NULL, 'pendiente', '2026-03', 'liquidacion', 'Liquidación marzo - Carnes', FALSE, NULL, NULL, CURRENT_TIMESTAMP),
-    (3, 2, 18.90, NULL, 'pendiente', '2026-03', 'liquidacion', 'Liquidación marzo - Carnes', FALSE, NULL, NULL, CURRENT_TIMESTAMP),
+    (2, 1, 15.80, NULL, 'pendiente', '2026-03-01', 'liquidacion', 'Liquidación marzo - Frutas', FALSE, NULL, NULL, CURRENT_TIMESTAMP),
+    (3, 1, 12.40, NULL, 'pendiente', '2026-03-01', 'liquidacion', 'Liquidación marzo - Frutas', FALSE, NULL, NULL, CURRENT_TIMESTAMP),
+    (1, 2, 22.50, NULL, 'pendiente', '2026-03-01', 'liquidacion', 'Liquidación marzo - Carnes', FALSE, NULL, NULL, CURRENT_TIMESTAMP),
+    (3, 2, 18.90, NULL, 'pendiente', '2026-03-01', 'liquidacion', 'Liquidación marzo - Carnes', FALSE, NULL, NULL, CURRENT_TIMESTAMP),
     -- Pago manual
-    (2, 1, 10.00, CURRENT_TIMESTAMP - INTERVAL '10 days', 'completado', '2026-03', 'manual', 'A cuenta pedido próximo', TRUE, CURRENT_TIMESTAMP - INTERVAL '10 days', CURRENT_TIMESTAMP - INTERVAL '10 days', CURRENT_TIMESTAMP - INTERVAL '10 days');
+    (2, 1, 10.00, CURRENT_TIMESTAMP - INTERVAL '10 days', 'completado', '2026-03-01', 'manual', 'A cuenta pedido próximo', TRUE, CURRENT_TIMESTAMP - INTERVAL '10 days', CURRENT_TIMESTAMP - INTERVAL '10 days', CURRENT_TIMESTAMP - INTERVAL '10 days');
 
 -- Notificaciones
 INSERT INTO notificacion (id_usuario, mensaje, fecha, leida)

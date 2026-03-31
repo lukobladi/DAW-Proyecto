@@ -326,3 +326,4 @@ VITE_API_URL=http://localhost:3000
 
 ### Running database migrations
 Manual SQL scripts in `backend/src/config/` - no automated migration tool.
+

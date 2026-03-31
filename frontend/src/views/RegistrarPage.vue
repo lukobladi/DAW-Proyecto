@@ -59,13 +59,23 @@ export default {
         return;
       }
 
+      if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(this.password)) {
+        alertStore.showAlert('La contraseña debe contener al menos una mayúscula, una minúscula y un número.', 'danger');
+        return;
+      }
+
+      if (this.movil && !/^[0-9]{9,15}$/.test(this.movil)) {
+        alertStore.showAlert('El móvil debe ser un número válido (9-15 dígitos).', 'danger');
+        return;
+      }
+
       try {
         await api.registrar({
           nombre: this.nombre,
           correo: this.correo,
           password: this.password,
           rol: 'usuario',
-          movil: this.movil,
+          movil: this.movil || null,
           familia: this.familia || null,
         });
 
@@ -73,7 +83,10 @@ export default {
         this.$router.push({ name: 'Login' });
       } catch (error) {
         console.error('Error al registrar usuario:', error);
-        const errorMessage = error.response?.data?.error || 'Error al registrar usuario. Inténtalo más tarde.';
+        const errores = error.response?.data?.errors;
+        const errorMessage = errores 
+          ? errores.join('. ') 
+          : (error.response?.data?.message || 'Error al registrar usuario. Inténtalo más tarde.');
         alertStore.showAlert(errorMessage, 'danger');
       }
     },

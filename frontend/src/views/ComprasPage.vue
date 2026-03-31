@@ -1,6 +1,6 @@
 <template>
   <div class="compras-page">
-    <div class="compras-content">
+    <div class="page-content">
       <h2>Compras</h2>
 
       <div class="filtros">
@@ -323,11 +323,6 @@ export default {
   min-height: 100vh;
 }
 
-.compras-content {
-  flex: 1;
-  padding: var(--spacing-xl);
-}
-
 .filtros {
   margin-bottom: var(--spacing-lg);
 }
@@ -342,6 +337,10 @@ export default {
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-sm);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-sm);
 }
 
 .proveedores-lista {

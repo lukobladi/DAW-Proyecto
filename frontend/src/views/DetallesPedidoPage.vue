@@ -1,6 +1,6 @@
 <template>
   <div class="detalles-pedido-page">
-    <div class="detalles-pedido-content container">
+    <div class="page-content container">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Detalles del Pedido #{{ pedidoId }}</h2>
         <router-link to="/historial" class="btn btn-outline-secondary">Volver al historial</router-link>
@@ -159,11 +159,6 @@ export default {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-}
-
-.detalles-pedido-content {
-  flex: 1;
-  padding: var(--spacing-xl);
 }
 
 .info-pedido {

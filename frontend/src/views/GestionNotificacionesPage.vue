@@ -1,7 +1,7 @@
 <template>
   <div class="gestion-notificaciones-page">
     <NavBar />
-    <div class="gestion-notificaciones-content">
+    <div class="page-content">
       <h2>Gestión de Notificaciones</h2>
       <div class="lista-notificaciones">
         <div v-for="notificacion in notificaciones" :key="notificacion.id" class="notificacion-card">
@@ -44,11 +44,6 @@ export default {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-}
-
-.gestion-notificaciones-content {
-  flex: 1;
-  padding: var(--spacing-xl);
 }
 
 .lista-notificaciones {

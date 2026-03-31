@@ -12,7 +12,6 @@ LOCAL_FRONTEND="/home/mcl/Proyects/DAW-Proyecto/frontend"
 
 echo "==> Subiendo backend a $TARGET:$DEST_DIR/backend/"
 rsync -avz --delete \
-  --exclude 'node_modules/' \
   --exclude '.env' \
   --exclude '.env.test' \
   --exclude '*.log' \
@@ -25,7 +24,6 @@ rsync -avz --delete \
 
 echo "==> Subiendo frontend a $TARGET:$DEST_DIR/frontend/"
 rsync -avz --delete \
-  --exclude 'node_modules/' \
   --exclude '.env' \
   --exclude '.env.development' \
   --exclude '.env.production' \
@@ -35,5 +33,7 @@ rsync -avz --delete \
   --exclude 'package-lock.json' \
   "$LOCAL_FRONTEND/" \
   "$TARGET:$DEST_DIR/frontend/"
+
+  rsync -avz --delete   /home/mcl/Proyects/DAW-Proyecto/frontend/dist/   ekonsumo@ekonsumo.duckdns.org:/var/www/daw-proyecto/frontend/dist/
 
 echo "==> Código subido correctamente"

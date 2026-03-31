@@ -1,5 +1,5 @@
 <template>
-  <div class="gestion-usuarios-page container py-4">
+  <div class="gestion-usuarios-page page-content container">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h2 class="mb-0">Gestion de Usuarios</h2>
       <button class="btn btn-primary" @click="abrirModalCrear">Anadir usuario</button>
