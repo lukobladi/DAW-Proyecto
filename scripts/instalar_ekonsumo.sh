@@ -5,11 +5,7 @@ set -euo pipefail
 # Prepara SO, Node, PostgreSQL, Nginx, PM2, UFW y estructura de app.
 #
 # Uso recomendado (como root o con sudo):
-#   DOMAIN=ekonsumo.duckdns.org \
-#   DB_PASSWORD='O&5Y9X}R9f2v' \
-#   JWT_SECRET='bFUeXtDBV6lV6n3sLTJ3aWsgP5H1Wtyr1LkQYoAVTVU' \
-#   EMAIL_USER='emartinmon6@educacion.navarra.es' EMAIL_PASS='3n3sh.fp' \
-#   scripts/instalar_ekonsumo.sh
+
 #
 # Opcional DuckDNS:
 #   DUCKDNS_DOMAIN=ekonsumo DUCKDNS_TOKEN=5cee5aa6-77fa-4e3d-b1f1-ec3afea1c773 scripts/instalar_ekonsumo.sh
