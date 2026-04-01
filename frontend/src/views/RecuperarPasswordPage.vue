@@ -1,6 +1,8 @@
 <template>
+  <!-- Pagina para recuperacion de contrasena: solicita email/movil o establece nueva contrasena -->
   <div class="recover-password-page">
     <div class="auth-card">
+      <!-- Si existe token, mostrar formulario para nueva contrasena -->
       <template v-if="token">
         <h2 class="auth-title">Nueva Contraseña</h2>
         <p class="auth-subtitle">Ingresa tu nueva contraseña</p>
@@ -83,22 +85,44 @@ import { alertStore } from '@/store/alertStore';
 
 export default {
   props: {
+    // Token de recuperación de contraseña (presente si el usuario llegó desde el email)
     token: {
       type: String,
       default: null,
     },
   },
+  // ============================================
+  // data()
+  // Variables de estado del componente
+  // ============================================
   data() {
     return {
+      // Correo electrónico o móvil del usuario que solicita recuperación
       correoOMovil: '',
+      // Nueva contraseña elegida por el usuario
       password: '',
+      // Confirmación de la nueva contraseña
       confirmarPassword: '',
+      // Mensaje de error para mostrar en el formulario
       error: '',
+      // Bandera que indica si se está procesando una solicitud
       guardando: false,
+      // Bandera que indica si el correo de recuperación fue enviado exitosamente
       enviado: false,
     };
   },
+  // ============================================
+  // methods
+  // Métodos del componente
+  // ============================================
   methods: {
+    // ============================================
+    // recoverPassword
+    // Envía una solicitud de recuperación de contraseña al backend
+    // Parámetros: Ninguno (obtiene datos del formulario via v-model)
+    // Retorna: No retorna valor, pero actualiza el estado 'enviado'
+    // Efectos secundarios: Llama a api.recoverPassword, actualiza estado 'enviado'
+    // ============================================
     async recoverPassword() {
       this.error = '';
       this.guardando = true;
@@ -119,14 +143,23 @@ export default {
         this.guardando = false;
       }
     },
+    // ============================================
+    // resetPassword
+    // Restablece la contraseña usando el token de recuperación
+    // Parámetros: Ninguno (obtiene datos del formulario via v-model y token de props)
+    // Retorna: No retorna valor, pero redirige al login tras éxito
+    // Efectos secundarios: Llama a api.resetPassword, redirige a Login
+    // ============================================
     async resetPassword() {
       this.error = '';
 
+      // Validar que las contraseñas coincidan
       if (this.password !== this.confirmarPassword) {
         this.error = 'Las contraseñas no coinciden';
         return;
       }
 
+      // Validar longitud mínima de contraseña
       if (this.password.length < 6) {
         this.error = 'La contraseña debe tener al menos 6 caracteres';
         return;

@@ -63,17 +63,39 @@ import api from '@/services/api';
 import { useAuthStore } from '@/store';
 
 export default {
+  // ============================================
+  // data()
+  // Variables de estado del componente
+  // ============================================
   data() {
     return {
+      // Lista de pedidos en los que el usuario ha comprado
       pedidos: [],
+      // Bandera que indica si se están cargando datos
       cargando: false,
+      // Mensaje de error en caso de que la carga falle
       errorCarga: '',
     };
   },
+  // ============================================
+  // created()
+  // Hook que se ejecuta cuando el componente se crea
+  // ============================================
   async created() {
+    // Carga los datos de pedidos del usuario
     await this.cargarDatos();
   },
+  // ============================================
+  // methods
+  // Métodos del componente
+  // ============================================
   methods: {
+    // ============================================
+    // formatFecha
+    // Formatea una fecha ISO a formato español (dd/mm/yyyy)
+    // Parámetros: fechaIso (String) - Fecha en formato ISO
+    // Retorna: String - Fecha formateada o '-' si no hay fecha
+    // ============================================
     formatFecha(fechaIso) {
       if (!fechaIso) {
         return '-';
@@ -84,6 +106,12 @@ export default {
         day: '2-digit',
       });
     },
+    // ============================================
+    // estadoClass
+    // Devuelve la clase CSS para el badge de estado del pedido
+    // Parámetros: estado (String) - Estado del pedido
+    // Retorna: String - Nombre de la clase CSS
+    // ============================================
     estadoClass(estado) {
       const classes = {
         pendiente: 'estado-pendiente',
@@ -94,6 +122,13 @@ export default {
       };
       return classes[estado] || 'estado-pendiente';
     },
+    // ============================================
+    // cargarDatos
+    // Carga los pedidos en los que el usuario actual ha realizado compras
+    // Parámetros: Ninguno
+    // Retorna: No retorna valor, actualiza la variable pedidos
+    // Efectos secundarios: Llama a api.getPedidos, api.getProveedores, api.getDetallesPedidoPorPedido
+    // ============================================
     async cargarDatos() {
       this.cargando = true;
       this.errorCarga = '';
@@ -107,6 +142,7 @@ export default {
           return;
         }
 
+        // Carga pedidos y proveedores en paralelo
         const [pedidosResponse, proveedoresResponse] = await Promise.all([
           api.getPedidos(),
           api.getProveedores(),
@@ -119,6 +155,7 @@ export default {
 
         const todosPedidos = pedidosResponse.data || [];
 
+        // Filtra pedidos que tienen productos del usuario actual
         const pedidosConCompra = [];
 
         for (const pedido of todosPedidos) {
@@ -139,6 +176,7 @@ export default {
           }
         }
 
+        // Ordena por fecha de cierre descendente (más recientes primero)
         this.pedidos = pedidosConCompra.sort((a, b) => {
           const fechaA = a.fecha_cierre || '9999-12-31';
           const fechaB = b.fecha_cierre || '9999-12-31';
@@ -150,6 +188,13 @@ export default {
         this.cargando = false;
       }
     },
+    // ============================================
+    // verDetalles
+    // Navega a la página de detalles del pedido seleccionado
+    // Parámetros: idPedido (Number) - ID del pedido a ver
+    // Retorna: No retorna valor
+    // Efectos secundarios: Redirige a la página de detalles
+    // ============================================
     verDetalles(idPedido) {
       this.$router.push({ name: 'DetallesPedido', params: { id: idPedido }, query: { from: 'historial' } });
     },

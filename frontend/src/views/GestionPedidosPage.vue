@@ -129,6 +129,12 @@ import api from '@/services/api';
 import { alertStore } from '@/store/alertStore';
 import { useAuthStore } from '@/store';
 
+// ============================================
+// FUNCION AUXILIAR: pedidoVacio
+// Crea un objeto de pedido vacío con valores por defecto
+// Parámetros: Ninguno
+// Retorna: Object - Objeto con estructura de pedido vacía
+// ============================================
 function pedidoVacio() {
   return {
     id_pedido: null,
@@ -141,39 +147,89 @@ function pedidoVacio() {
 }
 
 export default {
+  // ============================================
+  // data()
+  // Variables de estado del componente
+  // ============================================
   data() {
     return {
+      // Lista de pedidos cargados
       pedidos: [],
+      // Lista de proveedores disponibles
       proveedores: [],
+      // Bandera que indica si se están cargando datos
       cargando: false,
+      // Mensaje de error en caso de que la carga falle
       errorCarga: '',
+      // ID del pedido que se está eliminando (para deshabilitar botón)
       accionandoId: null,
+      // Bandera que controla la visibilidad del modal
       mostrarModal: false,
+      // Bandera que indica si estamos editando (true) o creando (false)
       modoEdicion: false,
+      // Bandera que indica si se está guardando el formulario
       guardando: false,
+      // Formulario de pedido (para crear/editar)
       form: pedidoVacio(),
     };
   },
+  // ============================================
+  // computed
+  // Propiedades calculadas del componente
+  // ============================================
   computed: {
+    // ============================================
+    // isAdmin
+    // Determina si el usuario tiene rol de administrador
+    // Parámetros: Ninguno
+    // Retorna: Boolean - true si es admin
+    // ============================================
     isAdmin() {
       const authStore = useAuthStore();
       return authStore.user?.rol === 'admin';
     },
+    // ============================================
+    // isGestor
+    // Determina si el usuario tiene rol de gestor
+    // Parámetros: Ninguno
+    // Retorna: Boolean - true si es gestor
+    // ============================================
     isGestor() {
       const authStore = useAuthStore();
       return authStore.user?.rol === 'gestor';
     },
   },
+  // ============================================
+  // created()
+  // Hook que se ejecuta cuando el componente se crea
+  // ============================================
   async created() {
+    // Carga pedidos y proveedores
     await this.cargarDatos();
   },
+  // ============================================
+  // methods
+  // Métodos del componente
+  // ============================================
   methods: {
+    // ============================================
+    // toInputDate
+    // Convierte una fecha ISO a formato YYYY-MM-DD para inputs de fecha
+    // Parámetros: fechaIso (String) - Fecha en formato ISO
+    // Retorna: String - Fecha en formato YYYY-MM-DD o cadena vacía
+    // ============================================
     toInputDate(fechaIso) {
       if (!fechaIso) {
         return '';
       }
       return new Date(fechaIso).toISOString().slice(0, 10);
     },
+    // ============================================
+    // formatFecha
+    // Formatea una fecha ISO a formato español (dd/mm/yyyy)
+    // Parámetros: fechaIso (String) - Fecha en formato ISO
+    // Retorna: String - Fecha formateada o '-' si no hay fecha
+    // ============================================
     formatFecha(fechaIso) {
       if (!fechaIso) {
         return '-';
@@ -184,9 +240,21 @@ export default {
         day: '2-digit',
       });
     },
+    // ============================================
+    // nombreProveedor
+    // Busca el nombre de un proveedor por su ID
+    // Parámetros: idProveedor (Number) - ID del proveedor
+    // Retorna: String - Nombre del proveedor o '-'
+    // ============================================
     nombreProveedor(idProveedor) {
       return this.proveedores.find((item) => item.id_proveedor === idProveedor)?.nombre || '-';
     },
+    // ============================================
+    // estadoClass
+    // Devuelve la clase CSS para el badge de estado del pedido
+    // Parámetros: estado (String) - Estado del pedido
+    // Retorna: String - Nombre de la clase CSS
+    // ============================================
     estadoClass(estado) {
       const classes = {
         pendiente: 'estado-pendiente',
@@ -197,6 +265,13 @@ export default {
       };
       return classes[estado] || 'estado-pendiente';
     },
+    // ============================================
+    // cargarDatos
+    // Carga la lista de pedidos y proveedores
+    // Parámetros: Ninguno
+    // Retorna: No retorna valor, actualiza pedidos y proveedores
+    // Efectos secundarios: Llama a api.getPedidos/getMisPedidos y api.getProveedores
+    // ============================================
     async cargarDatos() {
       this.cargando = true;
       this.errorCarga = '';
@@ -218,14 +293,35 @@ export default {
         this.cargando = false;
       }
     },
+    // ============================================
+    // verDetalles
+    // Navega a la página de detalles del pedido seleccionado
+    // Parámetros: idPedido (Number) - ID del pedido a ver
+    // Retorna: No retorna valor
+    // Efectos secundarios: Redirige a la página de detalles
+    // ============================================
     verDetalles(idPedido) {
       this.$router.push({ name: 'DetallesPedido', params: { id: idPedido }, query: { from: 'gestion-pedidos' } });
     },
+    // ============================================
+    // abrirModalCrear
+    // Abre el modal para crear un nuevo pedido
+    // Parámetros: Ninguno
+    // Retorna: No retorna valor
+    // Efectos secundarios: Resetea el formulario y muestra el modal
+    // ============================================
     abrirModalCrear() {
       this.modoEdicion = false;
       this.form = pedidoVacio();
       this.mostrarModal = true;
     },
+    // ============================================
+    // abrirModalEditar
+    // Abre el modal para editar un pedido existente
+    // Parámetros: pedido (Object) - Pedido a editar
+    // Retorna: No retorna valor
+    // Efectos secundarios: Prepara el formulario con datos del pedido
+    // ============================================
     abrirModalEditar(pedido) {
       this.modoEdicion = true;
       this.form = {
@@ -238,9 +334,23 @@ export default {
       };
       this.mostrarModal = true;
     },
+    // ============================================
+    // cerrarModal
+    // Cierra el modal de crear/editar pedido
+    // Parámetros: Ninguno
+    // Retorna: No retorna valor
+    // Efectos secundarios: Oculta el modal
+    // ============================================
     cerrarModal() {
       this.mostrarModal = false;
     },
+    // ============================================
+    // guardarPedido
+    // Guarda el pedido (crea nuevo o actualiza existente)
+    // Parámetros: Ninguno (obtiene datos del formulario via v-model)
+    // Retorna: No retorna valor
+    // Efectos secundarios: Llama a api.crearPedido o api.actualizarPedido
+    // ============================================
     async guardarPedido() {
       this.guardando = true;
       try {
@@ -268,6 +378,13 @@ export default {
         this.guardando = false;
       }
     },
+    // ============================================
+    // eliminarPedido
+    // Elimina un pedido existente tras confirmación
+    // Parámetros: idPedido (Number) - ID del pedido a eliminar
+    // Retorna: No retorna valor
+    // Efectos secundarios: Llama a api.eliminarPedido, actualiza lista
+    // ============================================
     async eliminarPedido(idPedido) {
       if (!window.confirm('Se eliminara el pedido. Quieres continuar?')) {
         return;

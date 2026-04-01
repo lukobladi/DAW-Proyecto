@@ -140,15 +140,27 @@ import api from '@/services/api';
 import { alertStore } from '@/store/alertStore';
 
 export default {
+  // ============================================
+  // data()
+  // Variables de estado del componente
+  // ============================================
   data() {
     return {
+      // Lista de usuarios cargados
       usuarios: [],
+      // Bandera que indica si se están cargando datos
       cargando: false,
+      // Mensaje de error en caso de que la carga falle
       errorCarga: '',
+      // ID del usuario que se está modificando (para deshabilitar botones)
       accionandoId: null,
+      // Bandera que controla la visibilidad del modal
       mostrarModal: false,
+      // Bandera que indica si estamos editando (true) o creando (false)
       modoEdicion: false,
+      // Bandera que indica si se está guardando el formulario
       guardando: false,
+      // Formulario de usuario (para crear/editar)
       form: {
         id_usuario: null,
         nombre: '',
@@ -158,13 +170,30 @@ export default {
         password: '',
         familia: null,
       },
+      // Objeto de errores de validación del formulario
       errors: {},
     };
   },
+  // ============================================
+  // created()
+  // Hook que se ejecuta cuando el componente se crea
+  // ============================================
   async created() {
+    // Carga la lista de usuarios
     await this.cargarUsuarios();
   },
+  // ============================================
+  // methods
+  // Métodos del componente
+  // ============================================
   methods: {
+    // ============================================
+    // cargarUsuarios
+    // Carga la lista de usuarios del sistema
+    // Parámetros: Ninguno
+    // Retorna: No retorna valor, actualiza la variable usuarios
+    // Efectos secundarios: Llama a api.getUsuarios
+    // ============================================
     async cargarUsuarios() {
       this.cargando = true;
       this.errorCarga = '';
@@ -177,6 +206,13 @@ export default {
         this.cargando = false;
       }
     },
+    // ============================================
+    // abrirModalCrear
+    // Abre el modal para crear un nuevo usuario
+    // Parámetros: Ninguno
+    // Retorna: No retorna valor
+    // Efectos secundarios: Resetea el formulario y muestra el modal
+    // ============================================
     abrirModalCrear() {
       this.modoEdicion = false;
       this.errors = {};
@@ -191,6 +227,13 @@ export default {
       };
       this.mostrarModal = true;
     },
+    // ============================================
+    // abrirModalEditar
+    // Abre el modal para editar un usuario existente
+    // Parámetros: usuario (Object) - Usuario a editar
+    // Retorna: No retorna valor
+    // Efectos secundarios: Prepara el formulario con datos del usuario
+    // ============================================
     abrirModalEditar(usuario) {
       this.modoEdicion = true;
       this.errors = {};
@@ -205,9 +248,23 @@ export default {
       };
       this.mostrarModal = true;
     },
+    // ============================================
+    // cerrarModal
+    // Cierra el modal de crear/editar usuario
+    // Parámetros: Ninguno
+    // Retorna: No retorna valor
+    // Efectos secundarios: Oculta el modal
+    // ============================================
     cerrarModal() {
       this.mostrarModal = false;
     },
+    // ============================================
+    // guardarUsuario
+    // Guarda el usuario (crea nuevo o actualiza existente)
+    // Parámetros: Ninguno (obtiene datos del formulario via v-model)
+    // Retorna: No retorna valor
+    // Efectos secundarios: Llama a api.registrar o api.actualizarUsuario
+    // ============================================
     async guardarUsuario() {
       this.errors = {};
       this.guardando = true;
@@ -252,6 +309,13 @@ export default {
         this.guardando = false;
       }
     },
+    // ============================================
+    // cambiarEstado
+    // Activa o desactiva un usuario
+    // Parámetros: usuario (Object) - Usuario cuyo estado se cambiará
+    // Retorna: No retorna valor
+    // Efectos secundarios: Llama a api.cambiarEstadoUsuario
+    // ============================================
     async cambiarEstado(usuario) {
       this.accionandoId = usuario.id_usuario;
       try {
@@ -263,6 +327,13 @@ export default {
         this.accionandoId = null;
       }
     },
+    // ============================================
+    // eliminarUsuario
+    // Elimina un usuario existente tras confirmación
+    // Parámetros: idUsuario (Number) - ID del usuario a eliminar
+    // Retorna: No retorna valor
+    // Efectos secundarios: Llama a api.eliminarUsuario, actualiza lista
+    // ============================================
     async eliminarUsuario(idUsuario) {
       if (!window.confirm('Se eliminara el usuario. Quieres continuar?')) {
         return;

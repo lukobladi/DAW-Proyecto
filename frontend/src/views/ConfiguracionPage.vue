@@ -49,11 +49,19 @@ import { useAuthStore } from '@/store';
 import { alertStore } from '@/store/alertStore';
 
 export default {
+  // ============================================
+  // data()
+  // Variables de estado del componente
+  // ============================================
   data() {
     return {
+      // Bandera que indica si se están cargando datos
       cargando: false,
+      // Bandera que indica si se está guardando
       guardando: false,
+      // Mensaje de error en caso de que la carga falle
       errorCarga: '',
+      // Formulario con los datos del perfil del usuario
       form: {
         id_usuario: null,
         nombre: '',
@@ -63,10 +71,26 @@ export default {
       },
     };
   },
+  // ============================================
+  // created()
+  // Hook que se ejecuta cuando el componente se crea
+  // ============================================
   async created() {
+    // Carga los datos del perfil del usuario
     await this.cargarPerfil();
   },
+  // ============================================
+  // methods
+  // Métodos del componente
+  // ============================================
   methods: {
+    // ============================================
+    // cargarPerfil
+    // Carga los datos del perfil del usuario autenticado
+    // Parámetros: Ninguno
+    // Retorna: No retorna valor, actualiza la variable form
+    // Efectos secundarios: Llama a api.getUsuario, actualiza authStore
+    // ============================================
     async cargarPerfil() {
       this.cargando = true;
       this.errorCarga = '';
@@ -90,6 +114,7 @@ export default {
           rol: usuario.rol || '',
         };
 
+        // Actualiza el auth store con los datos más recientes
         authStore.login({
           token: localStorage.getItem('authToken'),
           user: {
@@ -109,6 +134,13 @@ export default {
         this.cargando = false;
       }
     },
+    // ============================================
+    // guardarCambios
+    // Guarda los cambios realizados en el perfil del usuario
+    // Parámetros: Ninguno (obtiene datos del formulario via v-model)
+    // Retorna: No retorna valor
+    // Efectos secundarios: Llama a api.actualizarUsuario, actualiza authStore
+    // ============================================
     async guardarCambios() {
       this.guardando = true;
       try {

@@ -833,9 +833,15 @@ import { useAuthStore } from '@/store';
 import { alertStore } from '@/store/alertStore';
 
 export default {
+  // ============================================
+  // data()
+  // Variables de estado del componente
+  // ============================================
   data() {
     return {
+      // Bandera que indica si se está enviando la consulta
       enviando: false,
+      // Formulario de contacto con nombre, correo y mensaje
       form: {
         nombre: '',
         correo: '',
@@ -843,7 +849,17 @@ export default {
       },
     };
   },
+  // ============================================
+  // computed
+  // Propiedades calculadas del componente
+  // ============================================
   computed: {
+    // ============================================
+    // mailtoLink
+    // Genera un enlace mailto con los datos del formulario
+    // Parámetros: Ninguno
+    // Retorna: String - URL mailto con asunto y cuerpo codificados
+    // ============================================
     mailtoLink() {
       const asunto = encodeURIComponent('Consulta soporte Ekonsumo');
       const cuerpo = encodeURIComponent(
@@ -852,12 +868,28 @@ export default {
       return `mailto:soporte@ekonsumo.local?subject=${asunto}&body=${cuerpo}`;
     },
   },
+  // ============================================
+  // created()
+  // Hook que se ejecuta cuando el componente se crea
+  // ============================================
   created() {
+    // Pre-rellena el formulario con los datos del usuario autenticado
     const authStore = useAuthStore();
     this.form.nombre = authStore.user?.nombre || '';
     this.form.correo = authStore.user?.correo || '';
   },
+  // ============================================
+  // methods
+  // Métodos del componente
+  // ============================================
   methods: {
+    // ============================================
+    // enviarConsulta
+    // Envía una consulta de soporte al sistema
+    // Parámetros: Ninguno (obtiene datos del formulario via v-model)
+    // Retorna: No retorna valor
+    // Efectos secundarios: Llama a api.enviarNotificacion, limpia el mensaje
+    // ============================================
     async enviarConsulta() {
       this.enviando = true;
       try {

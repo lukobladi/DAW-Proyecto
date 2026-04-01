@@ -20,9 +20,17 @@
 <script>
 
 export default {
-
+  // ============================================
+  // data()
+  // Variables de estado del componente
+  // ============================================
   data() {
     return {
+      // Lista de notificaciones del usuario
+      // ID único de la notificación
+      // Mensaje de la notificación
+      // Fecha de la notificación
+      // Booleano que indica si ha sido leída
       notificaciones: [
         // Ejemplo de datos de notificaciones
         { id: 1, mensaje: 'Nuevo pedido recibido', fecha: '2026-03-01', leida: false },
@@ -30,7 +38,18 @@ export default {
       ]
     };
   },
+  // ============================================
+  // methods
+  // Métodos del componente
+  // ============================================
   methods: {
+    // ============================================
+    // marcarLeida
+    // Marca una notificación específica como leída
+    // Parámetros: notificacionId (Number) - ID de la notificación a marcar
+    // Retorna: No retorna valor
+    // Efectos secundarios: Actualiza el estado de la notificación en la lista local
+    // ============================================
     marcarLeida(notificacionId) {
       // Lógica para marcar una notificación como leída
       console.log('Marcando notificación como leída:', notificacionId);

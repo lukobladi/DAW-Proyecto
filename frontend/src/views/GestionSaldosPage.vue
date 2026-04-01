@@ -18,9 +18,16 @@
 <script>
 
 export default {
-
+  // ============================================
+  // data()
+  // Variables de estado del componente
+  // ============================================
   data() {
     return {
+      // Lista de usuarios con sus saldos
+      // ID único del usuario
+      // Nombre del usuario
+      // Saldo actual del usuario (puede ser positivo o negativo)
       usuarios: [
         // Ejemplo de datos de usuarios con saldos
         { id: 1, nombre: 'Juan Pérez', saldo: 25.5 },
@@ -28,7 +35,18 @@ export default {
       ]
     };
   },
+  // ============================================
+  // methods
+  // Métodos del componente
+  // ============================================
   methods: {
+    // ============================================
+    // verDetalles
+    // Muestra los detalles del saldo de un usuario
+    // Parámetros: usuarioId (Number) - ID del usuario cuyos detalles se quieren ver
+    // Retorna: No retorna valor
+    // Efectos secundarios: Acciona la navegación a la vista de detalles
+    // ============================================
     verDetalles(usuarioId) {
       // Lógica para ver detalles del saldo
       console.log('Ver detalles del saldo:', usuarioId);

@@ -157,6 +157,12 @@
 import api from '@/services/api';
 import { alertStore } from '@/store/alertStore';
 
+// ============================================
+// FUNCION AUXILIAR: proveedorVacio
+// Crea un objeto de proveedor vacío con valores por defecto
+// Parámetros: Ninguno
+// Retorna: Object - Objeto con estructura de proveedor vacía
+// ============================================
 function proveedorVacio() {
   return {
     id_proveedor: null,
@@ -174,22 +180,48 @@ function proveedorVacio() {
 }
 
 export default {
+  // ============================================
+  // data()
+  // Variables de estado del componente
+  // ============================================
   data() {
     return {
+      // Lista de proveedores cargados
       proveedores: [],
+      // Lista de usuarios del sistema (para generar familias)
       usuarios: [],
+      // Lista de familias únicas extraídas de usuarios
       familias: [],
+      // Bandera que indica si se están cargando datos
       cargando: false,
+      // Mensaje de error en caso de que la carga falle
       errorCarga: '',
+      // ID del proveedor que se está modificando (para deshabilitar botones)
       accionandoId: null,
+      // Bandera que controla la visibilidad del modal
       mostrarModal: false,
+      // Bandera que indica si estamos editando (true) o creando (false)
       modoEdicion: false,
+      // Bandera que indica si se está guardando el formulario
       guardando: false,
+      // Formulario de proveedor (para crear/editar)
       form: proveedorVacio(),
+      // Objeto de errores de validación del formulario
       errors: {},
     };
   },
+  // ============================================
+  // computed
+  // Propiedades calculadas del componente
+  // ============================================
   computed: {
+    // ============================================
+    // familiasDisponibles
+    // Filtra las familias que pueden ser asignadas a un proveedor
+    // (una familia solo puede gestionar un proveedor)
+    // Parámetros: Ninguno
+    // Retorna: Array - Lista de familias disponibles
+    // ============================================
     familiasDisponibles() {
       return this.familias.filter(f => {
         const proveedorAsignado = this.proveedores.find(p => p.familia === f);
@@ -199,12 +231,27 @@ export default {
       });
     },
   },
+  // ============================================
+  // created()
+  // Hook que se ejecuta cuando el componente se crea
+  // ============================================
   async created() {
+    // Carga proveedores y usuarios, luego genera la lista de familias
     await this.cargarProveedores();
     await this.cargarUsuarios();
     this.generarFamilias();
   },
+  // ============================================
+  // methods
+  // Métodos del componente
+  // ============================================
   methods: {
+    // ============================================
+    // generarFamilias
+    // Extrae las familias únicas de la lista de usuarios
+    // Parámetros: Ninguno
+    // Retorna: No retorna valor, actualiza la variable familias
+    // ============================================
     generarFamilias() {
       const familiasSet = new Set();
       this.usuarios.forEach(u => {
@@ -214,6 +261,13 @@ export default {
       });
       this.familias = Array.from(familiasSet).sort((a, b) => a - b);
     },
+    // ============================================
+    // cargarProveedores
+    // Carga la lista de proveedores del sistema
+    // Parámetros: Ninguno
+    // Retorna: No retorna valor, actualiza la variable proveedores
+    // Efectos secundarios: Llama a api.getProveedores
+    // ============================================
     async cargarProveedores() {
       this.cargando = true;
       this.errorCarga = '';
@@ -226,6 +280,13 @@ export default {
         this.cargando = false;
       }
     },
+    // ============================================
+    // cargarUsuarios
+    // Carga la lista de usuarios (para generar familias)
+    // Parámetros: Ninguno
+    // Retorna: No retorna valor, actualiza la variable usuarios
+    // Efectos secundarios: Llama a api.getUsuarios
+    // ============================================
     async cargarUsuarios() {
       try {
         const response = await api.getUsuarios();
@@ -235,12 +296,26 @@ export default {
         this.errorCarga = 'No se pudo cargar la lista de usuarios.';
       }
     },
+    // ============================================
+    // abrirModalCrear
+    // Abre el modal para crear un nuevo proveedor
+    // Parámetros: Ninguno
+    // Retorna: No retorna valor
+    // Efectos secundarios: Resetea el formulario y muestra el modal
+    // ============================================
     abrirModalCrear() {
       this.modoEdicion = false;
       this.errors = {};
       this.form = proveedorVacio();
       this.mostrarModal = true;
     },
+    // ============================================
+    // abrirModalEditar
+    // Abre el modal para editar un proveedor existente
+    // Parámetros: proveedor (Object) - Proveedor a editar
+    // Retorna: No retorna valor
+    // Efectos secundarios: Prepara el formulario con datos del proveedor
+    // ============================================
     abrirModalEditar(proveedor) {
       this.modoEdicion = true;
       this.errors = {};
@@ -250,9 +325,23 @@ export default {
       };
       this.mostrarModal = true;
     },
+    // ============================================
+    // cerrarModal
+    // Cierra el modal de crear/editar proveedor
+    // Parámetros: Ninguno
+    // Retorna: No retorna valor
+    // Efectos secundarios: Oculta el modal
+    // ============================================
     cerrarModal() {
       this.mostrarModal = false;
     },
+    // ============================================
+    // guardarProveedor
+    // Guarda el proveedor (crea nuevo o actualiza existente)
+    // Parámetros: Ninguno (obtiene datos del formulario via v-model)
+    // Retorna: No retorna valor
+    // Efectos secundarios: Llama a api.crearProveedor o api.actualizarProveedor
+    // ============================================
     async guardarProveedor() {
       this.errors = {};
       this.guardando = true;
@@ -299,6 +388,13 @@ export default {
         this.guardando = false;
       }
     },
+    // ============================================
+    // cambiarEstado
+    // Activa o desactiva un proveedor
+    // Parámetros: proveedor (Object) - Proveedor cuyo estado se cambiará
+    // Retorna: No retorna valor
+    // Efectos secundarios: Llama a api.cambiarEstadoProveedor
+    // ============================================
     async cambiarEstado(proveedor) {
       this.accionandoId = proveedor.id_proveedor;
       try {
@@ -310,6 +406,13 @@ export default {
         this.accionandoId = null;
       }
     },
+    // ============================================
+    // eliminarProveedor
+    // Elimina un proveedor existente tras confirmación
+    // Parámetros: idProveedor (Number) - ID del proveedor a eliminar
+    // Retorna: No retorna valor
+    // Efectos secundarios: Llama a api.eliminarProveedor, actualiza lista
+    // ============================================
     async eliminarProveedor(idProveedor) {
       if (!window.confirm('Se eliminara el proveedor. Quieres continuar?')) {
         return;

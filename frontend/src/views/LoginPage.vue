@@ -1,4 +1,5 @@
 <template>
+  <!-- Pagina de inicio de sesion para usuarios existentes -->
   <div class="login-page">
     <div class="auth-card">
       <h2 class="auth-title">Iniciar Sesión</h2>
@@ -30,13 +31,31 @@ import { alertStore } from '@/store/alertStore';
 import { useAuthStore } from '@/store';
 
 export default {
+  // ============================================
+  // data()
+  // Variables de estado del componente
+  // ============================================
   data() {
     return {
-      correoOMovil: '', // Puede ser correo o móvil
+      // Correo electrónico o número de móvil del usuario para autenticación
+      // Puede ser cualquiera de los dos campos registrados en la cuenta
+      correoOMovil: '',
+      // Contraseña de la cuenta del usuario
       contraseña: '',
     };
   },
+  // ============================================
+  // methods
+  // Métodos del componente
+  // ============================================
   methods: {
+    // ============================================
+    // login
+    // Autentica al usuario con sus credenciales y redirige al dashboard
+    // Parámetros: Ninguno (obtiene datos del formulario via v-model)
+    // Retorna: No retorna valor, pero actualiza el auth store y redirige
+    // Efectos secundarios: Llama a api.login, actualiza authStore, redirige a Dashboard
+    // ============================================
     async login() {
       try {
         const response = await api.login({
