@@ -206,17 +206,15 @@ class Pago {
   }
 
   // Obtener resumen mensual de pagos de un usuario
-  static async obtenerResumenMensual(idUsuario, periodo) {
+  static async obtenerResumenMensual(idUsuario, periodo, rol = 'usuario') {
     const { periodoQuery, periodoDate } = this.normalizePeriodo(periodo);
 
     const [
-      saldoResult,
       gastoMesResult,
       pagarResult,
       cobrarResult,
       deudasResult,
     ] = await Promise.all([
-      db.query('SELECT saldo FROM Usuario WHERE id_usuario = $1;', [idUsuario]),
       db.query(
         `
           SELECT COALESCE(SUM(d.Cantidad * d.Precio_Unitario), 0) AS total
@@ -225,7 +223,10 @@ class Pago {
           WHERE d.id_usuario_Comprador = $1
             AND d.Cantidad > 0
             AND p.Estado <> 'cancelado'
-            AND date_trunc('month', COALESCE(p.Fecha_Cierre, p.Fecha_Apertura)) = date_trunc('month', $2::date);
+            AND date_trunc('month', CASE
+              WHEN p.Estado = 'pendiente' THEN CURRENT_DATE
+              ELSE COALESCE(p.Fecha_Cierre, p.Fecha_Apertura)
+            END) = date_trunc('month', $2::date);
         `,
         [idUsuario, periodoDate]
       ),
@@ -234,18 +235,20 @@ class Pago {
           SELECT COALESCE(SUM(Monto), 0) AS total
           FROM Pago
           WHERE id_usuario_Deudor = $1
-            AND Estado = 'pendiente';
+            AND Estado = 'pendiente'
+            AND TO_CHAR(Periodo, 'YYYY-MM') = $2;
         `,
-        [idUsuario]
+        [idUsuario, periodoQuery]
       ),
       db.query(
         `
           SELECT COALESCE(SUM(Monto), 0) AS total
           FROM Pago
           WHERE id_usuario_Creditor = $1
-            AND Estado = 'pendiente';
+            AND Estado = 'pendiente'
+            AND TO_CHAR(Periodo, 'YYYY-MM') = $2;
         `,
-        [idUsuario]
+        [idUsuario, periodoQuery]
       ),
       db.query(
         `
@@ -267,18 +270,30 @@ class Pago {
           JOIN Usuario u_creditor ON p.id_usuario_Creditor = u_creditor.id_usuario
           WHERE p.Estado = 'pendiente'
             AND (p.id_usuario_Deudor = $1 OR p.id_usuario_Creditor = $1)
+            AND TO_CHAR(p.Periodo, 'YYYY-MM') = $2
           ORDER BY p.Periodo DESC NULLS LAST, p.ID_Pago DESC;
         `,
-        [idUsuario]
+        [idUsuario, periodoQuery]
       ),
     ]);
 
+    const totalGastadoMes = Number(gastoMesResult.rows[0]?.total || 0);
+    const totalPendientePorPagar = Number(pagarResult.rows[0]?.total || 0);
+    const totalPendientePorCobrar = Number(cobrarResult.rows[0]?.total || 0);
+
+    let saldoActual;
+    if (rol === 'gestor') {
+      saldoActual = totalPendientePorCobrar - totalPendientePorPagar;
+    } else {
+      saldoActual = -totalPendientePorPagar;
+    }
+
     return {
       periodo_consultado: periodoQuery,
-      saldo_actual: Number(saldoResult.rows[0]?.saldo || 0),
-      total_gastado_mes: Number(gastoMesResult.rows[0]?.total || 0),
-      total_pendiente_por_pagar: Number(pagarResult.rows[0]?.total || 0),
-      total_pendiente_por_cobrar: Number(cobrarResult.rows[0]?.total || 0),
+      saldo_actual: saldoActual,
+      total_gastado_mes: totalGastadoMes,
+      total_pendiente_por_pagar: totalPendientePorPagar,
+      total_pendiente_por_cobrar: totalPendientePorCobrar,
       deudas_pendientes: deudasResult.rows,
     };
   }

@@ -98,7 +98,8 @@ const PagoController = {
     try {
       const resumen = await Pago.obtenerResumenMensual(
         req.user.id_usuario,
-        periodo
+        periodo,
+        req.user.rol
       );
       res.json(resumen);
     } catch (err) {

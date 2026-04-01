@@ -44,6 +44,16 @@ const Pedido = {
     return rows;
   },
 
+  async findByProveedores(ids_proveedor) {
+    if (!ids_proveedor || ids_proveedor.length === 0) {
+      return [];
+    }
+    const placeholders = ids_proveedor.map((_, i) => `$${i + 1}`).join(', ');
+    const query = `SELECT * FROM pedido WHERE id_proveedor IN (${placeholders}) ORDER BY fecha_cierre DESC;`;
+    const { rows } = await pool.query(query, ids_proveedor);
+    return rows;
+  },
+
   async update(
     id,
     id_proveedor,

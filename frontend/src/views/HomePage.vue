@@ -72,7 +72,7 @@ export default {
   text-align: center;
   padding: var(--spacing-2xl);
   background-color: #4CAF50;
-  background-image: url('../assets/cestaesparza.png');
+  background-image: url('../assets/cestaesparza.jpg');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;

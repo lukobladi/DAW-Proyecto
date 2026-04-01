@@ -19,12 +19,6 @@
             Pedido abierto
           </button>
           <button
-            :class="['btn', filtroEstado === 'cerrado' ? 'btn-primary' : 'btn-outline-secondary']"
-            @click="filtroEstado = 'cerrado'"
-          >
-            Pedido cerrado
-          </button>
-          <button
             :class="['btn', filtroEstado === 'pendiente_entrega' ? 'btn-primary' : 'btn-outline-secondary']"
             @click="filtroEstado = 'pendiente_entrega'"
           >
@@ -115,11 +109,8 @@ export default {
       if (this.filtroEstado === 'abierto') {
         return this.productos.filter(p => p.pedidoAbierto);
       }
-      if (this.filtroEstado === 'cerrado') {
-        return this.productos.filter(p => !p.pedidoAbierto);
-      }
       if (this.filtroEstado === 'pendiente_entrega') {
-        return this.productos.filter(p => p.pedidoAbierto || (p.estadoPedido && !['repartido', 'cancelado'].includes(p.estadoPedido)));
+        return this.productos.filter(p => !p.pedidoAbierto && p.estadoPedido && ['pendiente', 'en proceso'].includes(p.estadoPedido));
       }
       return this.productos;
     },
@@ -184,32 +175,32 @@ export default {
           (proveedoresResponse.data || []).map((proveedor) => [proveedor.id_proveedor, proveedor])
         );
 
-        const pedidosAbiertos = (pedidosResponse.data || []).filter((pedido) =>
-          this.esPedidoAbierto(pedido)
-        );
-
-        pedidosAbiertos.sort(
-          (a, b) => new Date(a.fecha_cierre || '2999-12-31') - new Date(b.fecha_cierre || '2999-12-31')
-        );
-
-        const pedidoAbiertoPorProveedor = new Map();
-        pedidosAbiertos.forEach((pedido) => {
-          if (!pedidoAbiertoPorProveedor.has(pedido.id_proveedor)) {
-            pedidoAbiertoPorProveedor.set(pedido.id_proveedor, pedido.id_pedido);
-          }
-        });
-
-        const pedidosPorProveedor = new Map();
-        (pedidosResponse.data || []).forEach((pedido) => {
-          if (!pedidosPorProveedor.has(pedido.id_proveedor)) {
-            pedidosPorProveedor.set(pedido.id_proveedor, pedido);
-          }
-        });
+        const todosLosPedidos = pedidosResponse.data || [];
+        const hoy = new Date();
+        hoy.setHours(0, 0, 0, 0);
 
         this.productos = (productosResponse.data || [])
           .filter((producto) => producto.activo)
           .map((producto) => {
-            const pedidoDelProveedor = pedidosPorProveedor.get(producto.id_proveedor);
+            const pedidosDelProveedor = todosLosPedidos
+              .filter(p => p.id_proveedor === producto.id_proveedor)
+              .sort((a, b) => new Date(b.fecha_cierre || 0) - new Date(a.fecha_cierre || 0));
+
+            const pedidoMasReciente = pedidosDelProveedor[0] || null;
+
+            let pedidoAbierto = false;
+            let pedidoAbiertoId = null;
+
+            if (pedidoMasReciente) {
+              const fechaCierre = pedidoMasReciente.fecha_cierre ? new Date(pedidoMasReciente.fecha_cierre) : null;
+              fechaCierre?.setHours(0, 0, 0, 0);
+
+              if (pedidoMasReciente.estado === 'pendiente' && fechaCierre && fechaCierre > hoy) {
+                pedidoAbierto = true;
+                pedidoAbiertoId = pedidoMasReciente.id_pedido;
+              }
+            }
+
             return {
               id: producto.id_producto,
               nombre: producto.nombre,
@@ -221,11 +212,11 @@ export default {
               periodicidad:
                 proveedorPorId.get(producto.id_proveedor)?.frecuencia_pedido_aproximada ||
                 'Sin periodicidad',
-              pedidoAbiertoId: pedidoAbiertoPorProveedor.get(producto.id_proveedor) || null,
-              pedidoAbierto: pedidoAbiertoPorProveedor.has(producto.id_proveedor),
-              estadoPedido: pedidoDelProveedor?.estado || null,
-              fechaApertura: pedidoDelProveedor?.fecha_apertura || null,
-              fechaCierre: pedidoDelProveedor?.fecha_cierre || null,
+              pedidoAbiertoId,
+              pedidoAbierto,
+              estadoPedido: pedidoMasReciente?.estado || null,
+              fechaApertura: pedidoMasReciente?.fecha_apertura || null,
+              fechaCierre: pedidoMasReciente?.fecha_cierre || null,
             };
           });
       } catch (error) {
@@ -247,19 +238,16 @@ export default {
         return false;
       }
 
-      const ahora = new Date();
-      const apertura = pedido.fecha_apertura ? new Date(pedido.fecha_apertura) : null;
       const cierre = pedido.fecha_cierre ? new Date(pedido.fecha_cierre) : null;
-
-      if (apertura && ahora < apertura) {
+      if (!cierre) {
         return false;
       }
 
-      if (cierre && ahora > cierre) {
-        return false;
-      }
+      const ahora = new Date();
+      const hoy = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate());
+      const fechaCierre = new Date(cierre.getFullYear(), cierre.getMonth(), cierre.getDate());
 
-      return true;
+      return fechaCierre > hoy;
     },
     formatoFechaLocal(fecha) {
       if (!fecha) return '';

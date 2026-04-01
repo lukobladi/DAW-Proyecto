@@ -16,7 +16,6 @@
               <th>Nombre</th>
               <th>Correo</th>
               <th>Movil</th>
-              <th>Familia</th>
               <th>Rol</th>
               <th>Estado</th>
               <th>Saldo</th>
@@ -28,7 +27,6 @@
               <td>{{ usuario.nombre }}</td>
               <td>{{ usuario.correo }}</td>
               <td>{{ usuario.movil || '-' }}</td>
-              <td>{{ usuario.familia || '-' }}</td>
               <td>{{ usuario.rol }}</td>
               <td>
                 <span :class="['estado-pill', usuario.activo ? 'activo' : 'inactivo']">
@@ -70,7 +68,6 @@
           </div>
           <p class="mb-1"><strong>Correo:</strong> {{ usuario.correo }}</p>
           <p class="mb-1"><strong>Movil:</strong> {{ usuario.movil || '-' }}</p>
-          <p class="mb-1"><strong>Familia:</strong> {{ usuario.familia || '-' }}</p>
           <p class="mb-1"><strong>Rol:</strong> {{ usuario.rol }}</p>
           <p class="mb-1"><strong>Saldo:</strong> {{ Number(usuario.saldo || 0).toFixed(2) }} EUR</p>
           <div class="d-flex gap-2 flex-wrap mt-2">
@@ -112,11 +109,6 @@
             <label class="form-label">Movil</label>
             <input v-model="form.movil" class="form-control" :class="{ 'is-invalid': errors.movil }" />
             <span v-if="errors.movil" class="error-text">{{ errors.movil }}</span>
-          </div>
-          <div class="mb-2">
-            <label class="form-label">Familia</label>
-            <input v-model="form.familia" type="number" class="form-control" min="1" :class="{ 'is-invalid': errors.familia }" />
-            <span v-if="errors.familia" class="error-text">{{ errors.familia }}</span>
           </div>
           <div class="mb-2">
             <label class="form-label">Rol</label>

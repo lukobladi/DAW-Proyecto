@@ -63,7 +63,8 @@ const ProductoController = {
           });
       }
 
-      const productos = await Producto.findByProveedor(proveedores[0].id_proveedor);
+      const proveedorIds = proveedores.map(p => p.id_proveedor);
+      const productos = await Producto.findByProveedores(proveedorIds);
       res.json(productos);
     } catch (err) {
       console.error(err);

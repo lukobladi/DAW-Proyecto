@@ -15,17 +15,17 @@ TRUNCATE TABLE
   usuario
 RESTART IDENTITY CASCADE;
 
--- Insertar usuarios
+-- Insertar usuarios (el saldo en la tabla ya no se usa para el calculo dinamico)
 INSERT INTO usuario (nombre, correo, pass, movil, rol, activo, saldo)
 VALUES
-    ('Admin', 'admin@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '111111111', 'admin', TRUE, 100.00),
-    ('Usuario1', 'usuario1@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '444444444', 'usuario', TRUE, -80.00),
-    ('Gestor1', 'gestor1@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '222222222', 'gestor', TRUE, 90.00),
-    ('Gestor2', 'gestor2@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '777777777', 'gestor', TRUE, 90.00),
-    ('Gestor3', 'gestor3@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '888888888', 'gestor', TRUE, 90.00),
-    ('Usuario2', 'usuario2@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '555555555', 'usuario', TRUE, -40.00),
-    ('Usuario3', 'usuario3@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '333333333', 'usuario', TRUE, -30.00),
-    ('Usuario4', 'usuario4@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '666666666', 'usuario', TRUE, -20.00);
+    ('Admin', 'admin@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '111111111', 'admin', TRUE, 0),
+    ('Usuario1', 'usuario1@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '444444444', 'usuario', TRUE, 0),
+    ('Gestor1', 'gestor1@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '222222222', 'gestor', TRUE, 0),
+    ('Gestor2', 'gestor2@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '777777777', 'gestor', TRUE, 0),
+    ('Gestor3', 'gestor3@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '888888888', 'gestor', TRUE, 0),
+    ('Usuario2', 'usuario2@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '555555555', 'usuario', TRUE, 0),
+    ('Usuario3', 'usuario3@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '333333333', 'usuario', TRUE, 0),
+    ('Usuario4', 'usuario4@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '666666666', 'usuario', TRUE, 0);
 
 -- Insertar proveedores
 INSERT INTO proveedor (nombre, contacto, telefono, movil, correo, metodo_pago, frecuencia_pedido_aproximada, envio_movil, envio_mail, activo)
@@ -89,76 +89,136 @@ VALUES
     ('Cerezas', 'Cerezas de Montoro', 6.90, 8, TRUE, '/uploads/cereza.webp'),
     ('Nísperos', 'Nísperos Callosa', 4.20, 8, TRUE, '/uploads/nispero.webp');
 
--- Pedidos históricos
+-- Pedidos históricos (cerrados, estado repartido/entregado/cancelado - NO aparecen en ComprasPage)
 INSERT INTO pedido (id_proveedor, fecha_apertura, fecha_cierre, fecha_entrega, estado, fecha_modificacion)
 VALUES
-    (1, CURRENT_TIMESTAMP - INTERVAL '21 days', CURRENT_TIMESTAMP - INTERVAL '16 days', CURRENT_TIMESTAMP - INTERVAL '14 days', 'repartido', CURRENT_TIMESTAMP - INTERVAL '14 days'),
-    (1, CURRENT_TIMESTAMP - INTERVAL '14 days', CURRENT_TIMESTAMP - INTERVAL '9 days', CURRENT_TIMESTAMP - INTERVAL '7 days', 'repartido', CURRENT_TIMESTAMP - INTERVAL '7 days'),
-    (1, CURRENT_TIMESTAMP - INTERVAL '7 days', CURRENT_TIMESTAMP - INTERVAL '2 days', CURRENT_DATE, 'repartido', CURRENT_TIMESTAMP - INTERVAL '1 day'),
-    (4, CURRENT_TIMESTAMP - INTERVAL '21 days', CURRENT_TIMESTAMP - INTERVAL '18 days', CURRENT_TIMESTAMP - INTERVAL '15 days', 'repartido', CURRENT_TIMESTAMP - INTERVAL '15 days'),
-    (4, CURRENT_TIMESTAMP - INTERVAL '7 days', CURRENT_TIMESTAMP - INTERVAL '4 days', CURRENT_TIMESTAMP - INTERVAL '2 days', 'repartido', CURRENT_TIMESTAMP - INTERVAL '2 days'),
-    (2, CURRENT_TIMESTAMP - INTERVAL '21 days', CURRENT_TIMESTAMP - INTERVAL '17 days', CURRENT_TIMESTAMP - INTERVAL '14 days', 'repartido', CURRENT_TIMESTAMP - INTERVAL '14 days'),
-    (2, CURRENT_TIMESTAMP - INTERVAL '7 days', CURRENT_TIMESTAMP - INTERVAL '3 days', CURRENT_TIMESTAMP - INTERVAL '1 day', 'repartido', CURRENT_TIMESTAMP - INTERVAL '1 day'),
-    (3, CURRENT_TIMESTAMP - INTERVAL '14 days', CURRENT_TIMESTAMP - INTERVAL '12 days', CURRENT_TIMESTAMP - INTERVAL '10 days', 'repartido', CURRENT_TIMESTAMP - INTERVAL '10 days'),
-    (3, CURRENT_TIMESTAMP - INTERVAL '7 days', CURRENT_TIMESTAMP - INTERVAL '5 days', CURRENT_TIMESTAMP - INTERVAL '3 days', 'repartido', CURRENT_TIMESTAMP - INTERVAL '3 days');
+    -- Frutas: 3 pedidos cerrados repartidos (histórico)
+    (1, '2026-03-01', '2026-03-08', '2026-03-10', 'repartido', '2026-03-10'),
+    (1, '2026-03-08', '2026-03-15', '2026-03-17', 'repartido', '2026-03-17'),
+    (1, '2026-03-15', '2026-03-22', '2026-03-24', 'repartido', '2026-03-24'),
+    -- Carnes: 2 pedidos cerrados repartidos (histórico)
+    (2, '2026-03-01', '2026-03-10', '2026-03-12', 'repartido', '2026-03-12'),
+    (2, '2026-03-10', '2026-03-20', '2026-03-22', 'repartido', '2026-03-22'),
+    -- Huevos: 2 pedidos cerrados repartidos (histórico)
+    (4, '2026-03-01', '2026-03-07', '2026-03-09', 'repartido', '2026-03-09'),
+    (4, '2026-03-10', '2026-03-16', '2026-03-18', 'repartido', '2026-03-18'),
+    -- Panadería: 2 pedidos cerrados repartidos (histórico)
+    (3, '2026-03-03', '2026-03-10', '2026-03-12', 'repartido', '2026-03-12'),
+    (3, '2026-03-12', '2026-03-19', '2026-03-21', 'repartido', '2026-03-21'),
+    -- Vinos: 1 pedido cerrado repartido (histórico)
+    (6, '2026-03-01', '2026-03-15', '2026-03-18', 'repartido', '2026-03-18'),
+    -- Lácteos: 1 pedido entregado (histórico)
+    (5, '2026-02-20', '2026-03-01', '2026-03-03', 'entregado', '2026-03-03'),
+    -- Legumbres: 1 pedido cancelado (histórico)
+    (7, '2026-03-01', '2026-03-10', NULL, 'cancelado', '2026-03-08');
 
--- Pedidos abiertos
+-- Pedidos pendientes de entrega (cerrados, estado pendiente o en proceso - SÍ aparecen en "Pendiente de entrega")
 INSERT INTO pedido (id_proveedor, fecha_apertura, fecha_cierre, fecha_entrega, estado, fecha_modificacion)
 VALUES
-    (1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '5 days', CURRENT_TIMESTAMP + INTERVAL '7 days', 'pendiente', CURRENT_TIMESTAMP),
-    (4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '3 days', CURRENT_TIMESTAMP + INTERVAL '5 days', 'pendiente', CURRENT_TIMESTAMP),
-    (2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '4 days', CURRENT_TIMESTAMP + INTERVAL '6 days', 'pendiente', CURRENT_TIMESTAMP),
-    (3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '2 days', CURRENT_TIMESTAMP + INTERVAL '4 days', 'pendiente', CURRENT_TIMESTAMP),
-    (6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '5 days', CURRENT_TIMESTAMP + INTERVAL '7 days', 'pendiente', CURRENT_TIMESTAMP);
+    -- Frutas: pedido cerrado pero pendiente (cerrado el 29/3, estado pendiente)
+    (1, '2026-03-22', '2026-03-29', NULL, 'pendiente', '2026-03-29'),
+    -- Carnes: pedido cerrado pero en proceso
+    (2, '2026-03-22', '2026-03-30', NULL, 'en proceso', '2026-03-30'),
+    -- Vinos: pedido cerrado y entregado (NO debe aparecer - entregado no es pendiente ni en proceso)
+    (6, '2026-03-18', '2026-03-28', '2026-03-30', 'entregado', '2026-03-30');
 
--- Detalles de pedidos (productos elegidos por usuarios en cada pedido)
+-- Pedidos abiertos (fecha_cierre > hoy 1/4/2026, estado pendiente - aparecen en "Pedido abierto")
+INSERT INTO pedido (id_proveedor, fecha_apertura, fecha_cierre, fecha_entrega, estado, fecha_modificacion)
+VALUES
+    -- Panadería: abre 27/3, cierra 5/4 (pendiente)
+    (3, '2026-03-27', '2026-04-05', '2026-04-07', 'pendiente', '2026-03-27'),
+    -- Huevos: abre 30/3, cierra 2/4 (pendiente, cierra mañana)
+    (4, '2026-03-30', '2026-04-02', '2026-04-04', 'pendiente', '2026-03-30'),
+    -- Lácteos: abre 28/3, cierra 6/4 (pendiente)
+    (5, '2026-03-28', '2026-04-06', '2026-04-08', 'pendiente', '2026-03-28'),
+    -- Vinos: abre 29/3, cierra 8/4 (pendiente)
+    (6, '2026-03-29', '2026-04-08', '2026-04-10', 'pendiente', '2026-03-29'),
+    -- Legumbres: abre 30/3, cierra 4/4 (pendiente)
+    (7, '2026-03-30', '2026-04-04', '2026-04-06', 'pendiente', '2026-03-30'),
+    -- Frutas: abre 29/3, cierra 3/4 (pendiente)
+    (1, '2026-03-29', '2026-04-03', '2026-04-05', 'pendiente', '2026-03-29');
+
+-- Detalles de pedidos históricos (productos elegidos por usuarios)
 INSERT INTO detalle_pedido (id_pedido, id_producto, cantidad, precio_unitario, id_usuario_comprador, fecha_modificacion)
 VALUES
-    -- Detalles pedido 1 (frutas hace 21 días)
-    (1, 1, 5, 2.80, 1, CURRENT_TIMESTAMP - INTERVAL '14 days'),
-    (1, 2, 3, 2.20, 2, CURRENT_TIMESTAMP - INTERVAL '14 days'),
-    (1, 3, 2, 1.90, 3, CURRENT_TIMESTAMP - INTERVAL '14 days'),
-    (1, 4, 2, 3.50, 4, CURRENT_TIMESTAMP - INTERVAL '14 days'),
-    -- Detalles pedido 2 (frutas hace 14 días)
-    (2, 1, 4, 2.80, 1, CURRENT_TIMESTAMP - INTERVAL '7 days'),
-    (2, 5, 2, 1.20, 2, CURRENT_TIMESTAMP - INTERVAL '7 days'),
-    (2, 6, 1, 1.80, 3, CURRENT_TIMESTAMP - INTERVAL '7 days'),
-    -- Detalles pedido 3 (frutas hace 7 días)
-    (3, 1, 6, 2.80, 1, CURRENT_TIMESTAMP - INTERVAL '1 day'),
-    (3, 2, 4, 2.20, 2, CURRENT_TIMESTAMP - INTERVAL '1 day'),
-    (3, 7, 2, 1.10, 3, CURRENT_TIMESTAMP - INTERVAL '1 day'),
-    -- Detalles pedido 4 (huevos hace 21 días)
-    (4, 17, 2, 4.50, 1, CURRENT_TIMESTAMP - INTERVAL '15 days'),
-    (4, 18, 1, 3.80, 2, CURRENT_TIMESTAMP - INTERVAL '15 days'),
-    -- Detalles pedido 5 (huevos hace 7 días)
-    (5, 17, 3, 4.50, 1, CURRENT_TIMESTAMP - INTERVAL '2 days'),
-    (5, 18, 2, 3.80, 3, CURRENT_TIMESTAMP - INTERVAL '2 days'),
-    -- Detalles pedido 6 (carnes hace 21 días)
-    (6, 9, 1, 14.50, 1, CURRENT_TIMESTAMP - INTERVAL '14 days'),
-    (6, 10, 2, 8.90, 2, CURRENT_TIMESTAMP - INTERVAL '14 days'),
-    (6, 11, 1, 7.50, 3, CURRENT_TIMESTAMP - INTERVAL '14 days'),
-    -- Detalles pedido 7 (carnes hace 7 días)
-    (7, 9, 1, 14.50, 1, CURRENT_TIMESTAMP - INTERVAL '1 day'),
-    (7, 12, 0.5, 22.00, 2, CURRENT_TIMESTAMP - INTERVAL '1 day'),
-    -- Detalles pedido 8 (panadería hace 14 días)
-    (8, 14, 2, 2.80, 1, CURRENT_TIMESTAMP - INTERVAL '10 days'),
-    (8, 15, 1, 3.20, 2, CURRENT_TIMESTAMP - INTERVAL '10 days'),
-    (8, 16, 4, 1.50, 3, CURRENT_TIMESTAMP - INTERVAL '10 days'),
-    -- Detalles pedido 9 (panadería hace 7 días)
-    (9, 14, 3, 2.80, 1, CURRENT_TIMESTAMP - INTERVAL '3 days'),
-    (9, 16, 6, 1.50, 2, CURRENT_TIMESTAMP - INTERVAL '3 days'),
-    -- Detalles pedidos abiertos
-    (10, 1, 3, 2.80, 1, CURRENT_TIMESTAMP),
-    (10, 2, 2, 2.20, 2, CURRENT_TIMESTAMP),
-    (10, 3, 1, 1.90, 3, CURRENT_TIMESTAMP),
-    (11, 17, 2, 4.50, 1, CURRENT_TIMESTAMP),
-    (11, 18, 1, 3.80, 2, CURRENT_TIMESTAMP),
-    (12, 9, 1, 14.50, 1, CURRENT_TIMESTAMP),
-    (12, 10, 1, 8.90, 3, CURRENT_TIMESTAMP),
-    (13, 14, 2, 2.80, 1, CURRENT_TIMESTAMP),
-    (13, 15, 1, 3.20, 2, CURRENT_TIMESTAMP),
-    (14, 22, 2, 6.50, 1, CURRENT_TIMESTAMP),
-    (14, 23, 2, 5.80, 3, CURRENT_TIMESTAMP);
+    -- Detalles pedido 1 (frutas - repartido 10/3)
+    (1, 1, 5, 2.80, 2, '2026-03-08'),
+    (1, 2, 3, 2.20, 3, '2026-03-08'),
+    (1, 3, 2, 1.90, 4, '2026-03-08'),
+    -- Detalles pedido 2 (frutas - repartido 17/3)
+    (2, 1, 4, 2.80, 2, '2026-03-15'),
+    (2, 5, 2, 1.20, 3, '2026-03-15'),
+    (2, 6, 1, 1.80, 4, '2026-03-15'),
+    -- Detalles pedido 3 (frutas - repartido 24/3)
+    (3, 1, 6, 2.80, 2, '2026-03-22'),
+    (3, 2, 4, 2.20, 3, '2026-03-22'),
+    (3, 7, 2, 1.10, 4, '2026-03-22'),
+    -- Detalles pedido 4 (carnes - repartido 12/3)
+    (5, 9, 1, 14.50, 2, '2026-03-10'),
+    (5, 10, 2, 8.90, 3, '2026-03-10'),
+    (5, 11, 1, 7.50, 4, '2026-03-10'),
+    -- Detalles pedido 5 (carnes - repartido 22/3)
+    (6, 9, 2, 14.50, 2, '2026-03-20'),
+    (6, 12, 0.5, 22.00, 3, '2026-03-20'),
+    -- Detalles pedido 6 (huevos - repartido 9/3)
+    (7, 17, 2, 4.50, 2, '2026-03-07'),
+    (7, 18, 1, 3.80, 3, '2026-03-07'),
+    -- Detalles pedido 7 (huevos - repartido 18/3)
+    (8, 17, 3, 4.50, 2, '2026-03-16'),
+    (8, 18, 2, 3.80, 3, '2026-03-16'),
+    -- Detalles pedido 8 (panadería - repartido 12/3)
+    (9, 14, 2, 2.80, 2, '2026-03-10'),
+    (9, 15, 1, 3.20, 3, '2026-03-10'),
+    (9, 16, 4, 1.50, 4, '2026-03-10'),
+    -- Detalles pedido 9 (panadería - repartido 21/3)
+    (10, 14, 3, 2.80, 2, '2026-03-19'),
+    (10, 16, 6, 1.50, 3, '2026-03-19'),
+    -- Detalles pedido 10 (vinos - repartido 18/3)
+    (11, 22, 2, 6.50, 2, '2026-03-15'),
+    (11, 23, 2, 5.80, 3, '2026-03-15'),
+    -- Detalles pedido 11 (lácteos - entregado 3/3)
+    (12, 19, 4, 3.20, 2, '2026-03-01'),
+    (12, 20, 0.5, 12.50, 3, '2026-03-01'),
+    -- Detalles pedido 12 (legumbres - cancelado 8/3)
+    (13, 26, 2, 2.80, 2, '2026-03-08'),
+    (13, 27, 1, 3.20, 3, '2026-03-08');
+
+-- Detalles pedidos pendientes de entrega (cerrados con estado pendiente/en proceso)
+INSERT INTO detalle_pedido (id_pedido, id_producto, cantidad, precio_unitario, id_usuario_comprador, fecha_modificacion)
+VALUES
+    -- Pedido 13: frutas, cerrado 29/3, estado pendiente (pendiente de entrega)
+    (13, 1, 4, 2.80, 2, '2026-03-29'),
+    (13, 2, 3, 2.20, 3, '2026-03-29'),
+    (13, 4, 2, 3.50, 4, '2026-03-29'),
+    -- Pedido 14: carnes, cerrado 30/3, estado en proceso (pendiente de entrega)
+    (14, 9, 1, 14.50, 2, '2026-03-30'),
+    (14, 10, 2, 8.90, 3, '2026-03-30'),
+    -- Pedido 15: vinos, cerrado 28/3, estado entregado (NO debe aparecer)
+    (15, 22, 3, 6.50, 2, '2026-03-28');
+
+-- Detalles pedidos abiertos
+INSERT INTO detalle_pedido (id_pedido, id_producto, cantidad, precio_unitario, id_usuario_comprador, fecha_modificacion)
+VALUES
+    -- Pedido 16: panadería, cierra 5/4 (abierto)
+    (16, 14, 2, 2.80, 2, '2026-03-27'),
+    (16, 15, 1, 3.20, 3, '2026-03-27'),
+    (16, 16, 3, 1.50, 4, '2026-03-27'),
+    -- Pedido 17: huevos, cierra 2/4 (abierto)
+    (17, 17, 3, 4.50, 2, '2026-03-30'),
+    (17, 18, 2, 3.80, 3, '2026-03-30'),
+    -- Pedido 18: lácteos, cierra 6/4 (abierto)
+    (18, 19, 4, 3.20, 2, '2026-03-28'),
+    (18, 20, 1, 12.50, 3, '2026-03-28'),
+    (18, 21, 2, 1.40, 4, '2026-03-28'),
+    -- Pedido 19: vinos, cierra 8/4 (abierto)
+    (19, 22, 2, 6.50, 2, '2026-03-29'),
+    (19, 23, 2, 5.80, 3, '2026-03-29'),
+    -- Pedido 20: legumbres, cierra 4/4 (abierto)
+    (20, 26, 3, 2.80, 2, '2026-03-30'),
+    (20, 27, 2, 3.20, 3, '2026-03-30'),
+    -- Pedido 21: frutas, cierra 3/4 (abierto)
+    (21, 1, 5, 2.80, 2, '2026-03-29'),
+    (21, 2, 4, 2.20, 3, '2026-03-29');
 
 -- Pedidos periódicos
 INSERT INTO pedido_periodico (id_proveedor, fecha_inicio, fecha_fin, activo, periodicidad, dia_apertura, dia_cierre, dia_entrega)
@@ -172,15 +232,12 @@ VALUES
 INSERT INTO pago (id_usuario_deudor, id_usuario_creditor, monto, fecha_pago, estado, periodo, origen, concepto, deudor_reporta_pagado, fecha_reporte_deudor, fecha_confirmacion_receptor, fecha_modificacion)
 VALUES
     -- Pagos febrero completados
-    (1, 2, 28.50, CURRENT_TIMESTAMP - INTERVAL '15 days', 'completado', '2026-02-01', 'liquidacion', 'Liquidación febrero - Carnes', TRUE, CURRENT_TIMESTAMP - INTERVAL '16 days', CURRENT_TIMESTAMP - INTERVAL '15 days', CURRENT_TIMESTAMP - INTERVAL '15 days'),
-    (3, 2, 22.40, CURRENT_TIMESTAMP - INTERVAL '15 days', 'completado', '2026-02-01', 'liquidacion', 'Liquidación febrero - Carnes', TRUE, CURRENT_TIMESTAMP - INTERVAL '16 days', CURRENT_TIMESTAMP - INTERVAL '15 days', CURRENT_TIMESTAMP - INTERVAL '15 days'),
-    -- Pagos pendientes marzo
-    (2, 1, 15.80, NULL, 'pendiente', '2026-03-01', 'liquidacion', 'Liquidación marzo - Frutas', FALSE, NULL, NULL, CURRENT_TIMESTAMP),
-    (3, 1, 12.40, NULL, 'pendiente', '2026-03-01', 'liquidacion', 'Liquidación marzo - Frutas', FALSE, NULL, NULL, CURRENT_TIMESTAMP),
-    (1, 2, 22.50, NULL, 'pendiente', '2026-03-01', 'liquidacion', 'Liquidación marzo - Carnes', FALSE, NULL, NULL, CURRENT_TIMESTAMP),
-    (3, 2, 18.90, NULL, 'pendiente', '2026-03-01', 'liquidacion', 'Liquidación marzo - Carnes', FALSE, NULL, NULL, CURRENT_TIMESTAMP),
-    -- Pago manual
-    (2, 1, 10.00, CURRENT_TIMESTAMP - INTERVAL '10 days', 'completado', '2026-03-01', 'manual', 'A cuenta pedido próximo', TRUE, CURRENT_TIMESTAMP - INTERVAL '10 days', CURRENT_TIMESTAMP - INTERVAL '10 days', CURRENT_TIMESTAMP - INTERVAL '10 days');
+    (2, 1, 25.00, '2026-02-28', 'completado', '2026-02', 'liquidacion', 'Liquidación febrero - Frutas y Carnes', TRUE, '2026-02-27', '2026-02-28', '2026-02-28'),
+    (3, 1, 30.00, '2026-02-28', 'completado', '2026-02', 'liquidacion', 'Liquidación febrero - Frutas y Carnes', TRUE, '2026-02-27', '2026-02-28', '2026-02-28'),
+    -- Pagos pendientes marzo (deben pagarse a Admin por pedidos de Frutas y Carnes)
+    (2, 1, 25.70, NULL, 'pendiente', '2026-03', 'liquidacion', 'Liquidación marzo - Frutas y Carnes', FALSE, NULL, NULL, '2026-03-29'),
+    (3, 1, 24.40, NULL, 'pendiente', '2026-03', 'liquidacion', 'Liquidación marzo - Frutas y Carnes', FALSE, NULL, NULL, '2026-03-29'),
+    (4, 1, 7.00, NULL, 'pendiente', '2026-03', 'liquidacion', 'Liquidación marzo - Frutas', FALSE, NULL, NULL, '2026-03-29');
 
 -- Notificaciones
 INSERT INTO notificacion (id_usuario, mensaje, fecha, leida)

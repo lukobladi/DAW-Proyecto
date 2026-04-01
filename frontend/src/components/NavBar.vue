@@ -183,13 +183,23 @@ export default {
         const userId = Number(authStore.user?.id_usuario);
         if (!userId) return;
 
-        const pedidosPromise = this.isAdmin ? api.getPedidos() : api.getMisPedidos();
-        const [pedidosResponse] = await Promise.all([pedidosPromise]);
+        const pedidosResponse = await api.getPedidos();
         const pedidos = pedidosResponse.data || [];
 
-        const pedidosPendientes = pedidos.filter(
-          pedido => !['repartido', 'cancelado'].includes(pedido.estado)
-        );
+        const hoy = new Date();
+        hoy.setHours(0, 0, 0, 0);
+
+        const pedidosPendientes = pedidos.filter((pedido) => {
+          if (!['pendiente', 'en proceso'].includes(pedido.estado)) {
+            return false;
+          }
+          const cierre = pedido.fecha_cierre ? new Date(pedido.fecha_cierre) : null;
+          if (!cierre) {
+            return false;
+          }
+          cierre.setHours(0, 0, 0, 0);
+          return cierre < hoy;
+        });
 
         let totalProductos = 0;
         for (const pedido of pedidosPendientes) {

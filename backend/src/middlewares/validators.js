@@ -42,10 +42,14 @@ const validators = {
       .isIn(['admin', 'usuario', 'gestor'])
       .withMessage('El rol debe ser admin, usuario o gestor'),
     body('movil')
-      .optional()
-      .matches(/^[0-9]{9,15}$/)
-      .withMessage('El móvil debe ser un número válido')
-      .trim(),
+      .optional({ nullable: true })
+      .custom((value) => {
+        if (value === null || value === undefined || value === '') return true;
+        if (!/^[0-9]{9,15}$/.test(value)) {
+          throw new Error('El móvil debe ser un número válido (9-15 dígitos)');
+        }
+        return true;
+      }),
   ],
 
   // Validación para actualizar usuario

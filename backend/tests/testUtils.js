@@ -20,7 +20,7 @@ async function getAuthToken() {
   await pool.query(
     `
     INSERT INTO usuario (nombre, correo, pass, rol, movil)
-    VALUES ('Admin Test', 'enekoloko7@hotmail.com', $1, 'admin', '123456789')
+    VALUES ('Admin Test', 'admin@ekonsumo.com', $1, 'admin', '111111111')
     ON CONFLICT (correo) DO NOTHING;
   `,
     [hashedPassword]
@@ -28,7 +28,7 @@ async function getAuthToken() {
 
   // Obtener el token de autenticacion
   const res = await request(app).post('/api/usuarios/login').send({
-    correoOMovil: 'enekoloko7@hotmail.com',
+    correoOMovil: 'admin@ekonsumo.com',
     password: '1234', // Password en texto plano
   });
 

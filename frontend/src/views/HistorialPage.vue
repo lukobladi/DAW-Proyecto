@@ -1,36 +1,60 @@
 <template>
   <div class="page-content container">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h2 class="mb-0">Historial de Pedidos</h2>
-      <button class="btn btn-primary" @click="cargarHistorial" :disabled="cargando">
-        {{ cargando ? 'Actualizando...' : 'Actualizar' }}
-      </button>
-    </div>
+    <h2>Historial de Pedidos</h2>
+    <p>Pedidos en los que has realizado alguna compra.</p>
 
-    <div v-if="cargando" class="estado">Cargando historial...</div>
+    <div v-if="cargando" class="estado">Cargando pedidos...</div>
     <div v-else-if="errorCarga" class="estado error">{{ errorCarga }}</div>
-    <div v-else-if="!pedidosHistorial.length" class="estado">
-      Todavia no tienes pedidos en tu historial.
-    </div>
+    <div v-else-if="!pedidos.length" class="estado">No has realizado ninguna compra todavia.</div>
 
-    <div v-else class="row g-3">
-      <div v-for="pedido in pedidosHistorial" :key="pedido.id_pedido" class="col-12 col-md-6 col-lg-4">
-        <div class="pedido-card h-100">
+    <template v-else>
+      <div class="table-responsive d-none d-md-block">
+        <table class="table table-striped align-middle">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Proveedor</th>
+              <th>Apertura</th>
+              <th>Cierre</th>
+              <th>Entrega</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="pedido in pedidos" :key="pedido.id_pedido">
+              <td>{{ pedido.id_pedido }}</td>
+              <td>{{ pedido.proveedor }}</td>
+              <td>{{ formatFecha(pedido.fecha_apertura) }}</td>
+              <td>{{ formatFecha(pedido.fecha_cierre) }}</td>
+              <td>{{ formatFecha(pedido.fecha_entrega) }}</td>
+              <td>
+                <span :class="['estado-pill', estadoClass(pedido.estado)]">{{ pedido.estado }}</span>
+              </td>
+              <td>
+                <button class="btn btn-sm btn-info" @click="verDetalles(pedido.id_pedido)">Ver detalles</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-md-none">
+        <div v-for="pedido in pedidos" :key="pedido.id_pedido" class="pedido-card-mobile">
           <div class="d-flex justify-content-between align-items-start mb-2">
             <h5 class="mb-0">Pedido #{{ pedido.id_pedido }}</h5>
-            <span :class="['estado-pill', estadoClass(pedido.estado)]">{{ pedido.estado }}</span>
+            <span :class="['estado-pill', 'sm', estadoClass(pedido.estado)]">{{ pedido.estado }}</span>
           </div>
           <p class="mb-1"><strong>Proveedor:</strong> {{ pedido.proveedor }}</p>
-          <p class="mb-1"><strong>Productos:</strong> {{ pedido.num_lineas }}</p>
-          <p class="mb-1"><strong>Unidades:</strong> {{ pedido.unidades_total }}</p>
-          <p class="mb-1"><strong>Importe:</strong> {{ pedido.importe_total }} EUR</p>
-          <p class="mb-3"><strong>Entrega:</strong> {{ formatFecha(pedido.fecha_entrega) }}</p>
-          <button class="btn btn-outline-primary btn-sm" @click="verDetalles(pedido.id_pedido)">
-            Ver detalles
-          </button>
+          <p class="mb-1"><strong>Apertura:</strong> {{ formatFecha(pedido.fecha_apertura) }}</p>
+          <p class="mb-1"><strong>Cierre:</strong> {{ formatFecha(pedido.fecha_cierre) }}</p>
+          <p class="mb-1"><strong>Entrega:</strong> {{ formatFecha(pedido.fecha_entrega) }}</p>
+          <div class="d-flex gap-2 flex-nowrap mt-2">
+            <button class="btn btn-sm btn-info" @click="verDetalles(pedido.id_pedido)">Ver detalles</button>
+          </div>
         </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -41,26 +65,24 @@ import { useAuthStore } from '@/store';
 export default {
   data() {
     return {
+      pedidos: [],
       cargando: false,
       errorCarga: '',
-      pedidosHistorial: [],
     };
   },
-  computed: {
-    isAdminOrGestor() {
-      const authStore = useAuthStore();
-      return authStore.user?.rol === 'admin' || authStore.user?.rol === 'gestor';
-    },
-  },
   async created() {
-    await this.cargarHistorial();
+    await this.cargarDatos();
   },
   methods: {
     formatFecha(fechaIso) {
       if (!fechaIso) {
         return '-';
       }
-      return new Date(fechaIso).toLocaleString('es-ES');
+      return new Date(fechaIso).toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      });
     },
     estadoClass(estado) {
       const classes = {
@@ -72,7 +94,7 @@ export default {
       };
       return classes[estado] || 'estado-pendiente';
     },
-    async cargarHistorial() {
+    async cargarDatos() {
       this.cargando = true;
       this.errorCarga = '';
 
@@ -80,80 +102,67 @@ export default {
         const authStore = useAuthStore();
         const userId = Number(authStore.user?.id_usuario);
         if (!userId) {
-          this.errorCarga = 'No se pudo identificar el usuario actual.';
+          this.errorCarga = 'No se pudo identificar al usuario.';
+          this.cargando = false;
           return;
         }
 
-        const pedidosPromise = this.isAdmin ? api.getPedidos() : api.getMisPedidos();
         const [pedidosResponse, proveedoresResponse] = await Promise.all([
-          pedidosPromise,
+          api.getPedidos(),
           api.getProveedores(),
         ]);
 
-        const pedidos = pedidosResponse.data || [];
         const proveedores = proveedoresResponse.data || [];
         const proveedorPorId = new Map(
-          proveedores.map((proveedor) => [proveedor.id_proveedor, proveedor.nombre])
+          proveedores.map((p) => [p.id_proveedor, p.nombre])
         );
 
-        const detallesResponse = await Promise.all(
-          pedidos.map((pedido) => api.getDetallesPedidoPorPedido(pedido.id_pedido))
-        );
+        const todosPedidos = pedidosResponse.data || [];
 
-        const historial = [];
-        detallesResponse.forEach((response, index) => {
-          const pedido = pedidos[index];
-          const detallesUsuario = (response.data || []).filter(
-            (detalle) =>
-              Number(detalle.id_usuario_comprador) === userId && Number(detalle.cantidad || 0) > 0
-          );
+        const pedidosConCompra = [];
 
-          if (!detallesUsuario.length) {
-            return;
+        for (const pedido of todosPedidos) {
+          try {
+            const detallesResponse = await api.getDetallesPedidoPorPedido(pedido.id_pedido);
+            const detalles = detallesResponse.data || [];
+            const tieneCompra = detalles.some(
+              (d) => Number(d.id_usuario_comprador) === userId && Number(d.cantidad) > 0
+            );
+            if (tieneCompra) {
+              pedidosConCompra.push({
+                ...pedido,
+                proveedor: proveedorPorId.get(pedido.id_proveedor) || 'Proveedor sin nombre',
+              });
+            }
+          } catch {
+            // Skip errors for individual pedido details
           }
+        }
 
-          const unidadesTotal = detallesUsuario.reduce(
-            (total, detalle) => total + Number(detalle.cantidad || 0),
-            0
-          );
-
-          const importeTotal = detallesUsuario.reduce(
-            (total, detalle) => total + Number(detalle.cantidad || 0) * Number(detalle.precio_unitario || 0),
-            0
-          );
-
-          historial.push({
-            id_pedido: pedido.id_pedido,
-            proveedor: proveedorPorId.get(pedido.id_proveedor) || 'Proveedor sin nombre',
-            estado: pedido.estado,
-            fecha_entrega: pedido.fecha_entrega,
-            num_lineas: detallesUsuario.length,
-            unidades_total: unidadesTotal,
-            importe_total: importeTotal.toFixed(2),
-          });
+        this.pedidos = pedidosConCompra.sort((a, b) => {
+          const fechaA = a.fecha_cierre || '9999-12-31';
+          const fechaB = b.fecha_cierre || '9999-12-31';
+          return new Date(fechaB) - new Date(fechaA);
         });
-
-        this.pedidosHistorial = historial.sort(
-          (a, b) => new Date(b.fecha_entrega || 0) - new Date(a.fecha_entrega || 0)
-        );
       } catch {
-        this.errorCarga = 'No se pudo cargar el historial de pedidos.';
+        this.errorCarga = 'No se pudieron cargar los pedidos.';
       } finally {
         this.cargando = false;
       }
     },
-    verDetalles(pedidoId) {
-      this.$router.push({ name: 'DetallesPedido', params: { id: pedidoId } });
+    verDetalles(idPedido) {
+      this.$router.push({ name: 'DetallesPedido', params: { id: idPedido }, query: { from: 'historial' } });
     },
   },
 };
 </script>
 
 <style scoped>
-.pedido-card {
+.pedido-card-mobile {
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
   background: var(--color-bg);
 }
 </style>

@@ -62,7 +62,8 @@ const PedidoController = {
           .json({ error: 'No tienes proveedores asignados' });
       }
 
-      const pedidos = await Pedido.findByProveedor(proveedores[0].id_proveedor);
+      const proveedorIds = proveedores.map(p => p.id_proveedor);
+      const pedidos = await Pedido.findByProveedores(proveedorIds);
       res.json(pedidos);
     } catch (err) {
       console.error(err);

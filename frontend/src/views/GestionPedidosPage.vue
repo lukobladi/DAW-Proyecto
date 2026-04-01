@@ -15,7 +15,6 @@
             <tr>
               <th>ID</th>
               <th>Proveedor</th>
-              <th>Familia</th>
               <th>Apertura</th>
               <th>Cierre</th>
               <th>Entrega</th>
@@ -27,7 +26,6 @@
             <tr v-for="pedido in pedidos" :key="pedido.id_pedido">
               <td>{{ pedido.id_pedido }}</td>
               <td>{{ nombreProveedor(pedido.id_proveedor) }}</td>
-              <td>{{ familiaPorProveedor[pedido.id_proveedor] || '-' }}</td>
               <td>{{ formatFecha(pedido.fecha_apertura) }}</td>
               <td>{{ formatFecha(pedido.fecha_cierre) }}</td>
               <td>{{ formatFecha(pedido.fecha_entrega) }}</td>
@@ -35,6 +33,7 @@
                 <span :class="['estado-pill', estadoClass(pedido.estado)]">{{ pedido.estado }}</span>
               </td>
               <td class="acciones acciones-cell">
+                <button class="btn btn-sm btn-info" @click="verDetalles(pedido.id_pedido)">Ver detalles</button>
                 <button class="btn btn-sm btn-success" @click="abrirModalEditar(pedido)">Editar</button>
                 <button
                   class="btn btn-sm btn-danger"
@@ -56,11 +55,11 @@
             <span :class="['estado-pill', 'sm', estadoClass(pedido.estado)]">{{ pedido.estado }}</span>
           </div>
           <p class="mb-1"><strong>Proveedor:</strong> {{ nombreProveedor(pedido.id_proveedor) }}</p>
-          <p class="mb-1"><strong>Familia:</strong> {{ familiaPorProveedor[pedido.id_proveedor] || '-' }}</p>
           <p class="mb-1"><strong>Apertura:</strong> {{ formatFecha(pedido.fecha_apertura) }}</p>
           <p class="mb-1"><strong>Cierre:</strong> {{ formatFecha(pedido.fecha_cierre) }}</p>
           <p class="mb-1"><strong>Entrega:</strong> {{ formatFecha(pedido.fecha_entrega) }}</p>
           <div class="d-flex gap-2 flex-nowrap mt-2">
+            <button class="btn btn-sm btn-info" @click="verDetalles(pedido.id_pedido)">Ver detalles</button>
             <button class="btn btn-sm btn-success" @click="abrirModalEditar(pedido)">Editar</button>
             <button
               class="btn btn-sm btn-danger"
@@ -146,7 +145,6 @@ export default {
     return {
       pedidos: [],
       proveedores: [],
-      familias: [],
       cargando: false,
       errorCarga: '',
       accionandoId: null,
@@ -161,14 +159,9 @@ export default {
       const authStore = useAuthStore();
       return authStore.user?.rol === 'admin';
     },
-    familiaPorProveedor() {
-      const map = {};
-      this.proveedores.forEach((p) => {
-        if (p.familia) {
-          map[p.id_proveedor] = p.familia;
-        }
-      });
-      return map;
+    isGestor() {
+      const authStore = useAuthStore();
+      return authStore.user?.rol === 'gestor';
     },
   },
   async created() {
@@ -208,36 +201,25 @@ export default {
       this.cargando = true;
       this.errorCarga = '';
       try {
-        const pedidosPromise = this.isAdmin ? api.getPedidos() : api.getMisPedidos();
-        const proveedoresPromise = api.getProveedores();
-        const promises = [pedidosPromise, proveedoresPromise];
-
-        if (this.isAdmin) {
-          promises.push(api.getUsuarios());
-        }
-
-        const [pedidosResponse, proveedoresResponse, usuariosResponse] = await Promise.all(promises);
+        const [pedidosResponse, proveedoresResponse] = await Promise.all([
+          this.isGestor ? api.getMisPedidos() : api.getPedidos(),
+          api.getProveedores(),
+        ]);
 
         this.pedidos = pedidosResponse.data || [];
         this.proveedores = proveedoresResponse.data || [];
-
-        if (this.isAdmin && usuariosResponse) {
-          const usuarios = usuariosResponse.data || [];
-          const familiasSet = new Set();
-          usuarios.forEach((u) => {
-            if (u.familia) familiasSet.add(u.familia);
-          });
-          this.familias = Array.from(familiasSet).sort((a, b) => a - b);
-        }
       } catch (error) {
         if (error.response?.status === 403) {
           this.errorCarga = error.response.data.error || 'No tienes acceso a pedidos.';
         } else {
-          this.errorCarga = 'No se pudieron cargar pedidos, proveedores y familias.';
+          this.errorCarga = 'No se pudieron cargar pedidos y proveedores.';
         }
       } finally {
         this.cargando = false;
       }
+    },
+    verDetalles(idPedido) {
+      this.$router.push({ name: 'DetallesPedido', params: { id: idPedido }, query: { from: 'gestion-pedidos' } });
     },
     abrirModalCrear() {
       this.modoEdicion = false;

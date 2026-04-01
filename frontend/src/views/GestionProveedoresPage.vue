@@ -16,7 +16,6 @@
               <th>Nombre</th>
               <th>Contacto</th>
               <th>Correo</th>
-              <th>Familia Gestora</th>
               <th>Frecuencia</th>
               <th>Estado</th>
               <th>Acciones</th>
@@ -27,7 +26,6 @@
               <td>{{ proveedor.nombre }}</td>
               <td>{{ proveedor.contacto || '-' }}</td>
               <td>{{ proveedor.correo || '-' }}</td>
-              <td>Familia {{ proveedor.familia || '-' }}</td>
               <td>{{ proveedor.frecuencia_pedido_aproximada || '-' }}</td>
               <td>
                 <span :class="['estado-pill', proveedor.activo ? 'activo' : 'inactivo']">
@@ -68,7 +66,6 @@
           </div>
           <p class="mb-1"><strong>Contacto:</strong> {{ proveedor.contacto || '-' }}</p>
           <p class="mb-1"><strong>Correo:</strong> {{ proveedor.correo || '-' }}</p>
-          <p class="mb-1"><strong>Familia:</strong> {{ proveedor.familia || '-' }}</p>
           <p class="mb-1"><strong>Frecuencia:</strong> {{ proveedor.frecuencia_pedido_aproximada || '-' }}</p>
           <div class="d-flex gap-2 flex-wrap mt-2">
             <button class="btn btn-sm btn-success" @click="abrirModalEditar(proveedor)">Editar</button>
@@ -143,15 +140,6 @@
           <div class="form-check mb-3">
             <input id="envioMail" v-model="form.envio_mail" class="form-check-input" type="checkbox" />
             <label class="form-check-label" for="envioMail">Aviso email</label>
-          </div>
-          <div class="mb-2">
-            <label class="form-label">Familia Gestora</label>
-            <select v-model.number="form.familia" class="form-select">
-              <option :value="null">Selecciona una familia (opcional)</option>
-              <option v-for="familia in familiasDisponibles" :key="familia" :value="familia">
-                Familia {{ familia }}
-              </option>
-            </select>
           </div>
           <div class="d-flex gap-2">
             <button class="btn btn-primary" type="submit" :disabled="guardando">

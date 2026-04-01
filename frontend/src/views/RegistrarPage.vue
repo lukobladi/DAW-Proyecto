@@ -23,10 +23,7 @@
           <label for="movil" class="form-label">Móvil (opcional)</label>
           <input type="tel" id="movil" v-model="movil" class="form-control" placeholder="Ingresa tu número de móvil">
         </div>
-        <div class="mb-3">
-          <label for="familia" class="form-label">Familia (opcional)</label>
-          <input type="number" id="familia" v-model="familia" class="form-control" placeholder="Número de familia" min="1">
-        </div>
+
         <button type="submit" class="btn btn-primary w-100">Registrarse</button>
       </form>
       <div class="auth-divider">
@@ -48,8 +45,7 @@ export default {
       correo: '',
       password: '',
       confirmarPassword: '',
-      movil: '',
-      familia: null,
+      movil: null,
     };
   },
   methods: {
@@ -76,7 +72,6 @@ export default {
           password: this.password,
           rol: 'usuario',
           movil: this.movil || null,
-          familia: this.familia || null,
         });
 
         alertStore.showAlert('Registro exitoso. Ahora puedes iniciar sesión.', 'success');

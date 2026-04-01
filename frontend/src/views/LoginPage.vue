@@ -9,7 +9,7 @@
         </div>
         <div class="mb-3">
           <label for="contraseña" class="form-label">Contraseña</label>
-          <input type="password" id="contraseña" v-model="contraseña" class="form-control" placeholder="Ingresa tu contraseña" required>
+          <input type="password" id="contraseña" v-model="contraseña" class="form-control" placeholder="Ingresa tu contraseña" autocomplete="current-password" required>
         </div>
         <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
       </form>

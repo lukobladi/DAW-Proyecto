@@ -33,7 +33,7 @@ const router = express.Router();
  *                     example: Juan
  *                   correo:
  *                     type: string
- *                     example: enekoloko7@hotmail.com
+ *                     example: admin@ekonsumo.com
  *                   rol:
  *                     type: string
  *                     example: usuario
@@ -43,9 +43,8 @@ const router = express.Router();
 router.get(
   '/obtenerTodos',
   authMiddleware,
-  adminMiddleware,
   UsuarioController.listar
-); // Solo administradores
+);
 
 /**
  * @swagger
@@ -76,7 +75,7 @@ router.get(
  *                   example: Juan
  *                 correo:
  *                   type: string
- *                   example: enekoloko7@hotmail.com
+ *                   example: admin@ekonsumo.com
  *                 rol:
  *                   type: string
  *                   example: usuario
@@ -105,7 +104,7 @@ router.get('/obtener/:id', authMiddleware, UsuarioController.obtenerPorId); // U
  *                 example: Juan
  *               correo:
  *                 type: string
- *                 example: enekoloko7@hotmail.com
+ *                 example: admin@ekonsumo.com
  *               password:
  *                 type: string
  *                 example: 123456
@@ -131,7 +130,7 @@ router.get('/obtener/:id', authMiddleware, UsuarioController.obtenerPorId); // U
  *                   example: Juan
  *                 correo:
  *                   type: string
- *                   example: enekoloko7@hotmail.com
+ *                   example: admin@ekonsumo.com
  *                 rol:
  *                   type: string
  *                   example: usuario
@@ -212,7 +211,7 @@ router.patch(
  *             properties:
  *               correoOMovil:
  *                 type: string
- *                 example: enekoloko7@hotmail.com
+ *                 example: admin@ekonsumo.com
  *               password:
  *                 type: string
  *                 example: 1234
@@ -232,7 +231,7 @@ router.patch(
  *                   example: eneko
  *                 correo:
  *                   type: string
- *                   example: enekoloko7@hotmail.com
+ *                   example: admin@ekonsumo.com
  *                 rol:
  *                   type: string
  *                   example: usuario
@@ -266,7 +265,7 @@ router.post('/login', validators.login, validar, UsuarioController.login);
  *             properties:
  *               correoOMovil:
  *                 type: string
- *                 example: juan@example.com
+ *                 example: admin@ekonsumo.com
  *     responses:
  *       200:
  *         description: Enlace de recuperación enviado correctamente
@@ -312,7 +311,7 @@ router.post('/reset-password', UsuarioController.resetPassword);
  *                 example: Eneko
  *               correo:
  *                 type: string
- *                 example: enekoloko7@hotmail.com
+ *                 example: admin@ekonsumo.com
  *               rol:
  *                 type: string
  *                 example: admin
@@ -335,7 +334,7 @@ router.post('/reset-password', UsuarioController.resetPassword);
  *                   example: Eneko
  *                 correo:
  *                   type: string
- *                   example: enekoloko7@hotmail.com
+ *                   example: admin@ekonsumo.com
  *                 rol:
  *                   type: string
  *                   example: admin

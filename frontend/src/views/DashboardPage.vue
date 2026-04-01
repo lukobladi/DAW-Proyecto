@@ -11,9 +11,14 @@
 
         <template v-else>
           <div class="resumen-cards">
-            <article class="resumen-card">
-              <h4>Saldo actual</h4>
-              <p class="monto">{{ formatMoney(resumenFinanciero.saldo_actual) }}</p>
+            <article class="resumen-card gasto">
+              <h4>Gasto este mes</h4>
+              <p class="monto">{{ formatMoney(resumenFinanciero.total_gastado_mes) }}</p>
+            </article>
+
+            <article class="resumen-card gasto-vencido">
+              <h4>Gasto mes vencido</h4>
+              <p class="monto">{{ formatMoney(resumenFinancieroMesVencido.total_gastado_mes) }}</p>
             </article>
 
             <article class="resumen-card deuda">
@@ -24,11 +29,6 @@
             <article class="resumen-card cobrar">
               <h4>Te deben</h4>
               <p class="monto">{{ formatMoney(resumenFinanciero.total_pendiente_por_cobrar) }}</p>
-            </article>
-
-            <article class="resumen-card gasto">
-              <h4>Gasto de {{ resumenFinanciero.periodo_consultado || periodoActual }}</h4>
-              <p class="monto">{{ formatMoney(resumenFinanciero.total_gastado_mes) }}</p>
             </article>
           </div>
 
@@ -82,19 +82,19 @@
       </section>
 
       <section class="cesta-mensual">
-        <h3>Productos comprados pendientes de entrega</h3>
-        <p>Listado de productos que ya has pedido y aun no estan repartidos.</p>
+        <h3>Productos comprados este mes</h3>
+        <p>Listado de productos que has comprado durante el mes actual.</p>
 
         <div v-if="cargando" class="estado">Cargando dashboard...</div>
         <div v-else-if="errorCarga" class="estado error">{{ errorCarga }}</div>
 
-        <div v-else-if="!productosPendientesEntrega.length" class="estado">
-          No tienes productos pendientes de entrega.
+        <div v-else-if="!productosMes.length" class="estado">
+          No has comprado productos este mes.
         </div>
 
         <div v-else class="lista-productos">
           <div
-            v-for="producto in productosPendientesEntrega"
+            v-for="producto in productosMes"
             :key="`${producto.id_detalle}-${producto.id_pedido}`"
             class="producto-card"
           >
@@ -138,8 +138,38 @@
         </div>
       </section>
 
-      <section class="acceso-rapido">
-        <router-link to="/compras" class="btn btn-primary">Adquirir Productos</router-link>
+      <section class="productos-pendientes">
+        <h3>Productos pendientes de entrega</h3>
+        <p>Productos sin entregar o recoger.</p>
+
+        <div v-if="!productosPendientesEntrega.length" class="estado">
+          No tienes productos pendientes de entrega.
+        </div>
+
+        <div v-else class="lista-productos">
+          <div
+            v-for="producto in productosPendientesEntrega"
+            :key="`${producto.id_detalle}-${producto.id_pedido}`"
+            class="producto-card"
+          >
+            <img
+              :src="producto.imagen"
+              alt="Imagen del producto"
+              class="producto-imagen"
+              @error="onImageError"
+            />
+            <h3>{{ producto.nombre }}</h3>
+            <p>{{ producto.proveedor }}</p>
+            <p>Cantidad: {{ producto.cantidad }}</p>
+            <p>Precio unidad: {{ producto.precio_unitario }} EUR</p>
+            <p>Total: {{ producto.total }} EUR</p>
+            <p>
+              <span :class="['estado-pill', estadoClass(producto.estado_pedido)]">
+                {{ estadoLabel(producto.estado_pedido) }}
+              </span>
+            </p>
+          </div>
+        </div>
       </section>
 
       <section class="pedidos-abiertos">
@@ -152,10 +182,9 @@
             <p>Cierre: {{ formatFecha(pedido.fecha_cierre) }}</p>
             <p>Entrega aprox: {{ formatFecha(pedido.fecha_entrega) }}</p>
             <p>
-              <span :class="['estado-pill', estadoClass(pedido.estado)]">
-                {{ estadoLabel(pedido.estado) }}
-              </span>
+              <span :class="['estado-pill', 'estado-pendiente']">Abierto</span>
             </p>
+            <router-link to="/compras" class="btn btn-primary btn-sm">Adquirir</router-link>
           </div>
         </div>
       </section>
@@ -174,6 +203,7 @@ export default {
       cargando: false,
       cargandoFinanzas: false,
       errorCarga: '',
+      productosMes: [],
       productosPendientesEntrega: [],
       pedidosAbiertos: [],
       actualizandoDetalleId: null,
@@ -187,12 +217,28 @@ export default {
         total_pendiente_por_cobrar: 0,
         deudas_pendientes: [],
       },
+      resumenFinancieroMesVencido: {
+        total_gastado_mes: 0,
+      },
     };
   },
   computed: {
+    periodoVencido() {
+      const date = new Date();
+      date.setMonth(date.getMonth() - 1);
+      return date.toISOString().slice(0, 7);
+    },
     usuarioNombre() {
       const authStore = useAuthStore();
       return authStore.user?.nombre || 'usuario';
+    },
+    isAdmin() {
+      const authStore = useAuthStore();
+      return authStore.user?.rol === 'admin';
+    },
+    isGestor() {
+      const authStore = useAuthStore();
+      return authStore.user?.rol === 'gestor';
     },
     isAdminOrGestor() {
       const authStore = useAuthStore();
@@ -239,22 +285,16 @@ export default {
         return false;
       }
 
-      const ahora = new Date();
-      const apertura = pedido.fecha_apertura ? new Date(pedido.fecha_apertura) : null;
       const cierre = pedido.fecha_cierre ? new Date(pedido.fecha_cierre) : null;
-
-      if (apertura && ahora < apertura) {
+      if (!cierre) {
         return false;
       }
 
-      if (cierre && ahora > cierre) {
-        return false;
-      }
+      const ahora = new Date();
+      const hoy = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate());
+      const fechaCierre = new Date(cierre.getFullYear(), cierre.getMonth(), cierre.getDate());
 
-      return true;
-    },
-    esEstadoPendienteEntrega(estadoPedido) {
-      return !['repartido', 'cancelado'].includes(estadoPedido);
+      return fechaCierre > hoy;
     },
     estadoLabel(estado) {
       const labels = {
@@ -312,12 +352,23 @@ export default {
     async cargarResumenFinanciero() {
       this.cargandoFinanzas = true;
 
+      const periodoActual = new Date().toISOString().slice(0, 7);
+      const periodoVencido = new Date(new Date().setMonth(new Date().getMonth() - 1))
+        .toISOString()
+        .slice(0, 7);
+
       try {
-        const resumenResponse = await api.getResumenPagosMensual(this.periodoActual);
+        const resumenResponse = await api.getResumenPagosMensual(periodoActual);
+        const resumenVencidoResponse = await api.getResumenPagosMensual(periodoVencido);
+
         this.resumenFinanciero = {
           ...this.resumenFinanciero,
           ...(resumenResponse.data || {}),
           deudas_pendientes: resumenResponse.data?.deudas_pendientes || [],
+        };
+
+        this.resumenFinancieroMesVencido = {
+          total_gastado_mes: resumenVencidoResponse.data?.total_gastado_mes || 0,
         };
       } catch (error) {
         if (error.response?.status === 401) {
@@ -367,6 +418,8 @@ export default {
       }
     },
     async cargarDashboard() {
+      console.log('isGestor:', this.isGestor);
+  console.log('user rol:', useAuthStore().user?.rol);
       this.cargando = true;
       this.errorCarga = '';
 
@@ -385,11 +438,9 @@ export default {
           });
         }
 
-        const pedidosPromise = this.isAdmin ? api.getPedidos() : api.getMisPedidos();
-        const productosPromise = this.isAdmin ? api.getProductos() : api.getMisProductos();
         const [pedidosResponse, productosResponse, proveedoresResponse] = await Promise.all([
-          pedidosPromise,
-          productosPromise,
+          api.getPedidos(),
+          api.getProductos(),
           api.getProveedores(),
         ]);
 
@@ -414,21 +465,30 @@ export default {
             proveedor: proveedorPorId.get(pedido.id_proveedor) || 'Proveedor sin nombre',
           }));
 
-        const pedidosPendientes = pedidos.filter((pedido) =>
-          this.esEstadoPendienteEntrega(pedido.estado)
-        );
+        const mesActual = new Date().toISOString().slice(0, 7);
 
         const detallesPorPedido = await Promise.all(
-          pedidosPendientes.map((pedido) => api.getDetallesPedidoPorPedido(pedido.id_pedido))
+          pedidos.map((pedido) => api.getDetallesPedidoPorPedido(pedido.id_pedido))
         );
 
         const detallesNormalizados = [];
         detallesPorPedido.forEach((response, index) => {
-          const pedido = pedidosPendientes[index];
+          const pedido = pedidos[index];
           const detalles = response.data || [];
+
+          const fechaCierre = pedido.fecha_cierre ? new Date(pedido.fecha_cierre) : null;
+          const cierreMes = fechaCierre ? fechaCierre.toISOString().slice(0, 7) : null;
+          const esCierreEsteMes = cierreMes === mesActual;
 
           detalles.forEach((detalle) => {
             if (!userId || Number(detalle.id_usuario_comprador) !== userId || detalle.cantidad <= 0) {
+              return;
+            }
+
+            const fechaMod = detalle.fecha_modificacion || '';
+            const esModificacionEsteMes = fechaMod.startsWith(mesActual);
+
+            if (!esModificacionEsteMes && !esCierreEsteMes) {
               return;
             }
 
@@ -451,7 +511,45 @@ export default {
           });
         });
 
-        this.productosPendientesEntrega = detallesNormalizados;
+        this.productosMes = detallesNormalizados;
+
+        const hoy = new Date();
+        hoy.setHours(0, 0, 0, 0);
+
+        const productosPendientes = [];
+        detallesPorPedido.forEach((response, index) => {
+          const pedido = pedidos[index];
+          const cierre = pedido.fecha_cierre ? new Date(pedido.fecha_cierre) : null;
+          cierre?.setHours(0, 0, 0, 0);
+
+          if (!cierre || cierre >= hoy || !['pendiente', 'en proceso'].includes(pedido.estado)) {
+            return;
+          }
+
+          const detalles = response.data || [];
+          detalles.forEach((detalle) => {
+            if (!userId || Number(detalle.id_usuario_comprador) !== userId || detalle.cantidad <= 0) {
+              return;
+            }
+
+            const producto = productoPorId.get(detalle.id_producto) || {};
+            productosPendientes.push({
+              id_detalle: detalle.id_detalle,
+              id_pedido: detalle.id_pedido,
+              id_producto: detalle.id_producto,
+              id_usuario_comprador: detalle.id_usuario_comprador,
+              nombre: producto.nombre || `Producto #${detalle.id_producto}`,
+              imagen: this.normalizarImagen(producto.imagen),
+              proveedor: proveedorPorId.get(pedido.id_proveedor) || 'Proveedor sin nombre',
+              cantidad: Number(detalle.cantidad),
+              precio_unitario: Number(detalle.precio_unitario || 0).toFixed(2),
+              total: Number((detalle.precio_unitario || 0) * detalle.cantidad).toFixed(2),
+              estado_pedido: pedido.estado,
+            });
+          });
+        });
+
+        this.productosPendientesEntrega = productosPendientes;
       } catch (error) {
         if (error.response?.status === 401) {
           this.manejarSesionCaducada();
@@ -556,6 +654,7 @@ export default {
 .resumen-card.deuda { border-left: 4px solid var(--color-danger); }
 .resumen-card.cobrar { border-left: 4px solid var(--color-success); }
 .resumen-card.gasto { border-left: 4px solid var(--color-secondary); }
+.resumen-card.gasto-vencido { border-left: 4px solid var(--color-warning); }
 
 .deudas-lista {
   display: grid;

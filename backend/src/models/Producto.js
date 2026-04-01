@@ -36,6 +36,17 @@ const Producto = {
     return rows;
   },
 
+  // Obtener productos por múltiples proveedores
+  async findByProveedores(ids_proveedor) {
+    if (!ids_proveedor || ids_proveedor.length === 0) {
+      return [];
+    }
+    const placeholders = ids_proveedor.map((_, i) => `$${i + 1}`).join(', ');
+    const query = `SELECT * FROM producto WHERE id_proveedor IN (${placeholders}) ORDER BY id_proveedor, nombre;`;
+    const { rows } = await pool.query(query, ids_proveedor);
+    return rows;
+  },
+
   // Activar o desactivar un producto
   async updateActivo(id_producto, activo) {
     const query = `
