@@ -12,6 +12,42 @@ const emailService = {
     try {
       // Configuracion del transporte de correo
       const transporter = nodemailer.createTransport({
+        host: 'smtp.aol.com',
+        port: 587,
+        secure: false, // false para STARTTLS en puerto 587
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS
+        },
+        tls: {
+          ciphers: 'SSLv3',
+          rejectUnauthorized: false // opcional, si tienes problemas de certificado
+        }
+      });
+
+      // Configuracion del correo
+      const mailOptions = {
+        from: 'ekonsumo@aol.com',
+        to: destinatario,
+        subject: asunto,
+        text: mensaje,
+      };
+
+      // Enviar el correo
+      await transporter.sendMail(mailOptions);
+      logger.info(`Correo enviado correctamente a: ${destinatario}`);
+    } catch (error) {
+      logger.error(`Error al enviar correo a ${destinatario}:`, error);
+      throw new Error('No se pudo enviar el correo');
+    }
+  },
+  async enviarCorreoGmail(destinatario, asunto, mensaje) {
+    logger.info(
+      `Intentando enviar correo a: ${destinatario}, Asunto: ${asunto}`
+    );
+    try {
+      // Configuracion del transporte de correo
+      const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
           type: 'OAuth2',
@@ -25,7 +61,7 @@ const emailService = {
 
       // Configuracion del correo
       const mailOptions = {
-        from: 'emartinmon6@educacion.navarra.es',
+        from: 'ekonsumo@aol.com',
         to: destinatario,
         subject: asunto,
         text: mensaje,
@@ -59,7 +95,7 @@ const emailService = {
       });
 
       const mailOptions = {
-        from: 'emartinmon6@educacion.navarra.es',
+        from: 'ekonsumo@aol.com',
         bcc: destinatarios,
         subject: asunto,
         text: mensaje,

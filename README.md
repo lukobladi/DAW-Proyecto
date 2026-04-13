@@ -76,6 +76,11 @@ npm run test:frontend      # Tests del frontend (Vitest)
 npm run lint:backend       # Lint del backend
 npm run lint:frontend      # Lint del frontend
 npm run build:frontend     # Build de producción del frontend
+
+# Jobs (scripts de utilidad):
+npm run liquidacion:mensual         # Generar liquidaciones mensuales de pagos
+npm run pedidos:periodicos          # Generar pedidos automáticos según config periódica
+npm run pedidos:periodicos:dry-run  # Simular generación sin crear pedidos reales
 ```
 
 ---
@@ -331,6 +336,14 @@ Cuando un pedido está abierto significa que el usuario perteneciente a la famil
 
 ### Pedidos periódicos
 Hay algunos productos que se piden semanalmente de manera automática sin que tenga que intervenir el usuario hasta que quiera dejar de recibir ese pedido.
+
+La generación automática de pedidos periódicos funciona de la siguiente manera:
+- El administrador configura pedidos periódicos desde la pantalla "Gestión de Pedidos Periódicos"
+- Cada configuración especifica: proveedor, periodicidad (días entre pedidos), día de apertura, día de cierre y día de entrega
+- Un job cron ejecuta diariamente a las 02:00h el script `generarPedidosPeriodicos.js`
+- El script lee las configuraciones activas, calcula si corresponde crear un pedido según la periodicidad
+- Si corresponde, crea un nuevo pedido en la base de datos con las fechas calculadas
+- La tabla `Pedido_Periodico_Generacion` registra la última fecha de generación para evitar duplicados
 
 ### Frecuencia de Pedidos
 Los productos se solicitan a diferentes proveedores con distintas frecuencias: algunos se piden semanalmente, mientras que otros se solicitan cada dos, tres o seis meses.
@@ -1116,6 +1129,7 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 - **Detalle_Pedido**: Relaciona los pedidos con los productos.
 - **familia_proveedor**: Relación muchos a muchos entre familias y proveedores.
 - **Pedido_Periodico**: Almacena la información de los pedidos periódicos.
+- **Pedido_Periodico_Generacion**: Almacena la fecha de última generación de pedidos periódicos.
 - **Pago**: Almacena la información de los pagos.
 - **Notificacion**: Almacena las notificaciones enviadas a los usuarios.
 
@@ -1126,6 +1140,7 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 [Usuario] --< [Pedido] >-- [Proveedor]
 [Pedido] --< [Detalle_Pedido] >-- [Producto]
 [Pedido] --< [Pedido_Periodico]
+[Pedido_Periodico] --< [Pedido_Periodico_Generacion]
 [Usuario] --< [Pago] >-- [Usuario]
 [Usuario] --< [Notificacion]
 ```
@@ -1228,6 +1243,16 @@ Este diagrama muestra las tablas de la base de datos y sus relaciones.
 | `dia_apertura`   | `INT`             | Día de la semana en que se abre el pedido. |
 | `dia_cierre`     | `INT`             | Día de la semana en que se cierra el pedido. |
 | `dia_entrega`    | `INT`             | Día aproximado de entrega.           |
+
+---
+
+### 7.1. Pedido_Periodico_Generacion
+| Columna                   | Tipo de Dato      | Descripción                                           |
+|---------------------------|-------------------|-------------------------------------------------------|
+| `id_pedido_periodico`    | `INT`            | Clave foránea (relación con `Pedido_Periodico`). PK |
+| `ultimo_pedido_generado`  | `DATE`           | Fecha del último pedido generado automáticamente.    |
+
+Esta tabla es utilizada por el job `generarPedidosPeriodicos.js` para evitar generar pedidos duplicados y llevar control de cuándo fue la última generación.
 
 ---
 
@@ -1879,6 +1904,48 @@ cd /var/www/daw-proyecto/backend
 pm2 start index.js --name ekonsumo-api
 pm2 save
 pm2 startup systemd  # Para iniciar automáticamente al reiniciar
+```
+
+### Jobs Programados (Cron)
+
+El sistema incluye jobs automáticos que se ejecutan en el servidor:
+
+#### Tabla requerida: Pedido_Periodico_Generacion
+
+Antes de usar los pedidos periódicos, es necesario crear la tabla de seguimiento:
+
+```bash
+# En el servidor, como postgres:
+psql -d ekonsumo -f /var/www/daw-proyecto/datos/importar_datos_actuales/crear_tabla_pedido_periodico_generacion.sql
+```
+
+#### Liquidación mensual
+- **Script**: `/usr/local/bin/ekonsumo-liquidacion-mensual`
+- **Frecuencia**: `10 2 1 * *` (día 1 de cada mes a las 02:10)
+- **Función**: Genera las liquidaciones de pago mensuales entre usuarios
+- **Log**: `/var/www/daw-proyecto/logs/liquidacion-mensual.log`
+
+#### Pedidos periódicos
+- **Script**: `/usr/local/bin/ekonsumo-pedidos-periodicos`
+- **Frecuencia**: `0 2 * * *` (cada día a las 02:00)
+- **Función**: Genera pedidos automáticamente según configuraciones de Pedido_Periodico
+- **Log**: `/var/www/daw-proyecto/logs/pedidos-periodicos.log`
+
+#### Comandos útiles
+```bash
+# Ver jobs programados
+sudo -u ekonsumo crontab -l
+
+# Ejecutar job de pedidos periódicos manualmente
+sudo -u ekonsumo /usr/local/bin/ekonsumo-pedidos-periodicos
+
+# Ver logs
+cat /var/www/daw-proyecto/logs/pedidos-periodicos.log
+tail -f /var/www/daw-proyecto/logs/pedidos-periodicos.log
+
+# Simular sin ejecutar (dry-run)
+cd /var/www/daw-proyecto/backend
+sudo -u ekonsumo npm run pedidos:periodicos -- --dry-run
 ```
 
 ### Despliegue del Frontend

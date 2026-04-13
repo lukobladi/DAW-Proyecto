@@ -12,6 +12,8 @@
     "test:frontend": "npm test --workspace=frontend",
     "lint:frontend": "npm run lint --workspace=frontend",
     "lint:backend": "npm run lint --workspace=backend",
-    "liquidacion:mensual": "npm --prefix backend run liquidacion:mensual"
+    "liquidacion:mensual": "npm --prefix backend run liquidacion:mensual",
+    "pedidos:periodicos": "npm --prefix backend run pedidos:periodicos",
+    "pedidos:periodicos:dry-run": "npm --prefix backend run pedidos:periodicos -- --dry-run"
   }
 }

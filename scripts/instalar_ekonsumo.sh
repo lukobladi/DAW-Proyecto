@@ -201,6 +201,20 @@ if ! crontab -u "$APP_USER" -l 2>/dev/null | grep -q ekonsumo-liquidacion-mensua
   (crontab -u "$APP_USER" -l 2>/dev/null; echo "10 2 1 * * /usr/local/bin/ekonsumo-liquidacion-mensual") | crontab -u "$APP_USER" -
 fi
 
+echo "==> Configurando cron de pedidos periodicos"
+cat > /usr/local/bin/ekonsumo-pedidos-periodicos <<'EOF'
+#!/usr/bin/env bash
+cd "$BACKEND_DIR" || exit 1
+/usr/bin/npm run pedidos:periodicos >> "$APP_DIR/logs/pedidos-periodicos.log" 2>&1
+EOF
+chmod 750 /usr/local/bin/ekonsumo-pedidos-periodicos
+chown root:"$APP_GROUP" /usr/local/bin/ekonsumo-pedidos-periodicos
+
+if ! crontab -u "$APP_USER" -l 2>/dev/null | grep -q ekonsumo-pedidos-periodicos; then
+  # Ejecutar cada dia a las 2:00 AM
+  (crontab -u "$APP_USER" -l 2>/dev/null; echo "0 2 * * * /usr/local/bin/ekonsumo-pedidos-periodicos") | crontab -u "$APP_USER" -
+fi
+
 echo "==> Configurando PM2 startup para $APP_USER"
 pm2 startup systemd -u "$APP_USER" --hp "/home/$APP_USER" || true
 
@@ -224,15 +238,26 @@ Instalacion base completada.
 Siguientes pasos:
 1) Subir codigo: scripts/subir_codigo_fuente.sh <usuario@host> $APP_DIR
 2) En VPS:
+   # Crear tabla de seguimiento de pedidos periodicos
+   sudo -u postgres psql -d $DB_NAME -f "$APP_DIR/datos/importar_datos_actuales/crear_tabla_pedido_periodico_generacion.sql"
+   # Instalar dependencias
    cd $BACKEND_DIR && npm ci --omit=dev
    cd $FRONTEND_DIR && npm ci && npm run build
+   # Iniciar backend
    sudo -u $APP_USER pm2 start $BACKEND_DIR/index.js --name ekonsumo-backend --cwd $BACKEND_DIR --time
    sudo -u $APP_USER pm2 save
+   # Ejecutar jobs iniciales
    sudo -u $APP_USER npm --prefix $BACKEND_DIR run liquidacion:mensual
+   sudo -u $APP_USER npm --prefix $BACKEND_DIR run pedidos:periodicos
    systemctl reload nginx
 
 Opcional ahora (recomendado): HTTPS con Certbot
   apt install -y certbot python3-certbot-nginx
   certbot --nginx -d $DOMAIN
+
+Jobs programados:
+  - Liquidacion mensual: día 1 de cada mes a las 02:10
+  - Pedidos periodicos: cada día a las 02:00
+  - Logs: $APP_DIR/logs/
 
 EOF

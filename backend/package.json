@@ -32,9 +32,10 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "liquidacion:mensual": "node src/jobs/generarLiquidacionMensual.js",
+    "pedidos:periodicos": "node src/jobs/generarPedidosPeriodicos.js",
     "test": "NODE_ENV=test jest --runInBand",
     "test:watch": "NODE_ENV=test jest --watchAll",
     "test:coverage": "NODE_ENV=test jest --coverage --runInBand",
-    "kill":"pkill -f \"node index.js\""
+    "kill": "pkill -f \"node index.js\""
   }
 }
