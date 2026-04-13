@@ -25,7 +25,6 @@ yarn-error.log*
 package-lock.json
 backend/package-lock.json
 
-docs/
 
 # Reportes de cobertura
 backend/coverage/
