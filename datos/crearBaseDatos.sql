@@ -121,6 +121,12 @@ CREATE TABLE Pedido_Periodico (
     dia_entrega INT
 );
 
+CREATE TABLE Pedido_Periodico_Generacion (
+    id_pedido_periodico INT REFERENCES Pedido_Periodico(id_pedido_periodico) ON DELETE CASCADE,
+    ultimo_pedido_generado DATE NOT NULL DEFAULT CURRENT_DATE,
+    PRIMARY KEY (id_pedido_periodico)
+);
+
 CREATE TABLE Pago (
     id_pago SERIAL PRIMARY KEY,
     id_usuario_deudor INT REFERENCES Usuario(id_usuario) ON DELETE CASCADE,

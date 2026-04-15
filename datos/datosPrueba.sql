@@ -6,6 +6,7 @@
 TRUNCATE TABLE
   notificacion,
   pago,
+  pedido_periodico_generacion,
   pedido_periodico,
   detalle_pedido,
   pedido,
@@ -227,6 +228,14 @@ VALUES
     (4, CURRENT_TIMESTAMP - INTERVAL '3 months', NULL, TRUE, 7, 5, 6, 7),    -- Huevos semanal
     (3, CURRENT_TIMESTAMP - INTERVAL '2 months', NULL, TRUE, 7, 6, 0, 1),        -- Pan semanal
     (5, CURRENT_TIMESTAMP - INTERVAL '4 months', NULL, TRUE, 30, 25, 26, 27);  -- Lácteos mensual
+
+-- Seguimiento de pedidos periódicos
+INSERT INTO pedido_periodico_generacion (id_pedido_periodico, ultimo_pedido_generado)
+VALUES
+    (1, CURRENT_DATE - INTERVAL '7 days'),  -- Frutas
+    (2, CURRENT_DATE - INTERVAL '7 days'),  -- Huevos
+    (3, CURRENT_DATE - INTERVAL '7 days'),  -- Pan
+    (4, CURRENT_DATE - INTERVAL '30 days');  -- Lácteos
 
 -- Pagos
 INSERT INTO pago (id_usuario_deudor, id_usuario_creditor, monto, fecha_pago, estado, periodo, origen, concepto, deudor_reporta_pagado, fecha_reporte_deudor, fecha_confirmacion_receptor, fecha_modificacion)

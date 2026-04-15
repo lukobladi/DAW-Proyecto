@@ -306,15 +306,16 @@ class Pago {
       WITH resumen AS (
         SELECT
           d.id_usuario_Comprador AS id_usuario_deudor,
-          p.id_usuario_Encargado AS id_usuario_creditor,
+          up.id_usuario AS id_usuario_creditor,
           ROUND(SUM(d.Cantidad * d.Precio_Unitario)::numeric, 2) AS monto
         FROM Detalle_Pedido d
         JOIN Pedido p ON p.ID_Pedido = d.ID_Pedido
+        JOIN Usuario_Proveedor up ON up.id_proveedor = p.id_proveedor
         WHERE d.Cantidad > 0
           AND p.Estado <> 'cancelado'
-          AND d.id_usuario_Comprador <> p.id_usuario_Encargado
+          AND d.id_usuario_Comprador <> up.id_usuario
           AND date_trunc('month', COALESCE(p.Fecha_Cierre, p.Fecha_Apertura)) = date_trunc('month', $1::date)
-        GROUP BY d.id_usuario_Comprador, p.id_usuario_Encargado
+        GROUP BY d.id_usuario_Comprador, up.id_usuario
       )
       INSERT INTO Pago (
         id_usuario_Deudor,

@@ -83,7 +83,6 @@ describe('Modelo Pedido', () => {
   // Test: crear un nuevo pedido
   it('deberia crear un nuevo pedido', async () => {
     const nuevoPedido = await Pedido.create(
-      usuarioId,
       proveedorId,
       new Date().toISOString(),
       new Date(Date.now() + 86400000).toISOString(),
@@ -118,7 +117,6 @@ describe('Modelo Pedido', () => {
   it('deberia actualizar un pedido', async () => {
     const pedidoActualizado = await Pedido.update(
       pedidoId,
-      usuarioId,
       proveedorId,
       new Date().toISOString(),
       new Date(Date.now() + 86400000).toISOString(),
@@ -138,7 +136,6 @@ describe('Modelo Pedido', () => {
   // Test: eliminar un pedido
   it('deberia eliminar un pedido', async () => {
     const nuevoPedido = await Pedido.create(
-      usuarioId,
       proveedorId,
       new Date().toISOString(),
       new Date(Date.now() + 86400000).toISOString(),
