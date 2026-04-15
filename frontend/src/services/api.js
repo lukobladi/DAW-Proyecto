@@ -53,6 +53,9 @@ export default {
   getUsuarios() {
     return apiClient.get('/usuarios/obtenerTodos');
   },
+  getAdmins() {
+    return apiClient.get('/usuarios/admins');
+  },
   getUsuario(idUsuario) {
     return apiClient.get(`/usuarios/obtener/${idUsuario}`);
   },
@@ -158,6 +161,9 @@ export default {
   // =========== NOTIFICACIONES ===========
   enviarNotificacion(data) {
     return apiClient.post('/notificaciones/enviar/', data);
+  },
+  enviarConsultaPublica(data) {
+    return apiClient.post('/notificaciones/consulta-publica/', data);
   },
 
   // =========== PAGOS ===========

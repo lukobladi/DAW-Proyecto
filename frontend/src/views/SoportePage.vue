@@ -799,9 +799,16 @@
               <h5>Otras formas de contacto</h5>
               <div class="card bg-light">
                 <div class="card-body">
-                  <p class="mb-2">
+                  <p class="mb-2" v-if="admins.length > 0">
                     <i class="fas fa-envelope me-2"></i>
-                    <strong>Email:</strong> soporte@ekonsumo.local
+                    <strong>Email:</strong> 
+                    <a v-for="(admin, index) in admins" :key="admin.id_usuario" :href="'mailto:' + admin.correo">
+                      {{ admin.correo }}{{ index < admins.length - 1 ? ', ' : '' }}
+                    </a>
+                  </p>
+                  <p class="mb-2" v-else>
+                    <i class="fas fa-envelope me-2"></i>
+                    <strong>Email:</strong> Contacta con tu familia gestora
                   </p>
                   <p class="mb-2">
                     <i class="fas fa-phone me-2"></i>
@@ -841,6 +848,8 @@ export default {
     return {
       // Bandera que indica si se está enviando la consulta
       enviando: false,
+      // Lista de administradores para contacto
+      admins: [],
       // Formulario de contacto con nombre, correo y mensaje
       form: {
         nombre: '',
@@ -861,11 +870,12 @@ export default {
     // Retorna: String - URL mailto con asunto y cuerpo codificados
     // ============================================
     mailtoLink() {
+      const destino = this.admins.length > 0 ? this.admins[0].correo : 'soporte@ekonsumo.local';
       const asunto = encodeURIComponent('Consulta soporte Ekonsumo');
       const cuerpo = encodeURIComponent(
         `Nombre: ${this.form.nombre}\nCorreo: ${this.form.correo}\n\nMensaje:\n${this.form.mensaje}`
       );
-      return `mailto:soporte@ekonsumo.local?subject=${asunto}&body=${cuerpo}`;
+      return `mailto:${destino}?subject=${asunto}&body=${cuerpo}`;
     },
   },
   // ============================================
@@ -877,6 +887,7 @@ export default {
     const authStore = useAuthStore();
     this.form.nombre = authStore.user?.nombre || '';
     this.form.correo = authStore.user?.correo || '';
+    this.cargarAdmins();
   },
   // ============================================
   // methods
@@ -884,34 +895,39 @@ export default {
   // ============================================
   methods: {
     // ============================================
+    // cargarAdmins
+    // Carga la lista de administradores desde el servidor
+    // ============================================
+    async cargarAdmins() {
+      try {
+        const response = await api.getAdmins();
+        this.admins = response.data;
+      } catch {
+        console.error('Error al cargar administradores');
+      }
+    },
+    // ============================================
     // enviarConsulta
-    // Envía una consulta de soporte al sistema
-    // Parámetros: Ninguno (obtiene datos del formulario via v-model)
-    // Retorna: No retorna valor
-    // Efectos secundarios: Llama a api.enviarNotificacion, limpia el mensaje
+    // Envía una consulta de soporte al sistema (ruta pública)
     // ============================================
     async enviarConsulta() {
       this.enviando = true;
       try {
-        const authStore = useAuthStore();
-        const idUsuario = Number(authStore.user?.id_usuario);
-
-        if (!idUsuario) {
-          alertStore.showAlert('No se pudo identificar el usuario de sesion.', 'danger');
+        if (!this.form.nombre || !this.form.correo || !this.form.mensaje) {
+          alertStore.showAlert('Por favor completa todos los campos.', 'danger');
           return;
         }
 
-        const mensaje = `[SOPORTE] ${this.form.mensaje}\nContacto: ${this.form.nombre} (${this.form.correo})`;
-
-        await api.enviarNotificacion({
-          id_usuario: idUsuario,
-          mensaje,
+        await api.enviarConsultaPublica({
+          nombre: this.form.nombre,
+          correo: this.form.correo,
+          mensaje: this.form.mensaje,
         });
 
         alertStore.showAlert('Consulta enviada correctamente.', 'success');
         this.form.mensaje = '';
       } catch {
-        alertStore.showAlert('No se pudo enviar la consulta desde la app.', 'danger');
+        alertStore.showAlert('No se pudo enviar la consulta. Intentalo mas tarde.', 'danger');
       } finally {
         this.enviando = false;
       }

@@ -39,14 +39,57 @@ describe('Pago Routes', () => {
 
       expect([200, 500]).toContain(res.status);
     });
+
+    it('deberia manejar periodo sin datos', async () => {
+      const res = await request(app)
+        .get('/api/pagos/resumen-mensual')
+        .query({ periodo: '2099-01' })
+        .set('Authorization', adminToken);
+
+      expect([200, 500]).toContain(res.status);
+    });
+
+    it('deberia rechazar acceso sin token', async () => {
+      const res = await request(app)
+        .get('/api/pagos/resumen-mensual')
+        .query({ periodo: '2026-03' });
+
+      expect(res.status).toBe(401);
+    });
   });
 
   describe('POST /api/pagos/generar-liquidacion-mensual', () => {
-    it('deberia generar liquidacion mensual', async () => {
+    it('deberia generar liquidacion mensual para admin', async () => {
       const res = await request(app)
         .post('/api/pagos/generar-liquidacion-mensual')
         .set('Authorization', adminToken)
         .send({ periodo: '2026-03' });
+
+      expect([200, 500]).toContain(res.status);
+    });
+
+    it('deberia usar periodo actual si no se pasa periodo', async () => {
+      const res = await request(app)
+        .post('/api/pagos/generar-liquidacion-mensual')
+        .set('Authorization', adminToken)
+        .send({});
+
+      expect([200, 500]).toContain(res.status);
+    });
+
+    it('deberia rechazar solicitud sin token', async () => {
+      const res = await request(app)
+        .post('/api/pagos/generar-liquidacion-mensual')
+        .send({ periodo: '2026-03' });
+
+      expect(res.status).toBe(401);
+    });
+
+    it('deberia aceptar formato YYYY-MM para el periodo', async () => {
+      const res = await request(app)
+        .post('/api/pagos/generar-liquidacion-mensual')
+        .set('Authorization', adminToken)
+        .send({ periodo: '2026-04' });
 
       expect([200, 500]).toContain(res.status);
     });

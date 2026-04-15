@@ -32,7 +32,6 @@ describe('Pedido Periodico Routes', () => {
 
   describe('POST /api/pedido-periodico/crear', () => {
     it('deberia crear un nuevo pedido periodico', async () => {
-      // Obtener un proveedor existente
       const proveedoresRes = await request(app)
         .get('/api/proveedores/obtenerTodos')
         .set('Authorization', adminToken);
@@ -61,6 +60,33 @@ describe('Pedido Periodico Routes', () => {
         .send(newPedidoPeriodico);
 
       expect([201, 400]).toContain(res.status);
+    });
+
+    it('deberia rechazar solicitud sin token', async () => {
+      const res = await request(app)
+        .post('/api/pedido-periodico/crear')
+        .send({});
+
+      expect(res.status).toBe(401);
+    });
+  });
+
+  describe('PATCH /api/pedido-periodico/cambiarEstadoActivo/:id', () => {
+    it('deberia cambiar el estado activo de un pedido periodico', async () => {
+      const res = await request(app)
+        .patch('/api/pedido-periodico/cambiarEstadoActivo/1')
+        .set('Authorization', adminToken)
+        .send({ activo: false });
+
+      expect([200, 400, 404]).toContain(res.status);
+    });
+
+    it('deberia rechazar solicitud sin token', async () => {
+      const res = await request(app)
+        .patch('/api/pedido-periodico/cambiarEstadoActivo/1')
+        .send({ activo: true });
+
+      expect(res.status).toBe(401);
     });
   });
 });

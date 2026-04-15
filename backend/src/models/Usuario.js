@@ -109,6 +109,18 @@ const Usuario = {
     const { rows } = await pool.query(query);
     return rows.map((row) => row.correo);
   },
+
+  // Obtener los administradores completos (id, nombre, correo)
+  async findAdmins() {
+    const query = `
+      SELECT id_usuario, nombre, correo 
+      FROM usuario 
+      WHERE rol = 'admin' AND activo = true
+      ORDER BY nombre;
+    `;
+    const { rows } = await pool.query(query);
+    return rows;
+  },
 };
 
 module.exports = Usuario;

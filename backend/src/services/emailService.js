@@ -1,73 +1,41 @@
-// Servicio para enviar correos electronicos. Utiliza la libreria nodemailer con Gmail y OAuth2
+// Servicio para enviar correos electronicos. Utiliza la libreria nodemailer con SMTP de AOL
 
 const nodemailer = require('nodemailer');
 const logger = require('../config/logger');
 
 const emailService = {
+  // Crea y retorna un transporter configurado para AOL SMTP
+  _crearTransporter() {
+    return nodemailer.createTransport({
+      host: 'smtp.aol.com',
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+      tls: {
+        ciphers: 'TLSv1.2',
+        rejectUnauthorized: true,
+      },
+    });
+  },
+
   // Enviar un correo a un solo destinatario
   async enviarCorreo(destinatario, asunto, mensaje) {
     logger.info(
       `Intentando enviar correo a: ${destinatario}, Asunto: ${asunto}`
     );
     try {
-      // Configuracion del transporte de correo
-      const transporter = nodemailer.createTransport({
-        host: 'smtp.aol.com',
-        port: 587,
-        secure: false, // false para STARTTLS en puerto 587
-        auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS
-        },
-        tls: {
-          ciphers: 'SSLv3',
-          rejectUnauthorized: false // opcional, si tienes problemas de certificado
-        }
-      });
+      const transporter = this._crearTransporter();
 
-      // Configuracion del correo
       const mailOptions = {
-        from: 'ekonsumo@aol.com',
+        from: process.env.EMAIL_USER,
         to: destinatario,
         subject: asunto,
         text: mensaje,
       };
 
-      // Enviar el correo
-      await transporter.sendMail(mailOptions);
-      logger.info(`Correo enviado correctamente a: ${destinatario}`);
-    } catch (error) {
-      logger.error(`Error al enviar correo a ${destinatario}:`, error);
-      throw new Error('No se pudo enviar el correo');
-    }
-  },
-  async enviarCorreoGmail(destinatario, asunto, mensaje) {
-    logger.info(
-      `Intentando enviar correo a: ${destinatario}, Asunto: ${asunto}`
-    );
-    try {
-      // Configuracion del transporte de correo
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          type: 'OAuth2',
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS,
-          clientId: process.env.OAUTH_CLIENTID,
-          clientSecret: process.env.OAUTH_CLIENT_SECRET,
-          refreshToken: process.env.OAUTH_REFRESH_TOKEN,
-        },
-      });
-
-      // Configuracion del correo
-      const mailOptions = {
-        from: 'ekonsumo@aol.com',
-        to: destinatario,
-        subject: asunto,
-        text: mensaje,
-      };
-
-      // Enviar el correo
       await transporter.sendMail(mailOptions);
       logger.info(`Correo enviado correctamente a: ${destinatario}`);
     } catch (error) {
@@ -82,20 +50,10 @@ const emailService = {
       `Intentando enviar correo a ${destinatarios.length} destinatarios, Asunto: ${asunto}`
     );
     try {
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          type: 'OAuth2',
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS,
-          clientId: process.env.OAUTH_CLIENTID,
-          clientSecret: process.env.OAUTH_CLIENT_SECRET,
-          refreshToken: process.env.OAUTH_REFRESH_TOKEN,
-        },
-      });
+      const transporter = this._crearTransporter();
 
       const mailOptions = {
-        from: 'ekonsumo@aol.com',
+        from: process.env.EMAIL_USER,
         bcc: destinatarios,
         subject: asunto,
         text: mensaje,

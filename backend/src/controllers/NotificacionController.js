@@ -54,6 +54,32 @@ const NotificacionController = {
       res.status(500).send('Error al marcar la notificacion como leida');
     }
   },
+
+  // Enviar consulta de soporte publica (sin autenticacion)
+  async enviarConsultaPublica(req, res) {
+    const { nombre, correo, mensaje } = req.body;
+    try {
+      if (!nombre || !correo || !mensaje) {
+        return res.status(400).json({ error: 'Nombre, correo y mensaje son requeridos' });
+      }
+
+      const adminEmails = await Usuario.findAdminEmails();
+      if (adminEmails.length > 0) {
+        const mensajeCompleto = `Consulta de soporte recibida:\n\nDe: ${nombre} (${correo})\n\nMensaje:\n${mensaje}`;
+        await emailService.enviarCorreoMultiple(
+          adminEmails,
+          'Nueva consulta de soporte - Ekonsumo',
+          mensajeCompleto
+        );
+        logger.info(`Consulta de soporte enviada a ${adminEmails.length} administradores`);
+      }
+
+      res.status(201).json({ mensaje: 'Consulta enviada correctamente' });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al enviar la consulta');
+    }
+  },
 };
 
 module.exports = NotificacionController;

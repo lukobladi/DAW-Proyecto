@@ -48,6 +48,36 @@ router.get(
 
 /**
  * @swagger
+ * /api/usuarios/admins:
+ *   get:
+ *     summary: Obtener lista de administradores (id, nombre, correo)
+ *     tags: [Usuarios]
+ *     responses:
+ *       200:
+ *         description: Lista de administradores
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id_usuario:
+ *                     type: integer
+ *                   nombre:
+ *                     type: string
+ *                   correo:
+ *                     type: string
+ *       500:
+ *         description: Error al obtener los administradores
+ */
+router.get(
+  '/admins',
+  UsuarioController.obtenerAdmins
+);
+
+/**
+ * @swagger
  * /api/usuarios/obtener/{id}:
  *   get:
  *     summary: Obtener un usuario por ID

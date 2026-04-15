@@ -228,6 +228,16 @@ const UsuarioController = {
     }
   },
 
+  async obtenerAdmins(req, res) {
+    try {
+      const admins = await Usuario.findAdmins();
+      res.json(admins);
+    } catch (err) {
+      logger.error('Error al obtener administradores:', err);
+      res.status(500).send('Error al obtener los administradores');
+    }
+  },
+
   async obtenerPorId(req, res) {
     const { id } = req.params;
     try {

@@ -3,6 +3,11 @@
 
 const Pago = require('../../src/models/Pago');
 const Usuario = require('../../src/models/Usuario');
+const Proveedor = require('../../src/models/Proveedor');
+const Producto = require('../../src/models/Producto');
+const Pedido = require('../../src/models/Pedido');
+const DetallePedido = require('../../src/models/DetallePedido');
+const UsuarioProveedor = require('../../src/models/UsuarioProveedor');
 const pool = require('../../src/config/db');
 
 describe('Modelo Pago', () => {
@@ -42,7 +47,6 @@ describe('Modelo Pago', () => {
     if (acreedorId) {
       await Usuario.delete(acreedorId);
     }
-    await pool.end();
   });
 
   // Test: crear un nuevo pago
@@ -162,5 +166,171 @@ describe('Modelo Pago', () => {
     expect(resumen).toHaveProperty('total_pendiente_por_pagar');
     expect(resumen).toHaveProperty('total_pendiente_por_cobrar');
     expect(resumen).toHaveProperty('deudas_pendientes');
+  });
+});
+
+describe('Pago.generarLiquidacionMensual', () => {
+  let proveedorId;
+  let productoId;
+  let pedidoId;
+  let detalleId;
+  let acreedorId;
+  let deudorId;
+
+  const testPeriod = '2026-03';
+
+  beforeAll(async () => {
+    acreedorId = deudorId;
+
+    const acreedor = await Usuario.create(
+      'Usuario Acreedor Liquidacion',
+      `acreedor.liquidacion+${Date.now()}@test.com`,
+      'password123',
+      'usuario',
+      '333333333'
+    );
+    acreedorId = acreedor.id_usuario;
+
+    const deudor = await Usuario.create(
+      'Usuario Deudor Liquidacion',
+      `deudor.liquidacion+${Date.now()}@test.com`,
+      'password123',
+      'usuario',
+      '444444444'
+    );
+    deudorId = deudor.id_usuario;
+
+    const proveedor = await Proveedor.create(
+      'Proveedor Liquidacion Test',
+      'Contacto Test',
+      '123456789',
+      '321654987',
+      'liquidacion@test.com',
+      'Transferencia',
+      'mensual',
+      true,
+      true
+    );
+    proveedorId = proveedor.id_proveedor;
+
+    const producto = await Producto.create(
+      'Producto Liquidacion Test',
+      'Descripcion test',
+      10.50,
+      proveedorId,
+      null
+    );
+    productoId = producto.id_producto;
+
+    const pedido = await Pedido.create(
+      proveedorId,
+      `${testPeriod}-01`,
+      `${testPeriod}-10`,
+      `${testPeriod}-12`,
+      'pendiente'
+    );
+    pedidoId = pedido.id_pedido;
+
+    const detalle = await DetallePedido.create(
+      pedidoId,
+      productoId,
+      3,
+      10.50,
+      deudorId
+    );
+    detalleId = detalle.id_detalle;
+
+    await UsuarioProveedor.asignar(acreedorId, proveedorId);
+  });
+
+  afterAll(async () => {
+    if (detalleId) {
+      await DetallePedido.delete(detalleId);
+    }
+    if (pedidoId) {
+      await Pedido.delete(pedidoId);
+    }
+    if (productoId) {
+      await Producto.delete(productoId);
+    }
+    if (proveedorId) {
+      await Proveedor.delete(proveedorId);
+    }
+    if (deudorId) {
+      await Usuario.delete(deudorId);
+    }
+    if (acreedorId) {
+      await Usuario.delete(acreedorId);
+    }
+  });
+
+  it('deberia generar liquidacion mensual para periodo especifico', async () => {
+    const resultado = await Pago.generarLiquidacionMensual(testPeriod);
+
+    expect(resultado).toHaveProperty('periodo', testPeriod);
+    expect(resultado).toHaveProperty('total_registros');
+    expect(resultado).toHaveProperty('registros');
+    expect(resultado.registros).toBeInstanceOf(Array);
+  });
+
+  it('deberia usar periodo actual si no se especifica argumento', async () => {
+    const resultado = await Pago.generarLiquidacionMensual();
+
+    expect(resultado).toHaveProperty('periodo');
+    expect(resultado.periodo).toMatch(/^\d{4}-\d{2}$/);
+  });
+
+  it('deberia aceptar formato YYYY-MM para el periodo', async () => {
+    const resultado = await Pago.generarLiquidacionMensual('2026-03');
+
+    expect(resultado).toHaveProperty('periodo', '2026-03');
+  });
+
+  it('deberia aceptar formato YYYY-MM-DD para el periodo', async () => {
+    const resultado = await Pago.generarLiquidacionMensual('2026-03-15');
+
+    expect(resultado).toHaveProperty('periodo', '2026-03');
+  });
+
+  it('deberia excluir pedidos cancelados de la liquidacion', async () => {
+    await Pedido.changeStatus(pedidoId, 'cancelado');
+
+    const resultado = await Pago.generarLiquidacionMensual(testPeriod);
+
+    const liquidacionDelPeriodo = resultado.registros.filter(
+      r => r.periodo && r.periodo.toString().startsWith(testPeriod)
+    );
+    expect(liquidacionDelPeriodo.length).toBe(0);
+
+    await Pedido.changeStatus(pedidoId, 'pendiente');
+  });
+
+  it('deberia preservar estado completado al actualizar liquidacion existente', async () => {
+    await Pago.generarLiquidacionMensual(testPeriod);
+
+    const pagoExistente = await pool.query(
+      `SELECT id_pago FROM pago 
+       WHERE periodo = $1::date AND origen = 'liquidacion_mensual'
+       LIMIT 1`,
+      [`${testPeriod}-01`]
+    );
+
+    if (pagoExistente.rows.length > 0) {
+      await Pago.cambiarEstado(pagoExistente.rows[0].id_pago, 'completado');
+
+      const resultado = await Pago.generarLiquidacionMensual(testPeriod);
+      const pagoActualizado = resultado.registros.find(
+        r => r.id_pago === pagoExistente.rows[0].id_pago
+      );
+
+      expect(pagoActualizado.estado).toBe('completado');
+    }
+  });
+
+  it('deberia retornar 0 registros cuando no hay datos para el periodo', async () => {
+    const resultado = await Pago.generarLiquidacionMensual('2099-01');
+
+    expect(resultado.total_registros).toBe(0);
+    expect(resultado.registros).toHaveLength(0);
   });
 });

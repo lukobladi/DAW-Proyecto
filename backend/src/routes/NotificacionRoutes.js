@@ -65,6 +65,35 @@ router.post('/enviar/', authMiddleware, NotificacionController.enviar);
 
 /**
  * @swagger
+ * /api/notificaciones/consulta-publica:
+ *   post:
+ *     summary: Enviar una consulta de soporte sin autenticacion
+ *     tags: [Notificaciones]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *               correo:
+ *                 type: string
+ *               mensaje:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Consulta enviada correctamente
+ *       400:
+ *         description: Datos requeridos faltantes
+ *       500:
+ *         description: Error al enviar la consulta
+ */
+router.post('/consulta-publica/', NotificacionController.enviarConsultaPublica);
+
+/**
+ * @swagger
  * /api/notificaciones/marcar-leida/{id}:
  *   put:
  *     summary: Marcar una notificación como leída
