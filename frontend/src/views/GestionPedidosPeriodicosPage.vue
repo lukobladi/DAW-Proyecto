@@ -101,12 +101,7 @@
 import api from '@/services/api';
 import { alertStore } from '@/store/alertStore';
 
-// ============================================
-// FUNCION AUXILIAR: pedidoVacio
-// Crea un objeto de pedido periodico vacío con valores por defecto
-// Parámetros: Ninguno
-// Retorna: Object - Objeto con estructura de pedido periodico vacía
-// ============================================
+// Auxiliar: Crea un objeto de pedido periodico vacío con valores por defecto
 function pedidoVacio() {
   return {
     id_pedido_periodico: null,
@@ -122,69 +117,35 @@ function pedidoVacio() {
 }
 
 export default {
-  // ============================================
-  // data()
-  // Variables de estado del componente
-  // ============================================
+  
   data() {
     return {
-      // Lista de pedidos periodicos cargados
       pedidosPeriodicos: [],
-      // Lista de proveedores disponibles
       proveedores: [],
-      // Bandera que indica si se están cargando datos
       cargando: false,
-      // Mensaje de error en caso de que la carga falle
       errorCarga: '',
-      // Bandera que controla la visibilidad del modal
       mostrarModal: false,
-      // Bandera que indica si estamos editando (true) o creando (false)
       modoEdicion: false,
-      // Bandera que indica si se está guardando el formulario
       guardando: false,
-      // Formulario de pedido periodico (para crear/editar)
       form: pedidoVacio(),
     };
   },
-  // ============================================
-  // created()
-  // Hook que se ejecuta cuando el componente se crea
-  // ============================================
+
   async created() {
-    // Carga pedidos periodicos y proveedores
     await this.cargarDatos();
   },
-  // ============================================
-  // methods
-  // Métodos del componente
-  // ============================================
+
   methods: {
-    // ============================================
-    // formatFecha
-    // Formatea una fecha a formato español (dd/mm/yyyy)
-    // Parámetros: fecha (String/Date) - Fecha a formatear
-    // Retorna: String - Fecha formateada o '-' si no hay fecha
-    // ============================================
+
     formatFecha(fecha) {
       if (!fecha) return '-';
       return new Date(fecha).toLocaleDateString('es-ES');
     },
-    // ============================================
-    // nombreProveedor
-    // Busca el nombre de un proveedor por su ID
-    // Parámetros: idProveedor (Number) - ID del proveedor
-    // Retorna: String - Nombre del proveedor o '-'
-    // ============================================
+
     nombreProveedor(idProveedor) {
       return this.proveedores.find(p => p.id_proveedor === idProveedor)?.nombre || '-';
     },
-    // ============================================
-    // cargarDatos
-    // Carga la lista de pedidos periodicos y proveedores
-    // Parámetros: Ninguno
-    // Retorna: No retorna valor, actualiza las variables pedidosPeriodicos y proveedores
-    // Efectos secundarios: Llama a api.getPedidosPeriodicos y api.getProveedores
-    // ============================================
+
     async cargarDatos() {
       this.cargando = true;
       this.errorCarga = '';
@@ -201,25 +162,13 @@ export default {
         this.cargando = false;
       }
     },
-    // ============================================
-    // abrirModalCrear
-    // Abre el modal para crear un nuevo pedido periodico
-    // Parámetros: Ninguno
-    // Retorna: No retorna valor
-    // Efectos secundarios: Resetea el formulario y muestra el modal
-    // ============================================
+
     abrirModalCrear() {
       this.modoEdicion = false;
       this.form = pedidoVacio();
       this.mostrarModal = true;
     },
-    // ============================================
-    // abrirModalEditar
-    // Abre el modal para editar un pedido periodico existente
-    // Parámetros: pedido (Object) - Pedido periodico a editar
-    // Retorna: No retorna valor
-    // Efectos secundarios: Prepara el formulario con datos del pedido
-    // ============================================
+
     abrirModalEditar(pedido) {
       this.modoEdicion = true;
       this.form = {
@@ -235,23 +184,11 @@ export default {
       };
       this.mostrarModal = true;
     },
-    // ============================================
-    // cerrarModal
-    // Cierra el modal de crear/editar pedido periodico
-    // Parámetros: Ninguno
-    // Retorna: No retorna valor
-    // Efectos secundarios: Oculta el modal
-    // ============================================
+
     cerrarModal() {
       this.mostrarModal = false;
     },
-    // ============================================
-    // guardarPedido
-    // Guarda el pedido periodico (crea nuevo o actualiza existente)
-    // Parámetros: Ninguno (obtiene datos del formulario via v-model)
-    // Retorna: No retorna valor
-    // Efectos secundarios: Llama a api.crearPedidoPeriodico o api.actualizarPedidoPeriodico
-    // ============================================
+
     async guardarPedido() {
       this.guardando = true;
       try {
@@ -282,13 +219,7 @@ export default {
         this.guardando = false;
       }
     },
-    // ============================================
-    // eliminarPedido
-    // Elimina un pedido periodico existente tras confirmación
-    // Parámetros: id (Number) - ID del pedido periodico a eliminar
-    // Retorna: No retorna valor
-    // Efectos secundarios: Llama a api.eliminarPedidoPeriodico, actualiza lista
-    // ============================================
+
     async eliminarPedido(id) {
       if (!window.confirm('Se eliminara el pedido periodico. Quieres continuar?')) {
         return;

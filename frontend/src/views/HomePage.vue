@@ -41,44 +41,17 @@
 import { useAuthStore } from '@/store';
 
 export default {
-  // ============================================
-  // computed
-  // Propiedades calculadas del componente
-  // ============================================
   computed: {
-    // ============================================
-    // isAuthenticated
-    // Determina si el usuario ha iniciado sesión
-    // Parámetros: Ninguno
-    // Retorna: Boolean - true si el usuario está autenticado, false en caso contrario
-    // ============================================
     isAuthenticated() {
       const authStore = useAuthStore();
       return authStore.isAuthenticated;
     },
   },
-  // ============================================
-  // methods
-  // Métodos del componente
-  // ============================================
   methods: {
-    // ============================================
-    // goToLogin
-    // Navega a la página de inicio de sesión
-    // Parámetros: Ninguno
-    // Retorna: No retorna valor
-    // Efectos secundarios: Redirige a la ruta de Login
-    // ============================================
     goToLogin() {
       this.$router.push({ name: 'Login' });
     },
-    // ============================================
-    // goToRegistrar
-    // Navega a la página de registro de nuevos usuarios
-    // Parámetros: Ninguno
-    // Retorna: No retorna valor
-    // Efectos secundarios: Redirige a la ruta de Registrar
-    // ============================================
+
     goToRegistrar() {
       this.$router.push({ name: 'Registrar' });
     },

@@ -109,12 +109,8 @@ import api from '@/services/api';
 import { alertStore } from '@/store/alertStore';
 import { useAuthStore } from '@/store';
 
-// ============================================
-// FUNCION AUXILIAR: productoVacio
-// Crea un objeto de producto vacío con valores por defecto
-// Parámetros: Ninguno
-// Retorna: Object - Objeto con estructura de producto vacía
-// ============================================
+
+// Aux: Crea un objeto de producto vacío con valores por defecto
 function productoVacio() {
   return {
     id_producto: null,
@@ -128,99 +124,49 @@ function productoVacio() {
 }
 
 export default {
-  // ============================================
-  // data()
-  // Variables de estado del componente
-  // ============================================
   data() {
     return {
-      // Lista de productos cargados
       productos: [],
-      // Lista de proveedores disponibles
       proveedores: [],
-      // Bandera que indica si se están cargando datos
       cargando: false,
-      // Mensaje de error en caso de que la carga falle
       errorCarga: '',
-      // ID del producto que se está modificando (para deshabilitar botones)
       accionandoId: null,
-      // Bandera que controla la visibilidad del modal
       mostrarModal: false,
-      // Bandera que indica si estamos editando (true) o creando (false)
       modoEdicion: false,
-      // Bandera que indica si se está guardando el formulario
       guardando: false,
-      // Formulario de producto (para crear/editar)
       form: productoVacio(),
-      // Objeto de errores de validación del formulario
       errors: {},
     };
   },
-  // ============================================
-  // computed
-  // Propiedades calculadas del componente
-  // ============================================
+
   computed: {
-    // ============================================
-    // isAdmin
-    // Determina si el usuario tiene rol de administrador
-    // Parámetros: Ninguno
-    // Retorna: Boolean - true si es admin
-    // ============================================
+
     isAdmin() {
       const authStore = useAuthStore();
       return authStore.user?.rol === 'admin';
     },
-    // ============================================
-    // isGestor
-    // Determina si el usuario tiene rol de gestor
-    // Parámetros: Ninguno
-    // Retorna: Boolean - true si es gestor
-    // ============================================
+
     isGestor() {
       const authStore = useAuthStore();
       return authStore.user?.rol === 'gestor';
     },
-    // ============================================
-    // isAdminOrGestor
-    // Determina si el usuario es admin o gestor
-    // Parámetros: Ninguno
-    // Retorna: Boolean - true si es admin o gestor
-    // ============================================
+
     isAdminOrGestor() {
       const authStore = useAuthStore();
       return authStore.user?.rol === 'admin' || authStore.user?.rol === 'gestor';
     },
-    // ============================================
-    // nombreProveedorAsignado
-    // Obtiene el nombre del proveedor asignado al gestor actual
-    // Parámetros: Ninguno
-    // Retorna: String - Nombre del proveedor o mensaje de carga
-    // ============================================
+
     nombreProveedorAsignado() {
       if (!this.form.id_proveedor) return 'Cargando...';
       return this.proveedores.find(p => p.id_proveedor === this.form.id_proveedor)?.nombre || '-';
     },
   },
-  // ============================================
-  // created()
-  // Hook que se ejecuta cuando el componente se crea
-  // ============================================
+
   async created() {
-    // Carga productos y proveedores
     await this.cargarDatos();
   },
-  // ============================================
-  // methods
-  // Métodos del componente
-  // ============================================
+
   methods: {
-    // ============================================
-    // getBackendOrigin
-    // Obtiene el origen del backend para construir URLs completas
-    // Parámetros: Ninguno
-    // Retorna: String - Origen del backend
-    // ============================================
     getBackendOrigin() {
       const apiUrl = import.meta.env.VITE_API_URL || '/api';
       if (apiUrl.startsWith('http://') || apiUrl.startsWith('https://')) {
@@ -228,12 +174,7 @@ export default {
       }
       return window.location.origin;
     },
-    // ============================================
-    // normalizarImagen
-    // Normaliza la URL de una imagen para que sea accesible
-    // Parámetros: imagen (String) - URL de la imagen
-    // Retorna: String - URL normalizada
-    // ============================================
+
     normalizarImagen(imagen) {
       if (!imagen) {
         return '/favicon.ico';
@@ -246,31 +187,15 @@ export default {
       }
       return `${this.getBackendOrigin()}/${imagen}`;
     },
-    // ============================================
-    // onImageError
-    // Maneja errores de carga de imágenes
-    // Parámetros: event (Event) - Evento de error
-    // Retorna: No retorna valor
-    // ============================================
+
     onImageError(event) {
       event.target.src = '/favicon.ico';
     },
-    // ============================================
-    // nombreProveedor
-    // Busca el nombre de un proveedor por su ID
-    // Parámetros: idProveedor (Number) - ID del proveedor
-    // Retorna: String - Nombre del proveedor o '-'
-    // ============================================
+
     nombreProveedor(idProveedor) {
       return this.proveedores.find((item) => item.id_proveedor === idProveedor)?.nombre || '-';
     },
-    // ============================================
-    // cargarDatos
-    // Carga la lista de productos y proveedores
-    // Parámetros: Ninguno
-    // Retorna: No retorna valor, actualiza las variables productos y proveedores
-    // Efectos secundarios: Llama a api.getProveedores y api.getProductos o api.getMisProductos
-    // ============================================
+
     async cargarDatos() {
       this.cargando = true;
       this.errorCarga = '';
@@ -295,13 +220,7 @@ export default {
         this.cargando = false;
       }
     },
-    // ============================================
-    // abrirModalCrear
-    // Abre el modal para crear un nuevo producto
-    // Parámetros: Ninguno
-    // Retorna: No retorna valor
-    // Efectos secundarios: Resetea el formulario, detecta proveedor del gestor
-    // ============================================
+
     async abrirModalCrear() {
       this.modoEdicion = false;
       this.errors = {};
@@ -325,13 +244,7 @@ export default {
       this.form = nuevoForm;
       this.mostrarModal = true;
     },
-    // ============================================
-    // abrirModalEditar
-    // Abre el modal para editar un producto existente
-    // Parámetros: producto (Object) - Producto a editar
-    // Retorna: No retorna valor
-    // Efectos secundarios: Prepara el formulario con datos del producto
-    // ============================================
+
     abrirModalEditar(producto) {
       this.modoEdicion = true;
       this.errors = {};
@@ -345,33 +258,15 @@ export default {
       };
       this.mostrarModal = true;
     },
-    // ============================================
-    // cerrarModal
-    // Cierra el modal de crear/editar producto
-    // Parámetros: Ninguno
-    // Retorna: No retorna valor
-    // Efectos secundarios: Oculta el modal
-    // ============================================
+
     cerrarModal() {
       this.mostrarModal = false;
     },
-    // ============================================
-    // seleccionarImagen
-    // Maneja la selección de una imagen desde el formulario
-    // Parámetros: event (Event) - Evento de cambio del input file
-    // Retorna: No retorna valor
-    // Efectos secundarios: Actualiza form.imagenFile
-    // ============================================
+
     seleccionarImagen(event) {
       this.form.imagenFile = event.target.files?.[0] || null;
     },
-    // ============================================
-    // guardarProducto
-    // Guarda el producto (crea nuevo o actualiza existente)
-    // Parámetros: Ninguno (obtiene datos del formulario via v-model)
-    // Retorna: No retorna valor
-    // Efectos secundarios: Llama a api.crearProducto o api.actualizarProducto
-    // ============================================
+
     async guardarProducto() {
       this.errors = {};
       this.guardando = true;
@@ -413,13 +308,7 @@ export default {
         this.guardando = false;
       }
     },
-    // ============================================
-    // cambiarEstado
-    // Activa o desactiva un producto
-    // Parámetros: producto (Object) - Producto cuyo estado se cambiará
-    // Retorna: No retorna valor
-    // Efectos secundarios: Llama a api.cambiarEstadoProducto
-    // ============================================
+
     async cambiarEstado(producto) {
       this.accionandoId = producto.id_producto;
       try {
@@ -431,13 +320,7 @@ export default {
         this.accionandoId = null;
       }
     },
-    // ============================================
-    // eliminarProducto
-    // Elimina un producto existente tras confirmación
-    // Parámetros: idProducto (Number) - ID del producto a eliminar
-    // Retorna: No retorna valor
-    // Efectos secundarios: Llama a api.eliminarProducto, actualiza lista
-    // ============================================
+
     async eliminarProducto(idProducto) {
       if (!window.confirm('Se eliminara el producto. Quieres continuar?')) {
         return;
