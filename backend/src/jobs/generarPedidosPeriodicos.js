@@ -9,7 +9,7 @@
  * Uso: node generarPedidosPeriodicos.js [--dry-run]
  *   --dry-run: Simula la ejecución sin crear pedidos reales
  *
- * Programación recomendada (cron del SO):
+ * Programación cron Linux:
  *   0 2 * * * cd /var/www/daw-proyecto && node backend/src/jobs/generarPedidosPeriodicos.js >> logs/pedidos-periodicos.log 2>&1
  *
  * Para probarlo manualmente:
@@ -170,7 +170,7 @@ async function run() {
   console.log(`[${fechaEjecucion}] Iniciando job de pedidos periódicos...`);
 
   if (DRY_RUN) {
-    console.log('⚠️  MODO SIMULACIÓN - No se crearán pedidos reales');
+    console.log('  MODO SIMULACIÓN - No se crearán pedidos reales');
   }
 
   try {
@@ -221,14 +221,14 @@ async function run() {
     console.log(`Modo: ${DRY_RUN ? 'SIMULACIÓN' : 'PRODUCCIÓN'}`);
 
     if (!DRY_RUN) {
-      console.log('\n✅ Job completado correctamente');
+      console.log('\n Job completado correctamente');
     } else {
-      console.log('\n⚠️  Modo simulación - ningún pedido real fue creado');
+      console.log('\n  Modo simulación - ningún pedido real fue creado');
     }
 
     process.exit(0);
   } catch (error) {
-    console.error('\n❌ Error ejecutando job de pedidos periódicos:', error.message);
+    console.error('\n Error ejecutando job de pedidos periódicos:', error.message);
     console.error(error.stack);
     process.exit(1);
   }

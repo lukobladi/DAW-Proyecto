@@ -282,13 +282,7 @@ export default {
         this.guardando = false;
       }
     },
-    // ============================================
-    // eliminarPedido
-    // Elimina un pedido existente tras confirmación
-    // Parámetros: idPedido (Number) - ID del pedido a eliminar
-    // Retorna: No retorna valor
-    // Efectos secundarios: Llama a api.eliminarPedido, actualiza lista
-    // ============================================
+
     async eliminarPedido(idPedido) {
       if (!window.confirm('Se eliminara el pedido. Quieres continuar?')) {
         return;
