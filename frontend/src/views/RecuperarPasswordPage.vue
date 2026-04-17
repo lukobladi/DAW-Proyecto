@@ -91,38 +91,19 @@ export default {
       default: null,
     },
   },
-  // ============================================
-  // data()
-  // Variables de estado del componente
-  // ============================================
   data() {
     return {
-      // Correo electrónico o móvil del usuario que solicita recuperación
       correoOMovil: '',
-      // Nueva contraseña elegida por el usuario
       password: '',
-      // Confirmación de la nueva contraseña
       confirmarPassword: '',
-      // Mensaje de error para mostrar en el formulario
       error: '',
-      // Bandera que indica si se está procesando una solicitud
       guardando: false,
-      // Bandera que indica si el correo de recuperación fue enviado exitosamente
       enviado: false,
     };
   },
-  // ============================================
-  // methods
-  // Métodos del componente
-  // ============================================
+
   methods: {
-    // ============================================
-    // recoverPassword
-    // Envía una solicitud de recuperación de contraseña al backend
-    // Parámetros: Ninguno (obtiene datos del formulario via v-model)
-    // Retorna: No retorna valor, pero actualiza el estado 'enviado'
-    // Efectos secundarios: Llama a api.recoverPassword, actualiza estado 'enviado'
-    // ============================================
+    // Llama a api.recoverPassword, actualiza estado 'enviado'
     async recoverPassword() {
       this.error = '';
       this.guardando = true;
@@ -143,13 +124,7 @@ export default {
         this.guardando = false;
       }
     },
-    // ============================================
-    // resetPassword
-    // Restablece la contraseña usando el token de recuperación
-    // Parámetros: Ninguno (obtiene datos del formulario via v-model y token de props)
-    // Retorna: No retorna valor, pero redirige al login tras éxito
-    // Efectos secundarios: Llama a api.resetPassword, redirige a Login
-    // ============================================
+    // Llama a api.resetPassword, redirige a Login
     async resetPassword() {
       this.error = '';
 

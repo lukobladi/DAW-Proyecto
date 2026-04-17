@@ -840,17 +840,10 @@ import { useAuthStore } from '@/store';
 import { alertStore } from '@/store/alertStore';
 
 export default {
-  // ============================================
-  // data()
-  // Variables de estado del componente
-  // ============================================
   data() {
     return {
-      // Bandera que indica si se está enviando la consulta
       enviando: false,
-      // Lista de administradores para contacto
       admins: [],
-      // Formulario de contacto con nombre, correo y mensaje
       form: {
         nombre: '',
         correo: '',
@@ -858,17 +851,7 @@ export default {
       },
     };
   },
-  // ============================================
-  // computed
-  // Propiedades calculadas del componente
-  // ============================================
   computed: {
-    // ============================================
-    // mailtoLink
-    // Genera un enlace mailto con los datos del formulario
-    // Parámetros: Ninguno
-    // Retorna: String - URL mailto con asunto y cuerpo codificados
-    // ============================================
     mailtoLink() {
       const destino = this.admins.length > 0 ? this.admins[0].correo : 'soporte@ekonsumo.local';
       const asunto = encodeURIComponent('Consulta soporte Ekonsumo');
@@ -878,10 +861,6 @@ export default {
       return `mailto:${destino}?subject=${asunto}&body=${cuerpo}`;
     },
   },
-  // ============================================
-  // created()
-  // Hook que se ejecuta cuando el componente se crea
-  // ============================================
   created() {
     // Pre-rellena el formulario con los datos del usuario autenticado
     const authStore = useAuthStore();
@@ -889,15 +868,7 @@ export default {
     this.form.correo = authStore.user?.correo || '';
     this.cargarAdmins();
   },
-  // ============================================
-  // methods
-  // Métodos del componente
-  // ============================================
   methods: {
-    // ============================================
-    // cargarAdmins
-    // Carga la lista de administradores desde el servidor
-    // ============================================
     async cargarAdmins() {
       try {
         const response = await api.getAdmins();
@@ -906,10 +877,6 @@ export default {
         console.error('Error al cargar administradores');
       }
     },
-    // ============================================
-    // enviarConsulta
-    // Envía una consulta de soporte al sistema (ruta pública)
-    // ============================================
     async enviarConsulta() {
       this.enviando = true;
       try {

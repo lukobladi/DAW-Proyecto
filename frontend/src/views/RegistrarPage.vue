@@ -40,44 +40,24 @@ import api from '@/services/api';
 import { alertStore } from '@/store/alertStore';
 
 export default {
-  // ============================================
-  // data()
-  // Variables de estado del componente
-  // ============================================
   data() {
     return {
-      // Nombre completo del usuario a registrar
       nombre: '',
-      // Correo electrónico del usuario (único en el sistema)
       correo: '',
-      // Contraseña elegida por el usuario (debe cumplir requisitos de seguridad)
       password: '',
-      // Confirmación de contraseña (debe coincidir con password)
       confirmarPassword: '',
-      // Número de móvil opcional del usuario (9-15 dígitos)
       movil: null,
     };
   },
-  // ============================================
-  // methods
-  // Métodos del componente
-  // ============================================
   methods: {
-    // ============================================
-    // registrar
-    // Registra un nuevo usuario en el sistema tras validar los datos
-    // Parámetros: Ninguno (obtiene datos del formulario via v-model)
-    // Retorna: No retorna valor, pero muestra alertas y redirige al login
     // Efectos secundarios: Llama a api.registrar, muestra alertas, redirige
-    // ============================================
     async registrar() {
-      // Validar que las contraseñas coincidan
       if (this.password !== this.confirmarPassword) {
         alertStore.showAlert('Las contraseñas no coinciden.', 'danger');
         return;
       }
 
-      // Validar requisitos de contraseña: al menos una mayúscula, una minúscula y un número
+      // requisitos de contraseña: al menos una mayúscula, una minúscula y un número
       if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(this.password)) {
         alertStore.showAlert('La contraseña debe contener al menos una mayúscula, una minúscula y un número.', 'danger');
         return;
