@@ -19,7 +19,7 @@ RESTART IDENTITY CASCADE;
 -- Insertar usuarios (el saldo en la tabla ya no se usa para el calculo dinamico)
 INSERT INTO usuario (nombre, correo, pass, movil, rol, activo, saldo)
 VALUES
-    ('Admin', 'ekonsumo@eol.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '111111111', 'admin', TRUE, 0),
+    ('Admin', 'u0442115415@gmail.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '111111111', 'admin', TRUE, 0),
     ('Usuario1', 'usuario1@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '444444444', 'usuario', TRUE, 0),
     ('Gestor1', 'gestor1@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '222222222', 'gestor', TRUE, 0),
     ('Gestor2', 'gestor2@ekonsumo.com', '$2b$10$FP8Biq1KkfFip1pqV.0xf.lRaUT6YrKZFhbmvNF5vh4ynkauKmgOW', '777777777', 'gestor', TRUE, 0),

@@ -1,22 +1,20 @@
-// Servicio para enviar correos electronicos. Utiliza la libreria nodemailer con SMTP de AOL
+// Servicio para enviar correos electronicos. Utiliza nodemailer con Gmail y OAuth2
 
 const nodemailer = require('nodemailer');
 const logger = require('../config/logger');
 
 const emailService = {
-  // Crea y retorna un transporter configurado para AOL SMTP
+  // Crea y retorna un transporter configurado para Gmail OAuth2
   _crearTransporter() {
     return nodemailer.createTransport({
-      host: 'smtp.aol.com',
-      port: 587,
-      secure: false,
+      service: 'gmail',
       auth: {
+        type: 'OAuth2',
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
-      },
-      tls: {
-        ciphers: 'TLSv1.2',
-        rejectUnauthorized: true,
+        clientId: process.env.OAUTH_CLIENTID,
+        clientSecret: process.env.OAUTH_CLIENT_SECRET,
+        refreshToken: process.env.OAUTH_REFRESH_TOKEN,
       },
     });
   },

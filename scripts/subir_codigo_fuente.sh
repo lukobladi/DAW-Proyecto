@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Sube código fuente del proyecto al servidor
 # Usage: ./subir_codigo_fuente.sh [user@host] [destination_dir]
 
 TARGET="${1:-ekonsumo@ekonsumo.duckdns.org}"
 DEST_DIR="${2:-/var/www/daw-proyecto}"
 
+# TODO hacer rutas relativas para no depender del sistema
 LOCAL_BACKEND="/home/mcl/Proyects/DAW-Proyecto/backend"
 LOCAL_FRONTEND="/home/mcl/Proyects/DAW-Proyecto/frontend"
+LOCAL_DATOS="/home/mcl/Proyects/DAW-Proyecto/datos"
+
 
 echo "==> Subiendo backend a $TARGET:$DEST_DIR/backend/"
 rsync -avz --delete \
@@ -34,6 +36,9 @@ rsync -avz --delete \
   "$LOCAL_FRONTEND/" \
   "$TARGET:$DEST_DIR/frontend/"
 
-  rsync -avz --delete   /home/mcl/Proyects/DAW-Proyecto/frontend/dist/   ekonsumo@ekonsumo.duckdns.org:/var/www/daw-proyecto/frontend/dist/
+  # Subir tambien scripts de base de datos
+  rsync -avz --delete \
+  "$LOCAL_DATOS/" \
+  "$TARGET:$DEST_DIR/datos/"
 
 echo "==> Código subido correctamente"

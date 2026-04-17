@@ -78,19 +78,12 @@
 import api from '@/services/api';
 
 export default {
-  // ============================================
-  // data()
   // Variables de estado del componente
-  // ============================================
   data() {
     return {
-      // Bandera que indica si se están cargando los datos
       cargando: false,
-      // Mensaje de error en caso de que la carga falle
       errorCarga: '',
-      // ID del pedido cuyos detalles se están visualizando
       pedidoId: null,
-      // Información general del pedido (proveedor, estado, fechas)
       pedidoInfo: {
         proveedor: '',
         estado: '',
@@ -98,21 +91,13 @@ export default {
         fecha_cierre: null,
         fecha_entrega: null,
       },
-      // Lista de usuarios con sus productos agrupados para este pedido
       usuariosConProductos: [],
     };
   },
-  // ============================================
-  // computed
-  // Propiedades calculadas del componente
-  // ============================================
+  
+  // Se cachea y solo recalcula cuando cambia una variable de componente
   computed: {
-    // ============================================
-    // volverRuta
-    // Determina la ruta para el botón "Volver" según el origen
-    // Parámetros: Ninguno
-    // Retorna: Object - Objeto de ruta para router-link
-    // ============================================
+    // ruta del botón "Volver" según el origen
     volverRuta() {
       const from = this.$route.query.from;
       if (from === 'historial') {
@@ -120,37 +105,21 @@ export default {
       }
       return { name: 'GestionPedidos' };
     },
-    // ============================================
-    // totalPedido
-    // Calcula el total del pedido sumando los totales de todos los usuarios
-    // Parámetros: Ninguno
-    // Retorna: String - Total del pedido formateado con 2 decimales
-    // ============================================
+
     totalPedido() {
       return this.usuariosConProductos.reduce((total, u) => total + Number(u.totalUsuario), 0).toFixed(2);
     },
   },
-  // ============================================
-  // created()
-  // Hook que se ejecuta cuando el componente se crea
-  // ============================================
+
   async created() {
     // Obtiene el ID del pedido de los parámetros de la ruta
     this.pedidoId = this.$route.params.id;
-    // Carga los detalles del pedido
+    
     await this.cargarDetalles();
   },
-  // ============================================
-  // methods
-  // Métodos del componente
-  // ============================================
+  
   methods: {
-    // ============================================
-    // getBackendOrigin
     // Obtiene el origen del backend para construir URLs completas de imágenes
-    // Parámetros: Ninguno
-    // Retorna: String - Origen del backend (protocolo + host)
-    // ============================================
     getBackendOrigin() {
       const apiUrl = import.meta.env.VITE_API_URL || '/api';
       if (apiUrl.startsWith('http://') || apiUrl.startsWith('https://')) {
@@ -158,24 +127,16 @@ export default {
       }
       return window.location.origin;
     },
-    // ============================================
-    // normalizarImagen
-    // Normaliza la URL de una imagen para que sea accesible
-    // Parámetros: imagen (String) - URL de la imagen a normalizar
-    // Retorna: String - URL normalizada de la imagen
-    // ============================================
+
+    
     normalizarImagen(imagen) {
       if (!imagen) return '/favicon.ico';
       if (imagen.startsWith('http://') || imagen.startsWith('https://')) return imagen;
       if (imagen.startsWith('/')) return `${this.getBackendOrigin()}${imagen}`;
       return `${this.getBackendOrigin()}/${imagen}`;
     },
-    // ============================================
-    // formatFecha
-    // Formatea una fecha ISO a formato español (dd/mm/yyyy)
-    // Parámetros: fechaIso (String) - Fecha en formato ISO
-    // Retorna: String - Fecha formateada o '-' si no hay fecha
-    // ============================================
+
+    
     formatFecha(fechaIso) {
       if (!fechaIso) return '-';
       return new Date(fechaIso).toLocaleDateString('es-ES', {
@@ -184,12 +145,8 @@ export default {
         day: '2-digit',
       });
     },
-    // ============================================
-    // estadoClass
-    // Devuelve la clase CSS para el badge de estado del pedido
-    // Parámetros: estado (String) - Estado del pedido
-    // Retorna: String - Nombre de la clase CSS
-    // ============================================
+
+    
     estadoClass(estado) {
       const classes = {
         pendiente: 'estado-pendiente',
@@ -200,13 +157,8 @@ export default {
       };
       return classes[estado] || 'estado-pendiente';
     },
-    // ============================================
-    // cargarDetalles
-    // Carga todos los datos del pedido: info general, productos agrupados por usuario
-    // Parámetros: Ninguno
-    // Retorna: No retorna valor, actualiza las variables de estado
-    // Efectos secundarios: Llama a múltiples APIs (getPedidos, getDetallesPedidoPorPedido, etc.)
-    // ============================================
+
+    
     async cargarDetalles() {
       this.cargando = true;
       this.errorCarga = '';

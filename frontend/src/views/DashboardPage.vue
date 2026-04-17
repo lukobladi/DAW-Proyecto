@@ -198,27 +198,16 @@ import { useAuthStore } from '@/store';
 import { alertStore } from '@/store/alertStore';
 
 export default {
-  // ============================================
-  // data()
   // Variables de estado del componente
-  // ============================================
   data() {
     return {
-      // Bandera que indica si se están cargando los datos principales
       cargando: false,
-      // Bandera que indica si se está cargando el resumen financiero
       cargandoFinanzas: false,
-      // Mensaje de error en caso de que la carga falle
       errorCarga: '',
-      // Lista de productos comprados en el mes actual
       productosMes: [],
-      // Lista de productos pendientes de entrega
       productosPendientesEntrega: [],
-      // Lista de pedidos abiertos disponibles
       pedidosAbiertos: [],
-      // ID del detalle que se está actualizando (para deshabilitar botones)
       actualizandoDetalleId: null,
-      // ID del pago que se está actualizando (para deshabilitar botones)
       actualizandoPagoId: null,
       // Periodo actual en formato YYYY-MM
       periodoActual: new Date().toISOString().slice(0, 7),
@@ -237,82 +226,50 @@ export default {
       },
     };
   },
-  // ============================================
-  // computed
-  // Propiedades calculadas del componente
-  // ============================================
+
+    // Propiedades calculadas del componente. Se recalcula cuando cambia un miembro y se cachea para eficiencia
   computed: {
-    // ============================================
-    // periodoVencido
+    
     // Calcula el periodo del mes anterior en formato YYYY-MM
-    // Parámetros: Ninguno
-    // Retorna: String - Periodo del mes anterior
-    // ============================================
     periodoVencido() {
       const date = new Date();
       date.setMonth(date.getMonth() - 1);
       return date.toISOString().slice(0, 7);
     },
-    // ============================================
-    // usuarioNombre
-    // Obtiene el nombre del usuario autenticado
-    // Parámetros: Ninguno
-    // Retorna: String - Nombre del usuario o 'usuario' por defecto
+  
+    
     // ============================================
     usuarioNombre() {
       const authStore = useAuthStore();
       return authStore.user?.nombre || 'usuario';
     },
-    // ============================================
-    // isAdmin
-    // Determina si el usuario tiene rol de administrador
-    // Parámetros: Ninguno
-    // Retorna: Boolean - true si es admin
-    // ============================================
+
+    
     isAdmin() {
       const authStore = useAuthStore();
       return authStore.user?.rol === 'admin';
     },
-    // ============================================
-    // isGestor
-    // Determina si el usuario tiene rol de gestor
-    // Parámetros: Ninguno
-    // Retorna: Boolean - true si es gestor
-    // ============================================
+
+    
     isGestor() {
       const authStore = useAuthStore();
       return authStore.user?.rol === 'gestor';
     },
-    // ============================================
-    // isAdminOrGestor
-    // Determina si el usuario es admin o gestor
-    // Parámetros: Ninguno
-    // Retorna: Boolean - true si es admin o gestor
-    // ============================================
+
+    
     isAdminOrGestor() {
       const authStore = useAuthStore();
       return authStore.user?.rol === 'admin' || authStore.user?.rol === 'gestor';
     },
   },
-  // ============================================
-  // created()
+  
   // Hook que se ejecuta cuando el componente se crea
-  // ============================================
   async created() {
-    // Carga todos los datos del dashboard
     await this.cargarDashboard();
   },
-  // ============================================
-  // methods
-  // Métodos del componente
-  // ============================================
+
   methods: {
-    // ============================================
-    // getBackendOrigin
-    // Obtiene el origen del backend para construir URLs completas
-    // Parámetros: Ninguno
-    // Retorna: String - Origen del backend
-    // ============================================
+
     getBackendOrigin() {
       const apiUrl = import.meta.env.VITE_API_URL || '/api';
 
@@ -322,12 +279,7 @@ export default {
 
       return window.location.origin;
     },
-    // ============================================
-    // normalizarImagen
-    // Normaliza la URL de una imagen para que sea accesible
-    // Parámetros: imagen (String) - URL de la imagen
-    // Retorna: String - URL normalizada
-    // ============================================
+ 
     normalizarImagen(imagen) {
       if (!imagen) {
         return '/favicon.ico';
@@ -343,12 +295,7 @@ export default {
 
       return `${this.getBackendOrigin()}/${imagen}`;
     },
-    // ============================================
-    // formatFecha
-    // Formatea una fecha ISO a formato español con hora
-    // Parámetros: fechaIso (String) - Fecha en formato ISO
-    // Retorna: String - Fecha formateada o 'Sin fecha'
-    // ============================================
+
     formatFecha(fechaIso) {
       if (!fechaIso) {
         return 'Sin fecha';
@@ -356,12 +303,7 @@ export default {
 
       return new Date(fechaIso).toLocaleString('es-ES');
     },
-    // ============================================
-    // esPedidoAbierto
-    // Determina si un pedido está actualmente abierto
-    // Parámetros: pedido (Object) - Objeto pedido con estado y fecha_cierre
-    // Retorna: Boolean - true si el pedido está abierto
-    // ============================================
+
     esPedidoAbierto(pedido) {
       if (pedido.estado !== 'pendiente') {
         return false;
@@ -378,12 +320,7 @@ export default {
 
       return fechaCierre > hoy;
     },
-    // ============================================
-    // estadoLabel
-    // Devuelve la etiqueta traducida para un estado de pedido
-    // Parámetros: estado (String) - Estado del pedido
-    // Retorna: String - Etiqueta en español
-    // ============================================
+
     estadoLabel(estado) {
       const labels = {
         pendiente: 'Pendiente',
@@ -394,12 +331,8 @@ export default {
       };
       return labels[estado] || estado;
     },
-    // ============================================
-    // estadoClass
+
     // Devuelve la clase CSS para el badge de estado
-    // Parámetros: estado (String) - Estado del pedido
-    // Retorna: String - Nombre de la clase CSS
-    // ============================================
     estadoClass(estado) {
       const classes = {
         pendiente: 'estado-pendiente',
@@ -410,22 +343,14 @@ export default {
       };
       return classes[estado] || 'estado-pendiente';
     },
-    // ============================================
-    // formatMoney
+    
     // Formatea un valor numérico como moneda EUR
-    // Parámetros: value (Number/String) - Valor a formatear
-    // Retorna: String - Valor formateado con 2 decimales y EUR
-    // ============================================
     formatMoney(value) {
       const amount = Number(value || 0);
       return `${amount.toFixed(2)} EUR`;
     },
-    // ============================================
-    // formatPeriodoDeuda
+    
     // Formatea un periodo YYYY-MM a formato MM/YYYY
-    // Parámetros: periodo (String) - Periodo en formato YYYY-MM
-    // Retorna: String - Periodo formateado o 'Sin periodo'
-    // ============================================
     formatPeriodoDeuda(periodo) {
       if (!periodo) {
         return 'Sin periodo';
@@ -441,32 +366,16 @@ export default {
 
       return `${month}/${year}`;
     },
-    // ============================================
-    // getUsuarioId
-    // Obtiene el ID del usuario autenticado
-    // Parámetros: Ninguno
-    // Retorna: Number - ID del usuario
-    // ============================================
+
     getUsuarioId() {
       const authStore = useAuthStore();
       return Number(authStore.user?.id_usuario);
     },
-    // ============================================
-    // esDeudor
-    // Determina si el usuario actual es el deudor de una deuda
-    // Parámetros: deuda (Object) - Objeto deuda con id_usuario_deudor
-    // Retorna: Boolean - true si el usuario actual es el deudor
-    // ============================================
+
     esDeudor(deuda) {
       return Number(deuda.id_usuario_deudor) === this.getUsuarioId();
     },
-    // ============================================
-    // manejarSesionCaducada
-    // Maneja la expiración de sesión redirigiendo al login
-    // Parámetros: Ninguno
-    // Retorna: No retorna valor
-    // Efectos secundarios: Limpia localStorage y redirige a Login
-    // ============================================
+
     manejarSesionCaducada() {
       localStorage.removeItem('authToken');
       localStorage.removeItem('userRole');
@@ -474,13 +383,7 @@ export default {
       alertStore.showAlert('Tu sesion ha caducado. Inicia sesion de nuevo.', 'danger');
       this.$router.push({ name: 'Login' });
     },
-    // ============================================
-    // cargarResumenFinanciero
-    // Carga el resumen financiero del mes actual y mes vencido
-    // Parámetros: Ninguno
-    // Retorna: No retorna valor, actualiza resumenFinanciero y resumenFinancieroMesVencido
-    // Efectos secundarios: Llama a api.getResumenPagosMensual
-    // ============================================
+
     async cargarResumenFinanciero() {
       this.cargandoFinanzas = true;
 
@@ -513,13 +416,7 @@ export default {
         this.cargandoFinanzas = false;
       }
     },
-    // ============================================
-    // marcarComoPagado
-    // Marca una deuda como pagada por el deudor
-    // Parámetros: deuda (Object) - Objeto deuda con id_pago
-    // Retorna: No retorna valor
-    // Efectos secundarios: Llama a api.marcarPagoEnviado, actualiza UI
-    // ============================================
+
     async marcarComoPagado(deuda) {
       this.actualizandoPagoId = deuda.id_pago;
 
@@ -538,13 +435,7 @@ export default {
         this.actualizandoPagoId = null;
       }
     },
-    // ============================================
-    // marcarComoRecibido
-    // Confirma que el acreedor ha recibido el pago
-    // Parámetros: deuda (Object) - Objeto deuda con id_pago
-    // Retorna: No retorna valor
-    // Efectos secundarios: Llama a api.marcarPagoRecibido, actualiza UI
-    // ============================================
+   
     async marcarComoRecibido(deuda) {
       this.actualizandoPagoId = deuda.id_pago;
 
@@ -563,13 +454,7 @@ export default {
         this.actualizandoPagoId = null;
       }
     },
-    // ============================================
-    // cargarDashboard
-    // Carga todos los datos del dashboard: pedidos, productos, proveedores
-    // Parámetros: Ninguno
-    // Retorna: No retorna valor, actualiza múltiples variables de estado
-    // Efectos secundarios: Llama a múltiples APIs, maneja sesión caducada
-    // ============================================
+ 
     async cargarDashboard() {
       console.log('isGestor:', this.isGestor);
   console.log('user rol:', useAuthStore().user?.rol);
@@ -721,13 +606,6 @@ export default {
         this.cargando = false;
       }
     },
-    // ============================================
-    // actualizarUnidades
-    // Actualiza la cantidad de un producto en el pedido
-    // Parámetros: producto (Object), nuevaCantidad (Number)
-    // Retorna: No retorna valor
-    // Efectos secundarios: Llama a api.actualizarDetallePedido o api.eliminarDetallePedido
-    // ============================================
     async actualizarUnidades(producto, nuevaCantidad) {
       if (!producto.pedido_abierto) {
         alertStore.showAlert('Este pedido ya no esta abierto. No puedes modificar unidades.', 'danger');
@@ -767,32 +645,18 @@ export default {
         this.actualizandoDetalleId = null;
       }
     },
-    // ============================================
-    // incrementarUnidades
+    
     // Incrementa en 1 la cantidad de un producto
-    // Parámetros: producto (Object) - Producto a incrementar
-    // Retorna: No retorna valor
-    // Efectos secundarios: Llama a actualizarUnidades
-    // ============================================
     async incrementarUnidades(producto) {
       await this.actualizarUnidades(producto, producto.cantidad + 1);
     },
-    // ============================================
-    // decrementarUnidades
-    // Decrementa en 1 la cantidad de un producto
-    // Parámetros: producto (Object) - Producto a decrementar
-    // Retorna: No retorna valor
-    // Efectos secundarios: Llama a actualizarUnidades
-    // ============================================
+
+    
     async decrementarUnidades(producto) {
       await this.actualizarUnidades(producto, producto.cantidad - 1);
     },
-    // ============================================
-    // onImageError
-    // Maneja errores de carga de imágenes mostrando un icono por defecto
-    // Parámetros: event (Event) - Evento de error de imagen
-    // Retorna: No retorna valor
-    // ============================================
+
+    
     onImageError(event) {
       event.target.src = '/favicon.ico';
     },

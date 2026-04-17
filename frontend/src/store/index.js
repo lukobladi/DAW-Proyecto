@@ -33,7 +33,8 @@ function getPayloadFromToken(token) {
   }
 }
 
-// Construye el estado inicial de autenticacion desde localStorage
+// El estado inicial se coge dew LocalStorage que es persistente. 
+// Los datos de pInia se pierden si se refresca la pagina
 function buildInitialAuthState() {
   const token = localStorage.getItem('authToken');
   const tokenExpired = isTokenExpired(token);

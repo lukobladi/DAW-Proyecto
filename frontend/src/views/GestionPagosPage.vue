@@ -65,52 +65,27 @@ import { useAuthStore } from '@/store';
 import { alertStore } from '@/store/alertStore';
 
 export default {
-  // ============================================
-  // data()
-  // Variables de estado del componente
-  // ============================================
   data() {
     return {
-      // Bandera que indica si se están cargando datos
       cargando: false,
-      // Mensaje de error en caso de que la carga falle
       errorCarga: '',
-      // ID del pago que se está actualizando (para deshabilitar botón)
       pagoActualizandoId: null,
-      // Periodo seleccionado para filtrar pagos (formato YYYY-MM)
       periodo: new Date().toISOString().slice(0, 7),
-      // Lista de deudas/pagos pendientes del periodo seleccionado
       deudasPendientes: [],
     };
   },
-  // ============================================
-  // created()
-  // Hook que se ejecuta cuando el componente se crea
-  // ============================================
+  
   async created() {
     // Carga los pagos pendientes del periodo actual
     await this.cargarPagos();
   },
-  // ============================================
-  // methods
-  // Métodos del componente
-  // ============================================
+  
   methods: {
-    // ============================================
-    // formatMoney
-    // Formatea un valor numérico como moneda EUR
-    // Parámetros: value (Number/String) - Valor a formatear
-    // Retorna: String - Valor formateado con 2 decimales y EUR
-    // ============================================
+  
     formatMoney(value) {
       return `${Number(value || 0).toFixed(2)} EUR`;
     },
-    // ============================================
-    // formatPeriodoDeuda
-    // Formatea un periodo YYYY-MM a formato MM/YYYY
-    // Parámetros: periodo (String) - Periodo en formato YYYY-MM
-    // Retorna: String - Periodo formateado o 'Sin periodo'
-    // ============================================
+  
     formatPeriodoDeuda(periodo) {
       const raw = String(periodo || '');
       const periodoMes = raw.length >= 7 ? raw.slice(0, 7) : raw;
@@ -122,32 +97,16 @@ export default {
 
       return `${month}/${year}`;
     },
-    // ============================================
-    // getUsuarioId
-    // Obtiene el ID del usuario autenticado
-    // Parámetros: Ninguno
-    // Retorna: Number - ID del usuario
-    // ============================================
+  
     getUsuarioId() {
       const authStore = useAuthStore();
       return Number(authStore.user?.id_usuario);
     },
-    // ============================================
-    // esDeudor
-    // Determina si el usuario actual es el deudor de un pago
-    // Parámetros: pago (Object) - Objeto pago con id_usuario_deudor
-    // Retorna: Boolean - true si el usuario actual es el deudor
-    // ============================================
+  
     esDeudor(pago) {
       return Number(pago.id_usuario_deudor) === this.getUsuarioId();
     },
-    // ============================================
-    // manejarSesionCaducada
-    // Maneja la expiración de sesión redirigiendo al login
-    // Parámetros: Ninguno
-    // Retorna: No retorna valor
-    // Efectos secundarios: Limpia localStorage y redirige a Login
-    // ============================================
+  
     manejarSesionCaducada() {
       localStorage.removeItem('authToken');
       localStorage.removeItem('userRole');
@@ -155,13 +114,7 @@ export default {
       alertStore.showAlert('Tu sesion ha caducado. Inicia sesion de nuevo.', 'danger');
       this.$router.push({ name: 'Login' });
     },
-    // ============================================
-    // cargarPagos
-    // Carga las deudas/pagos pendientes del periodo seleccionado
-    // Parámetros: Ninguno
-    // Retorna: No retorna valor, actualiza la variable deudasPendientes
-    // Efectos secundarios: Llama a api.getResumenPagosMensual
-    // ============================================
+  
     async cargarPagos() {
       this.cargando = true;
       this.errorCarga = '';
@@ -180,13 +133,7 @@ export default {
         this.cargando = false;
       }
     },
-    // ============================================
-    // marcarPagado
-    // Marca una deuda como pagada por el deudor
-    // Parámetros: pago (Object) - Objeto pago con id_pago
-    // Retorna: No retorna valor
-    // Efectos secundarios: Llama a api.marcarPagoEnviado, actualiza UI
-    // ============================================
+  
     async marcarPagado(pago) {
       this.pagoActualizandoId = pago.id_pago;
 
@@ -205,13 +152,7 @@ export default {
         this.pagoActualizandoId = null;
       }
     },
-    // ============================================
-    // marcarRecibido
-    // Confirma que el acreedor ha recibido el pago
-    // Parámetros: pago (Object) - Objeto pago con id_pago
-    // Retorna: No retorna valor
-    // Efectos secundarios: Llama a api.marcarPagoRecibido, actualiza UI
-    // ============================================
+  
     async marcarRecibido(pago) {
       this.pagoActualizandoId = pago.id_pago;
 

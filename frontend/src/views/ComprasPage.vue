@@ -88,45 +88,26 @@ import { useAuthStore } from '@/store';
 import { alertStore } from '@/store/alertStore';
 
 export default {
-  // ============================================
-  // data()
+
   // Variables de estado del componente
-  // ============================================
   data() {
     return {
-      // Lista de productos cargados con información de pedidos
       productos: [],
-      // Bandera que indica si se están cargando datos
       cargando: false,
-      // Mensaje de error en caso de que la carga falle
       errorCarga: '',
-      // ID del producto que se está añadiendo (para deshabilitar botón)
       anadiendoProductoId: null,
-      // Filtro de estado actual ('todos', 'abierto', 'pendiente_entrega')
       filtroEstado: 'todos',
     };
   },
-  // ============================================
-  // computed
-  // Propiedades calculadas del componente
-  // ============================================
+
+  // Propiedades calculadas del componente. Se recalcula cuando cambia un miembro y se cachea para eficiencia
   computed: {
-    // ============================================
-    // isAdminOrGestor
-    // Determina si el usuario es admin o gestor
-    // Parámetros: Ninguno
-    // Retorna: Boolean - true si es admin o gestor
-    // ============================================
+
     isAdminOrGestor() {
       const authStore = useAuthStore();
       return authStore.user?.rol === 'admin' || authStore.user?.rol === 'gestor';
     },
-    // ============================================
-    // productosFiltrados
     // Filtra los productos según el filtro de estado seleccionado
-    // Parámetros: Ninguno
-    // Retorna: Array - Lista de productos filtrados
-    // ============================================
     productosFiltrados() {
       if (this.filtroEstado === 'todos') {
         return this.productos;
@@ -139,12 +120,8 @@ export default {
       }
       return this.productos;
     },
-    // ============================================
-    // productosAgrupados
+
     // Agrupa los productos filtrados por proveedor
-    // Parámetros: Ninguno
-    // Retorna: Array - Lista de grupos con proveedor y sus productos
-    // ============================================
     productosAgrupados() {
       const grupos = {};
       this.productosFiltrados.forEach(producto => {
@@ -163,25 +140,16 @@ export default {
       return Object.values(grupos);
     },
   },
-  // ============================================
-  // created()
+
   // Hook que se ejecuta cuando el componente se crea
-  // ============================================
   async created() {
     // Carga los productos disponibles
     await this.cargarProductos();
   },
-  // ============================================
-  // methods
-  // Métodos del componente
-  // ============================================
+
   methods: {
-    // ============================================
-    // getBackendOrigin
+
     // Obtiene el origen del backend para construir URLs completas
-    // Parámetros: Ninguno
-    // Retorna: String - Origen del backend
-    // ============================================
     getBackendOrigin() {
       const apiUrl = import.meta.env.VITE_API_URL || '/api';
 
@@ -191,12 +159,7 @@ export default {
 
       return window.location.origin;
     },
-    // ============================================
-    // normalizarImagen
     // Normaliza la URL de una imagen para que sea accesible
-    // Parámetros: imagen (String) - URL de la imagen
-    // Retorna: String - URL normalizada
-    // ============================================
     normalizarImagen(imagen) {
       if (!imagen) {
         return '/favicon.ico';
@@ -212,18 +175,13 @@ export default {
 
       return `${this.getBackendOrigin()}/${imagen}`;
     },
-    // ============================================
-    // cargarProductos
-    // Carga productos, pedidos y proveedores para mostrar el catálogo
-    // Parámetros: Ninguno
-    // Retorna: No retorna valor, actualiza la variable productos
-    // Efectos secundarios: Llama a api.getProductos, api.getProveedores, api.getPedidos
-    // ============================================
+
     async cargarProductos() {
       this.cargando = true;
       this.errorCarga = '';
 
       try {
+        // Ejectura un array de promesas en paralelo pero espera a todas
         const [productosResponse, proveedoresResponse, pedidosResponse] = await Promise.all([
           api.getProductos(),
           api.getProveedores(),
@@ -296,12 +254,7 @@ export default {
         this.cargando = false;
       }
     },
-    // ============================================
-    // esPedidoAbierto
-    // Determina si un pedido está actualmente abierto
-    // Parámetros: pedido (Object) - Objeto pedido con estado y fecha_cierre
-    // Retorna: Boolean - true si el pedido está abierto
-    // ============================================
+
     esPedidoAbierto(pedido) {
       if (pedido.estado !== 'pendiente') {
         return false;
@@ -318,23 +271,15 @@ export default {
 
       return fechaCierre > hoy;
     },
-    // ============================================
-    // formatoFechaLocal
-    // Formatea una fecha a formato español (dd/mm/yyyy)
-    // Parámetros: fecha (String/Date) - Fecha a formatear
-    // Retorna: String - Fecha formateada o cadena vacía
-    // ============================================
+
+    // Formatea una fecha a formato local
     formatoFechaLocal(fecha) {
       if (!fecha) return '';
       const d = new Date(fecha);
       return d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
     },
-    // ============================================
-    // productoDisponible
+    
     // Determina si un producto puede añadirse a la cesta
-    // Parámetros: producto (Object) - Producto a verificar
-    // Retorna: Boolean - true si el producto está disponible
-    // ============================================
     productoDisponible(producto) {
       if (!producto.pedidoAbierto) {
         return false;
@@ -344,13 +289,7 @@ export default {
       }
       return true;
     },
-    // ============================================
-    // anadirACesta
-    // Valida y prepara la adición de un producto a la cesta
-    // Parámetros: producto (Object) - Producto a añadir
-    // Retorna: No retorna valor
-    // Efectos secundarios: Muestra alerta si no está disponible
-    // ============================================
+
     anadirACesta(producto) {
       if (!this.productoDisponible(producto)) {
         alertStore.showAlert('Este producto no se puede pedir.', 'danger');
@@ -359,13 +298,7 @@ export default {
 
       this.anadirACestaBackend(producto);
     },
-    // ============================================
-    // anadirACestaBackend
-    // Añade o incrementa un producto en el pedido del usuario
-    // Parámetros: producto (Object) - Producto a añadir
-    // Retorna: No retorna valor
-    // Efectos secundarios: Llama a api.getDetallesPedidoPorPedido, api.actualizarDetallePedido o api.crearDetallePedido
-    // ============================================
+
     async anadirACestaBackend(producto) {
       const authStore = useAuthStore();
       const idUsuarioComprador = Number(authStore.user?.id_usuario);
@@ -419,12 +352,7 @@ export default {
         this.anadiendoProductoId = null;
       }
     },
-    // ============================================
-    // onImageError
-    // Maneja errores de carga de imágenes
-    // Parámetros: event (Event) - Evento de error
-    // Retorna: No retorna valor
-    // ============================================
+  
     onImageError(event) {
       event.target.src = '/favicon.ico';
     },
